@@ -62,6 +62,9 @@
                                         <th scope="col">Pobrane</th>
                                         <th scope="col">Sprzedane</th>
                                         <th scope="col">Zwrócone</th>
+                                        <th scope="col">Otrzymane</th>
+                                        <th scope="col">Przekazane</th>
+                                        <th scope="col">W ofercie</th>
                                         <th scope="col">Aktualny stan</th>
                                     </tr>
                                 </thead>
@@ -72,7 +75,10 @@
                                         $pr = $data['prod_availability'][$value->id];
                                         $prs = $data['prod_availability_sold'][$value->id];
                                         $prz = $data['prod_availability_returned'][$value->id];
-                                        $amount_left = $pr - $prs - $prz;
+                                        $pef = $data['prod_availability_exchange_from'][$value->id];
+                                        $pet = $data['prod_availability_exchange_to'][$value->id];
+                                        $pep = $data['prod_availability_exchange_pending'][$value->id];
+                                        $amount_left = $pr - $prs - $prz + $pef - $pet - $pep;
                                         if (!empty($value->p_photo)) {
                                             $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $value->p_photo . "'>";
                                         } else {
@@ -88,7 +94,10 @@
                                             <td>$value->p_unit</td>
                                             <td>$pr</td>
                                             <td>$prs</td>
-                                            <td>$prz</td>";
+                                            <td>$prz</td>
+                                            <td>$pef</td>
+                                            <td>$pet</td>
+                                            <td>$pep</td>";
                                         echo "<td>" . $amount_left . "</td>";
                                         echo "</tr>";
                                     }

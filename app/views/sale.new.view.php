@@ -93,6 +93,21 @@
                                             $products_list[$value->p_id] -= $value->amount;
                                         }
                                     }
+                                    if (!is_bool($data["exchange_from"])) {
+                                        foreach ($data["exchange_from"] as $key => $value) {
+                                            $products_list[$value->p_id] += $value->amount;
+                                        }
+                                    }
+                                    if (!is_bool($data["exchange_to"])) {
+                                        foreach ($data["exchange_to"] as $key => $value) {
+                                            $products_list[$value->p_id] -= $value->amount;
+                                        }
+                                    }
+                                    if (!is_bool($data["exchange_pending"])) {
+                                        foreach ($data["exchange_pending"] as $key => $value) {
+                                            $products_list[$value->p_id] -= $value->amount;
+                                        }
+                                    }
                                     // pobrana ilość z magazynu
                                     //trzeba odcjąc to już zaraportowane
                                     

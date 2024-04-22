@@ -104,6 +104,17 @@ class Sale
         $products_list = new ReturnsModel();
         $data["return"] = $products_list->getAllFullProducts($u_id);
 
+        $products_list = new CargoExchange();
+        $data["exchange_from"] = $products_list->getExchangeTodayOffersToMeSelected($u_id, 1);
+
+        $products_list = new CargoExchange();
+        $data["exchange_to"] = $products_list->getExchangeTodayMyOffersSelected($u_id, 1);
+
+        $products_list = new CargoExchange();
+        $data["exchange_pending"] = $products_list->getExchangeTodayMyOffersSelected($u_id, 0);
+
+
+
         $this->view('sale.new', $data);
     }
 }
