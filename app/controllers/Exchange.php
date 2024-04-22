@@ -13,23 +13,23 @@ class Exchange
         $data = [];
         $data["products"] = False;
 
-            $u_id = $_SESSION["USER"]->id;
+        $u_id = $_SESSION["USER"]->id;
 
-            $products_list = new ProductsModel();
-            $data["products"] = $products_list->getAllFullProducts();
+        $products_list = new ProductsModel();
+        $data["products"] = $products_list->getAllFullProducts();
 
-            $users_list = new User();
-            foreach($users_list->getAllTraders("users", TRADERS) as $key => $value) {
-                $data["users"][$value->id] = $value; 
-            }
+        $users_list = new User();
+        foreach ($users_list->getAllTraders("users", TRADERS) as $key => $value) {
+            $data["users"][$value->id] = $value;
+        }
 
 
-            $data["user_id"] = $u_id;
+        $data["user_id"] = $u_id;
 
-            $ex = new CargoExchange();
-            $data["exchange_my"] = $ex->getExchangeTodayMyOffers($u_id);
-            $data["exchange_to_me"] = $ex->getExchangeTodayOffersToMe($u_id);
-            
+        $ex = new CargoExchange();
+        $data["exchange_my"] = $ex->getExchangeTodayMyOffers($u_id);
+        $data["exchange_to_me"] = $ex->getExchangeTodayOffersToMe($u_id);
+
         $this->view('exchange', $data);
     }
 
@@ -49,7 +49,7 @@ class Exchange
             $sales = new CargoExchange;
             foreach ($_POST["p_id"] as $key => $value) {
                 if ($value > 0) {
-                    $toUpdate = ["u_id_init" => $u_id_init, "u_id_target"=>$u_id_target, "result" => 0, "date_result" => "", "p_id" => $key, "amount" => $value];
+                    $toUpdate = ["u_id_init" => $u_id_init, "u_id_target" => $u_id_target, "result" => 0, "date_result" => "", "p_id" => $key, "amount" => $value];
                     $sales->insert($toUpdate);
                 }
             }
@@ -93,9 +93,10 @@ class Exchange
         if ($_SESSION["ROLE"]->id != 1)
             if ($_SESSION["USER"]->id != $user)
                 redirect('login');
-        $scan = new ScanModel;
-        //$scan->update($id_scan, ['ps_active' => 0]);
-        $com = "Pomyślnie usunięto scan ID: $id_scan";
+        $scan = new CargoExchange;
+        $date = date("Y-m-d H:m:s");
+        $scan->update($id_scan, ['result' => 1, "date_result" => $date]);
+        $com = "Pomyślnie zaakceptowano przekazanie: $id_scan";
 
         return $com;
     }
@@ -111,9 +112,10 @@ class Exchange
         if ($_SESSION["ROLE"]->id != 1)
             if ($_SESSION["USER"]->id != $user)
                 redirect('login');
-        $scan = new ScanModel;
-        //$scan->update($id_scan, ['ps_active' => 0]);
-        $com = "Pomyślnie usunięto scan ID: $id_scan";
+        $scan = new CargoExchange;
+        $date = date("Y-m-d H:m:s");
+        $scan->update($id_scan, ['result' => 2, "date_result" => $date]);
+        $com = "Odrzucono przekazanie: $id_scan";
 
         return $com;
     }
@@ -129,9 +131,10 @@ class Exchange
         if ($_SESSION["ROLE"]->id != 1)
             if ($_SESSION["USER"]->id != $user)
                 redirect('login');
-        $scan = new ScanModel;
-        //$scan->update($id_scan, ['ps_active' => 0]);
-        $com = "Pomyślnie usunięto scan ID: $id_scan";
+        $scan = new CargoExchange;
+        $date = date("Y-m-d H:m:s");
+        $scan->update($id_scan, ['result' => 4, "date_result" => $date]);
+        $com = "Anulowano przekazanie: $id_scan";
 
         return $com;
     }
