@@ -34,6 +34,7 @@ define('PRODUCTTYPENAMES', [0 => "Półprodukt", 1 => "Gotowy produkt"]);
 define('COMPANIESTYPE', [0 => "Sprzedażowa", 1 => "Zakupowa"]);
 define('STATUSNAME', [0 => "Nieaktywne", 1 => "Aktywne"]);
 define('TRADERS', '1, 3');
+define('EXCHANGESTATUS', [0=>"Oczekuje", 1=>"Zaakceptowany", 2=>"Odrzucony", 3=>"Odrzucony automatycznie", 4=>"Anulowany"]);
 
 /** true means show errors **/
 define('DEBUG', true);
