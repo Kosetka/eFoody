@@ -31,6 +31,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Raportuj sprzedaż
                 </a>
+                <a class="nav-link" href="<?= ROOT ?>/exchange">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Oferty wymiany
+                </a>
                 <a class="nav-link" href="<?= ROOT ?>/returns/new">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Zwróć towar
