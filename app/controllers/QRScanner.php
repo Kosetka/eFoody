@@ -37,7 +37,7 @@ class QRScanner
         }
 
         $products = new ProductsModel;
-        $temp = $products->getAll("products");
+        $temp = $products->getAllFullProducts();
         foreach ($temp as $key => $value) {
             $data["products"][$value->id] = $value;
         }
