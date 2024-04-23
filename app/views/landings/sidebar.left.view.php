@@ -31,6 +31,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Raportuj sprzedaż
                 </a>
+                <a class="nav-link" href="<?= ROOT ?>/qrscanner">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    QR Raport
+                </a>
                 <a class="nav-link" href="<?= ROOT ?>/exchange">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Oferty wymiany
