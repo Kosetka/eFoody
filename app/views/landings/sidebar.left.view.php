@@ -116,6 +116,7 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="<?= ROOT ?>/products">Lista produktów/SKU</a>
                         <a class="nav-link" href="<?= ROOT ?>/products/new">Dodaj nowe SKU</a>
+                        <a class="nav-link" href="<?= ROOT ?>/prices">Ceny gotowych produktów</a>
                     </nav>
                 </div>
 

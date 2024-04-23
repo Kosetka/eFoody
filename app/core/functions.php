@@ -23,3 +23,8 @@ function getYourData(string $param)
 	$arr = (array) $_SESSION["USER"];
 	return $arr[$param];
 }
+
+function getMargin($p, $c)
+{
+	return round(($p - $c) / $p * 100, 2);
+}
