@@ -66,7 +66,7 @@ class Sale
 
             $u_id = $_SESSION["USER"]->id;
             $c_id = $_POST["c_id"];
-            $sale_description = $_POST["sale_description"];
+            $sale_description = isset($_POST["sale_description"]) ? "gratis" : "";
             $sales = new Sales;
             foreach ($_POST["p_id"] as $key => $value) {
                 if ($value > 0) {

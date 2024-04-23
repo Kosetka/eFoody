@@ -44,9 +44,9 @@
                         </div>
                     </div>
                     <div class="form-group row m-3">
-                        <label for="sale_description" class="col-sm-2 col-form-label">Notatki:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="sale_description" name="sale_description">
+                        <label for="sale_description" class="col-sm-3 col-form-label">Gratis:</label>
+                        <div class="col-sm-9">
+                            <input type="checkbox" class="form-check-input" id="sale_description" name="sale_description" value="1">
                         </div>
                     </div>
                     <div id="modal" class="modal">
