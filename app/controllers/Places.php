@@ -77,6 +77,12 @@ class Places
             }
         }
 
+        $sold_list = new Sales();
+        foreach($sold_list->getSoldForMap($u_id) as $key => $value) {
+            $data["soldCompany"][$value->c_id] = $value;
+        }
+        
+
         $data["not_visited"] = array_diff_key($data["companies"], $data["places"]);
 
         $this->view('places.my', $data);

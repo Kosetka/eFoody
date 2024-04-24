@@ -31,7 +31,9 @@ class Companies
         'date',
         'description',
         'latitude',
-        'longitude'
+        'longitude',
+        'c_type',
+        'workers'
     ];
 
     public function validate($data)

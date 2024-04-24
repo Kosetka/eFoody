@@ -84,8 +84,6 @@ class Sale
                     $placeVisited->insert(["u_id" => $u_id, "sold" => $v_sold, "c_id" => $c_id]);
                 }
             }
-
-
             $data['success'] = "Produkty zraportowane pomyślnie";
             unset($_POST);
             $data['errors'] = $sales->errors;
@@ -112,7 +110,7 @@ class Sale
 
         $sold_list = new Sales();
         $data["sold"] = $sold_list->getSoldProducts($u_id);
-
+        
         $products_list = new ReturnsModel();
         $data["return"] = $products_list->getAllFullProducts($u_id);
 

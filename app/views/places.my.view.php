@@ -31,6 +31,8 @@
                                     $link = "https://www.google.com/maps/dir//";
                                     $points = [];
                                     foreach ($data["not_visited"] as $key => $value) {
+                                        $total_gratis_amount = $data["soldCompany"][$key]->total_gratis_amount;
+                                        $total_regular_amount = $data["soldCompany"][$key]->total_regular_amount;
                                         echo "  <tr><td>$value->full_name</td>
                                             <td>$value->address</td>
                                             <td>$value->description</td>
@@ -38,7 +40,9 @@
                                             <td><a class='btn btn-warning' onClick = 'clicked($key)' data-el=$key 
                                             role='button'>Oznacz jako odwiedzony</a></td>";
                                         echo "</tr>";
-                                        $points[$key] = ["name" => $value->full_name, "lat" => $value->latitude, "lng"=> $value->longitude];
+                                
+
+                                        $points[$key] = ["name" => $value->full_name, "lat" => $value->latitude, "lng"=> $value->longitude, "workers" => "$value->workers", "yesterday" => $total_regular_amount,"free"=>$total_gratis_amount, "type" => "$value->c_type"];
                                     }
                                     ?>
                                     <script>
@@ -59,37 +63,31 @@
             </div>
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAJHFF9bGryg9sEfdgy5ukLAai8nRMKcU&callback=initMap" async defer></script>
             <script>
-    // Inicjalizacja mapy
-    function initMap() {
-      var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 51.40328, lng: 21.1486}, // Współrzędne centrum mapy 51.40328140169251, 21.14867948697794
-        zoom: 15, // Poziom przybliżenia
-        mapId: 'e6dc69ca24aac8ed'
-      });
+async function initMap() {
+  // Request needed libraries.
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+  const center = { lat: 51.40328, lng: 21.1486 };
+  const map = new Map(document.getElementById("map"), {
+    zoom: 15,
+    center,
+    mapId: "e6dc69ca24aac8ed",
+  });
 
-      // Tworzenie znaczników
-      //var marker1 = new google.maps.Marker({
-      //  position: {lat: 51.5111, lng: -0.1234}, // Współrzędne pierwszego znacznika
-      //  map: map,
-      //  title: 'Znacznik 1' // Nazwa znacznika
-      //});
-      <?php
-        foreach($points as $k => $point) {
-            $lat = $point["lat"];
-            $lng = $point["lng"];
-            $name = $point["name"];
-            echo ' 
-            var marker'.$k.' = new google.maps.Marker({
-                position: {lat: '.$lat.', lng: '.$lng.'},
-                map: map,
-                title: "'.$name.'",
-                //optimized: true,
-                url: "https://www.google.com/maps/dir//'.$lat.','.$lng.'"
-              });
-              ';
-        }
-      ?>
-infoWindow = new google.maps.InfoWindow();
+  for (const property of properties) {
+    const AdvancedMarkerElement = new google.maps.marker.AdvancedMarkerElement({
+      map,
+      content: buildContent(property),
+      position: property.position,
+      title: property.description,
+    });
+
+    AdvancedMarkerElement.addListener("click", () => {
+      toggleHighlight(AdvancedMarkerElement, property);
+    });
+  }
+
+  infoWindow2 = new google.maps.InfoWindow();
 
 const locationButton = document.createElement("button");
 
@@ -106,30 +104,108 @@ locationButton.addEventListener("click", () => {
           lng: position.coords.longitude,
         };
 
-        infoWindow.setPosition(pos);
-        infoWindow.setContent("Lokacja znaleziona");
-        infoWindow.open(map);
+        infoWindow2.setPosition(pos);
+        infoWindow2.setContent("Lokacja znaleziona");
+        infoWindow2.open(map);
         map.setCenter(pos);
       },
       () => {
-        handleLocationError(true, infoWindow, map.getCenter());
+        handleLocationError(true, infoWindow2, map.getCenter());
       },
     );
   } else {
     // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
+    handleLocationError(false, infoWindow2, map.getCenter());
   }
 });
 }
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-infoWindow.setPosition(pos);
-infoWindow.setContent(
+function toggleHighlight(markerView, property) {
+  if (markerView.content.classList.contains("highlight")) {
+    markerView.content.classList.remove("highlight");
+    markerView.zIndex = null;
+  } else {
+    markerView.content.classList.add("highlight");
+    markerView.zIndex = 1;
+  }
+}
+
+function buildContent(property) {
+  const content = document.createElement("div");
+
+  content.classList.add("property");
+  content.innerHTML = `
+    <div class="icon">
+        <i aria-hidden="true" class="fa fa-icon fa-${property.type}" title="${property.type}"></i>
+        <span class="fa-sr-only">${property.type}</span>
+    </div>
+    <div class="details">
+        <div class="price">${property.name}</div>
+        <div class="address"><a target='blank' href='${property.url}'>Pokaż na mapie</a></div>
+        <div class="features">
+        <div>
+            <i aria-hidden="true" class="fa fa-credit-card fa-lg bed" title="Sprzedane"></i>
+            <span class="fa-sr-only">Sprzedane</span>
+            <span>${property.yesterday}</span>
+        </div>
+        <div>
+            <i aria-hidden="true" class="fa fa-gift fa-lg gift" title="Prezenty"></i>
+            <span class="fa-sr-only">Prezenty</span>
+            <span>${property.free}</span>
+        </div>
+        <div>
+            <i aria-hidden="true" class="fa fa-users fa-lg bath" title="Pracownicy"></i>
+            <span class="fa-sr-only">Pracownicy</span>
+            <span>${property.workers}</span>
+        </div>
+        </div>
+    </div>
+    `;
+  return content;
+}
+
+const properties = [
+    <?php
+        foreach($points as $k => $point) {
+            $lat = $point["lat"];
+            $lng = $point["lng"];
+            $name = "<b>".$point["name"] . "</b></br></br><a href='https://www.google.com/maps/dir//".$lat.",".$lng."'>Pokaż na mapie</a>";
+            echo ' 
+            {
+                position: {lat: '.$lat.', lng: '.$lng.'},
+                title: "'.$name.'",
+                name: "'.$point["name"].'",
+                workers: "'.$point["workers"].'",
+                yesterday: "'.$point["yesterday"].'",
+                type: "'.$point["type"].'",
+                free: "",
+                url: "https://www.google.com/maps/dir//'.$lat.','.$lng.'"
+            },';
+        }
+      ?>
+  
+    /*address: "215 Emily St, MountainView, CA",
+    description: "Single family house with modern design",
+    price: "$ 3,889,000",
+    type: "home",
+    bed: 5,
+    bath: 4.5,
+    size: 300,
+    position: {
+      lat: 37.50024109655184,
+      lng: -122.28528451834352,
+    },*/
+];
+
+
+function handleLocationError(browserHasGeolocation, infoWindow2, pos) {
+infoWindow2.setPosition(pos);
+infoWindow2.setContent(
   browserHasGeolocation
     ? "Error: The Geolocation service failed."
     : "Error: Your browser doesn't support geolocation.",
 );
-infoWindow.open(map);
+infoWindow2.open(map);
       // Tutaj możesz dodać więcej znaczników na mapie, jeśli jest taka potrzeba
     }
   </script>
