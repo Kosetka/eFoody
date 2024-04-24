@@ -31,8 +31,14 @@
                                     $link = "https://www.google.com/maps/dir//";
                                     $points = [];
                                     foreach ($data["not_visited"] as $key => $value) {
-                                        $total_gratis_amount = $data["soldCompany"][$key]->total_gratis_amount;
-                                        $total_regular_amount = $data["soldCompany"][$key]->total_regular_amount;
+                                        $total_gratis_amount = 0;
+                                        $total_regular_amount = 0;
+                                        if(!empty($data["soldCompany"][$key])) {
+                                            $total_gratis_amount = $data["soldCompany"][$key]->total_gratis_amount;
+                                        }
+                                        if(!empty($data["soldCompany"][$key])) {
+                                            $total_regular_amount = $data["soldCompany"][$key]->total_regular_amount;
+                                        }
                                         echo "  <tr><td>$value->full_name</td>
                                             <td>$value->address</td>
                                             <td>$value->description</td>

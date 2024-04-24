@@ -58,10 +58,11 @@
  */
 
  :root {
-  --building-color: #e70909;
+  --building-color: #e78e09;
   --house-color: #43718a;
   --shop-color: #5bc729;
   --warehouse-color: #eee025;
+  --exclamation-color: #e70909;
 }
 
 .property {
@@ -234,4 +235,16 @@
 
 .property:not(.highlight):has(.fa-shop)::after {
   border-top: 9px solid var(--shop-color);
+}
+
+.property.highlight:has(.fa-exclamation) .icon {
+  color: var(--exclamation-color);
+}
+
+.property:not(.highlight):has(.fa-exclamation) {
+  background-color: var(--exclamation-color);
+}
+
+.property:not(.highlight):has(.fa-exclamation)::after {
+  border-top: 9px solid var(--exclamation-color);
 }

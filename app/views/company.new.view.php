@@ -157,6 +157,30 @@
                             <input type="text" class="form-control" id="longitude" name="longitude">
                         </div>
                     </div>
+                    <div class="form-group row m-3">
+                        <label for="workers" class="col-sm-2 col-form-label">Ilość pracowników</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="workers" name="workers">
+                        </div>
+                    </div>
+
+                    <div class="form-group row m-3">
+                        <label for="c_type" class="col-sm-2 col-form-label">Rodzaj firmy:</label>
+                        <div class="col-sm-10">
+                            <?php
+                            $selected = "checked";
+                            foreach (COMPANYSIZE as $key => $value) {
+                                echo "<div class='form-check'>
+                                    <input class='form-check-input' type='radio' name='c_type' id='c_type$key' value='$key' $selected>
+                                    <label class='form-check-label' for='c_type$key'>
+                                    $value
+                                    </label>
+                                    </div>";
+                                $selected = "";
+                            }
+                            ?>
+                        </div>
+                    </div>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary" type="submit">Dodaj firmę</button>
             </form>
