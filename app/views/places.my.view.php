@@ -46,7 +46,7 @@
                                     $.ajax({
                                         url: '<?php echo ROOT . "/places/setvisit/" ?>' + id,
                                         success: function (data) {
-                                            alert("Oznaczono jako odwiedzone.");
+                                            //alert("Oznaczono jako odwiedzone.");
                                             window.location.href = window.location.href
                                         }
                                     });
@@ -147,7 +147,7 @@ infoWindow.open(map);
                                         <th scope="col">Adres</th>
                                         <th scope="col">Opis</th>
                                         <th scope="col">Data wizyty</th>
-                                        <th scope="col">Rezultant wizyty</th>
+                                        <th scope="col">Rezultat wizyty</th>
                                         <th scope="col">Akcje</th>
                                     </tr>
                                 </thead>

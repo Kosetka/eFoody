@@ -67,13 +67,25 @@ class Sale
             $u_id = $_SESSION["USER"]->id;
             $c_id = $_POST["c_id"];
             $sale_description = isset($_POST["sale_description"]) ? "gratis" : "";
+            $v_sold = isset($_POST["sale_description"]) ? 2 : 1;
             $sales = new Sales;
+            $check_sold = 0;
             foreach ($_POST["p_id"] as $key => $value) {
                 if ($value > 0) {
+                    $check_sold = 1;
                     $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => $sale_description, "p_id" => $key, "s_amount" => $value];
                     $sales->insert($toUpdate);
                 }
             }
+            $placeVisited = new PlacesModel;
+            $v = $placeVisited->checkVisit($c_id);
+            if($check_sold == 1) {
+                if(empty($v)) {
+                    $placeVisited->insert(["u_id" => $u_id, "sold" => $v_sold, "c_id" => $c_id]);
+                }
+            }
+
+
             $data['success'] = "Produkty zraportowane pomyślnie";
             unset($_POST);
             $data['errors'] = $sales->errors;
@@ -90,7 +102,7 @@ class Sale
         $data["users"] = $users_list->getAllTraders("users", TRADERS);
 
         $companies_list = new Companies();
-        $data["companies"] = $companies_list->getAllCompanies("companies");
+        $data["companies"] = $companies_list->getMyCompanies($u_id);
 
         $products_list = new ProductsModel();
         $data["products"] = $products_list->getAllFullProducts();

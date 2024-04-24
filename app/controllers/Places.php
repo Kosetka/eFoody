@@ -79,10 +79,6 @@ class Places
 
         $data["not_visited"] = array_diff_key($data["companies"], $data["places"]);
 
-
-
-        show($data);
-
         $this->view('places.my', $data);
     }
 

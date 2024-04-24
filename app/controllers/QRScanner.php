@@ -29,6 +29,17 @@ class QRScanner
                 $now = date("Y-m-d H:i:s");
                 $data['success'] = "Pomyślnie zeskanowano produkt: <b>" . $_POST["prod_name"] . "</b> o godzinie: <b>" . $now . "</b>";
             }
+
+            $check_sold = 1;
+            $placeVisited = new PlacesModel;
+            $city_id = $_POST["c_id"];
+            $v = $placeVisited->checkVisit($city_id);
+            if($check_sold == 1) {
+                if(empty($v)) {
+                    $placeVisited->insert(["u_id" => $u_id, "sold" => 1, "c_id" => $city_id]);
+                }
+            }
+
             $_SESSION["selected_company"] = $_POST["c_fullname_id"]; // ustawia aktualnie wybraną firmę
             $_SESSION["selected_company_id"] = $_POST["c_id"]; // ustawia aktualnie wybraną firmę
             $_SESSION["selected_company_fullname"] = $_POST["c_fullname"]; // ustawia aktualnie wybraną firmę
@@ -42,7 +53,7 @@ class QRScanner
             $data["products"][$value->id] = $value;
         }
         $companies = new Companies();
-        $temp = $companies->getAll("companies");
+        $temp = $companies->getMyCompanies($_SESSION["USER"]->id);
         foreach ($temp as $key => $value) {
             $data["companies"][$value->id] = $value;
         }
