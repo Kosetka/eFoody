@@ -62,6 +62,11 @@ class Companies
         $query = "select * from $table WHERE company_type = 0";
         return $this->query($query);
     }
+    public function getMyCompanies($u_id)
+    {
+        $query = "select * from $this->table WHERE company_type = 0 AND guardian = $u_id AND active = 1";
+        return $this->query($query);
+    }
     public function getAdded($date)
     {
         $query = "select count(*) as total from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59'";

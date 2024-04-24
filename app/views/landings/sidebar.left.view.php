@@ -27,6 +27,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Pobierz towar
                 </a>
+                <a class="nav-link" href="<?= ROOT ?>/places/my">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Moje miejsca
+                </a>
                 <a class="nav-link" href="<?= ROOT ?>/sale/new">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Raportuj sprzedaż
