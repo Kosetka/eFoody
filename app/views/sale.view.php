@@ -137,10 +137,8 @@ echo "<option value='$id' $selected>$full_name [id: $id]</option>";
                             $products_sold[$value->date][$value->c_id][$value->p_id] += $value->s_amount;
                         }
                     }
-
-                    $product_number = count($products) + 1;
                     $companies_number = count($c_id_list) + 2;
-                    $dateOffset = ($companies_number - 1) * $product_number + 1;
+                    $dateOffset = ($companies_number);
                 }
                 ?>
                 <table class="table align-middle">
@@ -149,9 +147,9 @@ echo "<option value='$id' $selected>$full_name [id: $id]</option>";
                             <th scope="col">Data</th>
                             <th scope="col">Firma</th>
                             <th scope="col">Adres firmy</th>
-                            <th scope="col">Nazwa produktu</th>
-                            <?php //<th scope="col">Dane</th>                                ?>
-                            <th scope="col">Sprzedana ilość</th>
+                            <th scope="col">Produkty</th>
+                            <?php /*<th scope="col">Dane</th>                              
+<th scope="col">Sprzedana ilość</th>*/ ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -161,6 +159,14 @@ echo "<option value='$id' $selected>$full_name [id: $id]</option>";
                             echo "<tr><th colspan='6'>Brak danych do wyświetlenia</th></tr>";
                         } else {
                             $total_sold_day = [];
+                            if (!is_bool($data["dates"])) {
+                                foreach ($data["dates"] as $d) {
+                                    foreach ($products as $pr) {
+                                        $total_sold_day[$d][$pr->id]["amount"] = 0;
+                                    }
+                                }
+                            }
+
                             if (!is_bool($data["dates"])) {
                                 foreach ($data["dates"] as $date) {
                                     echo "<tr>";
@@ -176,52 +182,63 @@ echo "<option value='$id' $selected>$full_name [id: $id]</option>";
                                             $city_address = $companies[$c_id]->address;
                                         }
 
-                                        echo "<td scope='row' rowspan='$product_number'>" . $city_full_name . "</td>";
-                                        echo "<td scope='row' rowspan='$product_number'>" . $city_address . "</td>";
+                                        echo "<td scope='row' >" . $city_full_name . "</td>";
+                                        echo "<td scope='row' >" . $city_address . "</td>";
+                                        echo "<td scope='row' >";
+                                        $sold_show = "Brak sprzedaży";
                                         foreach ($products as $product) {
-                                            echo "<tr>";
-                                            if (!empty($product->p_photo)) {
-                                                $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $product->p_photo . "'>";
-                                            } else {
-                                                $photo = "";
-                                            }
-                                            echo "<td scope='row'>" . $photo . " " . $product->p_name . "</td>";
-                                            //echo "<td scope='row'>EAN: " . $product->ean . "</br>SKU: " . $product->sku . "</td>";
                                             $sold_number = $products_sold[$date][$c_id][$product->id];
-                                            if ($sold_number > 0)
+
+                                            $total_sold_day[$date][$product->id]['amount'] += $sold_number;
+
+                                            if ($sold_number > 0) {
+                                                echo "<table style='width: 100%'>";
                                                 $bold = "style='color: green; font-weight: bold'";
-                                            else if ($sold_number < 0)
-                                                $bold = "style='color: green; font-weight: bold'";
-                                            else
-                                                $bold = "";
-                                            if (!empty($total_sold_day)) {
-                                                $total_sold_day[$date][$product->id]['amount'] += $sold_number;
+                                                echo "<tr>";
+                                                if (!empty($product->p_photo)) {
+                                                    $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $product->p_photo . "'>";
+                                                } else {
+                                                    $photo = "";
+                                                }
+                                                echo "<td scope='row'>" . $photo . " " . $product->p_name . "</td>";
+                                                //echo "<td scope='row'>EAN: " . $product->ean . "</br>SKU: " . $product->sku . "</td>";
+                                                echo "<td scope='row' $bold>" . $sold_number . " " . $product->p_unit . "</td>";
+                                                echo "</tr>";
+                                                echo "</table>";
+                                                $sold_show = "";
                                             }
-                                            echo "<td scope='row' $bold>" . $sold_number . " " . $product->p_unit . "</td>";
-                                            echo "</tr>";
+
                                         }
+                                        echo $sold_show;
+                                        echo "</td>";
                                         echo "</tr>";
                                     }
                                     echo "<tr style='background: lightgray; font-weight: bold'>";
-                                    echo "<td scope='row' rowspan='$product_number' colspan='2'>TOTAL</td>";
-                                    foreach ($products as $product) {
-                                        echo "<tr style='background: lightgray; font-weight: bold'>";
-
-                                        echo "<td scope='row'>" . $product->p_name . "</td>";
+                                    echo "<td scope='row' colspan='2'>TOTAL</td>";
+                                    echo "<td scope='row'>";
+                                    $showed_total = 0;
+                                    foreach ($products as $product) { // naprawić sumowanie
                                         if (!empty($total_sold_day)) {
                                             $total_sh = $total_sold_day[$date][$product->id]['amount'];
                                         } else {
                                             $total_sh = 0;
                                         }
-                                        echo "<td scope='row' style='color: green; font-weight: bold'>" . $total_sh . " " . $product->p_unit . "</td>";
-                                        echo "</tr>";
+                                        if ($total_sh > 0) {
+                                            $showed_total++;
+                                            echo "<table style='width: 100%'>";
+                                            echo "<tr>";
+                                            echo "<td scope='row'>" . $product->p_name . "</td>";
+                                            echo "<td scope='row' style='color: green; font-weight: bold'>" . $total_sh . " " . $product->p_unit . "</td>";
+                                            echo "</tr>";
+                                            echo "</table>";
+                                        }
                                     }
+
+                                    if ($showed_total == 0) {
+                                        echo "Brak sprzedaży";
+                                    }
+                                    echo "</td>";
                                     echo "</tr>";
-                                    echo "</tr>";
-
-
-
-
                                 }
                             }
                         }

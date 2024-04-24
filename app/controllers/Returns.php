@@ -29,7 +29,7 @@ class Returns
         }
 
         $cities = new Shared();
-        $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city";
+        $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city AND w_active = 1 AND wh_name = 'MAIN'"; //wh_name tylko zwroty na główny
         $temp["cities"] = $cities->query($query);
         foreach ($temp["cities"] as $city) {
             $data["cities"][$city->id] = (array) $city;

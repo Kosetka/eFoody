@@ -7,7 +7,9 @@
         <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 100%">
             <div class="row">
                 <div class="col-md-12">
-                    <video style="max-height:200px" id="preview"></video>
+                    <video
+                        style="max-height:200px; background-color: lightgrey;box-shadow: 0px 8px 20px 8px rgba(66, 68, 90, 1); margin-bottom: 30px;"
+                        id="preview"></video>
                 </div>
                 <form method="post">
 
@@ -85,11 +87,11 @@
                             </div>
                         </div>
                         <?php /*<div class="form-group row m-3">
-                   <label for="c_id" class="col-sm-2 col-form-label">Handlowiec:</label>
-                   <div class="col-sm-10">
-                       <input type="text" class="form-control" id="c_id" name="c_id" readonly <?php echo "value = '" . $_SESSION["USER"]->first_name ." ".$_SESSION["USER"]->last_name . "'" ?>>
-                   </div>
-               </div>*/ ?>
+<label for="c_id" class="col-sm-2 col-form-label">Handlowiec:</label>
+<div class="col-sm-10">
+<input type="text" class="form-control" id="c_id" name="c_id" readonly <?php echo "value = '" . $_SESSION["USER"]->first_name ." ".$_SESSION["USER"]->last_name . "'" ?>>
+</div>
+</div>*/ ?>
                         <div class="form-group row m-3">
                             <label for="c_fullname" class="col-sm-2 col-form-label">QR Code:</label>
                             <div class="col-sm-10">
@@ -137,7 +139,7 @@
                 if (cameras.length > 0) {
                     //0 front
                     //1 back
-                    scanner.start(cameras[0]); //dla telefonó 2 // 0 dla komputerów
+                    scanner.start(cameras[2]); //dla telefonó 2 // 0 dla komputerów
                 } else {
                     alert("no camera Found");
                 }

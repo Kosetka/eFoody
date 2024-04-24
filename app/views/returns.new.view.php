@@ -18,11 +18,11 @@
                     </div>
                 <?php endif; ?>
 
-                <h1 class="h3 mb-3 fw-normal">Zwrot towaru</h1>
+                <h1 class="h3 mb-3 fw-normal">Rozlicz niesprzedany towaru</h1>
 
                 <div class="text-start">
                     <div class="form-group row m-3">
-                        <label for="w_id" class="col-sm-2 col-form-label">Magazyn:</label>
+                        <label for="w_id" class="col-sm-2 col-form-label">Magazyn zwrotu:</label>
                         <div class="col-sm-10">
                             <select class="form-control" id="w_id" name="w_id">
                                 <?php
@@ -84,22 +84,24 @@
                                         } else {
                                             $photo = "";
                                         }
-                                        echo "  <tr><td>$photo</td>
-                                            <td>$value->p_name</td>
-                                            <td>$value->sku</td>
-                                            <td>$value->ean</td>
-                                            <td>";
-                                        echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="0" min=0 max = "' . $amount_left . '">';
-                                        echo "</td>
-                                            <td>$value->p_unit</td>
-                                            <td>$pr</td>
-                                            <td>$prs</td>
-                                            <td>$prz</td>
-                                            <td>$pef</td>
-                                            <td>$pet</td>
-                                            <td>$pep</td>";
-                                        echo "<td>" . $amount_left . "</td>";
-                                        echo "</tr>";
+                                        if ($amount_left > 0) {
+                                            echo "  <tr><td>$photo</td>
+                                                <td>$value->p_name</td>
+                                                <td>$value->sku</td>
+                                                <td>$value->ean</td>
+                                                <td>";
+                                            echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="' . $amount_left . '" min=0 max = "' . $amount_left . '">';
+                                            echo "</td>
+                                                <td>$value->p_unit</td>
+                                                <td>$pr</td>
+                                                <td>$prs</td>
+                                                <td>$prz</td>
+                                                <td>$pef</td>
+                                                <td>$pet</td>
+                                                <td>$pep</td>";
+                                            echo "<td>" . $amount_left . "</td>";
+                                            echo "</tr>";
+                                        }
                                     }
 
                                     ?>
@@ -108,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="w-40 btn btn-lg btn-primary" type="submit">Zatwierdź zwrot</button>
+                <button class="w-40 btn btn-lg btn-primary" type="submit">Zatwierdź rozliczenie</button>
             </form>
 
         </main>

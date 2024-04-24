@@ -45,7 +45,7 @@
                 </a>
                 <a class="nav-link" href="<?= ROOT ?>/returns/new">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Zwróć towar
+                    Rozlicz towar
                 </a>
                 <a class="nav-link" href="<?= ROOT ?>/sale">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>

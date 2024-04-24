@@ -46,7 +46,8 @@
                     <div class="form-group row m-3">
                         <label for="sale_description" class="col-sm-3 col-form-label">Gratis:</label>
                         <div class="col-sm-9">
-                            <input type="checkbox" class="form-check-input" id="sale_description" name="sale_description" value="1">
+                            <input type="checkbox" class="form-check-input" id="sale_description"
+                                name="sale_description" value="1">
                         </div>
                     </div>
                     <div id="modal" class="modal">
@@ -117,21 +118,23 @@
                                     //show($data);
                                     foreach ($products_list2 as $key => $value) {
                                         $max = $products_list["$value->id"];
-                                        if (!empty($value->p_photo)) {
-                                            $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $value->p_photo . "'>";
-                                        } else {
-                                            $photo = "";
+                                        if ($max > 0) { // wyświetla tylko te, które mam ze sobą na stanie
+                                            if (!empty($value->p_photo)) {
+                                                $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $value->p_photo . "'>";
+                                            } else {
+                                                $photo = "";
+                                            }
+                                            echo "  <tr><td>$photo</td>
+                                                <td>$value->p_name</td>
+                                                <td>$value->sku</td>
+                                                <td>$value->ean</td>
+                                                <td>";
+                                            echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="0" min=0 max=' . $max . '>';
+                                            echo "</td>
+                                                <td>$value->p_unit</td>
+                                                <td>" . $max . "</td>";
+                                            echo "</tr>";
                                         }
-                                        echo "  <tr><td>$photo</td>
-                                            <td>$value->p_name</td>
-                                            <td>$value->sku</td>
-                                            <td>$value->ean</td>
-                                            <td>";
-                                        echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="0" min=0 max=' . $max . '>';
-                                        echo "</td>
-                                            <td>$value->p_unit</td>
-                                            <td>" . $max . "</td>";
-                                        echo "</tr>";
                                     }
 
                                     ?>
