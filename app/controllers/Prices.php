@@ -19,8 +19,10 @@ class Prices
         }
 
         $products = new PriceModel();
-        foreach ($products->getCurrentPrice() as $product) {
-            $data["prices"][$product->p_id] = (object) $product;
+        if(!empty($products->getCurrentPrice())) {
+            foreach ($products->getCurrentPrice() as $product) {
+                $data["prices"][$product->p_id] = (object) $product;
+            }
         }
 
 
@@ -72,10 +74,12 @@ class Prices
                 $price_id = $URL[3];
             }
             $products = new PriceModel();
-            foreach ($products->getAllPrices($p_id) as $product) {
-                $data["prices"][$product->id] = (object) $product;
-                if (!empty($price_id) && $product->id == $price_id) {
-                    $data["price"] = (object) $product;
+            if(!empty($products->getAllPrices($p_id))) {
+                foreach ($products->getAllPrices($p_id) as $product) {
+                    $data["prices"][$product->id] = (object) $product;
+                    if (!empty($price_id) && $product->id == $price_id) {
+                        $data["price"] = (object) $product;
+                    }
                 }
             }
 

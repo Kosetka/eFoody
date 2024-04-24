@@ -101,16 +101,18 @@
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($data["prices"] as $price) {
-                        echo "<tr>";
-                        echo "<td>" . $price->production_cost . "</td>";
-                        echo "<td>" . $price->price . "</td>";
-                        echo "<td>" . $price->price - $price->production_cost . " (" . getMargin($price->price, $price->production_cost) . "%)</td>";
-                        echo "<td>" . $price->date_from . "</td>";
-                        echo "<td>" . $price->date_to . "</td>";
-                        echo "<td>" . STATUSNAME[$price->active] . "</td>";
-                        echo "<td><a href='" . ROOT . "/prices/edit/" . $price->p_id . "/" . $price->id . "'>Edytuj</a></td>";
-                        echo "</tr>";
+                    if(isset($data["prices"])) {
+                        foreach ($data["prices"] as $price) {
+                            echo "<tr>";
+                            echo "<td>" . $price->production_cost . " zł</td>";
+                            echo "<td>" . $price->price . " zł</td>";
+                            echo "<td>" . $price->price - $price->production_cost . " zł (" . getMargin($price->price, $price->production_cost) . "%)</td>";
+                            echo "<td>" . $price->date_from . "</td>";
+                            echo "<td>" . $price->date_to . "</td>";
+                            echo "<td>" . STATUSNAME[$price->active] . "</td>";
+                            echo "<td><a href='" . ROOT . "/prices/edit/" . $price->p_id . "/" . $price->id . "'>Edytuj</a></td>";
+                            echo "</tr>";
+                        }
                     }
                     ?>
                 </tbody>

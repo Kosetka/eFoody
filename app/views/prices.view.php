@@ -57,7 +57,7 @@
                                         $production_cost = $data["prices"][$value->id]->production_cost;
                                         $date_from = $data["prices"][$value->id]->date_from;
                                         $date_to = $data["prices"][$value->id]->date_to;
-                                        $margin = $price - $production_cost . " (" . getMargin($price, $production_cost) . "%)";
+                                        $margin = $price - $production_cost . " zł (" . getMargin($price, $production_cost) . "%)";
                                     } else {
                                         $price = "";
                                         $production_cost = "";
@@ -68,8 +68,8 @@
                                     echo "  <tr><td>$value->p_name</td>
                                             <td>$photo</td>
                                             <td>$value->sku</td>
-                                            <td>$production_cost</td>
-                                            <td>$price</td>
+                                            <td>$production_cost zł</td>
+                                            <td>$price zł</td>
                                             <td>$margin</td>
                                             <td>$date_from - $date_to</td>";
                                     echo '<td>
