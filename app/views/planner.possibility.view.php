@@ -35,7 +35,7 @@
                         </thead>
                         <tbody>
                             <?php
-                            
+                                $arrayJS = [];
                                 echo "<tr>";
                                 echo "<td><table width='100%;'><tr><th>Zdjęcie</th><th>Nazwa produktu</th><th>SKU</th></tr>";
                                 foreach ($data["fullproducts"] as $key => $value) {
@@ -81,12 +81,16 @@
                                             // echo '<span id="myBtn" data-toggle="modal" data-target="#myModal'.$int.'">Open Modal</span>';
                                             echo '</td>';
                                             $int++;
-                                            echo "<td><b>$max_to_do</b> Szt.</td>";
+                                            echo "<td><label for='input_".$city["id"]."_$key'>$max_to_do</label> Szt.</td>";
+                                            echo "<td><input type='number' value='0' min='0' max='$max_to_do' name='input_".$city["id"]."_$key' id='input_".$city["id"]."_$key' class='input' data-wiersz='$key' data-kolumna='".$city["id"]."'></td>";
+                                            //$arrayJS[$city["id"]][$key][""];
+
                                         } else {
                                             echo "<td></td>"; //Brak przepisu
                                             echo "<td></td>";
+                                            echo "<td></td>";
                                         }
-                                        echo "<td><input value='0'></td>";
+                                        
                                         echo "</tr>";
                                     }
                                     echo "</table></td>";
@@ -100,6 +104,40 @@
                 </div>
             </div>
         </div>
+        <script>
+            <?php 
+                $tablica_recipes = json_encode($data["recipes"]);
+                $tablica_subproducts = json_encode($data["subproducts"]);
+                $tablica_sets = json_encode($data["sets"]);
+            ?>
+            var tablica_recipes = <?php echo $tablica_recipes; ?>;
+            var tablica_subproducts = <?php echo $tablica_subproducts; ?>;
+            var tablica_sets = <?php echo $tablica_sets; ?>;
+            document.querySelectorAll('.input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const kolumna = this.dataset.kolumna;
+                    const inputyWKolumnie = document.querySelectorAll(`.input[data-kolumna="${kolumna}"]`);
+                    const wartosciWKolumnie = {};
+                    // to fix
+                    inputyWKolumnie.forEach(input => {
+                        const wiersz = input.dataset.wiersz;
+                        wartosciWKolumnie[wiersz] = input.value;
+                    });
+                    inputyWKolumnie.forEach(input => {
+                        const inputValue = this.value;
+                        const labelFor = input.getAttribute('name');
+                        const labels = document.querySelectorAll(`label[for="${labelFor}"]`);
+                        
+                        labels.forEach(label => {
+                            label.innerText = inputValue;
+                        });
+                    });
+                    console.log(`Wartości inputów w kolumnie ${kolumna}:`, wartosciWKolumnie);
+                    
+                    // Tutaj możesz wykonać dodatkowe akcje w zależności od wartości inputów w danej kolumnie
+                });
+            });
+        </script>
         <?php 
         foreach($data["cities"] as $city) {
         ?>
