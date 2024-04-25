@@ -248,3 +248,7 @@
 .property:not(.highlight):has(.fa-exclamation)::after {
   border-top: 9px solid var(--exclamation-color);
 }
+
+.mymodal {
+  background: #fff;
+}

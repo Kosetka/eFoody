@@ -147,7 +147,7 @@
         <span class="fa-sr-only">${property.type}</span>
     </div>
     <div class="details">
-        <div class="price">${property.name}</div>
+        <div class="price"><a target='blank' href='${property.url}'>${property.name}</a></div>
         <div class="address"><a target='blank' href='${property.url}'>Pokaż na mapie</a></div>
         <div class="features">
         <div>

@@ -43,4 +43,12 @@ class RecipesModel
         $query = "select * from $this->table WHERE id = $id";
         return $this->query($query);
     }
+
+    public function getFullRecipes() {
+        $query = "SELECT recipes.*, recipe_details.*
+        FROM recipes
+        LEFT JOIN recipe_details ON recipes.id = recipe_details.r_id
+        WHERE recipes.active = 1;";
+        return $this->query($query);
+    }
 }

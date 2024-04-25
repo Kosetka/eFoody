@@ -21,7 +21,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('DBPASS', '');
 	define('DBDRIVER', '');
 
-	define('ROOT', 'https://192.168.1.9/efoody/public');
+	define('ROOT', 'https://192.168.1.105/efoody/public');
 	define('IMG_ROOT', '/efoody/public/assets/img/');
 	define('IMG_ROOT_UPLOAD', '../public/assets/img/');
 
