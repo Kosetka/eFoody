@@ -19,7 +19,8 @@ class ProductsQuantity
         'amount',
         'date',
         'old_amount',
-        'transaction_type'
+        'transaction_type',
+        'scan_id'
     ];
 
     public function getProducts(): array

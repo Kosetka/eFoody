@@ -51,7 +51,9 @@
                             </thead>
                             <tbody>
                                 <?php
-                                $arrayJS = [];
+                                $data["sets_old"] = unserialize(serialize($data["sets"]));
+                                //show($data["sets_old"]);
+                                $used = [];
                                 echo "<tr>";
                                 echo "<td><table width='100%;'><tr><th>Zdjęcie</th><th>Nazwa produktu</th><th>Total</th></tr>";
                                 foreach ($data["fullproducts"] as $key => $value) {
@@ -64,7 +66,37 @@
                                     echo "<td>$photo</td>";
                                     echo "<td>$value->p_name [<a href='" . ROOT . "/recipes'>przepis</a>]</td>";
                                     //echo "<td>$value->sku</td>";
-                                    echo "<td>0</td>";
+                                    $total_prod = 0;
+                                    foreach($data["cities"] as $c) {
+                                        $prod_local = 0;
+                                        if(isset($data["planned"][$c["id"]][$value->id]->amount)) {
+                                            $prod_local = $data["planned"][$c["id"]][$value->id]->amount;
+                                            $total_prod += $data["planned"][$c["id"]][$value->id]->amount;
+                                        }
+                                        if(isset($data["recipes"][$value->id])) {
+                                            foreach($data["recipes"][$value->id] as $kk => $vv) {
+                                                $used[$c["id"]][$kk]["amount"] = $prod_local * $vv->amount;
+                                                //echo $prod_local * $vv->amount;
+                                            }
+                                            //tu odjąć?
+                                        }
+                                        foreach($data["sets"][$c["id"]] as $kk => $vv) {
+                                            if(isset($used[$c["id"]][$kk]["amount"])) {
+                                                $vv->amount -= $used[$c["id"]][$kk]["amount"];
+                                            }
+                                        }
+                                        //show($used);
+                                        $used = [];
+                                        
+                                        //echo $prod_local;
+
+                                    }
+                                    if($total_prod <> 0) {
+                                        echo "<td><b>$total_prod Szt.</b></td>";
+
+                                    } else {
+                                        echo "<td></td>";
+                                    }
                                     echo "</tr>";
                                     /*echo "<td>[$key] $value->p_name</td>";
                                     echo "<td>$value->sku</td>";
@@ -85,6 +117,8 @@
 
                                                 $have = $data["sets"][$city["id"]][$v->sub_prod]->amount;
                                                 $need = $v->amount;
+                                                //echo "</br>Mam: ".$data["subproducts"][$v->sub_prod]->p_name . " : ".$have ."</br>";
+                                                //echo "</br>Potrzebuje: ".$data["subproducts"][$v->sub_prod]->p_name . " : ".$need;
                                                 $te = floor($have / $need);
                                                 if ($te < $max_to_do) {
                                                     $max_to_do = $te;
@@ -98,10 +132,16 @@
                                             // echo '<span id="myBtn" data-toggle="modal" data-target="#myModal'.$int.'">Open Modal</span>';
                                             //echo '</td>';
                                             $int++;
+                                            if(isset($data["planned"][$city["id"]][$key]->amount)) {
+                                                $setted = $data["planned"][$city["id"]][$key]->amount;
+                                            } else {
+                                                $setted = 0;
+                                            }
+                                            $max_to_do +=$setted;
                                             echo "<td><label for='input_" . $city["id"] . "_$key'>$max_to_do</label> Szt.</td>";
                                             echo "<form method='post'>";
                                             //echo "<td><input type='number' value='0' min='0' max='$max_to_do' name='input_" . $city["id"] . "_$key' id='input_" . $city["id"] . "_$key' class='input' data-wiersz='$key' data-kolumna='" . $city["id"] . "'></td>";
-                                            echo "<td><input type='number' value='0' min='0' max='$max_to_do' name='amount' id='input_" . $city["id"] . "_$key' class='input' data-wiersz='$key' data-kolumna='" . $city["id"] . "'></td>";
+                                            echo "<td><input type='number' value='$setted' min='0' max='$max_to_do' name='amount' id='input_" . $city["id"] . "_$key' class='input' data-wiersz='$key' data-kolumna='" . $city["id"] . "'></td>";
                                             echo "<input hidden name ='city' value='" . $city["id"] . "'>";
                                             echo "<input hidden name ='prod' value='" . $key . "'>";
                                             echo "<td><button class='btn btn-primary' type='submit' name='planSend' value='1'>Zapisz</button></td>";
@@ -132,7 +172,7 @@
 <?php
 $tablica_recipes = $data["recipes"];
 $tablica_subproducts = $data["subproducts"];
-$tablica_sets = $data["sets"];
+$tablica_sets = $data["sets22"];/usunąć 22
 ?>
 var tablica_recipes = <?php echo json_encode($tablica_recipes); ?>;
 var tablica_subproducts = <?php echo json_encode($tablica_subproducts); ?>;
@@ -204,9 +244,9 @@ labels.forEach(label => {
                                         <th scope="col">Zdjęcie</th>
                                         <th scope="col">Nazwa półproduktu</th>
                                         <th scope="col">SKU</th>
-                                        <th scope="col">Ilość</th>
+                                        <th scope="col">Ilość na magazynie</th>
+                                        <th scope="col">Ilość po zaplanowaniu</th>
                                         <th scope="col">Jednostka</th>
-                                        <th scope="col">Akcje</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -220,9 +260,9 @@ labels.forEach(label => {
                                         echo "  <tr><td>$photo</td>
                                             <td>[$key] $value->p_name</td>
                                             <td>$value->sku</td>
+                                            <td>" . $data["sets_old"][$city["id"]][$key]->amount . "</td>
                                             <td>" . $data["sets"][$city["id"]][$key]->amount . "</td>
-                                            <td>$value->p_unit</td>
-                                            <td></td>";
+                                            <td>$value->p_unit</td>";
                                         echo "</tr>";
                                     }
 
@@ -235,8 +275,6 @@ labels.forEach(label => {
                 <?php
             }
             ?>
-
-
 
 
             <div id="modalsContainer">

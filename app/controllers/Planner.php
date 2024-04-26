@@ -45,11 +45,13 @@ class Planner
         }
 
         $products_list = new PlannerModel();
-        foreach ($products_list->getAll($_SESSION["date_planner"]) as $key => $value) {
-            $data["planned"][$value->id] = $value;
+        if(!empty($products_list->getAll($_SESSION["date_planner"]))) {
+            foreach ($products_list->getAll($_SESSION["date_planner"]) as $key => $value) {
+                $data["planned"][$value->w_id][$value->p_id] = $value;
+            }
         }
-        // Tutaj ogarnąć sumowanie i wyświetlanie dobrze
 
+        // Tutaj ogarnąć sumowanie i wyświetlanie dobrze
         $products_list = new ProductsModel();
         foreach ($products_list->getAllSubProducts() as $key => $value) {
             $data["subproducts"][$value->id] = $value;
@@ -105,7 +107,7 @@ class Planner
             $data["product_quantity"][$product["id"]]["cargo"] = 0;
             $data["product_quantity"][$product["id"]]["return"] = 0;*/
         }
-        show($data);
+        //show($data);
         $this->view('planner.possibility', $data);
     }
 }
