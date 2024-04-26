@@ -56,4 +56,9 @@ class ScanModel
         $query = "select count(*) as total from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59' AND ps_active = 1";
         return $this->query($query)[0]->total;
     }
+    public function getAllProducts($date)
+    {
+        $query = "select * from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59' AND ps_active = 1";
+        return $this->query($query);
+    }
 }
