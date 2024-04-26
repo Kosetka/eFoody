@@ -27,6 +27,12 @@ class Sales
         $query = "select * from $this->table WHERE sale_description != 'gratis' AND sale_description != 'destroy' AND u_id = $u_id AND date >= '$today 00:00:00' AND date <='$today 23:59:59'";
         return $this->query($query);
     }
+    public function getLastScans($u_id)
+    {
+        $today = date("Y-m-d");
+        $query = "select * from $this->table WHERE sale_description = 'scan' AND u_id = $u_id AND date >= '$today 00:00:00' AND date <='$today 23:59:59' ORDER BY date DESC LIMIT 5";
+        return $this->query($query);
+    }
     public function getSoldProductsLeft($u_id)
     {
         $today = date("Y-m-d");

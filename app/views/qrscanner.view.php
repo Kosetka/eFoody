@@ -130,6 +130,63 @@
             </div>
 
 
+            <div class="card mb-4" style="margin-top: 50px;">
+        <div class="card-header">
+          <h2 class="">Ostatnie skanowania QR Code</h2>
+        </div>
+        <div class="form-group row m-3">
+          <div class="col-sm-12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Nazwa firmy</th>
+                  <th scope="col">Adres</th>
+                  <th scope="col">QR Code</th>
+                  <th scope="col">Produkt</th>
+                  <th scope="col">Data</th>
+                  <th scope="col">Akcje</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                if(isset($data["scans"])) {
+                    foreach ($data["scans"] as $key => $value) {
+                        $prodd = $data["products"][$value->p_id];
+                        if($value->c_id == 0) {
+                            $city_name = "Inna";
+                            $city_address = "";
+                        } else {
+                            $city_name = $data["companies"][$value->c_id]->full_name;
+                            $city_address = $data["companies"][$value->c_id]->address;
+                        }
+                      echo "  <tr><td>$city_name</td>
+                                                <td>$city_address</td>
+                                                <td>$prodd->sku</td>
+                                                <td>$prodd->p_name</td>
+                                                <td>$value->date</td>
+                                                <td><a class='btn btn-danger' onClick = 'clicked($key)' data-el=$key 
+                                                role='button'>Usuń</a></td>";
+                      echo "</tr>";
+                    }
+                }
+                ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <script>
+            function clicked(id) {
+                $.ajax({
+                    url: '<?php echo ROOT . "/qrscanner/delete/" ?>' + id,
+                    success: function (data) {
+                        //alert("Pomyślnie usunięto skan");
+                        window.location.href = window.location.href
+                    }
+                });
+            }
+        </script>
+
         </main>
         <script type="text/javascript"
             src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
@@ -139,7 +196,7 @@
                 if (cameras.length > 0) {
                     //0 front
                     //1 back
-                    scanner.start(cameras[2]); //dla telefonó 2 // 0 dla komputerów
+                    scanner.start(cameras[2]); //dla telefonów 2 // 0 dla komputerów
                 } else {
                     alert("no camera Found");
                 }

@@ -58,6 +58,30 @@ class QRScanner
             $data["companies"][$value->id] = $value;
         }
 
+        $sal = new Sales();
+        $temp = $sal->getLastScans($_SESSION["USER"]->id);
+        if(!empty($temp)) {
+            foreach ($temp as $key => $value) {
+                $data["scans"][$value->id] = $value;
+            }
+        }
+
         $this->view('qrscanner', $data);
+    }
+
+    public function delete()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        $id_scan = $URL[2];
+
+        $pq = new Sales;
+        $pq->delete($id_scan, "id");
+
+        $com = "Pomyślnie usunięto scan ID: $id_scan";
+
+        return $com;
     }
 }
