@@ -44,10 +44,20 @@
                         </div>
                     </div>
                     <div class="form-group row m-3">
-                        <label for="sale_description" class="col-sm-3 col-form-label">Gratis:</label>
-                        <div class="col-sm-9">
-                            <input type="checkbox" class="form-check-input" id="sale_description"
-                                name="sale_description" value="1">
+                        <label for="sale_description" class="col-sm-2 col-form-label">Rodzaj raportowania:</label>
+                        <div class="col-sm-10">
+                            <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='raport_type' id='raport_type_1' value='sell' checked>
+                                <label class='form-check-label' for='raport_type_1'>Sprzedaż</label>
+                            </div>
+                            <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='raport_type' id='raport_type_2' value='gratis'>
+                                <label class='form-check-label' for='raport_type_2'>Gratis</label>
+                            </div><div class='form-check'>
+                                <input class='form-check-input' type='radio' name='raport_type' id='raport_type_3' value='destroy'>
+                                <label class='form-check-label' for='raport_type_3'>Uszkodzone</label>
+                            </div>
+                            <?php /*<input type="checkbox" class="form-check-input" id="sale_description"name="sale_description" value="1">*/ ?>
                         </div>
                     </div>
                     <div id="modal" class="modal">

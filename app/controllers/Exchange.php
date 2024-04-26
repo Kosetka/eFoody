@@ -68,7 +68,7 @@ class Exchange
         $data["cargo"] = $cargo_list->getAllFullProducts($u_id);
 
         $sold_list = new Sales();
-        $data["sold"] = $sold_list->getSoldProducts($u_id);
+        $data["sold"] = $sold_list->getSoldProductsLeft($u_id);
 
         $products_list = new ReturnsModel();
         $data["return"] = $products_list->getAllFullProducts($u_id);

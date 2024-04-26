@@ -42,6 +42,8 @@ class Returns
         $prod_availability_exchange_from = [];
         $prod_availability_exchange_to = [];
         $prod_availability_exchange_pending = [];
+        $prod_availability_gratis = [];
+        $prod_availability_destroy = [];
 
         $data["products"] = $products_list->getAllFullProducts();
         foreach ($data["products"] as $prod) {
@@ -51,8 +53,10 @@ class Returns
             $prod_availability_exchange_from[$prod->id] = 0;
             $prod_availability_exchange_to[$prod->id] = 0;
             $prod_availability_exchange_pending[$prod->id] = 0;
+            $prod_availability_gratis[$prod->id] = 0;
+            $prod_availability_destroy[$prod->id] = 0;
         }
-
+        
         $today = date("Y-m-d");
         $date_from = $today . " 00:00:00";
         $date_to = $today . " 23:59:59";
@@ -113,6 +117,24 @@ class Returns
             }
         }
 
+        $products_list = new Sales();
+        $data["prod_availability_gratis"] = $products_list->getStatusProductsLeft($u_id, "gratis");
+
+        if (!is_bool($data["prod_availability_gratis"])) {
+            foreach ($data["prod_availability_gratis"] as $return) {
+                $prod_availability_gratis[$return->p_id] += $return->s_amount;
+            }
+        }
+
+        $products_list = new Sales();
+        $data["prod_availability_destroy"] = $products_list->getStatusProductsLeft($u_id, "destroy");
+
+        if (!is_bool($data["prod_availability_destroy"])) {
+            foreach ($data["prod_availability_destroy"] as $return) {
+                $prod_availability_destroy[$return->p_id] += $return->s_amount;
+            }
+        }
+
         //show($prod_availability_exchange_from);
         //die;
 
@@ -122,7 +144,8 @@ class Returns
         $data["prod_availability_exchange_from"] = $prod_availability_exchange_from;
         $data["prod_availability_exchange_to"] = $prod_availability_exchange_to;
         $data["prod_availability_exchange_pending"] = $prod_availability_exchange_pending;
-
+        $data["prod_availability_gratis"] = $prod_availability_gratis;
+        $data["prod_availability_destroy"] = $prod_availability_destroy;
         $this->view('returns.new', $data);
     }
 }

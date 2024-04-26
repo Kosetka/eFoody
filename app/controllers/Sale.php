@@ -63,10 +63,12 @@ class Sale
         $u_id = $_SESSION["USER"]->id;
         // do zrobienia
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
             $u_id = $_SESSION["USER"]->id;
             $c_id = $_POST["c_id"];
-            $sale_description = isset($_POST["sale_description"]) ? "gratis" : "";
+            $sale_description = $_POST["raport_type"];
+            if($sale_description == "sell") {
+                $sale_description = "";
+            }
             $v_sold = isset($_POST["sale_description"]) ? 2 : 1;
             $sales = new Sales;
             $check_sold = 0;
@@ -109,7 +111,7 @@ class Sale
         $data["cargo"] = $cargo_list->getAllFullProducts($u_id);
 
         $sold_list = new Sales();
-        $data["sold"] = $sold_list->getSoldProducts($u_id);
+        $data["sold"] = $sold_list->getSoldProductsLeft($u_id);
         
         $products_list = new ReturnsModel();
         $data["return"] = $products_list->getAllFullProducts($u_id);
