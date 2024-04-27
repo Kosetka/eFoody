@@ -45,9 +45,11 @@ class Planner
         }
 
         $products_list = new PlannerModel();
-        if(!empty($products_list->getAll($_SESSION["date_planner"]))) {
-            foreach ($products_list->getAll($_SESSION["date_planner"]) as $key => $value) {
-                $data["planned"][$value->w_id][$value->p_id] = $value;
+        if (isset($_SESSION["date_planner"])) {
+            if (!empty($products_list->getAll($_SESSION["date_planner"]))) {
+                foreach ($products_list->getAll($_SESSION["date_planner"]) as $key => $value) {
+                    $data["planned"][$value->w_id][$value->p_id] = $value;
+                }
             }
         }
 
@@ -114,24 +116,24 @@ class Planner
             }*/
 
             $products_list = new PlannerModel();
-            if(!empty($products_list->getAll($_SESSION["date_plan"]))) {
+            if (!empty($products_list->getAll($_SESSION["date_plan"]))) {
                 foreach ($products_list->getAll($_SESSION["date_plan"]) as $key => $value) {
                     $data["planned"][$value->w_id][$value->p_id] = $value;
                 }
             }
-            if(!empty($data["planned"])) {
-                foreach($data["planned"] as $key => $value) {
-                    foreach($value as $k => $v) {
+            if (!empty($data["planned"])) {
+                foreach ($data["planned"] as $key => $value) {
+                    foreach ($value as $k => $v) {
                         $data["prod_planned"][$k][$key] = $v->amount;
-                        if(!isset($data["prod_planned"][$k]["total"])) {
+                        if (!isset($data["prod_planned"][$k]["total"])) {
                             $data["prod_planned"][$k]["total"] = 0;
-                        } 
-                            $data["prod_planned"][$k]["total"] += $v->amount;
+                        }
+                        $data["prod_planned"][$k]["total"] += $v->amount;
                     }
                 }
             }
 
-            
+
             //die;
 
             /*$products_list = new PlannerModel();
@@ -146,24 +148,24 @@ class Planner
             foreach ($products_list->getAllSubProducts() as $key => $value) {
                 $data["subproducts"][$value->id] = $value;
             }*/
-            
+
             $products_list = new ProductsModel();
-            foreach($products_list->getAllFullProducts() as $key => $value) {
+            foreach ($products_list->getAllFullProducts() as $key => $value) {
                 $data["fullproducts"][$value->id] = $value;
             }
 
             $products_list = new ScanModel();
             $temp = $products_list->getAllProducts($_SESSION["date_plan"]);
-            
-            if(!empty($temp)) {
-                foreach($temp as $key => $value) {
+
+            if (!empty($temp)) {
+                foreach ($temp as $key => $value) {
                     $data["scans"][$value->p_id][$value->s_warehouse] = 0;
                     $data["scans"][$value->p_id]["total"] = 0;
                 }
             }
-            if(!empty($temp)) {
-                foreach($temp as $key => $value) {
-                    if(isset($data["scans"][$value->p_id][$value->s_warehouse])) {
+            if (!empty($temp)) {
+                foreach ($temp as $key => $value) {
+                    if (isset($data["scans"][$value->p_id][$value->s_warehouse])) {
                         $data["scans"][$value->p_id][$value->s_warehouse] += 1;
                         $data["scans"][$value->p_id]["total"] += 1;
                     }
