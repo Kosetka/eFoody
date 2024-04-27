@@ -110,21 +110,23 @@
                                     //show($data);
                                     foreach ($products_list2 as $key => $value) {
                                         $max = $products_list["$value->id"];
-                                        if (!empty($value->p_photo)) {
-                                            $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $value->p_photo . "'>";
-                                        } else {
-                                            $photo = "";
+                                        if ($max > 0) { //wyświetla tylko te produkty, które mam ze sobą
+                                            if (!empty($value->p_photo)) {
+                                                $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $value->p_photo . "'>";
+                                            } else {
+                                                $photo = "";
+                                            }
+                                            echo "  <tr><td>$photo</td>
+                                                <td>$value->p_name</td>
+                                                <td>$value->sku</td>
+                                                <td>$value->ean</td>
+                                                <td>";
+                                            echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="0" min=0 max=' . $max . '>';
+                                            echo "</td>
+                                                <td>$value->p_unit</td>
+                                                <td>" . $max . "</td>";
+                                            echo "</tr>";
                                         }
-                                        echo "  <tr><td>$photo</td>
-                                            <td>$value->p_name</td>
-                                            <td>$value->sku</td>
-                                            <td>$value->ean</td>
-                                            <td>";
-                                        echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="0" min=0 max=' . $max . '>';
-                                        echo "</td>
-                                            <td>$value->p_unit</td>
-                                            <td>" . $max . "</td>";
-                                        echo "</tr>";
                                     }
 
                                     ?>

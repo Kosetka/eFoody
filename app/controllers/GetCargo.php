@@ -30,7 +30,7 @@ class GetCargo
         }
 
         $cities = new Shared();
-        $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city";
+        $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city AND w_active = 1";
         $temp["cities"] = $cities->query($query);
         foreach ($temp["cities"] as $city) {
             $data["cities"][$city->id] = (array) $city;

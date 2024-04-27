@@ -22,9 +22,9 @@
 
                 <div class="text-start">
                     <div class="form-group row m-3">
-                        <label for="ean" class="col-sm-2 col-form-label">Kod kreskowy:</label>
+                        <label for="sku" class="col-sm-2 col-form-label">Kod kreskowy:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="ean" name="ean" autofocus>
+                            <input type="text" class="form-control" id="sku" name="sku" autofocus>
                         </div>
                         <button class="col-sm-2 btn btn-lg btn-primary" type="submit" name="scan">Skanuj</button>
                     </div>

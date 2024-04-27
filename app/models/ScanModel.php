@@ -26,16 +26,16 @@ class ScanModel
     {
         $this->errors = [];
 
-        if (empty($data['ean'])) {
-            $this->errors['ean'] = "EAN nie może być puste";
+        if (empty($data['sku'])) {
+            $this->errors['sku'] = "SKU nie może być puste";
         }
 
         $product = new ProductsModel;
-        $temp["ean"] = $_POST['ean'];
+        $temp["sku"] = $_POST['sku'];
 
         $row = $product->first($temp);
         if (!$row) {
-            $this->errors['ean_exists'] = "Taki EAN nie widnieje w bazie danych.";
+            $this->errors['sku_exists'] = "Taki SKU nie widnieje w bazie danych.";
         }
 
         if (empty($this->errors)) {
@@ -55,5 +55,10 @@ class ScanModel
     {
         $query = "select count(*) as total from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59' AND ps_active = 1";
         return $this->query($query)[0]->total;
+    }
+    public function getAllProducts($date)
+    {
+        $query = "select * from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59' AND ps_active = 1";
+        return $this->query($query);
     }
 }

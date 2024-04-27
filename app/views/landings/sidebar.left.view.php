@@ -27,9 +27,17 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Pobierz towar
                 </a>
+                <a class="nav-link" href="<?= ROOT ?>/places/my">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Moje miejsca
+                </a>
                 <a class="nav-link" href="<?= ROOT ?>/sale/new">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Raportuj sprzedaż
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/qrscanner">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    QR Raport
                 </a>
                 <a class="nav-link" href="<?= ROOT ?>/exchange">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
@@ -37,23 +45,58 @@
                 </a>
                 <a class="nav-link" href="<?= ROOT ?>/returns/new">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Zwróć towar
+                    Rozlicz towar
                 </a>
                 <a class="nav-link" href="<?= ROOT ?>/sale">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Historia sprzedaży
                 </a>
 
-                <div class="sb-sidenav-menu-heading">Technologia</div>
-                <a class="nav-link" href="<?= ROOT ?>/recipes">
+                <div class="sb-sidenav-menu-heading">Stickers</div>
+                <a class="nav-link" href="<?= ROOT ?>/#">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Receptury
+                    Sprzęt firmowy
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/#">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Dane kontaktowe
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/#">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Skanuj sprzęt
                 </a>
 
+                <div class="sb-sidenav-menu-heading">Raporty</div>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsesp"
+                    aria-expanded="false" aria-controls="collapseWH">
+                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    Sprzedaż
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapsesp" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="<?= ROOT ?>/#">Utarg - dzienny</a>
+                        <a class="nav-link" href="<?= ROOT ?>/#">Utarg - tygodniowy</a>
+                        <a class="nav-link" href="<?= ROOT ?>/#">Utarg - miesięczny</a>
+                    </nav>
+                </div>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsesppr"
+                    aria-expanded="false" aria-controls="collapseWH">
+                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    Produkcja
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapsesppr" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="<?= ROOT ?>/#">Raport produkcji</a>
+                    </nav>
+                </div>
+
+                <div class="sb-sidenav-menu-heading">Raporty mailowe</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                     aria-expanded="false" aria-controls="collapsePages">
                     <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                    Pages
+                    Sprzedaż
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
                 <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
@@ -61,7 +104,7 @@
                     <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                            Authentication
+                            Podgląd
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
@@ -75,7 +118,7 @@
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#pagesCollapseError" aria-expanded="false"
                             aria-controls="pagesCollapseError">
-                            Error
+                            Wysyłka ręczna
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
@@ -88,6 +131,21 @@
                         </div>
                     </nav>
                 </div>
+
+                <div class="sb-sidenav-menu-heading">Technologia</div>
+                <a class="nav-link" href="<?= ROOT ?>/recipes">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Receptury
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/planner">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Możliwości prod.
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/planner/show">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Plan produkcji
+                </a>
+
                 <div class="sb-sidenav-menu-heading">Zarządzanie magazynami</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseWH"
                     aria-expanded="false" aria-controls="collapseWH">
@@ -112,6 +170,7 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="<?= ROOT ?>/products">Lista produktów/SKU</a>
                         <a class="nav-link" href="<?= ROOT ?>/products/new">Dodaj nowe SKU</a>
+                        <a class="nav-link" href="<?= ROOT ?>/prices">Ceny gotowych produktów</a>
                     </nav>
                 </div>
 

@@ -44,9 +44,20 @@
                         </div>
                     </div>
                     <div class="form-group row m-3">
-                        <label for="sale_description" class="col-sm-2 col-form-label">Notatki:</label>
+                        <label for="sale_description" class="col-sm-2 col-form-label">Rodzaj raportowania:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="sale_description" name="sale_description">
+                            <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='raport_type' id='raport_type_1' value='sell' checked>
+                                <label class='form-check-label' for='raport_type_1'>Sprzedaż</label>
+                            </div>
+                            <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='raport_type' id='raport_type_2' value='gratis'>
+                                <label class='form-check-label' for='raport_type_2'>Gratis</label>
+                            </div><div class='form-check'>
+                                <input class='form-check-input' type='radio' name='raport_type' id='raport_type_3' value='destroy'>
+                                <label class='form-check-label' for='raport_type_3'>Uszkodzone</label>
+                            </div>
+                            <?php /*<input type="checkbox" class="form-check-input" id="sale_description"name="sale_description" value="1">*/ ?>
                         </div>
                     </div>
                     <div id="modal" class="modal">
@@ -93,6 +104,21 @@
                                             $products_list[$value->p_id] -= $value->amount;
                                         }
                                     }
+                                    if (!is_bool($data["exchange_from"])) {
+                                        foreach ($data["exchange_from"] as $key => $value) {
+                                            $products_list[$value->p_id] += $value->amount;
+                                        }
+                                    }
+                                    if (!is_bool($data["exchange_to"])) {
+                                        foreach ($data["exchange_to"] as $key => $value) {
+                                            $products_list[$value->p_id] -= $value->amount;
+                                        }
+                                    }
+                                    if (!is_bool($data["exchange_pending"])) {
+                                        foreach ($data["exchange_pending"] as $key => $value) {
+                                            $products_list[$value->p_id] -= $value->amount;
+                                        }
+                                    }
                                     // pobrana ilość z magazynu
                                     //trzeba odcjąc to już zaraportowane
                                     
@@ -102,21 +128,23 @@
                                     //show($data);
                                     foreach ($products_list2 as $key => $value) {
                                         $max = $products_list["$value->id"];
-                                        if (!empty($value->p_photo)) {
-                                            $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $value->p_photo . "'>";
-                                        } else {
-                                            $photo = "";
+                                        if ($max > 0) { // wyświetla tylko te, które mam ze sobą na stanie
+                                            if (!empty($value->p_photo)) {
+                                                $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $value->p_photo . "'>";
+                                            } else {
+                                                $photo = "";
+                                            }
+                                            echo "  <tr><td>$photo</td>
+                                                <td>$value->p_name</td>
+                                                <td>$value->sku</td>
+                                                <td>$value->ean</td>
+                                                <td>";
+                                            echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="0" min=0 max=' . $max . '>';
+                                            echo "</td>
+                                                <td>$value->p_unit</td>
+                                                <td>" . $max . "</td>";
+                                            echo "</tr>";
                                         }
-                                        echo "  <tr><td>$photo</td>
-                                            <td>$value->p_name</td>
-                                            <td>$value->sku</td>
-                                            <td>$value->ean</td>
-                                            <td>";
-                                        echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="0" min=0 max=' . $max . '>';
-                                        echo "</td>
-                                            <td>$value->p_unit</td>
-                                            <td>" . $max . "</td>";
-                                        echo "</tr>";
                                     }
 
                                     ?>

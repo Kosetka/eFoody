@@ -30,8 +30,6 @@
                                     <th scope="col">Zdjęcie</th>
                                     <th scope="col">Pełna nazwa</th>
                                     <th scope="col">Opis</th>
-                                    <th scope="col">EAN</th>
-                                    <th scope="col">Ilość</th>
                                     <th scope="col">Jednostka</th>
                                     <th scope="col">Typ produktu</th>
                                     <th scope="col">Akcja</th>
@@ -55,8 +53,6 @@
                                                     <td>$photo</td>
                                                     <td>$product->p_name</td>
                                                     <td>$product->p_description</td>
-                                                    <td>$product->ean</td>
-                                                    <td>[Ilość]</td>
                                                     <td>$product->p_unit</td>
                                                     <td>" . PRODUCTTYPENAMES[$product->prod_type] . "</td>
                                                     <td><a class='btn btn-info' href=' " . ROOT . "/products/edit/$product->id'

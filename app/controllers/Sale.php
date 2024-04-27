@@ -63,15 +63,27 @@ class Sale
         $u_id = $_SESSION["USER"]->id;
         // do zrobienia
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
             $u_id = $_SESSION["USER"]->id;
             $c_id = $_POST["c_id"];
-            $sale_description = $_POST["sale_description"];
+            $sale_description = $_POST["raport_type"];
+            if($sale_description == "sell") {
+                $sale_description = "";
+            }
+            $v_sold = isset($_POST["sale_description"]) ? 2 : 1;
             $sales = new Sales;
+            $check_sold = 0;
             foreach ($_POST["p_id"] as $key => $value) {
                 if ($value > 0) {
+                    $check_sold = 1;
                     $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => $sale_description, "p_id" => $key, "s_amount" => $value];
                     $sales->insert($toUpdate);
+                }
+            }
+            $placeVisited = new PlacesModel;
+            $v = $placeVisited->checkVisit($c_id);
+            if($check_sold == 1) {
+                if(empty($v)) {
+                    $placeVisited->insert(["u_id" => $u_id, "sold" => $v_sold, "c_id" => $c_id]);
                 }
             }
             $data['success'] = "Produkty zraportowane pomyślnie";
@@ -90,7 +102,7 @@ class Sale
         $data["users"] = $users_list->getAllTraders("users", TRADERS);
 
         $companies_list = new Companies();
-        $data["companies"] = $companies_list->getAllCompanies("companies");
+        $data["companies"] = $companies_list->getMyCompanies($u_id);
 
         $products_list = new ProductsModel();
         $data["products"] = $products_list->getAllFullProducts();
@@ -99,10 +111,21 @@ class Sale
         $data["cargo"] = $cargo_list->getAllFullProducts($u_id);
 
         $sold_list = new Sales();
-        $data["sold"] = $sold_list->getSoldProducts($u_id);
-
+        $data["sold"] = $sold_list->getSoldProductsLeft($u_id);
+        
         $products_list = new ReturnsModel();
         $data["return"] = $products_list->getAllFullProducts($u_id);
+
+        $products_list = new CargoExchange();
+        $data["exchange_from"] = $products_list->getExchangeTodayOffersToMeSelected($u_id, 1);
+
+        $products_list = new CargoExchange();
+        $data["exchange_to"] = $products_list->getExchangeTodayMyOffersSelected($u_id, 1);
+
+        $products_list = new CargoExchange();
+        $data["exchange_pending"] = $products_list->getExchangeTodayMyOffersSelected($u_id, 0);
+
+
 
         $this->view('sale.new', $data);
     }

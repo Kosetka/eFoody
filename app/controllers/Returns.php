@@ -29,7 +29,7 @@ class Returns
         }
 
         $cities = new Shared();
-        $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city";
+        $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city AND w_active = 1 AND wh_name = 'MAIN'"; //wh_name tylko zwroty na główny
         $temp["cities"] = $cities->query($query);
         foreach ($temp["cities"] as $city) {
             $data["cities"][$city->id] = (array) $city;
@@ -39,13 +39,24 @@ class Returns
         $prod_list = [];
         $prod_list_sold = [];
         $prod_list_returned = [];
+        $prod_availability_exchange_from = [];
+        $prod_availability_exchange_to = [];
+        $prod_availability_exchange_pending = [];
+        $prod_availability_gratis = [];
+        $prod_availability_destroy = [];
+
         $data["products"] = $products_list->getAllFullProducts();
         foreach ($data["products"] as $prod) {
             $prod_list[$prod->id] = 0;
             $prod_list_sold[$prod->id] = 0;
             $prod_list_returned[$prod->id] = 0;
+            $prod_availability_exchange_from[$prod->id] = 0;
+            $prod_availability_exchange_to[$prod->id] = 0;
+            $prod_availability_exchange_pending[$prod->id] = 0;
+            $prod_availability_gratis[$prod->id] = 0;
+            $prod_availability_destroy[$prod->id] = 0;
         }
-
+        
         $today = date("Y-m-d");
         $date_from = $today . " 00:00:00";
         $date_to = $today . " 23:59:59";
@@ -78,10 +89,63 @@ class Returns
                 $prod_list_returned[$return->p_id] += $return->amount;
             }
         }
+
+        $products_list = new CargoExchange();
+        $data["exchange_from"] = $products_list->getExchangeTodayOffersToMeSelected($u_id, 1);
+
+        if (!is_bool($data["exchange_from"])) {
+            foreach ($data["exchange_from"] as $return) {
+                $prod_availability_exchange_from[$return->p_id] += $return->amount;
+            }
+        }
+
+        $products_list = new CargoExchange();
+        $data["prod_availability_exchange_to"] = $products_list->getExchangeTodayMyOffersSelected($u_id, 1);
+
+        if (!is_bool($data["prod_availability_exchange_to"])) {
+            foreach ($data["prod_availability_exchange_to"] as $return) {
+                $prod_availability_exchange_to[$return->p_id] += $return->amount;
+            }
+        }
+
+        $products_list = new CargoExchange();
+        $data["prod_availability_exchange_pending"] = $products_list->getExchangeTodayMyOffersSelected($u_id, 0);
+
+        if (!is_bool($data["prod_availability_exchange_pending"])) {
+            foreach ($data["prod_availability_exchange_pending"] as $return) {
+                $prod_availability_exchange_pending[$return->p_id] += $return->amount;
+            }
+        }
+
+        $products_list = new Sales();
+        $data["prod_availability_gratis"] = $products_list->getStatusProductsLeft($u_id, "gratis");
+
+        if (!is_bool($data["prod_availability_gratis"])) {
+            foreach ($data["prod_availability_gratis"] as $return) {
+                $prod_availability_gratis[$return->p_id] += $return->s_amount;
+            }
+        }
+
+        $products_list = new Sales();
+        $data["prod_availability_destroy"] = $products_list->getStatusProductsLeft($u_id, "destroy");
+
+        if (!is_bool($data["prod_availability_destroy"])) {
+            foreach ($data["prod_availability_destroy"] as $return) {
+                $prod_availability_destroy[$return->p_id] += $return->s_amount;
+            }
+        }
+
+        //show($prod_availability_exchange_from);
+        //die;
+
         $data["prod_availability"] = $prod_list;
         $data["prod_availability_sold"] = $prod_list_sold;
         $data["prod_availability_returned"] = $prod_list_returned;
-
+        $data["prod_availability_exchange_from"] = $prod_availability_exchange_from;
+        $data["prod_availability_exchange_to"] = $prod_availability_exchange_to;
+        $data["prod_availability_exchange_pending"] = $prod_availability_exchange_pending;
+        $data["prod_availability_gratis"] = $prod_availability_gratis;
+        $data["prod_availability_destroy"] = $prod_availability_destroy;
         $this->view('returns.new', $data);
     }
 }

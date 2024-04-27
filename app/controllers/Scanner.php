@@ -81,14 +81,29 @@ class Scanner
             if ($scan->validate($_POST) && isset($_POST["scan"])) {
                 $u_id = $_SESSION["USER"]->id;
                 $s_warehouse = $_SESSION["USER"]->u_warehouse;
-                $ean = $_POST["ean"];
+                $sku = $_POST["sku"];
                 $product = new ProductsModel;
-                $p = $product->first(["ean" => $ean]);
-                $sku = $p->sku;
+                $p = $product->first(["sku" => $sku]);
+                $ean = $p->ean;
                 $p_id = $p->id;
-                $toUpdate = ["ean" => $ean, "u_id" => $u_id, "s_warehouse" => $s_warehouse, "p_id" => $p_id, "sku" => $sku, "ps_active" => 1];
-
+                $toUpdate = ["ean" => "$ean", "u_id" => $u_id, "s_warehouse" => $s_warehouse, "p_id" => $p_id, "sku" => "$sku", "ps_active" => 1];
                 $scan->insert($toUpdate);
+                $scan_id = $scan->firstNewAdded($toUpdate);
+                $scan_id = $scan_id->id;
+                //echo $scan_id;
+
+
+                if($p->prod_type == 1) {
+                    $recipes = new RecipesModel();
+                    foreach ($recipes->getOneRecipt($p_id) as $key => $value) {
+                        $qu = ["w_id" => $s_warehouse, "p_id" => $value->sub_prod, "u_id" => $u_id, "amount" => $value->amount, "old_amount" => 0, "transaction_type" => "sub", "scan_id" => $scan_id];
+                        $pq = new ProductsQuantity();
+                        $pq->insert($qu);
+                    }
+
+                }
+
+
                 $data['success'] = "Produkt zeskanowany";
                 unset($_POST);
 
@@ -117,6 +132,10 @@ class Scanner
                 redirect('login');
         $scan = new ScanModel;
         $scan->update($id_scan, ['ps_active' => 0]);
+
+        $pq = new ProductsQuantity;
+        $pq->delete($id_scan, "scan_id");
+
         $com = "Pomyślnie usunięto scan ID: $id_scan";
 
         return $com;

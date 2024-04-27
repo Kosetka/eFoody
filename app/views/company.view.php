@@ -26,6 +26,8 @@
                                 <th>Notatki</th>
                                 <th>Status</th>
                                 <th>Współrzędne</th>
+                                <th>Liczba pracowników</th>
+                                <th>Typ budynku</th>
                                 <th>Akcje</th>
                             </tr>
                         </thead>
@@ -44,11 +46,14 @@
                                 <th>Notatki</th>
                                 <th>Status</th>
                                 <th>Współrzędne</th>
+                                <th>Liczba pracowników</th>
+                                <th>Typ budynku</th>
                                 <th>Akcje</th>
                             </tr>
                         </tfoot>
                         <tbody>
                             <?php
+                            
                             $cities = [0 => "Brak magazynu"];
                             foreach ($data["cities"] as $s) {
                                 $cities[$s["id"]] = $s;
@@ -83,6 +88,8 @@
                                     <td>$company->description</td>
                                     <td>$active_display</td>
                                     <td>$latlong</td>
+                                    <td>$company->workers</td>
+                                    <td>".COMPANYSIZE[$company->c_type]."</td>
                                     <td>$edit_link</td>
                                 </tr>";
                             }

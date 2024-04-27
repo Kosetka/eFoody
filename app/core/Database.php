@@ -47,7 +47,6 @@ Trait Database
 
 		return false;
 	}
-	
 }
 
 

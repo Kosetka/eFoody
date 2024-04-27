@@ -56,7 +56,6 @@
                                         <th scope="col">Zdjęcie</th>
                                         <th scope="col">Produkt</th>
                                         <th scope="col">SKU</th>
-                                        <th scope="col">EAN</th>
                                         <th scope="col">Ilość</th>
                                         <th scope="col">Jednostka</th>
                                     </tr>
@@ -73,7 +72,6 @@
                                         echo "  <tr><td>$photo</td>
                                             <td>$value->p_name</td>
                                             <td>$value->sku</td>
-                                            <td>$value->ean</td>
                                             <td>";
                                         echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="0" min=0>';
                                         echo "</td>

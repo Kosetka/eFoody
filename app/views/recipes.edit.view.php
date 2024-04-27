@@ -68,8 +68,8 @@
                         </div>
                     </div>
                     <div class="form-group row m-3">
-                        <label for="active" class="col-sm-2 col-form-label">Receptura aktywna:</label>
-                        <div class="col-sm-10">
+                        <label for="active" class="col-sm-3 col-form-label">Receptura aktywna:</label>
+                        <div class="col-sm-9">
                             <input type="checkbox" class="form-check-input" id="active" name="active" value="1" <?php echo $checked; ?>>
                         </div>
                     </div>

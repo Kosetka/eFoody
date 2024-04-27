@@ -40,7 +40,6 @@
                                     <th scope="col">Zdjęcie</th>
                                     <th scope="col">Produkt</th>
                                     <th scope="col">SKU</th>
-                                    <th scope="col">EAN</th>
                                     <th scope="col">Pracownik</th>
                                     <th scope="col">Data dodania</th>
                                     <th scope="col">Status</th>
@@ -63,7 +62,6 @@
                                             <td>$photo</td>
                                             <td>$product->p_name</td>
                                             <td>$product->sku</td>
-                                            <td>$product->ean</td>
                                             <td>$user->first_name $user->last_name</td>
                                             <td>$value->date</td>
                                             <td>" . STATUSNAME[$value->active] . "</td>
@@ -79,7 +77,6 @@
                                     <th class="accordion-body">Zdjęcie</th>
                                     <th class="accordion-body">Półprodukt</th>
                                     <th class="accordion-body">SKU</th>
-                                    <th class="accordion-body">EAN</th>
                                     <th class="accordion-body">Ilość</th>
                                     <th class="accordion-body">Jednostka</th>
                                     <th class="accordion-body"></th>
@@ -101,7 +98,6 @@
                                         <td class="accordion-body">' . $photo . '</td>
                                         <td class="accordion-body">' . $p->p_name . '</td>
                                         <td class="accordion-body">' . $p->sku . '</td>
-                                        <td class="accordion-body">' . $p->ean . '</td>
                                         <td class="accordion-body">' . $recipe->amount . '</td>
                                         <td class="accordion-body">' . $p->p_unit . '</td>
                                         <td class="accordion-body"></td>

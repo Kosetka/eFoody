@@ -31,7 +31,9 @@ class Companies
         'date',
         'description',
         'latitude',
-        'longitude'
+        'longitude',
+        'c_type',
+        'workers'
     ];
 
     public function validate($data)
@@ -60,6 +62,11 @@ class Companies
     public function getAllCompanies($table)
     {
         $query = "select * from $table WHERE company_type = 0";
+        return $this->query($query);
+    }
+    public function getMyCompanies($u_id)
+    {
+        $query = "select * from $this->table WHERE company_type = 0 AND guardian = $u_id AND active = 1";
         return $this->query($query);
     }
     public function getAdded($date)
