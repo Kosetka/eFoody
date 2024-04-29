@@ -55,4 +55,20 @@ class Cargo
         $query = "select * from $this->table WHERE w_id = $w_id AND p_id = $p_id AND date >= '$date'";
         return $this->query($query);
     }
+
+    public function reportData($date_from, $date_to): array
+    {
+        $query = "SELECT 
+        u_id,
+        p_id,
+        SUM(amount) AS num
+    FROM 
+    cargo
+    WHERE 
+        date BETWEEN '$date_from' AND '$date_to' -- Zmodyfikowany warunek daty
+    GROUP BY 
+        u_id, p_id
+    ";
+        return $this->query($query);
+    }
 }

@@ -28,3 +28,11 @@ function getMargin($p, $c)
 {
 	return round(($p - $c) / $p * 100, 2);
 }
+function getPercent($p, $c)
+{
+	$ret = 0;
+	if($c > 0) {
+		$ret = round($p / $c * 100, 2);
+	}
+	return $ret;
+}

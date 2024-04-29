@@ -97,4 +97,25 @@ class Sales
         //show($array);
         return $array;
     }
+
+    public function reportData($date_from, $date_to): array
+    {
+        $query = "SELECT 
+        u_id,
+        p_id,
+        SUM(CASE WHEN sale_description = 'scan' OR sale_description = '' THEN s_amount ELSE 0 END) AS scan_and_empty,
+        MAX(CASE WHEN sale_description = 'gratis' THEN s_amount ELSE 0 END) AS gratis,
+        MAX(CASE WHEN sale_description = 'destroy' THEN s_amount ELSE 0 END) AS destroy
+    FROM 
+        sales
+    WHERE 
+        date BETWEEN '$date_from' AND '$date_to' -- Zmodyfikowany warunek daty
+    GROUP BY 
+        u_id, p_id
+    ";
+        return $this->query($query);
+    }
+
+    
+    
 }

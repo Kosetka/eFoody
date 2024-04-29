@@ -75,7 +75,8 @@
                 </a>
                 <div class="collapse" id="collapsesp" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= ROOT ?>/#">Utarg - dzienny</a>
+                        <a class="nav-link" href="<?= ROOT ?>/#">Raport godzinowy</a>
+                        <a class="nav-link" href="<?= ROOT ?>/reports/salesDaily">Raport dzienny</a>
                         <a class="nav-link" href="<?= ROOT ?>/#">Utarg - tygodniowy</a>
                         <a class="nav-link" href="<?= ROOT ?>/#">Utarg - miesięczny</a>
                     </nav>
@@ -144,6 +145,14 @@
                 <a class="nav-link" href="<?= ROOT ?>/planner/show">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Plan produkcji
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/#">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Podziel towar
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/planner/merchants">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Plan podziału
                 </a>
 
                 <div class="sb-sidenav-menu-heading">Zarządzanie magazynami</div>

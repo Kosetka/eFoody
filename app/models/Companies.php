@@ -74,4 +74,15 @@ class Companies
         $query = "select count(*) as total from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59'";
         return $this->query($query)[0]->total;
     }
+
+    function getCompaniesNumber() {
+        $query = "SELECT 
+        guardian,
+        COUNT(*) AS num
+    FROM 
+        companies
+    GROUP BY 
+        guardian";
+        return $this->query($query);
+    }
 }
