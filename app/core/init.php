@@ -12,3 +12,4 @@ require 'Model.php';
 require 'Controller.php';
 require 'App.php';
 require 'sessionManager.php';
+require 'Mailer.php';
