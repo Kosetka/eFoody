@@ -78,8 +78,11 @@ class Places
         }
 
         $sold_list = new Sales();
-        foreach($sold_list->getSoldForMap($u_id) as $key => $value) {
-            $data["soldCompany"][$value->c_id] = $value;
+        if(!empty($sold_list->getSoldForMap($u_id))) { //? powodowało błąd, nie wiem czy działa po tej zmianie skanowanie
+            foreach($sold_list->getSoldForMap($u_id) as $key => $value) {
+                $data["soldCompany"][$value->c_id] = $value;
+            }
+
         }
         
 

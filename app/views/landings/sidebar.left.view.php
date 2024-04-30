@@ -75,10 +75,10 @@
                 </a>
                 <div class="collapse" id="collapsesp" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/hour">Raport godzinowy</a>
-                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/day">Raport dzienny</a>
-                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/week">Raport tygodniowy</a>
-                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/month">Raport miesięczny</a>
+                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/show/hour">Raport godzinowy</a>
+                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/show/day">Raport dzienny</a>
+                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/show/week">Raport tygodniowy</a>
+                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/show/month">Raport miesięczny</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsesppr"

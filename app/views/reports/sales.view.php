@@ -1,4 +1,133 @@
 <?php 
+
+$send = $data["get"]["send"];
+
+if($send == 2) {
+    if($data["get"]["type"] == "hour") {
+        $f1 = "godzinę";
+    }
+    if($data["get"]["type"] == "day") {
+        $f1 = "dzień";
+    }
+    if($data["get"]["type"] == "week") {
+        $f1 = "zakres dat";
+    }
+    if($data["get"]["type"] == "month") {
+        $f1 = "miesiąc";
+    }
+
+
+    echo '<form method="get">';
+
+    echo '<h1 class="h3 mb-3 fw-normal">Wybierz '.$f1.' do wyświetlenia raportu:</h1>';
+                $date_from = "";
+                $date_to = "";
+                if (isset($data["date_from"])) {
+                    $date_from = $data["date_from"];
+                }
+                if (isset($data["date_to"])) {
+                    $date_to = $data["date_to"];
+                }
+
+?>
+                <div class="text-start">
+                    <?php
+//POPRAWIĆ wyświetlanie godzin po przesłaniu formularza, sprawdzić czy działa dla godzin porannych (6:00, 7:00, 8:00, 9:00)
+                        if($data["get"]["type"] == "hour") {
+            echo '  <div class="form-group row m-3">
+            <label for="date_from" class="col-sm-2 col-form-label">Godzina:</label>
+            <div class="col-sm-4">
+                <select class="form-control" id="date_from" name="date_from" required>';
+                    for ($hour = 7; $hour < 17; $hour++) {
+                        $selected = "";
+                        if($data["get"]["param1"] == $hour) {
+                            $selected = "selected";
+                        }
+                        $hour_padded = sprintf("%02d", $hour);
+                        $hour_padded_to = sprintf("%02d", $hour+1);
+                        echo '<option value="' . $hour_padded . '" '.$selected.'>' . $hour_padded . ':00 - '.$hour_padded_to.':00</option>';
+                    }
+                echo '</select>
+            </div>
+        </div>';  
+                        }
+
+                        if($data["get"]["type"] == "day") {
+                       
+            echo '  <div class="form-group row m-3">
+                        <label for="date_from" class="col-sm-2 col-form-label">Dzień:</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control" id="date_from" name="date_from"
+                                value="'.$date_from.'" required>
+                        </div>
+                    </div>';
+                        }
+                        if($data["get"]["type"] == "week") {
+                          
+            echo '  <div class="form-group row m-3">
+                        <label for="date_from" class="col-sm-2 col-form-label">Data od:</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control" id="date_from" name="date_from"
+                                value="'.$date_from.'" required>
+                        </div>
+                    </div>
+                    <div class="form-group row m-3">
+                        <label for="date_to" class="col-sm-2 col-form-label">Data do:</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control" id="date_to" name="date_to"
+                                value="'.$date_to.'" required>
+                        </div>
+                    </div>';
+                        }
+                        if($data["get"]["type"] == "month") {
+                        
+            echo '  <div class="form-group row m-3">
+            <label for="date_from" class="col-sm-2 col-form-label">Miesiąc:</label>
+            <div class="col-sm-4">
+                <select class="form-control" id="date_from" name="date_from" required>';
+                    for ($month = 1; $month <= 12; $month++) {
+                        echo '<option value="' . $month . '">' . date("F", mktime(0, 0, 0, $month, 1)) . '</option>';
+                    }
+                    
+               echo '</select>
+            </div>
+        </div>';
+        
+        echo '<div class="form-group row m-3">
+            <label for="date_to" class="col-sm-2 col-form-label">Rok:</label>
+            <div class="col-sm-4">
+                <select class="form-control" id="date_to" name="date_to" required>';
+                    for ($year = 2024; $year <= 2025; $year++) {
+                        echo '<option value="' . $year . '">' . $year . '</option>';
+                    }
+                echo '</select>
+            </div>
+        </div>';
+                        }
+                    ?>
+                    <script>
+                        const date = new Date();
+                        let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
+                        let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date);
+                        let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
+
+                        let currentDate = `${year}-${month}-${day}`;
+
+                        <?php
+                        if (!isset($data["date_from"])) {
+                            echo "document.getElementById('date_from').setAttribute('value', currentDate);";
+                        }
+                        if (!isset($data["date_to"])) {
+                            echo "document.getElementById('date_to').setAttribute('value', currentDate);";
+                        }
+                        ?>
+                    </script>
+                </div>
+                <button class="w-40 btn btn-lg btn-primary" style="margin-bottom: 40px;" type="submit" name="search" value=1>Wyświetl raport</button>
+            </form>
+<?php
+}
+
 $name = REPORTTYPES[$data["get"]["type"]];
 $dates = "";
 
@@ -159,7 +288,7 @@ $mess.="
 $to = 'mateusz.zybura@radluks.pl';
 $subject = "Raport $name sprzedaży - $dates";
 
-if($data["get"]["send"] == 1) {
+if($send == 1) {
     $mailer = new Mailer($to, $subject, $mess);
     if ($mailer->send()) {
         echo 'Wiadomość została wysłana pomyślnie.';

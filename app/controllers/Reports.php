@@ -12,7 +12,9 @@ class Reports
             redirect('login');
 
         $data = [];
-        $u_id = $_SESSION["USER"]->id;
+        
+
+        $this->view('reports.all', $data);
     }
 
     public function sales() 
@@ -46,6 +48,28 @@ class Reports
             if(isset($URL[5])) {
                 $param2 = $URL[5];
             }
+        } else if($type == "show" ) {
+            $send = 2;
+            if(isset($URL[3])) {
+                $type = $URL[3];
+            }
+            if(isset($_GET["search"])) { // wysłane zapytanie GETem
+                if(isset($_GET["date_from"])) {
+                    $param1 = $_GET["date_from"];
+                    $data["date_from"] = $param1;
+                }
+                if(isset($_GET["date_to"])) {
+                    $param2 = $_GET["date_to"];
+                    $data["date_to"] = $param2;
+                }
+            } else {
+                if(isset($URL[4])) {
+                    $param1 = $URL[4];
+                }
+                if(isset($URL[5])) {
+                    $param2 = $URL[5];
+                }
+            }
         } else {
             if(isset($URL[3])) {
                 $param1 = $URL[3];
@@ -59,10 +83,7 @@ class Reports
 
         if($type == "hour") {
             if ($param1 == 0) {
-                $param1 = date("h", strtotime("-1 hour"));
-            }
-            if ($param1 <10) {
-                $param1 = "0".$param1;
+                $param1_ = date("H", strtotime("-1 hour"));
             }
             $date_from = $today." ".$param1.":00:00";
             $date_to = $today." ".$param1.":59:59";
