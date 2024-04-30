@@ -75,10 +75,10 @@
                 </a>
                 <div class="collapse" id="collapsesp" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= ROOT ?>/#">Raport godzinowy</a>
-                        <a class="nav-link" href="<?= ROOT ?>/reports/salesDaily">Raport dzienny</a>
-                        <a class="nav-link" href="<?= ROOT ?>/#">Utarg - tygodniowy</a>
-                        <a class="nav-link" href="<?= ROOT ?>/#">Utarg - miesięczny</a>
+                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/hour">Raport godzinowy</a>
+                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/day">Raport dzienny</a>
+                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/week">Raport tygodniowy</a>
+                        <a class="nav-link" href="<?= ROOT ?>/reports/sales/month">Raport miesięczny</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsesppr"
@@ -111,9 +111,10 @@
                         <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordionPages">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="login.html">Login</a>
-                                <a class="nav-link" href="register.html">Register</a>
-                                <a class="nav-link" href="password.html">Forgot Password</a>
+                                <a class="nav-link" href="<?= ROOT ?>/reports/sales/hour">Raport godzinowy</a>
+                                <a class="nav-link" href="<?= ROOT ?>/reports/sales/day">Raport dzienny</a>
+                                <a class="nav-link" href="<?= ROOT ?>/reports/sales/week">Raport tygodniowy</a>
+                                <a class="nav-link" href="<?= ROOT ?>/reports/sales/month">Raport miesięczny</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -125,9 +126,10 @@
                         <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
                             data-bs-parent="#sidenavAccordionPages">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="401.html">401 Page</a>
-                                <a class="nav-link" href="404.html">404 Page</a>
-                                <a class="nav-link" href="500.html">500 Page</a>
+                                <a class="nav-link" href="<?= ROOT ?>/reports/sales/send/hour">Raport godzinowy</a>
+                                <a class="nav-link" href="<?= ROOT ?>/reports/sales/send/day">Raport dzienny</a>
+                                <a class="nav-link" href="<?= ROOT ?>/reports/sales/send/week">Raport tygodniowy</a>
+                                <a class="nav-link" href="<?= ROOT ?>/reports/sales/send/month">Raport miesięczny</a>
                             </nav>
                         </div>
                     </nav>

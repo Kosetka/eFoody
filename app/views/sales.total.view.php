@@ -4,7 +4,7 @@
 <div id="layoutSidenav">
     <?php require_once 'landings/sidebar.left.view.php' ?>
     <div id="layoutSidenav_content">
-        <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 50%">
+        <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 100%">
 
         <?php require_once 'reports/sales.view.php' ?>
 

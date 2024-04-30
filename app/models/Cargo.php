@@ -69,6 +69,12 @@ class Cargo
     GROUP BY 
         u_id, p_id
     ";
-        return $this->query($query);
+        $result = $this->query($query);
+
+        if (empty($result)) {
+            return [];
+        }
+    
+        return $result;
     }
 }

@@ -81,7 +81,13 @@ class CargoExchange
     GROUP BY 
         u_id_init, u_id_target, p_id
     ";
-        return $this->query($query);
+        $result = $this->query($query);
+
+        if (empty($result)) {
+            return [];
+        }
+    
+        return $result;
     }
 
 }

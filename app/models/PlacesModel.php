@@ -45,6 +45,12 @@ class PlacesModel
     GROUP BY 
         u_id, sold
     ";
-        return $this->query($query);
+        $result = $this->query($query);
+
+        if (empty($result)) {
+            return [];
+        }
+    
+        return $result;
     }
 }

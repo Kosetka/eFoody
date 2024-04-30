@@ -1,19 +1,44 @@
 <?php 
-$mess = "<table>
-    <thead>
-        <tr>
-            <th>Imię i nazwisko</th>
-            <th>Sprzedany towar</th>
-            <th>Stan</th>
-            <th>% sprzedaży</th>
-            <th>Odwiedzone firmy</th>
-            <th>Wszystkie firmy</th>
-            <th>% odwiedzonych firm</th>
-            <th>Pobrane z magazynu</th>
-            <th>Wymiany</th>
-            <th>Uszkodzone</th>
-            <th>Zwroty</th>
-            <th>Gratisy</th>
+$name = REPORTTYPES[$data["get"]["type"]];
+$dates = "";
+
+if ($data["get"]["type"] == "hour") {
+    $new_date_format = date("d-m-Y", strtotime($data["get"]["date_from"]));
+    $dates = $new_date_format." - ".$data["get"]["param1"].":00";
+}
+if ($data["get"]["type"] == "day") {
+    $new_date_format = date("d-m-Y", strtotime($data["get"]["date_from"]));
+    $dates = $new_date_format;
+}
+if ($data["get"]["type"] == "week") {
+    $new_date_format_from = date("d-m-Y", strtotime($data["get"]["date_from"]));
+    $new_date_format_to = date("d-m-Y", strtotime($data["get"]["date_to"]));
+    $dates = $new_date_format_from." - ".$new_date_format_to;
+}
+if ($data["get"]["type"] == "month") {
+    $month = date("F Y", strtotime($data["get"]["date_from"]));
+    $dates = $month;
+}
+
+
+$mess = "<table style='border: 1px solid'>
+    <thead style='border: 1px solid'>
+        <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
+            <th colspan='12'>Raport $name sprzedaży - $dates</th>
+        </tr>
+        <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+            <th style='border: 1px solid #000; width: 8%'>Handlowiec</th>
+            <th style='border: 1px solid #000; width: 8%'>Sprzedany towar</th>
+            <th style='border: 1px solid #000; width: 8%'>Stan</th>
+            <th style='border: 1px solid #000; width: 8%'>% sprzedaży</th>
+            <th style='border: 1px solid #000; width: 8%'>Odwiedzone firmy</th>
+            <th style='border: 1px solid #000; width: 8%'>Wszystkie firmy</th>
+            <th style='border: 1px solid #000; width: 8%'>% odwiedzonych firm</th>
+            <th style='border: 1px solid #000; width: 8%'>Pobrane z magazynu</th>
+            <th style='border: 1px solid #000; width: 8%'>Wymiany</th>
+            <th style='border: 1px solid #000; width: 8%'>Uszkodzone</th>
+            <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
+            <th style='border: 1px solid #000; width: 8%'>Gratisy</th>
         </tr>
     </thead>
     <tbody>";
@@ -88,38 +113,38 @@ $mess = "<table>
 
             $stan = $cargos + $plus - $minus;
 $mess.="
-        <tr>
-            <td>$user->first_name $user->last_name</td>
-            <td>$sales</td>
-            <td>$stan</td>
-            <td>".getPercent($sales, $stan)."%</td>
-            <td>$visit</td>
-            <td>$companies</td>
-            <td>".getPercent($visit, $companies)."%</td>
-            <td>$cargos</td>
-            <td>".$plus - $minus."</td>
-            <td>$destroy</td>
-            <td>$returns</td>
-            <td>$gratis</td>
+        <tr style='text-align: center;'>
+            <td style='border: 1px solid;'>$user->first_name $user->last_name</td>
+            <td style='border: 1px solid;'>$sales</td>
+            <td style='border: 1px solid;'>$stan</td>
+            <td style='border: 1px solid;'>".getPercent($sales, $stan)."%</td>
+            <td style='border: 1px solid;'>$visit</td>
+            <td style='border: 1px solid;'>$companies</td>
+            <td style='border: 1px solid;'>".getPercent($visit, $companies)."%</td>
+            <td style='border: 1px solid;'>$cargos</td>
+            <td style='border: 1px solid;'>".$plus - $minus."</td>
+            <td style='border: 1px solid;'>$destroy</td>
+            <td style='border: 1px solid;'>$returns</td>
+            <td style='border: 1px solid;'>$gratis</td>
         </tr>";
         }
         $total_stan = $total_cargo + $total_plus - $total_minus;
 $mess.="
     </tbody>
     <tfoot>
-        <tr>
-            <td>TOTAL</td>
-            <td>$total_sales</td>
-            <td>$total_stan</td>
-            <td>".getPercent($total_sales,$total_stan)."%</td>
-            <td>$total_visit</td>
-            <td>$total_companies</td>
-            <td>".getPercent($total_visit,$total_companies)."%</td>
-            <td>$total_cargo</td>
-            <td>".$total_plus - $total_minus."</td>
-            <td>$total_destroy</td>
-            <td>$total_returns</td>
-            <td>$total_gratis</td>
+        <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
+            <td style='border: 1px solid;'>TOTAL</td>
+            <td style='border: 1px solid;'>$total_sales</td>
+            <td style='border: 1px solid;'>$total_stan</td>
+            <td style='border: 1px solid;'>".getPercent($total_sales,$total_stan)."%</td>
+            <td style='border: 1px solid;'>$total_visit</td>
+            <td style='border: 1px solid;'>$total_companies</td>
+            <td style='border: 1px solid;'>".getPercent($total_visit,$total_companies)."%</td>
+            <td style='border: 1px solid;'>$total_cargo</td>
+            <td style='border: 1px solid;'>".$total_plus - $total_minus."</td>
+            <td style='border: 1px solid;'>$total_destroy</td>
+            <td style='border: 1px solid;'>$total_returns</td>
+            <td style='border: 1px solid;'>$total_gratis</td>
         </tr>
     </tfoot>
 </table>";
@@ -132,13 +157,15 @@ $mess.="
 
 <?php
 $to = 'mateusz.zybura@radluks.pl';
-$subject = 'Raport dzienny %dzień%';
+$subject = "Raport $name sprzedaży - $dates";
 
-$mailer = new Mailer($to, $subject, $mess);
-if ($mailer->send()) {
-    echo 'Wiadomość została wysłana pomyślnie.';
-} else {
-    echo 'Wystąpił problem podczas wysyłania wiadomości. Błąd: ' . print_r($mailer->getLastError(), true);
+if($data["get"]["send"] == 1) {
+    $mailer = new Mailer($to, $subject, $mess);
+    if ($mailer->send()) {
+        echo 'Wiadomość została wysłana pomyślnie.';
+    } else {
+        echo 'Wystąpił problem podczas wysyłania wiadomości. Błąd: ' . print_r($mailer->getLastError(), true);
+    }
 }
 ?>
 
