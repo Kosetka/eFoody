@@ -85,7 +85,7 @@
                     <div class="form-group row m-3">
                         <label for="nip" class="col-sm-2 col-form-label">NIP:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="nip" name="nip" required>
+                            <input type="text" class="form-control" id="nip" name="nip">
                         </div>
                     </div>
                     <div class="form-group row m-3">

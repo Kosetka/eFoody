@@ -40,17 +40,17 @@ class Companies
     {
         $this->errors = [];
 
-        if (empty($data['nip'])) {
-            $this->errors['nip'] = "NIP jest wymagany.";
-        }
+        //if (empty($data['nip'])) {
+        //    $this->errors['nip'] = "NIP jest wymagany.";
+        //}
 
-        $user = new Companies;
-        $temp["nip"] = $_POST['nip'];
+        //$user = new Companies;
+        //$temp["nip"] = $_POST['nip'];
 
-        $row = $user->first($temp);
-        if ($row) {
-            $this->errors['nip_exists'] = "Taki NIP już widnieje w bazie danych.";
-        }
+        //$row = $user->first($temp);
+        //if ($row) {
+        //    $this->errors['nip_exists'] = "Taki NIP już widnieje w bazie danych.";
+        //}
 
         if (empty($this->errors)) {
             return true;
