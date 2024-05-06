@@ -32,7 +32,7 @@
                                     <th scope="col">Opis</th>
                                     <th scope="col">Jednostka</th>
                                     <th scope="col">Typ produktu</th>
-                                    <th scope="col">Akcja</th>
+                                    <th scope="col" colspan="2">Akcja</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,8 +56,13 @@
                                                     <td>$product->p_unit</td>
                                                     <td>" . PRODUCTTYPENAMES[$product->prod_type] . "</td>
                                                     <td><a class='btn btn-info' href=' " . ROOT . "/products/edit/$product->id'
-                                                            role='button'>Edytuj</a></td>
-                                                </tr>";
+                                                            role='button'>Edytuj</a></td>";
+                                        if($product->prod_type == 1) {
+                                            echo "<td><a class='btn btn-primary' href=' " . ROOT . "/assets/labels/$product->sku.lbx'
+                                                                role='button'>Etykieta</a></td>";
+                                        }
+
+                                        echo "</tr>";
                                     }
                                 }
                                 ?>
