@@ -79,6 +79,7 @@ class Company
                 $company->insert($_POST);
                 $data['success'] = "Konto firmy zostało pomyślnie utworzone";
                 $this->view('company.new', $data);
+                die;
             }
             $data['errors'] = $company->errors;
         }
