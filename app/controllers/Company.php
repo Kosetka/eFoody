@@ -96,6 +96,9 @@ class Company
             $URL = explode("/", trim($URL, "/"));
             $company_id = $URL[2];
             $company = new Companies();
+            if (!isset($_POST["active"])) {
+                $_POST["active"] = 0;
+            }
             if (isset($_POST["companyEdit"])) {
                 $_POST["address"] = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
                 $company->update($company_id, $_POST);
