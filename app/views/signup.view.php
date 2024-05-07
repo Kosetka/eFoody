@@ -46,6 +46,18 @@
             </div>
           </div>
           <div class="form-group row m-3">
+              <label for="phone_business" class="col-sm-2 col-form-label">Numer służbowy:</label>
+              <div class="col-sm-10">
+                  <input type="number" class="form-control" id="phone_business" name="phone_business">
+              </div>
+          </div>
+          <div class="form-group row m-3">
+              <label for="phone_private" class="col-sm-2 col-form-label">Numer prywatny:</label>
+              <div class="col-sm-10">
+                  <input type="number" class="form-control" id="phone_private" name="phone_private">
+              </div>
+          </div>
+          <div class="form-group row m-3">
             <label for="active" class="col-sm-2 col-form-label">Konto aktywne:</label>
             <div class="col-sm-10">
               <input type="checkbox" class="form-check-input" id="active" name="active" value="1" checked>

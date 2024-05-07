@@ -19,7 +19,9 @@ class User
 		'last_name',
 		'u_warehouse',
 		'active',
-		'u_role'
+		'u_role', 
+		'phone_business',
+		'phone_private'
 	];
 
 	public function getAllTraders($table, $ids)

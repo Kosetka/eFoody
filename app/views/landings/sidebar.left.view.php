@@ -2,27 +2,51 @@
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
-                <div class="sb-sidenav-menu-heading">Użytkownicy</div>
+                <?php 
+                $your_id = $_SESSION["USER"]->u_role;
+                ?>
+
+                <div class="sb-sidenav-menu-heading">Pracownicy</div>
                 <a class="nav-link" href="<?= ROOT ?>/users">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Lista pracowników
                 </a>
+                <?php
+                $access = [1, 2, 4];
+                if(in_array($your_id,$access)) {
+                ?>
                 <a class="nav-link" href="<?= ROOT ?>/signup">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dodaj pracownika
                 </a>
-
+                <?php } ?>
+                
+                <?php
+                $access = [1, 2, 4];
+                if(in_array($your_id,$access)) {
+                ?>
                 <div class="sb-sidenav-menu-heading">Baza firm</div>
                 <a class="nav-link" href="<?= ROOT ?>/company">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Baza firm
                 </a>
+                <?php } ?>
+
+                <?php
+                $access = [1, 2, 4];
+                if(in_array($your_id,$access)) {
+                ?>
                 <a class="nav-link" href="<?= ROOT ?>/company/new">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dodaj firmę
                 </a>
-
-                <div class="sb-sidenav-menu-heading">Sprzedaż</div>
+                <?php } ?>
+                
+                <?php
+                $access = [1, 2, 3, 4];
+                if(in_array($your_id,$access)) {
+                ?>
+                <div class="sb-sidenav-menu-heading">Handlowiec</div>
                 <a class="nav-link" href="<?= ROOT ?>/getcargo">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Pobierz towar
@@ -51,7 +75,12 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Historia sprzedaży
                 </a>
+                <?php } ?>
 
+                <?php
+                $access = [1, 2, 4];
+                if(in_array($your_id,$access)) {
+                ?>
                 <div class="sb-sidenav-menu-heading">Stickers</div>
                 <a class="nav-link" href="<?= ROOT ?>/#">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
@@ -65,7 +94,12 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Skanuj sprzęt
                 </a>
+                <?php } ?>
 
+                <?php
+                $access = [1, 2];
+                if(in_array($your_id,$access)) {
+                ?>
                 <div class="sb-sidenav-menu-heading">Raporty</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsesp"
                     aria-expanded="false" aria-controls="collapseWH">
@@ -92,7 +126,12 @@
                         <a class="nav-link" href="<?= ROOT ?>/#">Raport produkcji</a>
                     </nav>
                 </div>
+                <?php } ?>
 
+                <?php
+                $access = [1, 2];
+                if(in_array($your_id,$access)) {
+                ?>
                 <div class="sb-sidenav-menu-heading">Raporty mailowe</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                     aria-expanded="false" aria-controls="collapsePages">
@@ -134,7 +173,12 @@
                         </div>
                     </nav>
                 </div>
+                <?php } ?>
 
+                <?php
+                $access = [1, 2];
+                if(in_array($your_id,$access)) {
+                ?>
                 <div class="sb-sidenav-menu-heading">Technologia</div>
                 <a class="nav-link" href="<?= ROOT ?>/recipes">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
@@ -156,7 +200,12 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Plan podziału
                 </a>
+                <?php } ?>
 
+                <?php
+                $access = [1, 2];
+                if(in_array($your_id,$access)) {
+                ?>
                 <div class="sb-sidenav-menu-heading">Zarządzanie magazynami</div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseWH"
                     aria-expanded="false" aria-controls="collapseWH">
@@ -201,18 +250,19 @@
                         <a class="nav-link" href="<?= ROOT ?>/scanner/history">Historia skanowania</a>
                     </nav>
                 </div>
+                <?php } ?>
 
             </div>
         </div>
         <div class="sb-sidenav-footer">
-            <div class="small">Witaj,</div>
             <b>
                 <?php
                 $warehoues_id = getYourData("u_warehouse");
                 $current_city = $_SESSION["CITIES"][$warehoues_id];
                 $current_city_detailed = $current_city["c_name"] . "_" . $current_city["wh_name"];
-                ?>
-                <?php echo getYourData("first_name") . " " . getYourData("last_name") . "</br>E-mail: " . getYourData("email") . "</br> Uprawnienia: " . $_SESSION["ROLE"]->role_name . "</br>Magazyn: " . $current_city_detailed ?>
+                echo getYourData("first_name") . " " . 
+                    getYourData("last_name") . "</br>E-mail: " . 
+                    getYourData("email") . "</br> Uprawnienia: " . $_SESSION["ROLE"]->role_name . "</br>Magazyn: " . $current_city_detailed ?>
             </b>
         </div>
     </nav>
