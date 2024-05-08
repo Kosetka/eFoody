@@ -1,6 +1,8 @@
 <?php require_once 'landings/header.view.php' ?>
 <?php require_once 'landings/nav.view.php' ?>
 
+
+
 <div id="layoutSidenav">
     <?php require_once 'landings/sidebar.left.view.php' ?>
     <div id="layoutSidenav_content">
@@ -28,7 +30,7 @@
                         <div class="form-group row m-3">
                             <label for="c_id" class="col-sm-2 col-form-label">Firma:</label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="c_id" name="c_id" onchange="companyChange()">
+                                <select class="" style="width: 100%" id="c_id" name="c_id" onchange="companyChange()" placeholder="Wybierz firmę...">
                                     <?php
                                     if (isset($_SESSION["selected_company"])) {
                                         $my_company = $_SESSION["selected_company"];

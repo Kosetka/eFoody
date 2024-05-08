@@ -31,7 +31,7 @@
                     <div class="form-group row m-3">
                         <label for="c_id" class="col-sm-2 col-form-label">Firma:</label>
                         <div class="col-sm-10">
-                            <select class="form-control" id="c_id" name="c_id">
+                            <select class="" style="width: 100%" id="c_id" name="c_id">
                                 <option value='0' selected>Inna </option>
                                 <?php
                                 foreach ($data["companies"] as $company) {

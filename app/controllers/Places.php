@@ -65,9 +65,13 @@ class Places
         $data["places"] = [];
         $u_id = $_SESSION["USER"]->id;
 
+        $data["companies"] = [];
+
         $companies = new Companies();
-        foreach($companies->getMyCompanies($u_id) as $key => $value) {
-            $data["companies"][$value->id] = $value;
+        if(!empty($companies->getMyCompanies($u_id))) {
+            foreach($companies->getMyCompanies($u_id) as $key => $value) {
+                $data["companies"][$value->id] = $value;
+            }
         }
 
         $places = new PlacesModel();

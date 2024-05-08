@@ -54,8 +54,10 @@ class QRScanner
         }
         $companies = new Companies();
         $temp = $companies->getMyCompanies($_SESSION["USER"]->id);
-        foreach ($temp as $key => $value) {
-            $data["companies"][$value->id] = $value;
+        if(!empty($temp)) {
+            foreach ($temp as $key => $value) {
+                $data["companies"][$value->id] = $value;
+            }
         }
 
         $sal = new Sales();
