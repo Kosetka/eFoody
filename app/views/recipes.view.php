@@ -52,7 +52,8 @@
                                 <?php
                                 foreach ($data["recipes"] as $key => $value) {
                                     $product = $data["products"][$value->p_id];
-                                    $user = $data["users"][$key];
+                                    $uu_id = $data["recipes"][$key]->u_id;
+                                    $user = $data["users"][$uu_id];
                                     if (!empty($product->p_photo)) {
                                         $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $product->p_photo . "'>";
                                     } else {

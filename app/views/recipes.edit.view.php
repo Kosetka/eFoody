@@ -117,7 +117,6 @@
                                     <tr>
                                         <th scope="col">Zdjęcie</th>
                                         <th scope="col">Półprodukt</th>
-                                        <th scope="col">Jednostka</th>
                                         <th scope="col">Ilość</th>
                                         <th scope="col">Aktywny</th>
                                     </tr>
@@ -142,9 +141,9 @@
 
                                         echo "  <tr><td>$photo</td>
                                             <td>$value->p_name</td>
-                                            <td>$value->p_unit</td>
                                             <td>";
                                         echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="amount" name="amount[' . $value->id . ']" value="' . $val . '" step="any" min=0>';
+                                        echo "<p style='margin-left: 70px; margin-top:5px;'>$value->p_unit</p>";
                                         echo "</td>";
                                         echo "<td>";
                                         echo "<input type='checkbox' class='form-check-input' id='sub_prod' name='sub_prod[" . $value->id . "]' value='1' $checked>";
