@@ -16,6 +16,8 @@ class App
 	public function loadController()
 	{
 		$URL = $this->splitURL();
+
+		show($URL);die;
 		/** select controller **/
 		$filename = "../app/controllers/" . ucfirst($URL[0]) . ".php";
 		if (file_exists($filename)) {
