@@ -22,7 +22,7 @@ class App
 		if (file_exists($filename)) {
 			require $filename;
 			$this->controller = ucfirst($URL[0]);
-			show($filename);die;
+			//show($filename);die;
 			unset($URL[0]);
 		} else {
 
