@@ -17,11 +17,11 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	/** database config **/
 	define('DBNAME', 'efoody');
 	define('DBHOST', 'localhost');
-	define('DBUSER', 'root');
-	define('DBPASS', '');
+	define('DBUSER', 'efoody_admin');
+	define('DBPASS', '#Verona123');
 	define('DBDRIVER', '');
 
-	define('ROOT', 'https://192.168.1.105/efoody/public');
+	define('ROOT', 'https://51.254.47.60//efoody/public');
 	define('IMG_ROOT', '/efoody/public/assets/img/');
 	define('IMG_ROOT_UPLOAD', '../public/assets/img/');
 
