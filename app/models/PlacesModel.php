@@ -32,4 +32,25 @@ class PlacesModel
         return $this->query($query);
     }
 
+    public function reportData($date_from, $date_to): array
+    {
+        $query = "SELECT 
+        u_id,
+        sold,
+        SUM(sold) AS num
+    FROM 
+    places
+    WHERE 
+        date BETWEEN '$date_from' AND '$date_to' -- Zmodyfikowany warunek daty
+    GROUP BY 
+        u_id, sold
+    ";
+        $result = $this->query($query);
+
+        if (empty($result)) {
+            return [];
+        }
+    
+        return $result;
+    }
 }

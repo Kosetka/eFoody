@@ -65,9 +65,13 @@ class Places
         $data["places"] = [];
         $u_id = $_SESSION["USER"]->id;
 
+        $data["companies"] = [];
+
         $companies = new Companies();
-        foreach($companies->getMyCompanies($u_id) as $key => $value) {
-            $data["companies"][$value->id] = $value;
+        if(!empty($companies->getMyCompanies($u_id))) {
+            foreach($companies->getMyCompanies($u_id) as $key => $value) {
+                $data["companies"][$value->id] = $value;
+            }
         }
 
         $places = new PlacesModel();
@@ -78,8 +82,11 @@ class Places
         }
 
         $sold_list = new Sales();
-        foreach($sold_list->getSoldForMap($u_id) as $key => $value) {
-            $data["soldCompany"][$value->c_id] = $value;
+        if(!empty($sold_list->getSoldForMap($u_id))) { //? powodowało błąd, nie wiem czy działa po tej zmianie skanowanie
+            foreach($sold_list->getSoldForMap($u_id) as $key => $value) {
+                $data["soldCompany"][$value->c_id] = $value;
+            }
+
         }
         
 

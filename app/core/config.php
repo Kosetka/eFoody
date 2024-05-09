@@ -17,11 +17,11 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	/** database config **/
 	define('DBNAME', 'efoody');
 	define('DBHOST', 'localhost');
-	define('DBUSER', 'root');
-	define('DBPASS', '');
+	define('DBUSER', 'efoody_admin');
+	define('DBPASS', '#Verona123');
 	define('DBDRIVER', '');
 
-	define('ROOT', 'https://192.168.1.105/efoody/public');
+	define('ROOT', 'https://51.254.47.60//efoody/public');
 	define('IMG_ROOT', '/efoody/public/assets/img/');
 	define('IMG_ROOT_UPLOAD', '../public/assets/img/');
 
@@ -37,6 +37,7 @@ define('VISITSTATUSES', [0 => "Brak sprzedaży", 1 => "Sprzedaż", 2 => "Gratisy
 define('COMPANYSIZE', ["building" => "Biurowiec", "house" => "Dom", "shop" => "Sklep", "warehouse" => "Magazyn", "exclamation" => "Duży biurowiec"]);
 define('TRADERS', '1, 3');
 define('EXCHANGESTATUS', [0 => "Oczekuje", 1 => "Zaakceptowany", 2 => "Odrzucony", 3 => "Odrzucony automatycznie", 4 => "Anulowany"]);
+define('REPORTTYPES', ['hour' => "godzinny", 'day'=>"dzienny", 'week' => "tygodniowy", 'month' => "miesięczny"]);
 
 /** true means show errors **/
 define('DEBUG', true);

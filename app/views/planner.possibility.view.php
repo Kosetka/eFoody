@@ -80,9 +80,12 @@
                                             }
                                             //tu odjąć?
                                         }
+                                        //show($data["sets"][$c["id"]]);
                                         foreach($data["sets"][$c["id"]] as $kk => $vv) {
                                             if(isset($used[$c["id"]][$kk]["amount"])) {
-                                                $vv->amount -= $used[$c["id"]][$kk]["amount"];
+                                                if(isset($vv->amount)) {
+                                                    $vv->amount -= $used[$c["id"]][$kk]["amount"];
+                                                }
                                             }
                                         }
                                         //show($used);
@@ -114,8 +117,11 @@
                                             $max_to_do = 999;
                                             $req = "";
                                             foreach ($data["recipes"][$key] as $k => $v) {
-
-                                                $have = $data["sets"][$city["id"]][$v->sub_prod]->amount;
+                                                if(isset($data["sets"][$city["id"]][$v->sub_prod]->amount)) {
+                                                    $have = $data["sets"][$city["id"]][$v->sub_prod]->amount;
+                                                } else {
+                                                    $have = 0;
+                                                }
                                                 $need = $v->amount;
                                                 //echo "</br>Mam: ".$data["subproducts"][$v->sub_prod]->p_name . " : ".$have ."</br>";
                                                 //echo "</br>Potrzebuje: ".$data["subproducts"][$v->sub_prod]->p_name . " : ".$need;
@@ -257,11 +263,21 @@ labels.forEach(label => {
                                         } else {
                                             $photo = "";
                                         }
+                                        if(isset($data["sets_old"][$city["id"]][$key]->amount)) {
+                                            $s_old = $data["sets_old"][$city["id"]][$key]->amount;
+                                        } else {
+                                            $s_old = 0;
+                                        }
+                                        if(isset($data["sets"][$city["id"]][$key]->amount)) {
+                                            $s_old2 = $data["sets"][$city["id"]][$key]->amount;
+                                        } else {
+                                            $s_old2 = 0;
+                                        }
                                         echo "  <tr><td>$photo</td>
                                             <td>[$key] $value->p_name</td>
                                             <td>$value->sku</td>
-                                            <td>" . $data["sets_old"][$city["id"]][$key]->amount . "</td>
-                                            <td>" . $data["sets"][$city["id"]][$key]->amount . "</td>
+                                            <td>" . $s_old . "</td>
+                                            <td>" . $s_old2 . "</td>
                                             <td>$value->p_unit</td>";
                                         echo "</tr>";
                                     }

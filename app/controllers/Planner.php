@@ -60,7 +60,7 @@ class Planner
         }
         foreach ($data["p"] as $k => $v) {
             foreach ($data["subproducts"] as $k1 => $v1) {
-                $data["sets"][$k][$k1] = [];
+                $data["sets"][$k][$k1] = (object)[];
             }
         }
         $products_list = new ProductsModel();

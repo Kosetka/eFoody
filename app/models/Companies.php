@@ -40,17 +40,17 @@ class Companies
     {
         $this->errors = [];
 
-        if (empty($data['nip'])) {
-            $this->errors['nip'] = "NIP jest wymagany.";
-        }
+        //if (empty($data['nip'])) {
+        //    $this->errors['nip'] = "NIP jest wymagany.";
+        //}
 
-        $user = new Companies;
-        $temp["nip"] = $_POST['nip'];
+        //$user = new Companies;
+        //$temp["nip"] = $_POST['nip'];
 
-        $row = $user->first($temp);
-        if ($row) {
-            $this->errors['nip_exists'] = "Taki NIP już widnieje w bazie danych.";
-        }
+        //$row = $user->first($temp);
+        //if ($row) {
+        //    $this->errors['nip_exists'] = "Taki NIP już widnieje w bazie danych.";
+        //}
 
         if (empty($this->errors)) {
             return true;
@@ -73,5 +73,16 @@ class Companies
     {
         $query = "select count(*) as total from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59'";
         return $this->query($query)[0]->total;
+    }
+
+    function getCompaniesNumber() {
+        $query = "SELECT 
+        guardian,
+        COUNT(*) AS num
+    FROM 
+        companies
+    GROUP BY 
+        guardian";
+        return $this->query($query);
     }
 }

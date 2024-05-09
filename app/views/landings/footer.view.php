@@ -79,6 +79,15 @@
   $('[data-toggle="tooltip"]').tooltip()
 })
 </script>
+
+
+<link href="<?= ROOT ?>/assets/css/select2.css" rel="stylesheet"/>
+<script src="<?= ROOT ?>/assets/js/select2.js"></script>
+<script>
+    $(document).ready(function() { $("#c_id").select2(); });
+</script>
+
+
 </body>
 
 </html>

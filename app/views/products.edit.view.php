@@ -44,6 +44,13 @@
                             <input type="text" class="form-control" id="ean" name="ean" <?php echo "value = " . $data['product']->ean; ?>>
                         </div>
                     </div>
+                    <?php /*<div class="form-group row m-3">
+                        <label for="labels" class="col-sm-2 col-form-label">EAN:</label>
+                        <div class="col-sm-10">
+                            <a href="<?php echo ROOT."/assets/labels/wzor.lbx";?>" media="print">Etykieta</a>
+                            <input type="text" class="form-control" id="labels" name="labels" <?php echo "value = " . $data['product']->labels; ?>>
+                        </div>
+                    </div>*/?>
                     <div class="form-group row m-3">
                         <label class="col-sm-2 col-form-label" for="p_unit">Jednostka:</label>
                         <div class="col-sm-10">

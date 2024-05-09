@@ -58,6 +58,10 @@ class Users
         if (empty($_SESSION['USER']))
             redirect('login');
 
+        $access = [1, 2, 4];
+        if(!in_array($_SESSION['USER']->u_role,$access))
+            redirect('login');
+
         if ($_SERVER['REQUEST_METHOD'] == "POST" && !empty($_GET)) {
             $URL = $_GET['url'] ?? 'home';
             $URL = explode("/", trim($URL, "/"));

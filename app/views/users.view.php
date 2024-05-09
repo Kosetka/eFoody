@@ -18,8 +18,10 @@
                                 <th>E-mail</th>
                                 <th>Imię</th>
                                 <th>Nazwisko</th>
-                                <th>Wybrany magazyn</th>
-                                <th>Uprawnienia</th>
+                                <th>Numer telefonu - służbowy</th>
+                                <th>Numer telefonu - prywatny</th>
+                                <th>Magazyn</th>
+                                <th>Stanowisko</th>
                                 <th>Aktywny</th>
                                 <th>Akcje</th>
                             </tr>
@@ -30,8 +32,10 @@
                                 <th>E-mail</th>
                                 <th>Imię</th>
                                 <th>Nazwisko</th>
-                                <th>Wybrany magazyn</th>
-                                <th>Uprawnienia</th>
+                                <th>Numer telefonu - służbowy</th>
+                                <th>Numer telefonu - prywatny</th>
+                                <th>Magazyn</th>
+                                <th>Stanowisko</th>
                                 <th>Aktywny</th>
                                 <th>Akcje</th>
                             </tr>
@@ -51,6 +55,8 @@
                                 $email = $user['email'];
                                 $first_name = $user['first_name'];
                                 $last_name = $user['last_name'];
+                                $phone_business = $user['phone_business'];
+                                $phone_private = $user['phone_private'];
                                 $title_warehouse = "";
 
 
@@ -67,12 +73,21 @@
                                 } else {
                                     $active_display = 'Nieaktywny';
                                 }
-                                $edit_link = '<a href="' . ROOT . '/users/edit/' . $id . '">Edytuj</a>';
+                                
+                                $access = [1, 2, 4];
+                                if(in_array($your_id,$access)) {
+                                    $edit_link = '<a href="' . ROOT . '/users/edit/' . $id . '">Edytuj</a>';
+                                } else {
+                                    $edit_link = "";
+                                }
+
                                 echo "<tr>
                                     <td>$id</td>
                                     <td>$email</td>
                                     <td>$first_name</td>
                                     <td>$last_name</td>
+                                    <td>$phone_business</td>
+                                    <td>$phone_private</td>
                                     <td><span data-toggle='tooltip' data-placement='right' title='$title_warehouse'>$u_warehouse </span></td>
                                     <td>$u_role</td>
                                     <td>$active_display</td>
