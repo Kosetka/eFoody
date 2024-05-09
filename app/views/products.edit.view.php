@@ -18,7 +18,7 @@
                 <?php endif; ?>
 
                 <?php
-                    $filename = IMG_ROOT_UPLOAD.'test.txt';
+                    $filename = '/public'.IMG_ROOT_UPLOAD.'test.txt';
                     $file = fopen($filename, 'w');
                     if ($file) {
                         fwrite($file, 'Test');
