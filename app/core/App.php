@@ -17,9 +17,9 @@ class App
 	{
 		$URL = $this->splitURL();
 
-		show($URL);die;
 		/** select controller **/
 		$filename = "../app/controllers/" . ucfirst($URL[0]) . ".php";
+		show($filename);die;
 		if (file_exists($filename)) {
 			require $filename;
 			$this->controller = ucfirst($URL[0]);
