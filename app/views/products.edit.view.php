@@ -17,18 +17,6 @@
                     </div>
                 <?php endif; ?>
 
-                <?php
-                    $filename = '/tmp/test.txt';
-                    $file = fopen($filename, 'w');
-                    if ($file) {
-                        fwrite($file, 'Test');
-                        fclose($file);
-                        echo 'Plik został utworzony.';
-                    } else {
-                        echo 'Nie można utworzyć pliku.';
-                    }
-                ?>
-
                 <h1 class="h3 mb-3 fw-normal">Edycja produktu/SKU</h1>
 
                 <div class="text-start">
