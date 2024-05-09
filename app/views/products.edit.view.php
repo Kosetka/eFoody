@@ -18,7 +18,7 @@
                 <?php endif; ?>
 
                 <?php
-                    $filename = '../public/assets/img/test.txt';
+                    /*$filename = '../public/assets/img/test.txt';
                     $file = fopen($filename, 'w');
                     if ($file) {
                         fwrite($file, 'Test');
@@ -27,7 +27,7 @@
                     } else {
                         $error = error_get_last();
                         echo 'Nie można utworzyć pliku. Błąd: ' . $error['message'];
-                    }
+                    }*/
                 ?>
 
                 <h1 class="h3 mb-3 fw-normal">Edycja produktu/SKU</h1>
