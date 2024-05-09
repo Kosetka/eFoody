@@ -21,7 +21,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('DBPASS', '#Verona123');
 	define('DBDRIVER', '');
 
-	define('ROOT', 'https://51.254.47.60'); //http://51.254.47.60/eFoody/public
+	define('ROOT', 'https://pan-obiadek.pl'); //http://51.254.47.60/eFoody/public
 	define('IMG_ROOT', '/assets/img/'); ///efoody/public/assets/img/
 	define('IMG_ROOT_UPLOAD', '../public/assets/img/'); //../public/assets/img/
 
