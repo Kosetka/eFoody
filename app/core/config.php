@@ -2,6 +2,7 @@
 
 if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	/** database config **/
+	
 	define('DBNAME', 'efoody');
 	define('DBHOST', 'localhost');
 	define('DBUSER', 'root');
