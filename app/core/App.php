@@ -16,7 +16,6 @@ class App
 	public function loadController()
 	{
 		$URL = $this->splitURL();
-
 		/** select controller **/
 		$filename = "../app/controllers/" . ucfirst($URL[0]) . ".php";
 		if (file_exists($filename)) {
@@ -32,7 +31,6 @@ class App
 		}
 
 		$controller = new $this->controller;
-
 		/** select method **/
 		if (!empty($URL[1])) {
 			if (method_exists($controller, $URL[1])) {
