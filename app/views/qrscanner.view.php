@@ -198,7 +198,7 @@
                 if (cameras.length > 0) {
                     //0 front
                     //1 back
-                    scanner.start(cameras[4]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
+                    scanner.start(cameras[1]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
                 } else {
                     alert("no camera Found");
                 }
