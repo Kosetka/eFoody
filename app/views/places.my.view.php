@@ -20,6 +20,7 @@
                 <tr>
                   <th scope="col">Nazwa firmy</th>
                   <th scope="col">Adres</th>
+                  <th scope="col">Telefon</th>
                   <th scope="col">Opis</th>
                   <th scope="col">Mapa</th>
                   <th scope="col">Akcje</th>
@@ -41,6 +42,7 @@
                   }
                   echo "  <tr><td>$value->full_name</td>
                                             <td>$value->address</td>
+                                            <td>$value->phone_number</td>
                                             <td>$value->description</td>
                                             <td><a target='blank' href='" . $link . $value->latitude . "," . $value->longitude . "'>Przejdź do mapy</a></td>
                                             <td><a class='btn btn-warning' onClick = 'clicked($key)' data-el=$key 

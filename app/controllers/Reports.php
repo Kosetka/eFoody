@@ -83,10 +83,12 @@ class Reports
 
         if($type == "hour") {
             if ($param1 == 0) {
-                $param1_ = date("H", strtotime("-1 hour"));
+                $param1 = date("H", strtotime("-1 hour"));
             }
-            $date_from = $today." ".$param1.":00:00";
-            $date_to = $today." ".$param1.":59:59";
+            $date_from_hour = $today." ".$param1.":00:00";
+            $date_to_hour = $today." ".$param1.":59:59";
+            $date_from = $today." 00:00:00";
+            $date_to = $today." 23:59:59";
 
         } else if ($type =="day") {
             if($param1 <> 0) {
@@ -111,8 +113,8 @@ class Reports
             if($param1 == 0) {
                 $first_day_current_month = date("Y-m-01");
                 $last_day_current_month = date("Y-m-t", strtotime($first_day_current_month));
-                $first_day_previous_month = date("Y-m-01", strtotime("-1 month", strtotime($last_day_current_month)));
                 $last_day_previous_month = date("Y-m-t", strtotime("-1 month", strtotime($first_day_current_month)));
+                $first_day_previous_month = date("Y-m-01", strtotime("-1 month", strtotime($first_day_current_month)));
 
                 $date_from = $first_day_previous_month." 00:00:00";
                 $date_to = $last_day_previous_month." 23:59:59";
@@ -157,6 +159,13 @@ class Reports
         $sales = new Sales;
         $data["sales"] = $sales->reportData($date_from, $date_to);
         
+        if($type == "hour") {
+            $sales = new Sales;
+            $data["sales_hour"] = $sales->reportData($date_from_hour, $date_to_hour);
+            $places = new PlacesModel;
+            $data["places_hour"] = $places->reportData($date_from_hour, $date_to_hour);
+        }
+
         $cargo = new Cargo;
         $data["cargo"] = $cargo->reportData($date_from, $date_to);
 

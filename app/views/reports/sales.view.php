@@ -1,5 +1,4 @@
 <?php 
-
 $send = $data["get"]["send"];
 
 if($send == 2) {
@@ -184,12 +183,16 @@ $mess = "<table style='border: 1px solid'>
         foreach($data["users"] as $user) {
             $u_id = $user->id;
             $sales = 0;
+            $sales_hour = 0;
             $companies = 0;
             $cargos = 0;
             $visit = 0;
+            $visit_hour = 0;
             $destroy = 0;
+            $destroy_hour = 0;
             $returns = 0;
             $gratis = 0;
+            $gratis_hour = 0;
             $plus = 0;
             $minus = 0;
             $stan = 0;
@@ -200,6 +203,17 @@ $mess = "<table style='border: 1px solid'>
                     $gratis += $sale->gratis;
                 }
             }
+
+            if(isset($data["sales_hour"])) {
+                foreach($data["sales_hour"] as $sale_hour) {
+                    if($sale_hour->u_id == $u_id) {
+                        $sales_hour += $sale_hour->scan_and_empty;
+                        $destroy_hour += $sale_hour->destroy;
+                        $gratis_hour += $sale_hour->gratis;
+                    }
+                }
+            }
+
             foreach($data["cargo"] as $cargo) {  //dodać wymiany
                 if($cargo->u_id == $u_id) {
                     $cargos += $cargo->num;
@@ -226,6 +240,15 @@ $mess = "<table style='border: 1px solid'>
                     $visit += $place->num;
                 }
             }
+
+            if(isset($data["places_hour"])) {
+                foreach($data["places_hour"] as $place_hour) {
+                    if($place_hour->u_id == $u_id) {
+                        $visit_hour += $place_hour->num;
+                    }
+                }
+            }
+
             if(isset($data["companies"][$u_id])) {
                 $companies = $data["companies"][$u_id];
             }
@@ -241,30 +264,44 @@ $mess = "<table style='border: 1px solid'>
             $total_minus += $minus;
 
             $stan = $cargos + $plus - $minus;
-$mess.="
+            $stan2 = $cargos + $plus - $minus - $sales - $destroy - $returns - $gratis;
+
+            $sale_diff = "";
+            $destroy_diff = "";
+            $gratis_diff = "";
+            $visit_diff = "";
+            if ($data["get"]["type"] == "hour") {
+                $sale_diff = "(+$sales_hour)";
+                $destroy_diff = "(+$destroy_hour)";
+                $gratis_diff = "(+$gratis_hour)";
+                $visit_diff = "(+$visit_hour)";
+            }
+
+            $mess.="
         <tr style='text-align: center;'>
             <td style='border: 1px solid;'>$user->first_name $user->last_name</td>
-            <td style='border: 1px solid;'>$sales</td>
-            <td style='border: 1px solid;'>$stan</td>
+            <td style='border: 1px solid;'>$sales $sale_diff</td>
+            <td style='border: 1px solid;'>$stan2</td>
             <td style='border: 1px solid;'>".getPercent($sales, $stan)."%</td>
-            <td style='border: 1px solid;'>$visit</td>
+            <td style='border: 1px solid;'>$visit $visit_diff</td>
             <td style='border: 1px solid;'>$companies</td>
             <td style='border: 1px solid;'>".getPercent($visit, $companies)."%</td>
             <td style='border: 1px solid;'>$cargos</td>
             <td style='border: 1px solid;'>".$plus - $minus."</td>
-            <td style='border: 1px solid;'>$destroy</td>
+            <td style='border: 1px solid;'>$destroy $destroy_diff</td>
             <td style='border: 1px solid;'>$returns</td>
-            <td style='border: 1px solid;'>$gratis</td>
+            <td style='border: 1px solid;'>$gratis $gratis_diff</td>
         </tr>";
         }
         $total_stan = $total_cargo + $total_plus - $total_minus;
-$mess.="
+        $total_stan2 = $total_cargo + $total_plus - $total_minus - $total_sales - $total_destroy - $total_returns - $total_gratis;
+        $mess.="
     </tbody>
     <tfoot>
         <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
             <td style='border: 1px solid;'>TOTAL</td>
             <td style='border: 1px solid;'>$total_sales</td>
-            <td style='border: 1px solid;'>$total_stan</td>
+            <td style='border: 1px solid;'>$total_stan2</td>
             <td style='border: 1px solid;'>".getPercent($total_sales,$total_stan)."%</td>
             <td style='border: 1px solid;'>$total_visit</td>
             <td style='border: 1px solid;'>$total_companies</td>
