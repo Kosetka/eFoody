@@ -1,6 +1,6 @@
 <?php
 
-//show($data);
+show($data);
 
 
 
