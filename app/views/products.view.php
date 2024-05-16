@@ -4,11 +4,8 @@
 <div id="layoutSidenav">
     <?php require_once 'landings/sidebar.left.view.php' ?>
     <div id="layoutSidenav_content">
-        <main class="container h-100 text-center">
+        <main class="container h-100 text-center" style="padding-top: 40px; max-width: 100%">
             <div class="container-fluid px-4">
-                <ol class="breadcrumb mb-4">
-                    <li class=""></li>
-                </ol>
                 <div id="modal" class="modal">
                     <span class="close">&times;</span>
                     <div class="modal-content">
@@ -30,6 +27,7 @@
                                     <th scope="col">Zdjęcie</th>
                                     <th scope="col">Pełna nazwa</th>
                                     <th scope="col">Opis</th>
+                                    <th scope="col">Alergeny</th>
                                     <th scope="col">Jednostka</th>
                                     <th scope="col">Typ produktu</th>
                                     <th scope="col" colspan="2">Akcja</th>
@@ -47,12 +45,21 @@
                                         } else {
                                             $photo = "";
                                         }
+                                        $ids = "";
+                                        if(!empty($data["prod_alergens"][$product->id]->lista_a_id)) {
+                                            $numbers = explode(",", $data["prod_alergens"][$product->id]->lista_a_id);
+                                            foreach ($numbers as $number) {
+                                                $ids .=$number.", ";
+                                            }
+                                        }
+
                                         echo "  <tr>
                                                     <th scope='row'>$product->id</th>
                                                     <td>$product->sku</td>
                                                     <td>$photo</td>
                                                     <td>$product->p_name</td>
                                                     <td>$product->p_description</td>
+                                                    <td>".substr($ids, 0, -2)."</td>
                                                     <td>$product->p_unit</td>
                                                     <td>" . PRODUCTTYPENAMES[$product->prod_type] . "</td>
                                                     <td><a class='btn btn-info' href=' " . ROOT . "/products/edit/$product->id'
