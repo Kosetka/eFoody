@@ -99,4 +99,36 @@ class Alergens
 
         $this->view('alergens.edit', $data);
     }
+
+    public function show() {
+        if (!empty($_GET)) {
+            $URL = $_GET['url'] ?? 'home';
+            $URL = explode("/", trim($URL, "/"));
+            $p_id = $URL[2];
+            $alergen = new Alergen();
+            $data["alergen"] = $alergen->first(["id" => $p_id]);
+            foreach($alergen->getAlergens() as $ale) {
+                $data["alergens"][$ale->id] = $ale;
+            }
+
+
+            $alergens = new Productalergens();
+            foreach($alergens->getGrouped() as $ale) {
+                $data["prod_alergens"][$ale->p_id] = $ale;
+            }
+            //$data["prod_alergens"] = $alergens->getAll();
+            if(!empty($alergens->getByAlergen($p_id))) {
+                foreach($alergens->getByAlergen($p_id) as $ale) {
+                    $data["p_alergen"][$ale->p_id] = $ale;
+                }
+            }
+            $product = new ProductsModel;
+            foreach($product->getAllFullProducts() as $prod) {
+                $data["product"][$prod->id] = $prod;
+                
+            }
+        }
+
+        $this->view('alergens.show', $data);
+    }
 }

@@ -15,6 +15,14 @@ class Products
         $data = [];
         $products = new ProductsModel;
         $data["products"] = $products->getAll("products");
+        $alergen = new Alergen();
+        foreach($alergen->getAlergens() as $ale) {
+            $data["alergens"][$ale->id] = $ale;
+        }
+        $alergens = new Productalergens();
+        foreach($alergens->getGrouped() as $ale) {
+            $data["prod_alergens"][$ale->p_id] = $ale;
+        }
         $this->view('products', $data);
     }
 
@@ -110,6 +118,10 @@ class Products
             $id_product = $URL[2];
             $product = new ProductsModel;
             $data["product"] = $product->first(["id" => $id_product]);
+            $alergens = new Alergen;
+            $data["alergens"] = $alergens->getAlergens();
+            $p_alergens = new Productalergens;
+            $data["p_alergen"] = $p_alergens->getByProduct($id_product);
 
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $target_dir = IMG_ROOT_UPLOAD;
@@ -161,10 +173,19 @@ class Products
                 }
 
                 $product->update($id_product, $_POST);
+                
+                $p_alergens->delete($id_product,"p_id");
+                foreach($_POST["alergens"] as $key => $value) {
+                    $p_alergens->insert(["p_id" => $id_product, "a_id" => $key]);
+                }
+
                 $data['success'] = "Edycja produktu/SKU pomyślna";
                 $product = new ProductsModel;
                 $data["product"] = $product->first(["id" => $id_product]);
-
+                $alergens = new Alergen;
+                $data["alergens"] = $alergens->getAlergens();
+                $p_alergens = new Productalergens;
+                $data["p_alergen"] = $p_alergens->getByProduct($id_product);
 
                 $data['errors'] = $product->errors;
 

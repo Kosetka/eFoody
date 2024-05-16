@@ -5,6 +5,12 @@
     <?php require_once 'landings/sidebar.left.view.php' ?>
     <div id="layoutSidenav_content">
         <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 70%">
+        <div id="modal" class="modal">
+                    <span class="close">&times;</span>
+                    <div class="modal-content">
+                        <img id="modal-image" src="" alt="Modal Image">
+                    </div>
+                </div>
             <form method="post" enctype="multipart/form-data">
                 <?php if (!empty($errors)): ?>
                     <div class="alert alert-danger">
@@ -18,16 +24,8 @@
                 <?php endif; ?>
 
                 <?php
-                    /*$filename = '../public/assets/img/test.txt';
-                    $file = fopen($filename, 'w');
-                    if ($file) {
-                        fwrite($file, 'Test');
-                        fclose($file);
-                        echo 'Plik został utworzony.';
-                    } else {
-                        $error = error_get_last();
-                        echo 'Nie można utworzyć pliku. Błąd: ' . $error['message'];
-                    }*/
+                    //show($data);
+                    //die;
                 ?>
 
                 <h1 class="h3 mb-3 fw-normal">Edycja produktu/SKU</h1>
@@ -101,6 +99,29 @@
                                 }
                                 ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row m-3">
+                        <label for="alergens" class="col-sm-2 col-form-label">Alergeny:</label>
+                        <div class="col-sm-10">
+                            <?php
+                                foreach($data["alergens"] as $alergen) {
+                                    $checked = "";
+                                    if(!empty($data["p_alergen"]) ) {
+                                        foreach($data["p_alergen"] as $a) {
+                                            if ($a->a_id == $alergen->id) {
+                                                $checked = "checked";
+                                            }
+                                        }
+                                    }
+                                    if (!empty($alergen->a_photo)) {
+                                        $photo = "<img width='40' height='40' class='obrazek' id='imageBox$alergen->id' src='" . IMG_ALERGENS_ROOT . "" . $alergen->a_photo . "'>";
+                                    } else {
+                                        $photo = "";
+                                    }
+                                    echo '<input style="margin-top: 15px;" type="checkbox" class="form-check-input" id="alergens'.$alergen->id.'" name="alergens['.$alergen->id.']" value="1" '.$checked.'>['.$alergen->id.'] '. $photo .' '. $alergen->a_name.'</input></br>';
+                                }
+                            ?>
                         </div>
                     </div>
                 </div>

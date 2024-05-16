@@ -34,7 +34,8 @@
                       echo "  <tr><td>$key</td>
                                 <td>".$photo."</td>
                                 <td>".$value->a_name."</td>
-                                <td><a href='".ROOT."/alergens/edit/".$key."' class='btn btn-primary' role='button'>Edytuj</a> <a href='#' class='btn btn-success' role='button'>Pokaż produkty</a></td>";
+                                <td><a href='".ROOT."/alergens/edit/".$key."' class='btn btn-primary' role='button'>Edytuj</a> 
+                                <a href='".ROOT."/alergens/show/".$key."' class='btn btn-success' role='button'>Pokaż produkty</a></td>";
                       echo "</tr>";
                     }
                 }
