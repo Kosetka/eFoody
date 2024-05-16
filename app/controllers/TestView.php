@@ -16,6 +16,9 @@ class TestView
             $data["products"][$value->id] = $value;
         }
 
+        show($temp);
+        die;
+
         $date_from = "2024-05-16 00:00:00";
         $date_to = "2024-05-16 23:59:59";
         $u_id = 3;
