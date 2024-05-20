@@ -190,7 +190,13 @@
                 });
             }
         </script>
-
+<?php
+if(isset($_SESSION["USER"]->camera)) {
+    $cam = $_SESSION["USER"]->camera;
+} else {
+    $cam = 2;
+}
+?>
         </main>
         <script type="text/javascript"
             src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
@@ -201,7 +207,7 @@
                     console.log(cameras);
                     //0 front
                     //1 back
-                    scanner.start(cameras[1]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
+                    scanner.start(cameras[<?=$cam?>]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
                 } else {
                     alert("no camera Found");
                 }

@@ -21,7 +21,8 @@ class User
 		'active',
 		'u_role', 
 		'phone_business',
-		'phone_private'
+		'phone_private',
+		'camera'
 	];
 
 	public function getAllTraders($table, $ids)

@@ -47,7 +47,7 @@
                 <li><a class="dropdown-item" href="<?= ROOT ?>/profile/<?= getYourData("id") ?>">Twój profil</a>
                 </li>
 
-                <li><a class="dropdown-item" href="#!">jakaś zakładka</a></li>
+                <li><a class="dropdown-item" href="<?= ROOT ?>/profile/camera">Wybór kamery</a></li>
                 <li>
                     <hr class="dropdown-divider" />
                 </li>
