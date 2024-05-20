@@ -95,11 +95,11 @@
                     let scanner2 = new Instascan.Scanner({ video: document.getElementById('preview2'), mirror: false });
                     let scanner3 = new Instascan.Scanner({ video: document.getElementById('preview3'), mirror: false });
                     let scanner4 = new Instascan.Scanner({ video: document.getElementById('preview4'), mirror: false });
-                    scanner2.start(cameras[2]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
-                    scanner0.start(cameras[0]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
-                    scanner1.start(cameras[1]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
-                    scanner3.start(cameras[3]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
                     scanner4.start(cameras[4]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
+                    scanner3.start(cameras[3]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
+                    scanner2.start(cameras[2]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
+                    scanner1.start(cameras[1]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
+                    scanner0.start(cameras[0]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
                 } else {
                     alert("no camera Found");
                 }
