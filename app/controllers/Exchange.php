@@ -86,16 +86,15 @@ class Exchange
     }
     public function accept()
     {
+
         if (empty($_SESSION['USER']))
             redirect('login');
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
         $id_scan = $URL[2];
-        $user = $URL[3];
-
-        if ($_SESSION["ROLE"]->id != 1)
-            if ($_SESSION["USER"]->id != $user)
-                redirect('login');
+        
+        //if ($_SESSION["ROLE"]->id != 1)
+        //    redirect('login');
         $scan = new CargoExchange;
         $date = date("Y-m-d H:m:s");
         $scan->update($id_scan, ['result' => 1, "date_result" => $date]);
@@ -110,11 +109,10 @@ class Exchange
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
         $id_scan = $URL[2];
-        $user = $URL[3];
 
-        if ($_SESSION["ROLE"]->id != 1)
-            if ($_SESSION["USER"]->id != $user)
-                redirect('login');
+        //if ($_SESSION["ROLE"]->id != 1)
+        //    if ($_SESSION["USER"]->id != $user)
+        //        redirect('login');
         $scan = new CargoExchange;
         $date = date("Y-m-d H:m:s");
         $scan->update($id_scan, ['result' => 2, "date_result" => $date]);
@@ -129,11 +127,11 @@ class Exchange
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
         $id_scan = $URL[2];
-        $user = $URL[3];
+        //$user = $URL[3];
 
-        if ($_SESSION["ROLE"]->id != 1)
-            if ($_SESSION["USER"]->id != $user)
-                redirect('login');
+        //if ($_SESSION["ROLE"]->id != 1)
+        //    if ($_SESSION["USER"]->id != $user)
+        //        redirect('login');
         $scan = new CargoExchange;
         $date = date("Y-m-d H:m:s");
         $scan->update($id_scan, ['result' => 4, "date_result" => $date]);
