@@ -199,7 +199,6 @@
             Instascan.Camera.getCameras().then(function (cameras) {
                 if (cameras.length > 0) {
                     console.log(cameras);
-                    console.log("dupa");
                     //0 front
                     //1 back
                     scanner.start(cameras[1]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
@@ -211,19 +210,19 @@
             });
             //scan then qr code part
             scanner.addListener('scan', function (c) {
-                document.getElementById("tab-show").style.display = "";
-                document.getElementById("text").value = c;
-                document.getElementById("prod_name").innerHTML = products[c]["1"];
-                document.getElementById("prod_name").value = products[c]["1"];
-                document.getElementById("prod_ean").innerHTML = products[c]["ean"];
-                document.getElementById("prod_ean").value = products[c]["ean"];
-                document.getElementById("prod_sku").innerHTML = products[c]["sku"];;
-                document.getElementById("prod_sku").value = products[c]["sku"];
-                document.getElementById("prod_p_id").innerHTML = products[c]["p_id"];
-                document.getElementById("prod_p_id").value = products[c]["p_id"];
+            document.getElementById("tab-show").style.display = "";
+            document.getElementById("text").value = c;
+            document.getElementById("prod_name").innerHTML = products[c]["1"];
+            document.getElementById("prod_name").value = products[c]["1"];
+            document.getElementById("prod_ean").innerHTML = products[c]["ean"];
+            document.getElementById("prod_ean").value = products[c]["ean"];
+            document.getElementById("prod_sku").innerHTML = products[c]["sku"];;
+            document.getElementById("prod_sku").value = products[c]["sku"];
+            document.getElementById("prod_p_id").innerHTML = products[c]["p_id"];
+            document.getElementById("prod_p_id").value = products[c]["p_id"];
 
-                let sendButton = document.getElementById("sendButton");
-                sendButton.click();
+            let sendButton = document.getElementById("sendButton");
+            sendButton.click();
             });
         </script>
         <?php require_once 'landings/footer.view.php' ?>
