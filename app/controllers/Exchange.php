@@ -43,8 +43,8 @@ class Exchange
         // do zrobienia
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-            show($_POST);
-            die;
+            //show($_POST);
+            //die;
 
             $u_id_init = $_SESSION["USER"]->id;
             $u_id_target = $_POST["u_id_target"];
