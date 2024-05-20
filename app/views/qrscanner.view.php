@@ -60,10 +60,12 @@
                             let arrid = [];
                             let products = [];
                             <?php
-                            foreach ($data["companies"] as $company) {
-                                echo "arr[" . $company->id . "] = '" . $company->address . "';";
-                                echo "arrid[" . $company->id . "] = '" . $company->id . "';";
-                                //echo "arr.push({'".$company->id."' :'".$company->address."' });";
+                            if(isset($data["companies"])) {
+                                foreach ($data["companies"] as $company) {
+                                    echo "arr[" . $company->id . "] = '" . $company->address . "';";
+                                    echo "arrid[" . $company->id . "] = '" . $company->id . "';";
+                                    //echo "arr.push({'".$company->id."' :'".$company->address."' });";
+                                }
                             }
                             foreach ($data["products"] as $prod) {
                                 echo "products['" . $prod->sku . "'] = ['name', '" . $prod->p_name . "'];";
@@ -196,9 +198,11 @@
             let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false });
             Instascan.Camera.getCameras().then(function (cameras) {
                 if (cameras.length > 0) {
+                    console.log(cameras);
+                    console.log("dupa");
                     //0 front
                     //1 back
-                    scanner.start(cameras[0]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
+                    scanner.start(cameras[1]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
                 } else {
                     alert("no camera Found");
                 }
