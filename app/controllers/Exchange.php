@@ -52,7 +52,7 @@ class Exchange
             $sales = new CargoExchange;
             foreach ($_POST["p_id"] as $key => $value) {
                 if ($value > 0) {
-                    $toUpdate = ["u_id_init" => $u_id_init, "u_id_target" => $u_id_target, "result" => 0, "date_result" => "", "p_id" => $key, "amount" => $value];
+                    $toUpdate = ["u_id_init" => $u_id_init, "u_id_target" => $u_id_target, "result" => 0, "date_result" => "", "p_id" => $key, "amount" => $value, 'date_result' => NULL];
                     $sales->insert($toUpdate);
                 }
             }
