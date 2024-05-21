@@ -17,14 +17,23 @@
                         <?= $success ?>
                     </div>
                 <?php endif; ?>
-
+                    <?php
+    $sk = "";
+    $tt = 1;
+    if(isset($data["target_sku"])) {
+        $sk = $data["target_sku"];
+    }
+    if(isset($data["target_type"])) {
+        $tt = $data["target_type"];
+    }
+                    ?>
                 <h1 class="h3 mb-3 fw-normal">Dodawanie produktu/SKU</h1>
 
                 <div class="text-start">
                     <div class="form-group row m-3">
                         <label for="sku" class="col-sm-2 col-form-label">SKU:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="sku" name="sku">
+                            <input type="text" class="form-control" id="sku" name="sku" <?php echo "value='$sk'";?>>
                         </div>
                     </div>
                     <div class="form-group row m-3">
@@ -69,7 +78,14 @@
                             <select class="form-control" id="prod_type" name="prod_type">
                                 <?php
                                 foreach (PRODUCTTYPENAMES as $key => $value) {
-                                    echo "<option value='$key'>$value</option>";
+                                    $selected = "";
+                                    if($key == 0 && $tt == 2) {
+                                        $selected = "selected";
+                                    }
+                                    if($key == 1 && $tt == 1) {
+                                        $selected = "selected";
+                                    }
+                                    echo "<option value='$key' $selected>$value</option>";
                                 }
                                 ?>
                             </select>

@@ -230,8 +230,9 @@
                 </a>
                 <div class="collapse" id="collapseProd" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="<?= ROOT ?>/products">Lista produktów/SKU</a>
-                        <a class="nav-link" href="<?= ROOT ?>/products/new">Dodaj nowe SKU</a>
+                        <a class="nav-link" href="<?= ROOT ?>/products">Lista produktów</a>
+                        <a class="nav-link" href="<?= ROOT ?>/products/new">Dodaj nowy produkt</a>
+                        <a class="nav-link" href="<?= ROOT ?>/sku">Generator SKU</a>
                         <a class="nav-link" href="<?= ROOT ?>/alergens">Lista alergenów</a>
                         <a class="nav-link" href="<?= ROOT ?>/prices">Ceny gotowych produktów</a>
                     </nav>
