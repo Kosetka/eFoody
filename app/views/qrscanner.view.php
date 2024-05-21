@@ -15,9 +15,9 @@
                 </div>
                 <form method="post">
 
-                    <?php if (!empty($errors)): ?>
+                    <?php if (!empty($error)): ?>
                         <div class="alert alert-danger">
-                            <?= implode("<br>", $errors) ?>
+                            <?= $error ?>
                         </div>
                     <?php endif; ?>
                     <?php if (!empty($success)): ?>
@@ -28,6 +28,7 @@
                     <h1 class="h3 mb-3 fw-normal">Dane skanu:</h1>
                     <div class="text-start">
                         <div class="form-group row m-3">
+                        <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>">
                             <label for="c_id" class="col-sm-2 col-form-label">Firma:</label>
                             <div class="col-sm-10">
                                 <select class="" style="width: 100%" id="c_id" name="c_id" onchange="companyChange()" placeholder="Wybierz firmę...">
