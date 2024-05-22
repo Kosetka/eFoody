@@ -4,7 +4,7 @@
 /**
  * Cargo class
  */
-class SkuModel
+class Skumodel
 {
 
     use Model;

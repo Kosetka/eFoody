@@ -12,7 +12,7 @@ class Sku
             redirect('login');
 
         $data = [];
-        $sku = new SkuModel;
+        $sku = new Skumodel;
         $data["sku"] = $sku->getSku();
 
         $this->view('sku', $data);
@@ -27,7 +27,7 @@ class Sku
         $URL = explode("/", trim($URL, "/"));
         $id = $URL[2];
 
-        $sku = new SkuModel;
+        $sku = new Skumodel;
         $sku_show = $sku->getFullType($id);
 
         $products = new ProductsModel;
