@@ -28,7 +28,6 @@ trait Model
 		$query = "select * from $table";
 		return $this->query($query);
 	}
-
 	public function getUserId($email)
 	{
 		$query = "select id from users where email = '$email'";

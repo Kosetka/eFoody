@@ -39,6 +39,13 @@ class Products
             $data["products"][$value->id] = $value;
         }
 
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $data["target_sku"] = $URL[2];
+            $data["target_type"] = substr($URL[2],0,1);
+        }
+        
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
