@@ -52,6 +52,7 @@ class QRScanner
         }
 
         $token = md5(uniqid(mt_rand(), true));//bin2hex(random_bytes(32));
+        echo $token;
         $_SESSION['token'] = $token;
 
         $products = new ProductsModel;
