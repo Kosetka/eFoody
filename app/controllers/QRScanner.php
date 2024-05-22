@@ -3,7 +3,7 @@
 /**
  * Scanner class
  */
-class QRScanner
+class Qrscanner
 {
     use Controller;
     public function index()
