@@ -6,8 +6,10 @@
 ?>
 <script>
     var jsArray = <?php echo $productsjson; ?>;
-    console.log(jsArray);
 </script>
+<?php
+    show($data["planned"]);
+?>
 <div id="layoutSidenav">
     <?php require_once 'landings/sidebar.left.view.php' ?>
     <div id="layoutSidenav_content">

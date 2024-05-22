@@ -224,10 +224,26 @@ class Planner
                 $prod[$v] = $_POST["product_quantity"][$k];
             }
             $u_id = $_SESSION["USER"]->id;
-            echo $u_id;
-            show($prod);
-            echo $date;
-            //die;
+            //echo $u_id;
+            //show($prod);
+            //echo $date;
+            $w_id = 1;
+
+            $plan = new Plannerproduction();
+
+            //tu usunąć cały plan z tego dnia przed wstawieniem aktualizacji/nowego
+            foreach($prod as $pid => $amount) {
+                $que = ["date_plan" => "$date", "w_id" => $w_id, "p_id" => $pid, "amount" => $amount, "u_id" => $u_id];
+                $plan->insert($que);
+            }
+        }
+
+
+        $planned = new Plannerproduction();
+        if(!empty($planned->getPlanned($date, 1))) {
+            foreach ($planned->getPlanned($date, 1) as $key => $value) {
+                $data["planned"][$value->id] = (array) $value;
+            }
         }
 
 
