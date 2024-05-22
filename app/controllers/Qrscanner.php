@@ -19,7 +19,7 @@ class QRScanner
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             if (isset($_POST["text"]) && !empty($_POST["text"])) {
-                if (!isset($_POST['token_post']) || $_POST['token_post'] !== $_SESSION['token_post']) {
+                if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
                     $data['error'] = "Odświeżenie strony, nie dodano skanu";
                 } else {
                     $u_id = $_SESSION["USER"]->id;
@@ -43,7 +43,7 @@ class QRScanner
                 }
             }
 
-            unset($_SESSION['token_post']);
+            unset($_SESSION['token']);
 
 
             $_SESSION["selected_company"] = $_POST["c_fullname_id"]; // ustawia aktualnie wybraną firmę
@@ -52,7 +52,7 @@ class QRScanner
         }
         
         $token = bin2hex(random_bytes(32));
-        $_SESSION['token_post'] = $token;
+        $_SESSION['token'] = $token;
 
         $products = new ProductsModel;
         $temp = $products->getAllFullProducts();
