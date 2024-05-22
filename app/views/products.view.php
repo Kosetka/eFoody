@@ -17,8 +17,10 @@
                         <h2 class="">Lista produktów/SKU</h2>
                     </div>
                     <div class="card-body">
-                        <a type="button" class="btn btn-primary" href="<?= ROOT ?>/products/new">Dodaj nowy
-                            produkt/SKU</a>
+                        <a type="button" class="btn btn-success" href="<?= ROOT ?>/products/new">Dodaj produkt</a>
+                        <a type="button" class="btn btn-info" href="<?= ROOT ?>/products/fullproducts">Lista produktów</a>
+                        <a type="button" class="btn btn-info" href="<?= ROOT ?>/products/subproducts">Lista półproduktów</a>
+
                         <table class="table">
                             <thead>
                                 <tr>

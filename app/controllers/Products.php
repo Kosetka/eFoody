@@ -25,6 +25,42 @@ class Products
         }
         $this->view('products', $data);
     }
+    public function fullproducts()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+        $products = new ProductsModel;
+        $data["products"] = $products->getAllFullProducts("products");
+        $alergen = new Alergen();
+        foreach($alergen->getAlergens() as $ale) {
+            $data["alergens"][$ale->id] = $ale;
+        }
+        $alergens = new Productalergens();
+        foreach($alergens->getGrouped() as $ale) {
+            $data["prod_alergens"][$ale->p_id] = $ale;
+        }
+        $this->view('products', $data);
+    }
+    public function subproducts()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+        $products = new ProductsModel;
+        $data["products"] = $products->getAllSubProducts("products");
+        $alergen = new Alergen();
+        foreach($alergen->getAlergens() as $ale) {
+            $data["alergens"][$ale->id] = $ale;
+        }
+        $alergens = new Productalergens();
+        foreach($alergens->getGrouped() as $ale) {
+            $data["prod_alergens"][$ale->p_id] = $ale;
+        }
+        $this->view('products', $data);
+    }
 
     public function new()
     {
