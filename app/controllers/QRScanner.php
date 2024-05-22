@@ -50,11 +50,8 @@ class QRScanner
             $_SESSION["selected_company_id"] = $_POST["c_id"]; // ustawia aktualnie wybraną firmę
             $_SESSION["selected_company_fullname"] = $_POST["c_fullname"]; // ustawia aktualnie wybraną firmę
         }
-        $test = substr(bin2hex(openssl_random_pseudo_bytes(16)), 0, 16);
-        echo $test."test";
-        show($_SESSION);
-        $token = md5(uniqid(mt_rand(), true));//bin2hex(random_bytes(32));
-        echo $token;
+        
+        $token = bin2hex(random_bytes(32));
         $_SESSION['token_post'] = $token;
 
         $products = new ProductsModel;
