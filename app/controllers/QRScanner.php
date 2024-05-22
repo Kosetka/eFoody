@@ -19,7 +19,7 @@ class QRScanner
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             if (isset($_POST["text"]) && !empty($_POST["text"])) {
-                if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
+                if (!isset($_POST['token_post']) || $_POST['token_post'] !== $_SESSION['token_post']) {
                     $data['error'] = "Odświeżenie strony, nie dodano skanu";
                 } else {
                     $u_id = $_SESSION["USER"]->id;
@@ -34,7 +34,7 @@ class QRScanner
                 }
             }
 
-            unset($_SESSION['token']);
+            unset($_SESSION['token_post']);
 
             $check_sold = 1;
             $placeVisited = new PlacesModel;
@@ -52,9 +52,10 @@ class QRScanner
         }
         $test = substr(bin2hex(openssl_random_pseudo_bytes(16)), 0, 16);
         echo $test."test";
+        show($_SESSION['token_post']);
         $token = md5(uniqid(mt_rand(), true));//bin2hex(random_bytes(32));
         echo $token;
-        $_SESSION['token'] = $token;
+        $_SESSION['token_post'] = $token;
 
         $products = new ProductsModel;
         $temp = $products->getAllFullProducts();
