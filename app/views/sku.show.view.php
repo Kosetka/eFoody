@@ -19,13 +19,19 @@
                     <div class="card-body">
                         <?php
                         $sku_arr = [];
-                        foreach($data["products"] as $k => $v) {
-                            $sku_arr[$v->id] = $v->sku;
+                        if(!empty($data["products"])) {
+                            foreach($data["products"] as $k => $v) {
+                                $sku_arr[$v->id] = $v->sku;
+                            }
                         }
                             $ostatniElement = end($sku_arr);
                             $sekcje = explode('-', $ostatniElement);
-                            $sekcje[2] = $sekcje[2] + 1;
-                            $nowyElement = implode('-', $sekcje);
+                            if(isset($sekcje[2])) {
+                                $sekcje[2] = $sekcje[2] + 1;
+                                $nowyElement = implode('-', $sekcje);
+                            } else {
+                                $nowyElement = "";
+                            }
                         ?>
                         <a type="button" class="btn btn-primary" href="<?= ROOT ?>/products/new/<?=$nowyElement;?>">Dodaj nowy produkt</a>
                         <table class="table">
@@ -48,37 +54,39 @@
                                 if (!$data) {
                                     echo "<tr><th colspan='8'>Brak danych do wyświetlenia</th></tr>";
                                 } else {
-                                    foreach ($data["products"] as $product) {
-                                        if (!empty($product->p_photo)) {
-                                            $photo = "<img width='40' height='40' class='obrazek' id='imageBox$product->id' src='" . IMG_ROOT . "" . $product->p_photo . "'>";
-                                        } else {
-                                            $photo = "";
-                                        }
-                                        $ids = "";
-                                        if(!empty($data["prod_alergens"][$product->id]->lista_a_id)) {
-                                            $numbers = explode(",", $data["prod_alergens"][$product->id]->lista_a_id);
-                                            foreach ($numbers as $number) {
-                                                $ids .=$number.", ";
+                                    if(!empty($data["products"])) {
+                                        foreach ($data["products"] as $product) {
+                                            if (!empty($product->p_photo)) {
+                                                $photo = "<img width='40' height='40' class='obrazek' id='imageBox$product->id' src='" . IMG_ROOT . "" . $product->p_photo . "'>";
+                                            } else {
+                                                $photo = "";
                                             }
-                                        }
+                                            $ids = "";
+                                            if(!empty($data["prod_alergens"][$product->id]->lista_a_id)) {
+                                                $numbers = explode(",", $data["prod_alergens"][$product->id]->lista_a_id);
+                                                foreach ($numbers as $number) {
+                                                    $ids .=$number.", ";
+                                                }
+                                            }
 
-                                        echo "  <tr>
-                                                    <th scope='row'>$product->id</th>
-                                                    <td>$product->sku</td>
-                                                    <td>$photo</td>
-                                                    <td>$product->p_name</td>
-                                                    <td>$product->p_description</td>
-                                                    <td>".substr($ids, 0, -2)."</td>
-                                                    <td>$product->p_unit</td>
-                                                    <td>" . PRODUCTTYPENAMES[$product->prod_type] . "</td>
-                                                    <td><a class='btn btn-info' href=' " . ROOT . "/products/edit/$product->id'
-                                                            role='button'>Edytuj</a></td>";
-                                        if($product->prod_type == 1) {
-                                            echo "<td><a class='btn btn-primary' href=' " . ROOT . "/assets/labels/$product->sku.lbx'
-                                                                role='button'>Etykieta</a></td>";
-                                        }
+                                            echo "  <tr>
+                                                        <th scope='row'>$product->id</th>
+                                                        <td>$product->sku</td>
+                                                        <td>$photo</td>
+                                                        <td>$product->p_name</td>
+                                                        <td>$product->p_description</td>
+                                                        <td>".substr($ids, 0, -2)."</td>
+                                                        <td>$product->p_unit</td>
+                                                        <td>" . PRODUCTTYPENAMES[$product->prod_type] . "</td>
+                                                        <td><a class='btn btn-info' href=' " . ROOT . "/products/edit/$product->id'
+                                                                role='button'>Edytuj</a></td>";
+                                            if($product->prod_type == 1) {
+                                                echo "<td><a class='btn btn-primary' href=' " . ROOT . "/assets/labels/$product->sku.lbx'
+                                                                    role='button'>Etykieta</a></td>";
+                                            }
 
-                                        echo "</tr>";
+                                            echo "</tr>";
+                                        }
                                     }
                                 }
                                 ?>

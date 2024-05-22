@@ -45,6 +45,12 @@ class ProductsModel
         return false;
     }
 
+    public function getAllBySku($sku)
+	{
+		$query = "select * from $this->table WHERE sku LIKE '$sku%' ORDER BY sku ASC";
+		return $this->query($query);
+	}
+
     public function getProducts(): array
     {
         $this->product = [];

@@ -3,7 +3,7 @@
 /**
  * Scanner class
  */
-class Qrscanner
+class QRScanner
 {
     use Controller;
     public function index()
@@ -50,7 +50,7 @@ class Qrscanner
             $_SESSION["selected_company_id"] = $_POST["c_id"]; // ustawia aktualnie wybraną firmę
             $_SESSION["selected_company_fullname"] = $_POST["c_fullname"]; // ustawia aktualnie wybraną firmę
         }
-
+        
         $token = bin2hex(random_bytes(32));
         $_SESSION['token'] = $token;
 
