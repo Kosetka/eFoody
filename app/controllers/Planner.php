@@ -200,4 +200,31 @@ class Planner
 
         $this->view('planner.plan', $data);
     }
+
+    public function new() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
+
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
+
+        $data["date_plan"] = $date;
+
+        $this->view('planner.new', $data);
+    }
 }

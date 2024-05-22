@@ -189,6 +189,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     [*] Możliwości prod.
                 </a>
+                <a class="nav-link" href="<?= ROOT ?>/planner/new">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Planowanie produkcji
+                </a>
                 
                 <a class="nav-link" href="<?= ROOT ?>/planner/show">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
