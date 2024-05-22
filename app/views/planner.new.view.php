@@ -89,7 +89,6 @@
                 const selectElement = document.getElementById('c_id');
     const orderedProductsTable = document.getElementById('orderedProductsTable').querySelector('tbody');
     const addProductButton = document.getElementById('addProductButton');
-    const selectedSpan = document.getElementById('select2-chosen-1');
 
     function populateSelect() {
         selectElement.innerHTML = ''; // Clear the select element
@@ -133,9 +132,9 @@
         // Update the span text to the first available product name
         if (selectElement.options.length > 0) {
             selectElement.selectedIndex = 0;
-            selectedSpan.textContent = selectElement.options[0].textContent;
+            document.getElementById('select2-chosen-1').innerHTML = selectElement.options[0].textContent;
         } else {
-            selectedSpan.textContent = '';
+            document.getElementById('select2-chosen-1').innerHTML = '';
         }
     }
 }
@@ -153,6 +152,47 @@
 
     // Initialize the select element with products
     populateSelect();
+
+    const submitOrderButton = document.getElementById('submitOrderButton');
+
+    function submitOrder() {
+    const orderedProducts = [];
+    const rows = orderedProductsTable.querySelectorAll('tr');
+    rows.forEach(row => {
+        const id = row.cells[0].textContent; // ID produktu
+        const quantity = row.cells[4].querySelector('input').value; // Planowana ilość
+        orderedProducts.push({ id: id, quantity: quantity });
+    });
+
+    // Utwórz formularz
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '';
+
+    // Dodaj pola do formularza dla każdego zamówionego produktu
+    orderedProducts.forEach(product => {
+        const inputId = document.createElement('input');
+        inputId.type = 'hidden';
+        inputId.name = 'product_id[]'; // Używamy tablicy dla wielu produktów
+        inputId.value = product.id;
+        form.appendChild(inputId);
+
+        const inputQuantity = document.createElement('input');
+        inputQuantity.type = 'hidden';
+        inputQuantity.name = 'product_quantity[]'; // Używamy tablicy dla wielu ilości
+        inputQuantity.value = product.quantity;
+        form.appendChild(inputQuantity);
+    });
+
+    // Dodaj formularz do body dokumentu i wyślij
+    document.body.appendChild(form);
+    form.submit();
+}
+
+// Dodaj event listener do przycisku "Wyślij zamówienie"
+submitOrderButton.addEventListener('click', submitOrder);
+
+
 
     // Add event listener to the add product button
     addProductButton.addEventListener('click', addProduct);

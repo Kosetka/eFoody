@@ -218,6 +218,20 @@ class Planner
         }
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
 
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["product_id"])) {
+            $prod = [];
+            foreach($_POST["product_id"] as $k => $v) {
+                $prod[$v] = $_POST["product_quantity"][$k];
+            }
+            $u_id = $_SESSION["USER"]->id;
+            echo $u_id;
+            show($prod);
+            echo $date;
+            //die;
+        }
+
+
+
         $products_list = new ProductsModel();
         foreach ($products_list->getAllFullProducts() as $key => $value) {
             $data["fullproducts"][$value->id] = (array) $value;
