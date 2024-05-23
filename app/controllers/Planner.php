@@ -218,11 +218,10 @@ class Planner
         }
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["product_id"])) {
-            $prod = [];
-            foreach($_POST["product_id"] as $k => $v) {
-                $prod[$v] = $_POST["product_quantity"][$k];
-            }
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["ordered_products"])) {
+
+
+            $prod = $_POST["ordered_products"];
             $u_id = $_SESSION["USER"]->id;
             //echo $u_id;
             //show($prod);
@@ -231,6 +230,7 @@ class Planner
 
             $plan = new Plannerproduction();
 
+            $plan->deleteByDate($date,$w_id);
             //tu usunąć cały plan z tego dnia przed wstawieniem aktualizacji/nowego
             foreach($prod as $pid => $amount) {
                 $que = ["date_plan" => "$date", "w_id" => $w_id, "p_id" => $pid, "amount" => $amount, "u_id" => $u_id];

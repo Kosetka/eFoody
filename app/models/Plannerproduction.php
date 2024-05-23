@@ -32,4 +32,15 @@ class Plannerproduction
         $query = "select * from $this->table WHERE date_plan = '$date' AND w_id = $w_id";
         return $this->query($query);
     }
+
+    public function deleteByDate($date, $w_id)
+	{
+
+		$query = "delete from $this->table where w_id = $w_id AND date_plan = '$date' ";
+		$this->query($query);
+
+		return false;
+
+	}
+
 }

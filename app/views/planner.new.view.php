@@ -8,7 +8,7 @@
     var jsArray = <?php echo $productsjson; ?>;
 </script>
 <?php
-    show($data["planned"]);
+    //show($data["planned"]);
 ?>
 <div id="layoutSidenav">
     <?php require_once 'landings/sidebar.left.view.php' ?>
@@ -19,6 +19,10 @@
                 <div class="modal-content">
                     <img id="modal-image" src="" alt="Modal Image">
                 </div>
+            </div>
+            <div class="alert alert-info">
+                <h2>UWAGA!</h2>
+                <span>Po dodaniu planu produkcji lub wprowadzeniu zmian, pamiętaj o ich zapisaniu!</span>
             </div>
             <div class="card mb-4">
                 <div class="card-header">
@@ -47,7 +51,7 @@
                             <div class="col-sm-3" style="display: inline;">
                                 <select style="width: 80%" id="c_id" name="p_id" placeholder="Wybierz produkt...">
                                 </select>
-                                <button id="addProductButton" class="btn btn-primary">+</button>
+                                <button id="addProductButton" class="btn btn-success">+</button>
                             </div>
                         </div>
                         <div class="form-group row m-3">
@@ -56,9 +60,9 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Zdjęcie</th>
                                             <th>Nazwa produktu</th>
                                             <th>SKU</th>
-                                            <th>Zdjęcie</th>
                                             <th>Planowana ilość</th>
                                             <th>Akcja</th>
                                         </tr>
@@ -70,8 +74,8 @@
                             </div>
                         </div>
                         <div class="form-group row m-3">
-                            <div class="col-sm-10 offset-sm-2">
-                                <button id="submitOrderButton" class="btn btn-success">Zapisz plan</button>
+                            <div class="col-sm-12">
+                                <button id="submitOrderButton" class="btn btn-primary">Zapisz plan</button>
                             </div>
                         </div>
                     </div>
@@ -79,18 +83,31 @@
         </main>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const products = [
-                    <?php
-                    foreach($data["fullproducts"] as $product) {
-                        echo "{ ID: ".$product['id'].", p_name: '".$product['p_name']."', sku: '".$product['sku']."', p_photo: '".$product['p_photo']."' },";
-                    }
-                    ?>
-                ];
 
-                const selectElement = document.getElementById('c_id');
+
+//OKKKKKKK
+document.addEventListener("DOMContentLoaded", function() {
+    const products = [
+        <?php
+        foreach($data["fullproducts"] as $product) {
+            echo "{ ID: ".$product['id'].", p_name: '".$product['p_name']."', sku: '".$product['sku']."', p_photo: '".$product['p_photo']."' },";
+        }
+        ?>
+    ];
+    const initialOrder = [
+        <?php
+        if(isset($data["planned"])) {
+            foreach($data["planned"] as $product) {
+                echo "{ id: ".$product['p_id'].", amount: ".$product['amount']." },";
+            }
+        }
+        ?>
+    ];
+
+    const selectElement = document.getElementById('c_id');
     const orderedProductsTable = document.getElementById('orderedProductsTable').querySelector('tbody');
     const addProductButton = document.getElementById('addProductButton');
+    const selectedSpan = document.getElementById('select2-chosen-1');
 
     function populateSelect() {
         selectElement.innerHTML = ''; // Clear the select element
@@ -100,46 +117,54 @@
             option.textContent = product.p_name;
             selectElement.appendChild(option);
         });
+
+        // Update the span text to the first available product name
+        if (selectElement.options.length > 0) {
+            selectElement.selectedIndex = 0;
+            if (document.getElementById('select2-chosen-1')) {
+                document.getElementById('select2-chosen-1').innerHTML = selectElement.options[0].textContent;
+            }
+        } else {
+            if (document.getElementById('select2-chosen-1')) {
+                document.getElementById('select2-chosen-1').innerHTML  = '';
+            }
+        }
     }
 
-    function addProduct() {
-    const selectedProductId = parseInt(selectElement.value);
-    const selectedProductIndex = products.findIndex(product => product.ID === selectedProductId);
-    if (selectedProductIndex !== -1) {
-        const selectedProduct = products[selectedProductIndex];
-
-        // Add selected product to ordered products table
+    function addProductToTable(product, quantity) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${selectedProduct.ID}</td>
-            <td>${selectedProduct.p_name}</td>
-            <td>${selectedProduct.sku}</td>
-            <td><img src="${selectedProduct.p_photo}" alt="${selectedProduct.p_name}" width="50"></td>
-            <td><input type="number" class="form-control" value="1" min="1"></td>
+            <td>${product.ID}</td>
+            <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="<?php echo IMG_ROOT;?>${product.p_photo}"></td>
+            <td>${product.p_name}</td>
+            <td>${product.sku}</td>
+            <td><input type="number" class="form-control" value="${quantity}" min="1"></td>
             <td><button class="btn btn-danger remove-product">Usuń</button></td>
         `;
         orderedProductsTable.appendChild(tr);
 
         // Add event listener to the remove button
         tr.querySelector('.remove-product').addEventListener('click', function() {
-            removeProduct(tr, selectedProduct);
+            removeProduct(tr, product);
         });
+    }
 
-        // Remove selected product from products array
-        products.splice(selectedProductIndex, 1);
+    function addProduct() {
+        const selectedProductId = parseInt(selectElement.value);
+        const selectedProductIndex = products.findIndex(product => product.ID === selectedProductId);
+        if (selectedProductIndex !== -1) {
+            const selectedProduct = products[selectedProductIndex];
 
-        // Update the select element
-        populateSelect();
+            // Add selected product to ordered products table
+            addProductToTable(selectedProduct, 1);
 
-        // Update the span text to the first available product name
-        if (selectElement.options.length > 0) {
-            selectElement.selectedIndex = 0;
-            document.getElementById('select2-chosen-1').innerHTML = selectElement.options[0].textContent;
-        } else {
-            document.getElementById('select2-chosen-1').innerHTML = '';
+            // Remove selected product from products array
+            products.splice(selectedProductIndex, 1);
+
+            // Update the select element
+            populateSelect();
         }
     }
-}
 
     function removeProduct(row, product) {
         // Remove the row from the table
@@ -155,49 +180,54 @@
     // Initialize the select element with products
     populateSelect();
 
-    const submitOrderButton = document.getElementById('submitOrderButton');
+    // Add initial products to the table
+    initialOrder.forEach(orderItem => {
+        const product = products.find(p => p.ID === orderItem.id);
+        if (product) {
+            addProductToTable(product, orderItem.amount);
 
-    function submitOrder() {
-    const orderedProducts = [];
-    const rows = orderedProductsTable.querySelectorAll('tr');
-    rows.forEach(row => {
-        const id = row.cells[0].textContent; // ID produktu
-        const quantity = row.cells[4].querySelector('input').value; // Planowana ilość
-        orderedProducts.push({ id: id, quantity: quantity });
+            // Remove initial products from the products array
+            const index = products.findIndex(p => p.ID === product.ID);
+            if (index !== -1) {
+                products.splice(index, 1);
+            }
+        }
     });
 
-    // Utwórz formularz
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '';
-
-    // Dodaj pola do formularza dla każdego zamówionego produktu
-    orderedProducts.forEach(product => {
-        const inputId = document.createElement('input');
-        inputId.type = 'hidden';
-        inputId.name = 'product_id[]'; // Używamy tablicy dla wielu produktów
-        inputId.value = product.id;
-        form.appendChild(inputId);
-
-        const inputQuantity = document.createElement('input');
-        inputQuantity.type = 'hidden';
-        inputQuantity.name = 'product_quantity[]'; // Używamy tablicy dla wielu ilości
-        inputQuantity.value = product.quantity;
-        form.appendChild(inputQuantity);
-    });
-
-    // Dodaj formularz do body dokumentu i wyślij
-    document.body.appendChild(form);
-    form.submit();
-}
-
-// Dodaj event listener do przycisku "Wyślij zamówienie"
-submitOrderButton.addEventListener('click', submitOrder);
-
-
+    // Update the select element again to remove initial products
+    populateSelect();
 
     // Add event listener to the add product button
     addProductButton.addEventListener('click', addProduct);
+
+    // Add event listener to the submit button
+    document.getElementById('submitOrderButton').addEventListener('click', function() {
+        const orderedProducts = [];
+        const rows = orderedProductsTable.querySelectorAll('tr');
+        rows.forEach(row => {
+            const id = row.cells[0].textContent; // ID produktu
+            const quantity = row.cells[4].querySelector('input').value; // Planowana ilość
+            orderedProducts.push({ id: id, quantity: quantity });
+        });
+
+        // Utwórz formularz
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '';
+
+        // Dodaj pola do formularza dla każdego zamówionego produktu
+        orderedProducts.forEach(product => {
+            const inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = `ordered_products[${product.id}]`; // Klucz to ID produktu, wartość to ilość
+            inputId.value = product.quantity;
+            form.appendChild(inputId);
+        });
+
+        // Dodaj formularz do body dokumentu i wyślij
+        document.body.appendChild(form);
+        form.submit();
+    });
 });
         </script>
 
