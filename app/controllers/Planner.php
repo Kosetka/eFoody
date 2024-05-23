@@ -217,6 +217,7 @@ class Planner
             }
         }
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
+        $w_id = 1;
 
         if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["ordered_products"])) {
 
@@ -226,7 +227,6 @@ class Planner
             //echo $u_id;
             //show($prod);
             //echo $date;
-            $w_id = 1;
 
             $plan = new Plannerproduction();
 
@@ -240,8 +240,8 @@ class Planner
 
 
         $planned = new Plannerproduction();
-        if(!empty($planned->getPlanned($date, 1))) {
-            foreach ($planned->getPlanned($date, 1) as $key => $value) {
+        if(!empty($planned->getPlanned($date, $w_id))) {
+            foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->id] = (array) $value;
             }
         }
@@ -256,5 +256,55 @@ class Planner
         $data["date_plan"] = $date;
 
         $this->view('planner.new', $data);
+    }
+
+    public function planned() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+
+        //w przyszłości zmienić gdyby było więcej magazynów
+        $w_id = 1;
+
+        $data["warehouse"] = $w_id;
+
+        $warehouse = new WarehouseModel();
+        $data["warehouse"] = $warehouse->getWarehouse($w_id);
+
+        $alergen = new Alergen();
+        foreach($alergen->getAlergens() as $ale) {
+            $data["alergens"][$ale->id] = $ale;
+        }
+        $alergens = new Productalergens();
+        foreach($alergens->getGrouped() as $ale) {
+            $data["prod_alergens"][$ale->p_id] = $ale;
+        }
+
+        $planned = new Plannerproduction();
+        if(!empty($planned->getPlanned($date, $w_id))) {
+            foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                $data["planned"][$value->p_id] = (array) $value;
+            }
+        }
+
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
+
+        $data["date_plan"] = $date;
+
+        $this->view('planner.planned', $data);
     }
 }
