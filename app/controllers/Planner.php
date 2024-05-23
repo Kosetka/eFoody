@@ -343,6 +343,13 @@ class Planner
             }
         }
 
+        $plan = new Plannersplit();
+        if(!empty($plan->getAll($date))) {
+            foreach ($plan->getAll($date) as $key => $value) {
+                $data["split"][$value->u_id][$value->p_id] = (array) $value;
+            }
+        }
+
         $users = new User();
         foreach ($users->getTraders() as $key => $value) {
             $data["traders"][$value->id] = $value;

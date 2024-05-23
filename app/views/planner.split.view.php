@@ -1,6 +1,15 @@
 <?php require_once 'landings/header.view.php' ?>
 <?php require_once 'landings/nav.view.php' ?>
-
+<style>
+    th:nth-child(2n+6), 
+    td:nth-child(2n+6),
+    tr:nth-child(1) th {
+        background-color: #f0f0f0;
+    }
+    tr:hover {
+        background-color: #f0f0f0;
+    }
+</style>
 <?php
     //show($data["planned"]);
 ?>
@@ -21,7 +30,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                 <?php
-                //show($data["traders"]);
+                //show($data["split"]);
                 $date = "";
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
@@ -49,6 +58,7 @@
                                             <th>Nazwa produktu</th>
                                             <th>SKU</th>
                                             <th>Planowana ilość</th>
+                                            <th>Pozostało</th>
                                             <?php
                                                 foreach($data["traders"] as $user) {
                                                     echo "<th>".$user->first_name." ".$user->last_name."</th>";
@@ -64,18 +74,35 @@
                                                 echo '
                                                 <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
                                                 <td>'.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>
-                                                <td>'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
-                                                <td>'.$product["amount"].'</td>';
+                                                <td style="width: 100px">'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
+                                                <td>'.$product["amount"].'</td>
+                                                <td></td>';
 
                                                 $pid = $data["fullproducts"][$product["p_id"]]["id"];
                                                 foreach($data["traders"] as $user) {
                                                     $us = $user->id;
-                                                    echo "<td><input type='number' class='form-control' value='0' min='0' id='in_".$pid."_".$us."' name='in_".$pid."_".$us."'>in_".$pid."_".$us."</td>";
+                                                    $val = 0;
+                                                    if(isset($data["split"][$us][$pid])) {
+                                                        $val = $data["split"][$us][$pid]["amount"];
+                                                    }
+                                                    echo "<td><input type='number' class='form-control' value='$val' min='0' id='in_".$pid."_".$us."' name='in_".$pid."_".$us."'></td>";
                                                 }
                                                 echo "</tr>";
                                             }
                                         }
                                         ?>
+                                        <tr id="totalRow">
+                                            <th></th>
+                                            <th></th>
+                                            <th>Total</th>
+                                            <th></th>
+                                            <th></th>
+                                            <?php
+                                                foreach($data["traders"] as $user) {
+                                                    echo "<th></th>";
+                                                }
+                                            ?>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -91,7 +118,7 @@
         <script>
             document.getElementById('prepareTableButton').addEventListener('click', function() {
                 let traders = <?php echo json_encode($data["traders"]); ?>;
-                let planned = <?php echo json_encode($data["planned"]); ?>;
+                let planned = <?php if(isset($data["planned"])) echo json_encode($data["planned"]); else echo "[]";?>;
                 let fullproducts = <?php echo json_encode($data["fullproducts"]); ?>;
 
                 let result = {};
@@ -141,6 +168,70 @@
                 // Add the form to the document body and submit it
                 document.body.appendChild(form);
                 form.submit();
+            });
+
+
+
+            function updateCellColor(row) {
+                let plannedAmount = parseInt(row.querySelector('td:nth-child(4)').textContent);
+                let inputs = row.querySelectorAll('input[type="number"]');
+                let sum = 0;
+                inputs.forEach(input => {
+                    sum += parseInt(input.value) || 0;
+                });
+                let cell = row.querySelector('td:nth-child(4)');
+                let remainingCell = row.querySelector('td:nth-child(5)');
+                let remaining = plannedAmount - sum;
+                remainingCell.textContent = remaining;
+
+                if (sum < plannedAmount) {
+                    cell.style.backgroundColor = 'yellow';
+                    remainingCell.style.backgroundColor = 'yellow';
+                } else if (sum === plannedAmount) {
+                    cell.style.backgroundColor = 'green';
+                    remainingCell.style.backgroundColor = 'green';
+                } else {
+                    cell.style.backgroundColor = 'red';
+                    remainingCell.style.backgroundColor = 'red';
+                }
+            }
+
+            function updateTotals() {
+                const totalRow = document.getElementById('totalRow');
+                const rows = document.querySelectorAll('#orderedProductsTable tbody tr:not(#totalRow)');
+
+                // Initialize totals array
+                let totals = Array.from(totalRow.children).map(() => 0);
+
+                rows.forEach(row => {
+                    let cells = row.children;
+                    for (let i = 3; i < cells.length; i++) { // Start from 3 to skip first columns
+                        let value = parseInt(cells[i].querySelector('input')?.value || cells[i].textContent) || 0;
+                        totals[i] += value;
+                    }
+                });
+
+                // Update the totalRow cells with calculated totals
+                totals.forEach((total, index) => {
+                    if (index >= 3) { // Skip the first 3 columns
+                        totalRow.children[index].textContent = total;
+                    }
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const rows = document.querySelectorAll('#orderedProductsTable tbody tr:not(#totalRow)');
+                rows.forEach(row => {
+                    let inputs = row.querySelectorAll('input[type="number"]');
+                    inputs.forEach(input => {
+                        input.addEventListener('change', function() {
+                            updateCellColor(row);
+                            updateTotals();
+                        });
+                    });
+                    updateCellColor(row);
+                });
+                updateTotals();
             });
         </script>
         <?php require_once 'landings/footer.view.php' ?>
