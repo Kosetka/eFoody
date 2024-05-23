@@ -59,6 +59,7 @@
                                 <table class="table table-bordered" id="orderedProductsTable">
                                     <thead>
                                         <tr>
+                                            <th>ID</th>
                                             <th>Zdjęcie</th>
                                             <th>Nazwa produktu</th>
                                             <th>SKU</th>
@@ -133,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function addProductToTable(product, quantity) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
+            <td>${product.ID}</td>
             <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="<?php echo IMG_ROOT;?>${product.p_photo}"></td>
             <td>${product.p_name}</td>
             <td>${product.sku}</td>

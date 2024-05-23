@@ -73,7 +73,7 @@
                                                 <td>'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
                                                 <td>'.$product["amount"].'</td>
                                                 <td>0</td>
-                                                <td>'.getPercent(2, $product["amount"]).'%</td>
+                                                <td>'.getPercent(0, $product["amount"]).'%</td>
                                                 <td>'.substr($ids, 0, -2).'</td>
                                                 <td><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
                                                 role="button">Etykieta</a></td>
