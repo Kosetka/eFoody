@@ -46,4 +46,30 @@ class WarehouseModel
 
         return false;
     }
+
+    public function getWarehouse($w_id)
+{
+    $query = "
+        SELECT 
+            w.id AS warehouse_id, 
+            w.wh_name, 
+            w.wh_fullname, 
+            w.wh_description, 
+            w.w_active, 
+            c.id AS city_id, 
+            c.c_name, 
+            c.c_fullname, 
+            c.c_description, 
+            c.c_active
+        FROM 
+            warehouses w
+        JOIN 
+            cities c 
+        ON 
+            w.id_city = c.id
+        WHERE 
+            w.id = '$w_id'
+    ";
+    return $this->query($query);
+}
 }

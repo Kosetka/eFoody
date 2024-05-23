@@ -184,23 +184,29 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Receptury
                 </a>
-                
-                <a class="nav-link" href="<?= ROOT ?>/planner">
+                <a class="nav-link" href="<?= ROOT ?>/planner/new">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    [*] Możliwości prod.
+                    Planuj produkcje
                 </a>
-                
-                <a class="nav-link" href="<?= ROOT ?>/planner/show">
+                <a class="nav-link" href="<?= ROOT ?>/planner/split">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Podziel produkty
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/planner/planned">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Plan produkcji
-                </a>
-                <a class="nav-link" href="<?= ROOT ?>/#">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Podziel towar
                 </a>
                 <a class="nav-link" href="<?= ROOT ?>/planner/merchants">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Plan podziału
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/planner/show">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    [*] Plan produkcji
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/planner">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    [*] Możliwości prod.
                 </a>
                 <?php } ?>
 
