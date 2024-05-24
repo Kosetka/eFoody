@@ -35,6 +35,12 @@
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
                     }
+                    $toBlock = "";
+                    $toBlockButton = "";
+                    if($date<=date("Y-m-d")) {
+                        $toBlock = " disabled";
+                        $toBlockButton = " hidden";
+                    }
                 ?>
                     <h2 class="">Plan podziału: <?php echo $date;?></h2>
                     <div class="form-group row m-3">
@@ -85,7 +91,7 @@
                                                     if(isset($data["split"][$us][$pid])) {
                                                         $val = $data["split"][$us][$pid]["amount"];
                                                     }
-                                                    echo "<td><input type='number' class='form-control' value='$val' min='0' id='in_".$pid."_".$us."' name='in_".$pid."_".$us."'></td>";
+                                                    echo "<td><input $toBlock type='number' class='form-control' value='$val' min='0' id='in_".$pid."_".$us."' name='in_".$pid."_".$us."'></td>";
                                                 }
                                                 echo "</tr>";
                                             }
@@ -109,7 +115,7 @@
                         </div>
                         <div class="form-group row m-3">
                             <div class="col-sm-12">
-                                <button id="prepareTableButton" class="btn btn-primary">Zapisz podział</button>
+                                <button id="prepareTableButton" <?=$toBlockButton; ?> class="btn btn-primary">Zapisz podział</button>
                             </div>
                         </div>
                     </div>

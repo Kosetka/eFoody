@@ -56,6 +56,8 @@
                                     </thead>
                                     <tbody>
                                         <?php
+                                        $tot_plan = 0;
+                                        $tot_pro = 0;
                                             //show($data["producted"]);
                                         if(isset($data["planned"])) {
                                             foreach($data["planned"] as $product) {
@@ -71,17 +73,44 @@
                                                 <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
                                                 <td>'.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>
                                                 <td>'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
-                                                <td>'.$product["amount"].'</td>
-                                                <td>'.$data["producted"][$product["p_id"]]["amount"].'</td>
-                                                <td>'.getPercent($data["producted"][$product["p_id"]]["amount"], $product["amount"]).'%</td>
+                                                <td>'.$product["amount"].'</td>';
+                                                $prod_amo = 0;
+                                                if(isset($data["producted"][$product["p_id"]]["amount"]) ) {
+                                                    $prod_amo = $data["producted"][$product["p_id"]]["amount"];
+                                                    echo '<td>'.$prod_amo.'</td>';
+                                                } else {
+                                                    echo '<td>0</td>';
+                                                }
+                                                $color = '';
+                                                if($product["amount"] < $prod_amo) {
+                                                    $color = "yellow";
+                                                } else if ($product["amount"] == $prod_amo) {
+                                                    $color = "green";
+                                                } else if($product["amount"] > $prod_amo) {
+                                                    $color = "red";
+                                                }
+
+                                                echo '<td style="background: '.$color.'">'.getPercent($prod_amo, $product["amount"]).'%</td>
                                                 <td>'.substr($ids, 0, -2).'</td>
                                                 <td><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
                                                 role="button">Etykieta</a></td>
                                                 ';
                                                 echo "</tr>";
+                                                $tot_plan += $product["amount"];
+                                                $tot_pro += $prod_amo;
                                             }
                                         }
                                         ?>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Total</th>
+                                            <th><?=$tot_plan;?></th>
+                                            <th><?=$tot_pro;?></th>
+                                            <th><?=getPercent($tot_pro, $tot_plan)?>%</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

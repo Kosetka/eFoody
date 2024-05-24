@@ -41,6 +41,12 @@
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
                     }
+                    $toBlock = "";
+                    $toBlockButton = "";
+                    if($date<date("Y-m-d")) {
+                        $toBlock = " disabled";
+                        $toBlockButton = " hidden";
+                    }
                 ?>
                     <h2 class="">Przydzielanie produktów</h2>
                     <div class="form-group row m-3">
@@ -121,7 +127,7 @@
                                                     } else {
                                                         $am = 0;
                                                     }
-                                                    echo "<td><input type='number' class='form-control prepared-amount' value='$am' min='0' id='$pid' name='in_".$pid." data-pid='".$pid."'></td>";
+                                                    echo "<td><input $toBlock type='number' class='form-control prepared-amount' value='$am' min='0' id='$pid' name='in_".$pid." data-pid='".$pid."'></td>";
                                                     
                                                     echo "</tr>";
                                                 }
@@ -141,7 +147,7 @@
                         </div>
                         <div class="form-group row m-3">
                             <div class="col-sm-12">
-                                <button id="prepareTableButton" class="btn btn-primary">Potwierdź pobrane produkty</button>
+                                <button id="prepareTableButton" <?=$toBlockButton?> class="btn btn-primary">Potwierdź pobrane produkty</button>
                             </div>
                         </div>
                     </div>

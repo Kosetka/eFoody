@@ -35,6 +35,12 @@
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
                     }
+                    $toBlock = "";
+                    $toBlockButton = "";
+                    if($date<>date("Y-m-d")) {
+                        $toBlock = " disabled";
+                        $toBlockButton = " hidden";
+                    }
                 ?>
                     <h2 class="">Raportowanie produkcji z dnia: <?php echo $date;?></h2>
                     <div class="form-group row m-3">
@@ -97,7 +103,7 @@
                                                 <td style="background: '.$color.'">'.$product["amount"].'</td>';
 
 
-                                                echo "<td><input type='number' class='form-control prepared-amount' value='$am' min='0' id='$pid' name='in_".$pid." data-pid='".$pid."'></td>";
+                                                echo "<td><input $toBlock type='number' class='form-control prepared-amount' value='$am' min='0' id='$pid' name='in_".$pid." data-pid='".$pid."'></td>";
                                                 
                                                 echo "</tr>";
                                             }
@@ -116,7 +122,7 @@
                         </div>
                         <div class="form-group row m-3">
                             <div class="col-sm-12">
-                                <button id="prepareTableButton" class="btn btn-primary">Zapisz produkcję</button>
+                                <button id="prepareTableButton" <?=$toBlockButton?> class="btn btn-primary">Zapisz produkcję</button>
                             </div>
                         </div>
                     </div>
