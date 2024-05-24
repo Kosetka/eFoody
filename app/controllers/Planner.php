@@ -370,4 +370,51 @@ class Planner
 
         $this->view('planner.split', $data);
     }
+
+    public function splitted() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
+        $w_id = 1;
+        
+
+        $plan = new Plannersplit();
+        if(!empty($plan->getAll($date))) {
+            foreach ($plan->getAll($date) as $key => $value) {
+                $data["split"][$value->u_id][$value->p_id] = (array) $value;
+            }
+        }
+
+        $users = new User();
+        foreach ($users->getTraders() as $key => $value) {
+            $data["traders"][$value->id] = $value;
+        }
+
+        $planned = new Plannerproduction();
+        if(!empty($planned->getPlanned($date, $w_id))) {
+            foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                $data["planned"][$value->id] = (array) $value;
+            }
+        }
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
+
+        $data["date_plan"] = $date;
+
+        $this->view('planner.splitted', $data);
+    }
 }
