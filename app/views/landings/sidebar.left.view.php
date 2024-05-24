@@ -47,6 +47,10 @@
                 if(in_array($your_id,$access)) {
                 ?>
                 <div class="sb-sidenav-menu-heading">Handlowiec</div>
+                <a class="nav-link" href="<?= ROOT ?>/planner/myplan">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Mój plan
+                </a>
                 <a class="nav-link" href="<?= ROOT ?>/getcargo">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Pobierz towar
@@ -75,6 +79,21 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Historia sprzedaży
                 </a>
+                <?php } ?>
+                <div class="sb-sidenav-menu-heading">Kuchnia</div>
+                <a class="nav-link" href="<?= ROOT ?>/planner/kitchen">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Plan produkcji
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/planner/producted">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Raportuj produkcję
+                </a>
+                <?php
+                $access = [1, 2];
+                if(in_array($your_id,$access)) {
+                ?>
+
                 <?php } ?>
 
                 <?php

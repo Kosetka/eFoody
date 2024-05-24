@@ -277,6 +277,13 @@ class Planner
         //w przyszłości zmienić gdyby było więcej magazynów
         $w_id = 1;
 
+        $producted = new Plannerproducted();
+        if(!empty($producted->getProducted($date, $w_id))) {
+            foreach ($producted->getProducted($date, $w_id) as $key => $value) {
+                $data["producted"][$value->p_id] = (array) $value;
+            }
+        }
+
         $data["warehouse"] = $w_id;
 
         $warehouse = new WarehouseModel();
@@ -337,7 +344,7 @@ class Planner
 
             foreach($prod as $usr => $pid) {
                 foreach($pid as $p_id => $amount) {
-                    $que = ["date_split" => "$date", "p_id" => $w_id, "p_id" => $p_id, "amount" => $amount, "u_id" => $usr, "u_set_id" => $u_id];
+                    $que = ["date_split" => "$date", "p_id" => $p_id, "amount" => $amount, "u_id" => $usr, "u_set_id" => $u_id];
                     $plan->insert($que);
                 }
             }
@@ -416,5 +423,184 @@ class Planner
         $data["date_plan"] = $date;
 
         $this->view('planner.splitted', $data);
+    }
+    public function myplan() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
+        $w_id = 1;
+        $u_id = $_SESSION["USER"]->id;
+        
+
+        $plan = new Plannersplit();
+        if(!empty($plan->getAll($date))) {
+            foreach ($plan->getAll($date) as $key => $value) {
+                $data["split"][$value->u_id][$value->p_id] = (array) $value;
+            }
+        }
+
+        $users = new User();
+        foreach ($users->getMyTraders($u_id) as $key => $value) {
+            $data["traders"][$value->id] = $value;
+        }
+
+        $planned = new Plannerproduction();
+        if(!empty($planned->getPlanned($date, $w_id))) {
+            foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                $data["planned"][$value->id] = (array) $value;
+            }
+        }
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
+
+        $data["date_plan"] = $date;
+
+        $this->view('planner.myplan', $data);
+    }
+
+    public function kitchen() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
+        $w_id = 1;
+        
+
+        $plan = new Plannersplit();
+        if(!empty($plan->getAll($date))) {
+            foreach ($plan->getAll($date) as $key => $value) {
+                $data["split"][$value->u_id][$value->p_id] = (array) $value;
+            }
+        }
+
+        $users = new User();
+        foreach ($users->getTraders() as $key => $value) {
+            $data["traders"][$value->id] = $value;
+        }
+
+        $planned = new Plannerproduction();
+        if(!empty($planned->getPlanned($date, $w_id))) {
+            foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                $data["planned"][$value->id] = (array) $value;
+            }
+        }
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
+
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllSubProducts() as $key => $value) {
+            $data["subproducts"][$value->id] = (array) $value;
+        }
+
+        $recipes = new RecipesModel();
+        foreach ($recipes->getFullRecipes() as $key => $value) {
+            $data["recipes"][$value->p_id][$value->sub_prod] = $value;
+        }
+
+        $data["date_plan"] = $date;
+
+        $this->view('planner.kitchen', $data);
+    }
+
+    public function producted() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
+        $w_id = 1;
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["prepared_products"])) {
+            //show($_POST);//die;
+            $prod = $_POST["prepared_products"];
+            $u_id = $_SESSION["USER"]->id;
+            //echo $u_id;
+            //show($prod);
+            //echo $date;
+            $plan = new Plannerproducted();
+            $plan->deleteByDate($date);
+
+            foreach($prod as $pid => $val) {
+                $am = $val["amount"];
+                $que = ["date_producted" => "$date", "w_id" => $w_id, "p_id" => $pid, "amount" => $am, "u_id" => $u_id];
+                $plan->insert($que);
+            }
+        }
+
+        $plan = new Plannerproducted();
+        if(!empty($plan->getAll($date))) {
+            foreach ($plan->getAll($date) as $key => $value) {
+                $data["producted"][$value->p_id] = (array) $value;
+            }
+        }
+
+        $plan = new Plannersplit();
+        if(!empty($plan->getAll($date))) {
+            foreach ($plan->getAll($date) as $key => $value) {
+                $data["split"][$value->u_id][$value->p_id] = (array) $value;
+            }
+        }
+
+        $users = new User();
+        foreach ($users->getTraders() as $key => $value) {
+            $data["traders"][$value->id] = $value;
+        }
+
+        $planned = new Plannerproduction();
+        if(!empty($planned->getPlanned($date, $w_id))) {
+            foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                $data["planned"][$value->id] = (array) $value;
+            }
+        }
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
+
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllSubProducts() as $key => $value) {
+            $data["subproducts"][$value->id] = (array) $value;
+        }
+
+
+        $data["date_plan"] = $date;
+
+        $this->view('planner.producted', $data);
     }
 }

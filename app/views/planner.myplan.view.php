@@ -1,6 +1,15 @@
 <?php require_once 'landings/header.view.php' ?>
 <?php require_once 'landings/nav.view.php' ?>
-
+<style>
+    th:nth-child(2n+6), 
+    td:nth-child(2n+6),
+    tr:nth-child(1) th {
+        background-color: #f0f0f0;
+    }
+    tr:hover {
+        background-color: #f0f0f0;
+    }
+</style>
 <?php
     //show($data["planned"]);
 ?>
@@ -17,16 +26,13 @@
             <div class="card mb-4">
                 <div class="card-header">
                 <?php
-                //show($data["warehouse"]);
-
-                $wh = "[".$data["warehouse"][0]->c_name."_".$data["warehouse"][0]->wh_name."] -> ".$data["warehouse"][0]->c_fullname." ".$data["warehouse"][0]->wh_fullname;
-
+                //show($data["split"]);
                 $date = "";
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
                     }
                 ?>
-                    <h2 class="">Plan produkcji: <?php echo $date;?> - Magazyn: <?=$wh?></h2>
+                    <h2 class="">Mój plan na: <?php echo $date;?></h2>
                     <div class="form-group row m-3">
                         <form method='get'>
                             <div class="col-sm-12" style='display: flex'>
@@ -48,40 +54,51 @@
                                             <th>Nazwa produktu</th>
                                             <th>SKU</th>
                                             <th>Planowana ilość</th>
-                                            <th>Przygotowana ilość</th>
-                                            <th>% Realizacji</th>
-                                            <th>Alergeny</th>
-                                            <th>Akcje</th>
+                                            <th>Pobrane</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
-                                            //show($data["producted"]);
+                                        $tot_plan = 0;
+                                        $tot_pob = 0;
                                         if(isset($data["planned"])) {
                                             foreach($data["planned"] as $product) {
-                                                $ids = "";
-                                                if(!empty($data["prod_alergens"][$product["p_id"]]->lista_a_id)) {
-                                                    $numbers = explode(",", $data["prod_alergens"][$product["p_id"]]->lista_a_id);
-                                                    foreach ($numbers as $number) {
-                                                        $ids .=$number.", ";
+                                                $pid = $data["fullproducts"][$product["p_id"]]["id"];
+                                                $left = $product["amount"];
+                                                foreach($data["traders"] as $user) {
+                                                    $us = $user->id;
+                                                    if(isset($data["split"][$us][$pid])) {
+                                                        $left -= $data["split"][$us][$pid]["amount"];
                                                     }
                                                 }
+
                                                 echo "<tr>";
                                                 echo '
                                                 <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
                                                 <td>'.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>
-                                                <td>'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
-                                                <td>'.$product["amount"].'</td>
-                                                <td>'.$data["producted"][$product["p_id"]]["amount"].'</td>
-                                                <td>'.getPercent($data["producted"][$product["p_id"]]["amount"], $product["amount"]).'%</td>
-                                                <td>'.substr($ids, 0, -2).'</td>
-                                                <td><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
-                                                role="button">Etykieta</a></td>
-                                                ';
+                                                <td style="width: 100px">'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>';
+
+                                                foreach($data["traders"] as $user) {
+                                                    $us = $user->id;
+                                                    $val = 0;
+                                                    if(isset($data["split"][$us][$pid])) {
+                                                        $val = $data["split"][$us][$pid]["amount"];
+                                                    }
+                                                    echo "<td>$val</td>";
+                                                    echo "<td></td>";
+                                                    $tot_plan += $val;
+                                                }
                                                 echo "</tr>";
                                             }
                                         }
                                         ?>
+                                        <tr id="totalRow">
+                                            <th></th>
+                                            <th></th>
+                                            <th>Total</th>
+                                            <th><?=$tot_plan?></th>
+                                            <th><?=$tot_pob?></th>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
