@@ -78,4 +78,14 @@ class Cargo
     
         return $result;
     }
+
+    public function deleteByDateId($date, $id)
+	{
+
+		$query = "delete from $this->table where date = '$date' AND u_id = $id";
+		$this->query($query);
+
+		return false;
+
+	}
 }

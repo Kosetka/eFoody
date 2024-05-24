@@ -69,13 +69,14 @@ class GetCargo
             if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $cargo = new Cargo;
                 $prod = $_POST["prepared_products"];
-                show($_POST);
-                die();
+                //show($_POST);
+                //die();
                 $date_now = $date.' 06:00:00';
+                $cargo->deleteByDateId($date_now, $u_id);
                 foreach ($prod as $key => $value) {
                     $am = $value["amount"];
                     $toUpdate = ["w_id" => $w_id, "u_id" => $u_id, "p_id" => $key, "amount" => $am, "date" => $date_now];
-                    //$cargo->insert($toUpdate);
+                    $cargo->insert($toUpdate);
                 }
                 $data['success'] = "Zapisano pomyślnie";
                 unset($_POST);
@@ -83,6 +84,14 @@ class GetCargo
                 $data['errors'] = $cargo->errors;
             }
 
+            $cargo = new Cargo;
+            $date_from = $date.' 00:00:00';
+            $date_to = $date.' 23:59:59';
+            if(!empty($cargo->getAllFullProductsDate($u_id, $date_from, $date_to))) {
+                foreach ($cargo->getAllFullProductsDate($u_id, $date_from, $date_to) as $key => $value) {
+                    $data["cargo"][$value->p_id] = (array) $value;
+                }
+            }
 
             $data["warehouse"] = $w_id;
 

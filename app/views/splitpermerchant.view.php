@@ -116,7 +116,11 @@
 
                                                     echo '<td style="width: 100px">'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
                                                     <td>'.$product["amount"].'</td>';
-                                                    $am = 0;
+                                                    if(isset($data["cargo"])) {
+                                                        $am = $data["cargo"][$pid]["amount"];
+                                                    } else {
+                                                        $am = 0;
+                                                    }
                                                     echo "<td><input type='number' class='form-control prepared-amount' value='$am' min='0' id='$pid' name='in_".$pid." data-pid='".$pid."'></td>";
                                                     
                                                     echo "</tr>";

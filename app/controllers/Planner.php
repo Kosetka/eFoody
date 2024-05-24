@@ -444,6 +444,15 @@ class Planner
         $u_id = $_SESSION["USER"]->id;
         
 
+        $cargo = new Cargo;
+        $date_from = $date.' 00:00:00';
+        $date_to = $date.' 23:59:59';
+        if(!empty($cargo->getAllFullProductsDate($u_id, $date_from, $date_to))) {
+            foreach ($cargo->getAllFullProductsDate($u_id, $date_from, $date_to) as $key => $value) {
+                $data["cargo"][$value->p_id] = (array) $value;
+            }
+        }
+
         $plan = new Plannersplit();
         if(!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {

@@ -51,10 +51,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Mój plan
                 </a>
-                <a class="nav-link" href="<?= ROOT ?>/getcargo">
+                <?php /*<a class="nav-link" href="<?= ROOT ?>/getcargo">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Pobierz towar
-                </a>
+                </a>*/ ?>
                 <a class="nav-link" href="<?= ROOT ?>/places/my">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Moje miejsca

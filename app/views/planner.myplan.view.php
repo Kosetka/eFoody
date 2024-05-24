@@ -85,7 +85,15 @@
                                                         $val = $data["split"][$us][$pid]["amount"];
                                                     }
                                                     echo "<td>$val</td>";
-                                                    echo "<td></td>";
+                                                    if(isset($data["cargo"][$pid])) {
+                                                        $am = $data["cargo"][$pid]["amount"];
+                                                    } else {
+                                                        $am = 0;
+                                                    }
+
+
+                                                    echo "<td>$am</td>";
+                                                    $tot_pob += $am;
                                                     $tot_plan += $val;
                                                 }
                                                 echo "</tr>";

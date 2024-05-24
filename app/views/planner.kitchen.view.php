@@ -101,12 +101,14 @@
                         }
                     }
                     //show($data["planned"]);
-                    foreach($data["planned"] as $key => $value) {
-                        $p = $value["p_id"]; //produkt który mam w planach
-                        foreach($data["recipes"] as $k => $v) {
-                            if($p == $k) { // produkt ma przepis
-                                foreach($v as $kk => $vv) {
-                                    $recipes[$kk] += $vv->amount * $value["amount"]; //tu pomnożyć razy ilości z planów
+                    if(!empty($data["planned"])) {
+                        foreach($data["planned"] as $key => $value) {
+                            $p = $value["p_id"]; //produkt który mam w planach
+                            foreach($data["recipes"] as $k => $v) {
+                                if($p == $k) { // produkt ma przepis
+                                    foreach($v as $kk => $vv) {
+                                        $recipes[$kk] += $vv->amount * $value["amount"]; //tu pomnożyć razy ilości z planów
+                                    }
                                 }
                             }
                         }
