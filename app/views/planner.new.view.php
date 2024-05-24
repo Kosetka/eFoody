@@ -31,6 +31,12 @@
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
                     }
+                    $toBlock = "";
+                    $toBlockButton = "";
+                    if($date<=date("Y-m-d")) {
+                        $toBlock = " disabled";
+                        $toBlockButton = " hidden";
+                    }
                 ?>
                     <h2 class="">Plan produkcji na <?php echo $date;?></h2>
                     <div class="form-group row m-3">
@@ -51,7 +57,7 @@
                             <div class="col-sm-3" style="display: inline;">
                                 <select style="width: 80%" id="c_id" name="p_id" placeholder="Wybierz produkt...">
                                 </select>
-                                <button id="addProductButton" class="btn btn-success">+</button>
+                                <button id="addProductButton" <?=$toBlockButton; ?> class="btn btn-success">+</button>
                             </div>
                         </div>
                         <div class="form-group row m-3">
@@ -75,7 +81,7 @@
                         </div>
                         <div class="form-group row m-3">
                             <div class="col-sm-12">
-                                <button id="submitOrderButton" class="btn btn-primary">Zapisz plan</button>
+                                <button id="submitOrderButton" <?=$toBlockButton; ?> class="btn btn-primary">Zapisz plan</button>
                             </div>
                         </div>
                     </div>
@@ -138,8 +144,8 @@ document.addEventListener("DOMContentLoaded", function() {
             <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="<?php echo IMG_ROOT;?>${product.p_photo}"></td>
             <td>${product.p_name}</td>
             <td>${product.sku}</td>
-            <td><input type="number" class="form-control" value="${quantity}" min="1"></td>
-            <td><button class="btn btn-danger remove-product">Usuń</button></td>
+            <td><input <?=$toBlock;?> type="number" class="form-control" value="${quantity}" min="1"></td>
+            <td><button <?=$toBlockButton;?> class="btn btn-danger remove-product">Usuń</button></td>
         `;
         orderedProductsTable.appendChild(tr);
 

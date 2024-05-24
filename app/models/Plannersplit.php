@@ -27,9 +27,14 @@ class Plannersplit
         return $this->query($query);
     }
 
-    public function getPlanned($date, $w_id)
+    public function getPlanned($date)
     {
-        $query = "select * from $this->table WHERE date_split = '$date' AND w_id = $w_id";
+        $query = "select * from $this->table WHERE date_split = '$date'";
+        return $this->query($query);
+    }
+    public function getPlannedUser($date, $u_id)
+    {
+        $query = "select * from $this->table WHERE date_split = '$date' AND u_id = $u_id";
         return $this->query($query);
     }
 

@@ -1,6 +1,15 @@
 <?php require_once 'landings/header.view.php' ?>
 <?php require_once 'landings/nav.view.php' ?>
-
+<style>
+    th:nth-child(2n+6), 
+    td:nth-child(2n+6),
+    tr:nth-child(1) th {
+        background-color: #f0f0f0;
+    }
+    tr:hover {
+        background-color: #f0f0f0;
+    }
+</style>
 <?php
     //show($data["planned"]);
 ?>
@@ -17,16 +26,13 @@
             <div class="card mb-4">
                 <div class="card-header">
                 <?php
-                //show($data["warehouse"]);
-
-                $wh = "[".$data["warehouse"][0]->c_name."_".$data["warehouse"][0]->wh_name."] -> ".$data["warehouse"][0]->c_fullname." ".$data["warehouse"][0]->wh_fullname;
-
+                //show($data["split"]);
                 $date = "";
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
                     }
                 ?>
-                    <h2 class="">Plan produkcji: <?php echo $date;?> - Magazyn: <?=$wh?></h2>
+                    <h2 class="">Plan podziału: <?php echo $date;?></h2>
                     <div class="form-group row m-3">
                         <form method='get'>
                             <div class="col-sm-12" style='display: flex'>
@@ -48,68 +54,74 @@
                                             <th>Nazwa produktu</th>
                                             <th>SKU</th>
                                             <th>Planowana ilość</th>
-                                            <th>Przygotowana ilość</th>
-                                            <th>% Realizacji</th>
-                                            <th>Alergeny</th>
-                                            <th>Akcje</th>
+                                            <th>Pozostało</th>
+                                            <?php
+                                                foreach($data["traders"] as $user) {
+                                                    echo "<th>".$user->first_name." ".$user->last_name."</th>";
+                                                }
+                                            ?>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
+                                        $tot = [];
                                         $tot_plan = 0;
-                                        $tot_pro = 0;
-                                            //show($data["producted"]);
+                                        $tot_left = 0;
+                                        foreach($data["traders"] as $user) {
+                                            $tot[$user->id] = 0;
+                                        }
                                         if(isset($data["planned"])) {
                                             foreach($data["planned"] as $product) {
-                                                $ids = "";
-                                                if(!empty($data["prod_alergens"][$product["p_id"]]->lista_a_id)) {
-                                                    $numbers = explode(",", $data["prod_alergens"][$product["p_id"]]->lista_a_id);
-                                                    foreach ($numbers as $number) {
-                                                        $ids .=$number.", ";
+                                                $pid = $data["fullproducts"][$product["p_id"]]["id"];
+                                                $left = $product["amount"];
+                                                foreach($data["traders"] as $user) {
+                                                    $us = $user->id;
+                                                    if(isset($data["split"][$us][$pid])) {
+                                                        $left -= $data["split"][$us][$pid]["amount"];
                                                     }
                                                 }
+                                                $color = '';
+                                                if($left < 0) {
+                                                    $color = "red";
+                                                } else if ($left == 0) {
+                                                    $color = "green";
+                                                } else if($left > 0) {
+                                                    $color = "yellow";
+                                                }
+                                                $tot_left += $left;
+                                                $tot_plan += $product["amount"];
                                                 echo "<tr>";
                                                 echo '
                                                 <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
                                                 <td>'.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>
-                                                <td>'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
-                                                <td>'.$product["amount"].'</td>';
-                                                $prod_amo = 0;
-                                                if(isset($data["producted"][$product["p_id"]]["amount"]) ) {
-                                                    $prod_amo = $data["producted"][$product["p_id"]]["amount"];
-                                                    echo '<td>'.$prod_amo.'</td>';
-                                                } else {
-                                                    echo '<td>0</td>';
-                                                }
-                                                $color = '';
-                                                if($product["amount"] < $prod_amo) {
-                                                    $color = "yellow";
-                                                } else if ($product["amount"] == $prod_amo) {
-                                                    $color = "green";
-                                                } else if($product["amount"] > $prod_amo) {
-                                                    $color = "red";
-                                                }
+                                                <td style="width: 100px">'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
+                                                <td style="background: '.$color.'">'.$product["amount"].'</td>
+                                                <td>'.$left.'</td>';
 
-                                                echo '<td style="background: '.$color.'">'.getPercent($prod_amo, $product["amount"]).'%</td>
-                                                <td>'.substr($ids, 0, -2).'</td>
-                                                <td><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
-                                                role="button">Etykieta</a></td>
-                                                ';
+                                                foreach($data["traders"] as $user) {
+                                                    $us = $user->id;
+                                                    $val = 0;
+                                                    if(isset($data["split"][$us][$pid])) {
+                                                        $val = $data["split"][$us][$pid]["amount"];
+                                                        $tot[$us] += $data["split"][$us][$pid]["amount"];
+                                                    }
+                                                    echo "<td>$val</td>";
+                                                }
                                                 echo "</tr>";
-                                                $tot_plan += $product["amount"];
-                                                $tot_pro += $prod_amo;
                                             }
                                         }
                                         ?>
-                                        <tr>
+                                        <tr id="totalRow">
                                             <th></th>
                                             <th></th>
                                             <th>Total</th>
-                                            <th><?=$tot_plan;?></th>
-                                            <th><?=$tot_pro;?></th>
-                                            <th><?=getPercent($tot_pro, $tot_plan)?>%</th>
-                                            <th></th>
-                                            <th></th>
+                                            <th><?=$tot_plan?></th>
+                                            <th><?=$tot_left?></th>
+                                            <?php
+                                                foreach($data["traders"] as $user) {
+                                                    echo "<th>".$tot[$user->id]."</th>";
+                                                }
+                                            ?>
                                         </tr>
                                     </tbody>
                                 </table>

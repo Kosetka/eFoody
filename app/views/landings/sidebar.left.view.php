@@ -47,10 +47,14 @@
                 if(in_array($your_id,$access)) {
                 ?>
                 <div class="sb-sidenav-menu-heading">Handlowiec</div>
-                <a class="nav-link" href="<?= ROOT ?>/getcargo">
+                <a class="nav-link" href="<?= ROOT ?>/planner/myplan">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Mój plan
+                </a>
+                <?php /*<a class="nav-link" href="<?= ROOT ?>/getcargo">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Pobierz towar
-                </a>
+                </a>*/ ?>
                 <a class="nav-link" href="<?= ROOT ?>/places/my">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Moje miejsca
@@ -74,6 +78,32 @@
                 <a class="nav-link" href="<?= ROOT ?>/sale">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Historia sprzedaży
+                </a>
+                <?php } ?>
+                
+                <?php
+                $access = [1, 2];
+                if(in_array($your_id,$access)) {
+                ?>
+                <div class="sb-sidenav-menu-heading">Kuchnia</div>
+                <a class="nav-link" href="<?= ROOT ?>/planner/kitchen">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Plan produkcji
+                </a>
+                <a class="nav-link" href="<?= ROOT ?>/planner/producted">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Raportuj produkcję
+                </a>
+                <?php } ?>
+
+                <?php
+                $access = [1, 2];
+                if(in_array($your_id,$access)) {
+                ?>
+                <div class="sb-sidenav-menu-heading">Magazyn</div>
+                <a class="nav-link" href="<?= ROOT ?>/getcargo/split">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Przydziel produkty
                 </a>
                 <?php } ?>
 
@@ -196,7 +226,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Plan produkcji
                 </a>
-                <a class="nav-link" href="<?= ROOT ?>/planner/merchants">
+                <a class="nav-link" href="<?= ROOT ?>/planner/splitted">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Plan podziału
                 </a>

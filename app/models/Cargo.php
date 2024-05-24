@@ -17,7 +17,8 @@ class Cargo
         'p_id',
         'date',
         'u_id',
-        'amount'
+        'amount',
+        'date_stamp'
     ];
 
     public function getProducts(): array
@@ -77,4 +78,14 @@ class Cargo
     
         return $result;
     }
+
+    public function deleteByDateId($date, $id)
+	{
+
+		$query = "delete from $this->table where date = '$date' AND u_id = $id";
+		$this->query($query);
+
+		return false;
+
+	}
 }
