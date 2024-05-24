@@ -186,13 +186,10 @@
 
                 if (sum < plannedAmount) {
                     cell.style.backgroundColor = 'yellow';
-                    remainingCell.style.backgroundColor = 'yellow';
                 } else if (sum === plannedAmount) {
                     cell.style.backgroundColor = 'green';
-                    remainingCell.style.backgroundColor = 'green';
                 } else {
                     cell.style.backgroundColor = 'red';
-                    remainingCell.style.backgroundColor = 'red';
                 }
             }
 
