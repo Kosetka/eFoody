@@ -80,6 +80,11 @@
                     Historia sprzedaży
                 </a>
                 <?php } ?>
+                
+                <?php
+                $access = [1, 2];
+                if(in_array($your_id,$access)) {
+                ?>
                 <div class="sb-sidenav-menu-heading">Kuchnia</div>
                 <a class="nav-link" href="<?= ROOT ?>/planner/kitchen">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
@@ -89,11 +94,17 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Raportuj produkcję
                 </a>
+                <?php } ?>
+
                 <?php
                 $access = [1, 2];
                 if(in_array($your_id,$access)) {
                 ?>
-
+                <div class="sb-sidenav-menu-heading">Magazyn</div>
+                <a class="nav-link" href="<?= ROOT ?>/getcargo/split">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Przydziel produkty
+                </a>
                 <?php } ?>
 
                 <?php

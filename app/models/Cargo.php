@@ -17,7 +17,8 @@ class Cargo
         'p_id',
         'date',
         'u_id',
-        'amount'
+        'amount',
+        'date_stamp'
     ];
 
     public function getProducts(): array
