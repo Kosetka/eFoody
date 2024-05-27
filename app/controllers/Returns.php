@@ -17,15 +17,18 @@ class Returns
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $returns = new ReturnsModel;
 
-            foreach ($_POST["p_id"] as $key => $value) {
-                if ($value > 0) {
-                    $toUpdate = ["w_id" => $_POST["w_id"], "u_id" => $u_id, "p_id" => $key, "amount" => $value];
-                    $returns->insert($toUpdate);
+            if(isset($_POST["p_id"])) {
+                foreach ($_POST["p_id"] as $key => $value) {
+                    if ($value > 0) {
+                        $toUpdate = ["w_id" => $_POST["w_id"], "u_id" => $u_id, "p_id" => $key, "amount" => $value];
+                        $returns->insert($toUpdate);
+                    }
                 }
+                $data['success'] = "Produkty zostały zwrócone do magazynu";
+                unset($_POST);
+            } else {
+                $data['errors'] = "Brak produktów do zwrotu";
             }
-            $data['success'] = "Produkty zostały zwrócone do magazynu";
-            unset($_POST);
-            $data['errors'] = $returns->errors;
         }
 
         $cities = new Shared();
@@ -45,7 +48,10 @@ class Returns
         $prod_availability_gratis = [];
         $prod_availability_destroy = [];
 
-        $data["products"] = $products_list->getAllFullProducts();
+        foreach($products_list->getAllFullProducts() as $key => $value) {
+            $data["products"][$value->id] = $value;
+        }
+
         foreach ($data["products"] as $prod) {
             $prod_list[$prod->id] = 0;
             $prod_list_sold[$prod->id] = 0;

@@ -9,7 +9,7 @@
 
                 <?php if (!empty($errors)): ?>
                     <div class="alert alert-danger">
-                        <?= implode("<br>", $errors) ?>
+                        <?= $errors ?>
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($success)): ?>
@@ -53,6 +53,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th scope="col">ID</th>
                                         <th scope="col">Zdjęcie</th>
                                         <th scope="col">Produkt</th>
                                         <th scope="col">SKU</th>
@@ -72,29 +73,32 @@
                                 <tbody>
 
                                     <?php
-                                    foreach ($data["products"] as $key => $value) {
-                                        $pr = $data['prod_availability'][$value->id];
-                                        $prs = $data['prod_availability_sold'][$value->id];
-                                        $prz = $data['prod_availability_returned'][$value->id];
-                                        $pef = $data['prod_availability_exchange_from'][$value->id];
-                                        $pet = $data['prod_availability_exchange_to'][$value->id];
-                                        $pep = $data['prod_availability_exchange_pending'][$value->id];
-                                        $pag = $data['prod_availability_gratis'][$value->id];
-                                        $pad = $data['prod_availability_destroy'][$value->id];
+                                    //show($data["products"]);
+                                    foreach ($data["cargo"] as $key => $value) {
+                                        $pr = $data['prod_availability'][$value->p_id];
+                                        $prs = $data['prod_availability_sold'][$value->p_id];
+                                        $prz = $data['prod_availability_returned'][$value->p_id];
+                                        $pef = $data['prod_availability_exchange_from'][$value->p_id];
+                                        $pet = $data['prod_availability_exchange_to'][$value->p_id];
+                                        $pep = $data['prod_availability_exchange_pending'][$value->p_id];
+                                        $pag = $data['prod_availability_gratis'][$value->p_id];
+                                        $pad = $data['prod_availability_destroy'][$value->p_id];
                                         $amount_left = $pr - $prs - $prz + $pef - $pet - $pep - $pag - $pad;
-                                        if (!empty($value->p_photo)) {
-                                            $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $value->p_photo . "'>";
+                                        if (!empty($data["products"][$value->p_id]->p_photo)) {
+                                            $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $data["products"][$value->p_id]->p_photo . "'>";
                                         } else {
                                             $photo = "";
                                         }
-                                        if ($amount_left > 0) {
-                                            echo "  <tr><td>$photo</td>
-                                                <td>$value->p_name</td>
-                                                <td>$value->sku</td>
+                                        //if ($amount_left > 0) {
+                                            echo "  <tr>
+                                                <td>".$value->p_id."</td>
+                                                <td>$photo</td>
+                                                <td>".$data["products"][$value->p_id]->p_name."</td>
+                                                <td style='width: 100px'>".$data["products"][$value->p_id]->sku."</td>
                                                 <td>";
-                                            echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->id . ']" value="' . $amount_left . '" min=0 max = "' . $amount_left . '">';
+                                            echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->p_id . ']" value="' . $amount_left . '" min=0 max = "' . $amount_left . '">';
                                             echo "</td>
-                                                <td>$value->p_unit</td>
+                                                <td>".$data["products"][$value->p_id]->p_unit."</td>
                                                 <td>$pr</td>
                                                 <td>$prs</td>
                                                 <td>$prz</td>
@@ -105,7 +109,7 @@
                                                 <td>$pad</td>";
                                             echo "<td>" . $amount_left . "</td>";
                                             echo "</tr>";
-                                        }
+                                        //}
                                     }
 
                                     ?>
