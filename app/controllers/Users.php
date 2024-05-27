@@ -15,8 +15,9 @@ class Users
         $data = [];
 
         $users = new UsersModel();
-        $users->getAllUsers();
-        $data["users"] = $users->users;
+        foreach($users->getAllUsers() as $user) {
+            $data["users"][$user->id] = (array) $user;
+        }
 
         $role = new RolesNameModel;
         $data["roles"] = $role->getRoles();
