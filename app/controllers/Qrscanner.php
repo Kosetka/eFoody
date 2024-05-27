@@ -16,17 +16,28 @@ class QRScanner
         $_SESSION["selected_company"] = 0;
         $_SESSION["selected_company_id"] = 0;
         $_SESSION["selected_company_fullname"] = "";
+        $u_id = $_SESSION["USER"]->id;
+
+        // ODWRÓCONIE ID PRZY POMOCNIKU
+        $h_id = 0;
+        if(isset($_SESSION["USER"]->helper_for)) {
+            $u_id = $_SESSION["USER"]->helper_for;
+            $h_id = $_SESSION["USER"]->id;
+        }
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             if (isset($_POST["text"]) && !empty($_POST["text"])) {
                 if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
                     $data['error'] = "Odświeżenie strony, nie dodano skanu";
                 } else {
-                    $u_id = $_SESSION["USER"]->id;
                     $c_id = $_POST["c_fullname_id"];
                     $p_id = $_POST["prod_p_id"];
                     $sales = new Sales;
-                    $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => "scan", "p_id" => $p_id, "s_amount" => 1];
+                    if($h_id == 0) {
+                        $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => "scan", "p_id" => $p_id, "s_amount" => 1];
+                    } else {
+                        $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => "scan", "p_id" => $p_id, "s_amount" => 1, "h_id" => $h_id];
+                    }
                     $sales->insert($toUpdate);
     
                     $now = date("Y-m-d H:i:s");
@@ -37,7 +48,11 @@ class QRScanner
                     $v = $placeVisited->checkVisit($city_id);
                     if($check_sold == 1) {
                         if(empty($v)) {
-                            $placeVisited->insert(["u_id" => $u_id, "sold" => 1, "c_id" => $city_id]);
+                            if($h_id == 0) {
+                                $placeVisited->insert(["u_id" => $u_id, "sold" => 1, "c_id" => $city_id]);
+                            } else {
+                                $placeVisited->insert(["u_id" => $u_id, "sold" => 1, "c_id" => $city_id, "h_id" => $u_id]);
+                            }
                         }
                     }
                 }
@@ -60,7 +75,7 @@ class QRScanner
             $data["products"][$value->id] = $value;
         }
         $companies = new Companies();
-        $temp = $companies->getMyCompanies($_SESSION["USER"]->id);
+        $temp = $companies->getMyCompanies($u_id);
         if(!empty($temp)) {
             foreach ($temp as $key => $value) {
                 $data["companies"][$value->id] = $value;
@@ -68,7 +83,7 @@ class QRScanner
         }
 
         $sal = new Sales();
-        $temp = $sal->getLastScans($_SESSION["USER"]->id);
+        $temp = $sal->getLastScans($u_id);
         if(!empty($temp)) {
             foreach ($temp as $key => $value) {
                 $data["scans"][$value->id] = $value;

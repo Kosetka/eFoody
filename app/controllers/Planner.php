@@ -447,6 +447,12 @@ class Planner
         $w_id = 1;
         $u_id = $_SESSION["USER"]->id;
         
+        // ODWRÓCONIE ID PRZY POMOCNIKU
+        $h_id = 0;
+        if(isset($_SESSION["USER"]->helper_for)) {
+            $u_id = $_SESSION["USER"]->helper_for;
+            $h_id = $_SESSION["USER"]->id;
+        }
 
         $cargo = new Cargo;
         $date_from = $date.' 00:00:00';

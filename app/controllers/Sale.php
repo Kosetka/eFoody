@@ -14,13 +14,22 @@ class Sale
         $data["dates"] = False;
         $data["products"] = False;
         $show_data = False;
+
+        $u_id = $_SESSION["USER"]->id;
+
+        // ODWRÓCONIE ID PRZY POMOCNIKU
+        $h_id = 0;
+        if(isset($_SESSION["USER"]->helper_for)) {
+            $u_id = $_SESSION["USER"]->helper_for;
+            $h_id = $_SESSION["USER"]->id;
+        }
+
         if (isset($_GET["search"]) && $_GET["search"] == 1)
             $show_data = True;
 
         if ($_SERVER['REQUEST_METHOD'] == "GET" && $show_data) {
             $date_from = $_GET["date_from"] . " 00:00:00";
             $date_to = $_GET["date_to"] . " 23:59:59";
-            $u_id = $_SESSION["USER"]->id;
 
             $companies_list = new Companies();
             $data["companies"] = $companies_list->getAllCompanies("companies");
@@ -61,9 +70,15 @@ class Sale
 
         $data = [];
         $u_id = $_SESSION["USER"]->id;
-        // do zrobienia
+
+        // ODWRÓCONIE ID PRZY POMOCNIKU
+        $h_id = 0;
+        if(isset($_SESSION["USER"]->helper_for)) {
+            $u_id = $_SESSION["USER"]->helper_for;
+            $h_id = $_SESSION["USER"]->id;
+        }
+        
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $u_id = $_SESSION["USER"]->id;
             $c_id = $_POST["c_id"];
             $sale_description = $_POST["raport_type"];
             if($sale_description == "sell") {
@@ -75,7 +90,11 @@ class Sale
             foreach ($_POST["p_id"] as $key => $value) {
                 if ($value > 0) {
                     $check_sold = 1;
-                    $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => $sale_description, "p_id" => $key, "s_amount" => $value];
+                    if($h_id == 0) {
+                        $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => $sale_description, "p_id" => $key, "s_amount" => $value];
+                    } else {
+                        $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => $sale_description, "p_id" => $key, "s_amount" => $value, "h_id" => $h_id];
+                    }
                     $sales->insert($toUpdate);
                 }
             }
@@ -83,7 +102,11 @@ class Sale
             $v = $placeVisited->checkVisit($c_id);
             if($check_sold == 1) {
                 if(empty($v)) {
-                    $placeVisited->insert(["u_id" => $u_id, "sold" => $v_sold, "c_id" => $c_id]);
+                    if($h_id == 0) {
+                        $placeVisited->insert(["u_id" => $u_id, "sold" => $v_sold, "c_id" => $c_id]);
+                    } else {
+                        $placeVisited->insert(["u_id" => $h_id, "sold" => $v_sold, "c_id" => $c_id, "h_id" => $u_id]);
+                    }
                 }
             }
             $data['success'] = "Produkty zraportowane pomyślnie";
