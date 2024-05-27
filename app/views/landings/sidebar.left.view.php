@@ -214,6 +214,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Receptury
                 </a>
+                <a class="nav-link" href="<?= ROOT ?>/labels">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Etykiety
+                </a>
                 <a class="nav-link" href="<?= ROOT ?>/planner/new">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Planuj produkcje
