@@ -18,7 +18,8 @@ class Sales
         'sale_description',
         'date',
         'p_id',
-        's_amount'
+        's_amount',
+        'h_id'
     ];
 
     public function getSoldProducts($u_id)

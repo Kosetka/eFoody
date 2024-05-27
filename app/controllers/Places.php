@@ -65,6 +65,13 @@ class Places
         $data["places"] = [];
         $u_id = $_SESSION["USER"]->id;
 
+        // ODWRÓCONIE ID PRZY POMOCNIKU
+        $h_id = 0;
+        if(isset($_SESSION["USER"]->helper_for)) {
+            $u_id = $_SESSION["USER"]->helper_for;
+            $h_id = $_SESSION["USER"]->id;
+        }
+
         $data["companies"] = [];
 
         $companies = new Companies();

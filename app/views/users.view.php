@@ -50,6 +50,7 @@
                             foreach ($data["cities"] as $s) {
                                 $cities[$s["id"]] = $s;
                             }
+                            //show($data["users"]);
                             foreach ($data["users"] as $user) {
                                 $id = $user['id'];
                                 $email = $user['email'];
@@ -88,9 +89,14 @@
                                     <td>$last_name</td>
                                     <td>$phone_business</td>
                                     <td>$phone_private</td>
-                                    <td><span data-toggle='tooltip' data-placement='right' title='$title_warehouse'>$u_warehouse </span></td>
-                                    <td>$u_role</td>
-                                    <td>$active_display</td>
+                                    <td><span data-toggle='tooltip' data-placement='right' title='$title_warehouse'>$u_warehouse </span></td>";
+                                if($user['u_role'] == 10) {
+                                    echo "<td>$u_role</br>(imie)</td>";
+                                } else {
+                                    echo "<td>$u_role</td>";
+                                }
+
+                                echo "<td>$active_display</td>
                                     <td>$edit_link</td>
                                 </tr>";
                             }

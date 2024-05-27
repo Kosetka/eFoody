@@ -16,7 +16,8 @@ class PlacesModel
         'u_id',
         'date',
         'sold',
-        'c_id'
+        'c_id',
+        'h_id'
     ];
 
     public function getMyPlaces($u_id)

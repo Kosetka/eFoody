@@ -43,7 +43,7 @@
                 <?php } ?>
                 
                 <?php
-                $access = [1, 2, 3, 4];
+                $access = [1, 2, 3, 4, 10];
                 if(in_array($your_id,$access)) {
                 ?>
                 <div class="sb-sidenav-menu-heading">Handlowiec</div>

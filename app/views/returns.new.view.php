@@ -74,42 +74,44 @@
 
                                     <?php
                                     //show($data["products"]);
-                                    foreach ($data["cargo"] as $key => $value) {
-                                        $pr = $data['prod_availability'][$value->p_id];
-                                        $prs = $data['prod_availability_sold'][$value->p_id];
-                                        $prz = $data['prod_availability_returned'][$value->p_id];
-                                        $pef = $data['prod_availability_exchange_from'][$value->p_id];
-                                        $pet = $data['prod_availability_exchange_to'][$value->p_id];
-                                        $pep = $data['prod_availability_exchange_pending'][$value->p_id];
-                                        $pag = $data['prod_availability_gratis'][$value->p_id];
-                                        $pad = $data['prod_availability_destroy'][$value->p_id];
-                                        $amount_left = $pr - $prs - $prz + $pef - $pet - $pep - $pag - $pad;
-                                        if (!empty($data["products"][$value->p_id]->p_photo)) {
-                                            $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $data["products"][$value->p_id]->p_photo . "'>";
-                                        } else {
-                                            $photo = "";
+                                    if(!empty($data["cargo"] )) {
+                                        foreach ($data["cargo"] as $key => $value) {
+                                            $pr = $data['prod_availability'][$value->p_id];
+                                            $prs = $data['prod_availability_sold'][$value->p_id];
+                                            $prz = $data['prod_availability_returned'][$value->p_id];
+                                            $pef = $data['prod_availability_exchange_from'][$value->p_id];
+                                            $pet = $data['prod_availability_exchange_to'][$value->p_id];
+                                            $pep = $data['prod_availability_exchange_pending'][$value->p_id];
+                                            $pag = $data['prod_availability_gratis'][$value->p_id];
+                                            $pad = $data['prod_availability_destroy'][$value->p_id];
+                                            $amount_left = $pr - $prs - $prz + $pef - $pet - $pep - $pag - $pad;
+                                            if (!empty($data["products"][$value->p_id]->p_photo)) {
+                                                $photo = "<img width='40' height='40' class='obrazek' src='" . IMG_ROOT . "" . $data["products"][$value->p_id]->p_photo . "'>";
+                                            } else {
+                                                $photo = "";
+                                            }
+                                            //if ($amount_left > 0) {
+                                                echo "  <tr>
+                                                    <td>".$value->p_id."</td>
+                                                    <td>$photo</td>
+                                                    <td>".$data["products"][$value->p_id]->p_name."</td>
+                                                    <td style='width: 100px'>".$data["products"][$value->p_id]->sku."</td>
+                                                    <td>";
+                                                echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->p_id . ']" value="' . $amount_left . '" min=0 max = "' . $amount_left . '">';
+                                                echo "</td>
+                                                    <td>".$data["products"][$value->p_id]->p_unit."</td>
+                                                    <td>$pr</td>
+                                                    <td>$prs</td>
+                                                    <td>$prz</td>
+                                                    <td>$pef</td>
+                                                    <td>$pet</td>
+                                                    <td>$pep</td>
+                                                    <td>$pag</td>
+                                                    <td>$pad</td>";
+                                                echo "<td>" . $amount_left . "</td>";
+                                                echo "</tr>";
+                                            //}
                                         }
-                                        //if ($amount_left > 0) {
-                                            echo "  <tr>
-                                                <td>".$value->p_id."</td>
-                                                <td>$photo</td>
-                                                <td>".$data["products"][$value->p_id]->p_name."</td>
-                                                <td style='width: 100px'>".$data["products"][$value->p_id]->sku."</td>
-                                                <td>";
-                                            echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->p_id . ']" value="' . $amount_left . '" min=0 max = "' . $amount_left . '">';
-                                            echo "</td>
-                                                <td>".$data["products"][$value->p_id]->p_unit."</td>
-                                                <td>$pr</td>
-                                                <td>$prs</td>
-                                                <td>$prz</td>
-                                                <td>$pef</td>
-                                                <td>$pet</td>
-                                                <td>$pep</td>
-                                                <td>$pag</td>
-                                                <td>$pad</td>";
-                                            echo "<td>" . $amount_left . "</td>";
-                                            echo "</tr>";
-                                        //}
                                     }
 
                                     ?>

@@ -50,15 +50,18 @@ class Exchange
             $u_id_target = $_POST["u_id_target"];
 
             $sales = new CargoExchange;
-            foreach ($_POST["p_id"] as $key => $value) {
-                if ($value > 0) {
-                    $toUpdate = ["u_id_init" => $u_id_init, "u_id_target" => $u_id_target, "result" => 0, "date_result" => "", "p_id" => $key, "amount" => $value, 'date_result' => NULL];
-                    $sales->insert($toUpdate);
+            if(!empty($_POST["p_id"])) {
+                foreach ($_POST["p_id"] as $key => $value) {
+                    if ($value > 0) {
+                        $toUpdate = ["u_id_init" => $u_id_init, "u_id_target" => $u_id_target, "result" => 0, "date_result" => "", "p_id" => $key, "amount" => $value, 'date_result' => NULL];
+                        $sales->insert($toUpdate);
+                    }
                 }
+                $data['success'] = "Oferta wymiany została dodana";
+                unset($_POST);
+            } else {
+                $data['errors'] = "Brak produktów do wymiany";
             }
-            $data['success'] = "Oferta wymiany została dodana";
-            unset($_POST);
-            $data['errors'] = $sales->errors;
         }
 
         $users_list = new User();

@@ -23,7 +23,8 @@ class UsersModel
         'u_role',
 		'phone_business',
 		'phone_private',
-		'camera'
+		'camera',
+        'helper_for'
     ];
 
     public function getAllUsers(): array
