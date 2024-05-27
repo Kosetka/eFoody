@@ -50,6 +50,11 @@ class Cargo
         $query = "select * from $this->table WHERE u_id = $id AND date >= '$date_from' AND date <='$date_to'";
         return $this->query($query);
     }
+    public function getFullProductsDate($date_from, $date_to)
+    {
+        $query = "select * from $this->table WHERE date >= '$date_from' AND date <='$date_to'";
+        return $this->query($query);
+    }
 
     public function getCargo($w_id, $p_id, $date)
     {

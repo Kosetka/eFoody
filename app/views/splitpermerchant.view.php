@@ -99,13 +99,32 @@
                                             <th>Nazwa produktu</th>
                                             <th>SKU</th>
                                             <th>Planowana ilość</th>
+                                            <th>Wolna ilość</th>
                                             <th>Przypisana ilość</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $tot_plan = 0;
-                                        //show($data["split"]);
+                                        $tot_left = 0;
+                                        $sp = [];
+                                        /*foreach($data["split_total"] as $us) {
+                                            foreach($us as $pr) {
+                                                if(isset($sp[$pr["p_id"]])) {
+                                                    $sp[$pr["p_id"]] += $pr["amount"];
+                                                } else {
+                                                    $sp[$pr["p_id"]] = $pr["amount"];
+                                                }
+                                            }
+                                        }*/
+                                        //show($data["cargo_total"]);
+                                        foreach($data["cargo_total"] as $pr) {
+                                            if(isset($sp[$pr["p_id"]])) {
+                                                $sp[$pr["p_id"]] += $pr["amount"];
+                                            } else {
+                                                $sp[$pr["p_id"]] = $pr["amount"];
+                                            }
+                                        }
                                         if(isset($data["split"])) {
                                             foreach($data["split"] as $user) {
                                                 foreach($user as $product) {
@@ -127,7 +146,9 @@
                                                     } else {
                                                         $am = 0;
                                                     }
-                                                    echo "<td><input $toBlock type='number' class='form-control prepared-amount' value='$am' min='0' id='$pid' name='in_".$pid." data-pid='".$pid."'></td>";
+                                                    $free = $data["planned_total"][$pid]["amount"] - $sp[$pid];
+                                                    echo '<td>'.$free.'/'.$data["planned_total"][$pid]["amount"].'</td>';
+                                                    echo "<td><input $toBlock type='number' class='form-control prepared-amount' value='$am' min='0' max = '$free' id='$pid' name='in_".$pid." data-pid='".$pid."'></td>";
                                                     
                                                     echo "</tr>";
                                                 }
@@ -139,6 +160,7 @@
                                             <th></th>
                                             <th>Total</th>
                                             <th><?=$tot_plan?></th>
+                                            <th><?=$tot_left?></th>
                                             <th></th>
                                         </tr>
                                     </tbody>

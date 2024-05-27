@@ -92,6 +92,11 @@ class GetCargo
                     $data["cargo"][$value->p_id] = (array) $value;
                 }
             }
+            if(!empty($cargo->getFullProductsDate($date_from, $date_to))) {
+                foreach ($cargo->getFullProductsDate($date_from, $date_to) as $key => $value) {
+                    $data["cargo_total"][$value->p_id] = (array) $value;
+                }
+            }
 
             $data["warehouse"] = $w_id;
 
@@ -104,13 +109,23 @@ class GetCargo
                     $data["planned"][$value->p_id] = (array) $value;
                 }
             }
+            if(!empty($planned->getPlanned($date, $w_id))) {
+                foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                    $data["planned_total"][$value->p_id] = (array) $value;
+                }
+            }
 
             $plan = new Plannersplit();
-                if(!empty($plan->getPlannedUser($date, $u_id))) {
-                    foreach ($plan->getPlannedUser($date, $u_id) as $key => $value) {
-                        $data["split"][$value->u_id][$value->p_id] = (array) $value;
-                    }
+            if(!empty($plan->getPlannedUser($date, $u_id))) {
+                foreach ($plan->getPlannedUser($date, $u_id) as $key => $value) {
+                    $data["split"][$value->u_id][$value->p_id] = (array) $value;
                 }
+            }
+            if(!empty($plan->getPlanned($date))) {
+                foreach ($plan->getPlanned($date) as $key => $value) {
+                    $data["split_total"][$value->u_id][$value->p_id] = (array) $value;
+                }
+            }
 
             $products_list = new ProductsModel();
             foreach ($products_list->getAllFullProducts() as $key => $value) {
