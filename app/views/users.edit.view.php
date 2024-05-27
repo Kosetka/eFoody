@@ -96,8 +96,8 @@
                         <legend class="col-sm-2 col-form-label ">Uprawnienia:</legend>
                         <div class="col-sm-10">
                             <?php
+                                //show($data);
                             foreach ($roles as $role) {
-                                //show($role);
                                 $r_id = $role["id"];
                                 $id = $data["user"]->u_role;
                                 $role_name = $role["role_name"];
@@ -112,13 +112,36 @@
                                     $active = "disabled";
                                 }
                                 echo "<div class='form-check'>
-                <input class='form-check-input' type='radio' name='u_role' id='u_role$r_id' value='$r_id' $checked $active>
+                <input class='form-check-input' type='radio' name='u_role' id='u_role$r_id' value='$r_id' $checked $active onchange='toggleHelper(this)'>
                 <label class='form-check-label' for='u_role$r_id'>
                   $role_name
                 </label>
               </div>";
                             }
                             ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row m-3" id="helperfor" hidden>
+                        <label class="col-sm-2 col-form-label" for="u_warehouse">Pomocnik dla:</label>
+                        <div class="col-sm-10">
+                        <select class="form-control" id="helper_for" name="helper_for">
+                            <?php
+                            $helper_for = "";
+                            if(isset($data["user"]->helper_for)) {
+                                $helper_for = $data["user"]->helper_for;
+                            }
+                            foreach ($data["users"] as $trader) {
+                                $id = $trader->id;
+                                $full_name = $trader->first_name . ' '. $trader->last_name;
+                                if($id == $helper_for) {
+                                    echo "<option value='$id' selected>$full_name</option>";
+                                } else {
+                                    echo "<option value='$id'>$full_name</option>";
+                                }
+                            }
+                            ?>
+                        </select>
                         </div>
                     </div>
                 </div>
@@ -190,4 +213,23 @@
                 </button>
             </form>
         </div>
+
+        <script>
+            function toggleHelper(element) {
+                var helperDiv = document.getElementById('helperfor');
+                if (element.id === 'u_role10' && element.checked) {
+                helperDiv.removeAttribute('hidden');
+                } else {
+                helperDiv.setAttribute('hidden', 'hidden');
+                }
+            }
+
+            // Jeśli element z id 'u_role3' jest zaznaczony przy ładowaniu strony, pokaż helperDiv
+            document.addEventListener('DOMContentLoaded', function() {
+                var selectedRole = document.querySelector('input[name="u_role"]:checked');
+                if (selectedRole && selectedRole.id === 'u_role10') {
+                document.getElementById('helperfor').removeAttribute('hidden');
+                }
+            });
+            </script>
         <?php require_once 'landings/footer.view.php' ?>

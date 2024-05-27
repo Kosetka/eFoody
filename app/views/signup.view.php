@@ -6,7 +6,9 @@
   <div id="layoutSidenav_content">
     <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 70%">
       <form method="post">
-
+        <?php
+        //show($data);
+        ?>
         <?php if (!empty($errors)): ?>
           <div class="alert alert-danger">
             <?= implode("<br>", $errors) ?>
@@ -97,13 +99,28 @@
                   $active = "disabled";
                 }
                 echo "<div class='form-check'>
-                <input class='form-check-input' type='radio' name='u_role' id='u_role$id' value='$id' $checked $active>
+                <input class='form-check-input' type='radio' name='u_role' id='u_role$id' value='$id' $checked $active onchange='toggleHelper(this)'>
                 <label class='form-check-label' for='u_role$id'>
                   $role_name
                 </label>
               </div>";
               }
               ?>
+            </div>
+          </div>
+          
+          <div class="form-group row m-3" id="helperfor" hidden>
+            <label class="col-sm-2 col-form-label" for="u_warehouse">Pomocnik dla:</label>
+            <div class="col-sm-10">
+              <select class="form-control" id="helper_for" name="helper_for">
+                <?php
+                foreach ($data["users"] as $trader) {
+                  $id = $trader->id;
+                  $full_name = $trader->first_name . ' '. $trader->last_name;
+                  echo "<option value='$id'>$full_name</option>";
+                }
+                ?>
+              </select>
             </div>
           </div>
 
@@ -119,4 +136,22 @@
       </form>
 
     </main>
+    <script>
+      function toggleHelper(element) {
+        var helperDiv = document.getElementById('helperfor');
+        if (element.id === 'u_role10' && element.checked) {
+          helperDiv.removeAttribute('hidden');
+        } else {
+          helperDiv.setAttribute('hidden', 'hidden');
+        }
+      }
+
+      // Jeśli element z id 'u_role3' jest zaznaczony przy ładowaniu strony, pokaż helperDiv
+      document.addEventListener('DOMContentLoaded', function() {
+        var selectedRole = document.querySelector('input[name="u_role"]:checked');
+        if (selectedRole && selectedRole.id === 'u_role10') {
+          document.getElementById('helperfor').removeAttribute('hidden');
+        }
+      });
+    </script>
     <?php require_once 'landings/footer.view.php' ?>

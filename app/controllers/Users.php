@@ -64,6 +64,11 @@ class Users
             redirect('login');
 
         if ($_SERVER['REQUEST_METHOD'] == "POST" && !empty($_GET)) {
+
+            if($_POST["u_role"] <> 10) {
+                $_POST["helper_for"] = NULL;
+                //unset($_POST["helper_for"]);
+            }
             $URL = $_GET['url'] ?? 'home';
             $URL = explode("/", trim($URL, "/"));
             $user_id = $URL[2];
@@ -96,6 +101,11 @@ class Users
             $user_id = $URL[2];
             $user = new User();
             $data["user"] = $user->getOne("users", $user_id)[0];
+
+            foreach($user->getAllTraders("users", TRADERS) as $trader) {
+                $data["users"][$trader->id] = $trader; 
+            }
+
             $roles_name = new RolesNameModel();
             $roles_name->getRoles();
             $data["roles"] = $roles_name->roles;
