@@ -36,3 +36,25 @@ function getPercent($p, $c)
 	}
 	return $ret;
 }
+
+function buildHierarchy($data) {
+    $tree = [];
+    $indexed = [];
+
+    // Index all elements by their ID
+    foreach ($data as $element) {
+        $indexed[$element['id']] = $element;
+        $indexed[$element['id']]['children'] = [];
+    }
+
+    // Build the hierarchy
+    foreach ($indexed as $id => $element) {
+        if ($element['id_parent'] === null) {
+            $tree[] = &$indexed[$id];
+        } else {
+            $indexed[$element['id_parent']]['children'][] = &$indexed[$id];
+        }
+    }
+
+    return $tree;
+}

@@ -30,6 +30,13 @@ class Login
 						$tarr["ROLE"] = (object) ["id" => $temp[0]->id, "role_name" => $temp[0]->role_name, "role_description" => $temp[0]->role_description, "r_active" => $temp[0]->r_active];
 						$_SESSION['ROLE'] = $tarr["ROLE"];
 
+						$links = new Linksmodel();
+						foreach ($links->getLinks() as $link) {
+							$temp_links[$link->id] = (array) $link;
+						}
+						$hierarchy = buildHierarchy($temp_links);
+						$_SESSION["links"] = $hierarchy;
+
 						//ograniczyć do dostępnych oddziałów
 						$user_id = $_SESSION['USER']->id;
 						$cities = new Shared();
