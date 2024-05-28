@@ -20,7 +20,7 @@
     $pdfWidth = 29;
     $pdfHeight = 62;
 
-    $tempDir = 'temp/';
+    $tempDir = IMG_LABELS_UPLOAD;
     if (!file_exists($tempDir)) {
         mkdir($tempDir);
     }
