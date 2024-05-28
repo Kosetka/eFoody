@@ -93,7 +93,10 @@
                                                 echo '<td style="background: '.$color.'">'.getPercent($prod_amo, $product["amount"]).'%</td>
                                                 <td>'.substr($ids, 0, -2).'</td>
                                                 <td><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
-                                                role="button">Etykieta</a></td>
+                                                role="button" title="Etykieta"><i class="fa-solid fa-tag"></i></a>
+                                                 
+                                                <a target="_blank"class="btn btn-success" href=" ' . ROOT . '/labels/generate/'.$data["fullproducts"][$product["p_id"]]["id"].'"
+                                                role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a></td>
                                                 ';
                                                 echo "</tr>";
                                                 $tot_plan += $product["amount"];

@@ -86,4 +86,59 @@ class Labels
         $this->view('recipes.new', $data);
 
     }
+
+    public function generate() 
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $data["alergens"] = "";
+
+        $tomorrow = date("d.m.Y", strtotime("+1 day"));
+        $today = date("N");
+        if ($today >= 5) {
+            $nextMonday = date("d.m.Y", strtotime("next Monday"));
+            $date = $nextMonday;
+        } else {
+            $date = $tomorrow;
+        }
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $id = $URL[2];
+            if(isset($URL[3])) {
+                $date = $URL[3]; 
+            }
+        } else {
+            if(isset($_GET["id"])) {
+                $id = $_GET["id"];
+                if(isset($_GET["date"])) {
+                    $date = $_GET["date"]; 
+                }
+            } else {
+                $id = NULL;
+                $date = NULL;
+                redirect('home');
+            }
+        }
+        if($id != NULL) {
+            $products = new ProductsModel();
+            foreach ($products->getAllById($id) as $product) {
+                $temp["product"] = (object) $product;
+            }
+            $data["prod_name"] = $temp["product"]->p_name;
+            $data["sku"] = $temp["product"]->sku;
+            $pid = $temp["product"]->id;
+            $alergens = new Productalergens();
+            if(!empty($alergens->getByProduct($pid)) ) {
+                foreach($alergens->getByProduct($pid) as $ale) {
+                    $data["alergens"] = $data["alergens"].$ale->a_id.', ';
+                }
+            }
+            $data["alergens"] = substr($data["alergens"],0,-2);
+            $data["date"] = $date;
+        }
+        $this->view('labels.generate', $data);
+    }
 }

@@ -10,13 +10,14 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('DBDRIVER', '');
 
 	define('ROOT', 'http://localhost/efoody/public');
+	define('ROOT_PLUGINS', '../public/plugins/');
 	define('IMG_ROOT', '/efoody/public/assets/img/');
 	define('IMG_ALERGENS_ROOT', '/efoody/public/assets/img/alergens/');
 	define('IMG_ROOT_UPLOAD', '../public/assets/img/');
 	define('IMG_LABELS_UPLOAD', '../public/assets/labels/');
 	define('IMG_ALERGENS_ROOT_UPLOAD', '../public/assets/img/alergens/');
-
-
+	
+	
 } else {
 	/** database config **/
 	define('DBNAME', 'efoody');
@@ -24,8 +25,9 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('DBUSER', 'efoody_admin');
 	define('DBPASS', '#Verona123');
 	define('DBDRIVER', '');
-
+	
 	define('ROOT', 'https://51.254.47.60'); //http://51.254.47.60/eFoody/public
+	define('ROOT_PLUGINS', '../public/plugins/');
 	define('IMG_ROOT', '/assets/img/'); ///efoody/public/assets/img/
 	define('IMG_ALERGENS_ROOT', '/assets/img/alergens/'); ///efoody/public/assets/img/
 	define('IMG_ROOT_UPLOAD', '../public/assets/img/'); //../public/assets/img/

@@ -67,8 +67,11 @@
                                                     <td><a class='btn btn-info' href=' " . ROOT . "/products/edit/$product->id'
                                                             role='button'>Edytuj</a></td>";
                                         if($product->prod_type == 1) {
-                                            echo "<td><a class='btn btn-primary' href=' " . ROOT . "/assets/labels/$product->sku.lbx'
-                                                                role='button'>Etykieta</a></td>";
+                                            echo '<td><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$product->sku.'.lbx"
+                                                role="button" title="Etykieta"><i class="fa-solid fa-tag"></i></a>
+                                                 
+                                                <a target="_blank"class="btn btn-success" href=" ' . ROOT . '/labels/generate/'.$product->id.'"
+                                                role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a></td>';
                                         }
 
                                         echo "</tr>";
