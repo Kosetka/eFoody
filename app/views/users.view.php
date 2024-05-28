@@ -59,6 +59,10 @@
                                 $phone_business = $user['phone_business'];
                                 $phone_private = $user['phone_private'];
                                 $title_warehouse = "";
+                                $helper_for = "";
+                                if(!empty($user['helper_for'])) {
+                                    $helper_for = $data["users"][$user['helper_for']]["first_name"].' '.$data["users"][$user['helper_for']]["last_name"];
+                                }
 
 
                                 if ($user['u_warehouse'] === 0) {
@@ -91,7 +95,7 @@
                                     <td>$phone_private</td>
                                     <td><span data-toggle='tooltip' data-placement='right' title='$title_warehouse'>$u_warehouse </span></td>";
                                 if($user['u_role'] == 10) {
-                                    echo "<td>$u_role</br>(imie)</td>";
+                                    echo "<td>$u_role ($helper_for)</td>";
                                 } else {
                                     echo "<td>$u_role</td>";
                                 }

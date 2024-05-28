@@ -23,4 +23,9 @@ class Alergen
         $query = "select * from $this->table;";
         return $this->query($query);
     }
+    public function getAlergensById($id)
+    {
+        $query = "select * from $this->table WHERE p_id = $id;";
+        return $this->query($query);
+    }
 }

@@ -16,6 +16,7 @@ Trait Controller
 		}else{
 
 			$filename = "../app/views/404.view.php";
+			echo $name;
 			require $filename;
 		}
 	}

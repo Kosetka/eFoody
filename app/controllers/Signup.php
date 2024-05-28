@@ -17,6 +17,12 @@ class Signup
 		$roles_name->getRoles();
 		$data["roles"] = $roles_name->roles;
 
+		$users_list = new User();
+
+		foreach($users_list->getAllTraders("users", TRADERS) as $trader) {
+			$data["users"][$trader->id] = $trader; 
+		}
+
 		$cities = new Shared();
 		$query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city";
 		$temp["cities"] = $cities->query($query);
@@ -25,6 +31,9 @@ class Signup
 		}
 
 		if ($_SERVER['REQUEST_METHOD'] == "POST") {
+			if($_POST["u_role"]<>10) {
+				unset($_POST["helper_for"]);
+			}
 			$user = new User;
 			if ($user->validate($_POST)) {
 				$user->insert($_POST);

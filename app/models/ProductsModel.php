@@ -50,6 +50,11 @@ class ProductsModel
 		$query = "select * from $this->table WHERE sku LIKE '$sku%' ORDER BY sku ASC";
 		return $this->query($query);
 	}
+    public function getAllById($id)
+	{
+		$query = "select * from $this->table WHERE id = $id";
+		return $this->query($query);
+	}
 
     public function getProducts(): array
     {
