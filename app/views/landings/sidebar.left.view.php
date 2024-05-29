@@ -7,7 +7,11 @@
                 ?>
 
 <?php
-        $curr_place = substr($_SERVER["REQUEST_URI"], 14);
+        if(ROOT_DIR == '/efoody/public/') {
+            $curr_place = substr($_SERVER["REQUEST_URI"], 14);
+        } else {
+            $curr_place = "/".$_SERVER["REQUEST_URI"];
+        }
 foreach($_SESSION["links"] as $cat) {
     if($cat["l_type"] == 0) {
         echo "<div class='sb-sidenav-menu-heading'>".$cat["l_name"]."</div>";

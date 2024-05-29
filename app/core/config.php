@@ -10,6 +10,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('DBDRIVER', '');
 
 	define('ROOT', 'http://localhost/efoody/public');
+	define('ROOT_DIR', '/efoody/public/');
 	define('ROOT_PLUGINS', '../public/plugins/');
 	define('IMG_ROOT', '/efoody/public/assets/img/');
 	define('IMG_ALERGENS_ROOT', '/efoody/public/assets/img/alergens/');
@@ -27,6 +28,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('DBDRIVER', '');
 	
 	define('ROOT', 'https://51.254.47.60'); //http://51.254.47.60/eFoody/public
+	define('ROOT_DIR', '/');
 	define('ROOT_PLUGINS', '../public/plugins/');
 	define('IMG_ROOT', '/assets/img/'); ///efoody/public/assets/img/
 	define('IMG_ALERGENS_ROOT', '/assets/img/alergens/'); ///efoody/public/assets/img/
