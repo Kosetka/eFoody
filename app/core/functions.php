@@ -36,3 +36,59 @@ function getPercent($p, $c)
 	}
 	return $ret;
 }
+
+function buildHierarchy($data) {
+    $tree = [];
+    $indexed = [];
+
+    // Index all elements by their ID
+    foreach ($data as $element) {
+        $indexed[$element['id']] = $element;
+        $indexed[$element['id']]['children'] = [];
+    }
+
+    // Build the hierarchy
+    foreach ($indexed as $id => $element) {
+        if ($element['id_parent'] === null) {
+            $tree[] = &$indexed[$id];
+        } else {
+            $indexed[$element['id_parent']]['children'][] = &$indexed[$id];
+        }
+    }
+
+    return $tree;
+}
+
+function generateTree($items) {
+    $html = '<ul class="tree">';
+    foreach ($items as $item) {
+        $html .= '<li class="tree">';
+        $html .= '<input type="checkbox" id="checkbox-' . $item['id'] . '" class="checkbox tree" data-id="' . $item['id'] . '" />';
+        $html .= '<label class="tree" for="checkbox-' . $item['id'] . '">' . $item['l_name'] . '</label>';
+        if (!empty($item['children'])) {
+            $html .= generateTree($item['children']);
+        }
+        $html .= '</li>';
+    }
+    $html .= '</ul>';
+    return $html;
+}
+
+function generateTreeEditing($items) {
+    $html = '<ul class="tree">';
+    foreach ($items as $item) {
+        $html .= '<li class="tree">';
+        //$html .= '<input type="checkbox" id="checkbox-' . $item['id'] . '" class="checkbox tree" data-id="' . $item['id'] . '" />';
+        $color = "";
+        if($item["l_active"] == 0) {
+            $color = ' style="color: red; text-decoration: line-through;" ';
+        }
+        $html .= '<label class="tree" '.$color.'>' . $item['l_name'] . ' [<a style="color: green;" href="'.ROOT.'/tabs/add/'.$item["id"].'">Dodaj</a>] [<a href="'.ROOT.'/tabs/edit/'.$item["id"].'">Edytuj</a>]</label>';
+        if (!empty($item['children'])) {
+            $html .= generateTreeEditing($item['children']);
+        }
+        $html .= '</li>';
+    }
+    $html .= '</ul>';
+    return $html;
+}

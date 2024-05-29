@@ -31,7 +31,7 @@ class Signup
 		}
 
 		if ($_SERVER['REQUEST_METHOD'] == "POST") {
-			if($_POST["u_role"]<>10) {
+			if($_POST["u_role"]<>10) { //pomocnik handlowca
 				unset($_POST["helper_for"]);
 			}
 			$user = new User;
