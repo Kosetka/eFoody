@@ -2,7 +2,7 @@
 
 if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	/** database config **/
-	
+
 	define('DBNAME', 'efoody');
 	define('DBHOST', 'localhost');
 	define('DBUSER', 'root');
@@ -17,8 +17,8 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('IMG_ROOT_UPLOAD', '../public/assets/img/');
 	define('IMG_LABELS_UPLOAD', '../public/assets/labels/');
 	define('IMG_ALERGENS_ROOT_UPLOAD', '../public/assets/img/alergens/');
-	
-	
+
+
 } else {
 	/** database config **/
 	define('DBNAME', 'efoody');
@@ -26,8 +26,8 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('DBUSER', 'efoody_admin');
 	define('DBPASS', '#Verona123');
 	define('DBDRIVER', '');
-	
-	define('ROOT', 'https://app.pan-obiadek.pl'); //https://51.254.47.60
+
+	define('ROOT', 'https://51.254.47.60'); //https://51.254.47.60
 	define('ROOT_DIR', '/');
 	define('ROOT_PLUGINS', '../public/plugins/');
 	define('IMG_ROOT', '/assets/img/'); ///efoody/public/assets/img/
@@ -48,7 +48,7 @@ define('VISITSTATUSES', [0 => "Brak sprzedaży", 1 => "Sprzedaż", 2 => "Gratisy
 define('COMPANYSIZE', ["building" => "Biurowiec", "house" => "Dom", "shop" => "Sklep", "warehouse" => "Magazyn", "exclamation" => "Duży biurowiec"]);
 define('TRADERS', '1, 3');
 define('EXCHANGESTATUS', [0 => "Oczekuje", 1 => "Zaakceptowany", 2 => "Odrzucony", 3 => "Odrzucony automatycznie", 4 => "Anulowany"]);
-define('REPORTTYPES', ['hour' => "godzinny", 'day'=>"dzienny", 'week' => "tygodniowy", 'month' => "miesięczny"]);
+define('REPORTTYPES', ['hour' => "godzinny", 'day' => "dzienny", 'week' => "tygodniowy", 'month' => "miesięczny"]);
 
 /** true means show errors **/
 define('DEBUG', true);
