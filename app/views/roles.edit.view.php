@@ -6,18 +6,18 @@
     text-align: left;
 }
 
-ul {
-    list-style-type: none;
+ ul {
+    list-style-type: none !important;
     padding-left: 20px;
     margin: 0;
 }
 
-li {
+.tree li {
     margin: 5px 0;
     position: relative;
 }
 
-li::before {
+.tree li::before {
     content: '';
     position: absolute;
     top: 10px;
@@ -27,7 +27,7 @@ li::before {
     background: #ccc;
 }
 
-li::after {
+.tree li::after {
     content: '';
     position: absolute;
     top: -10px;
@@ -37,21 +37,21 @@ li::after {
     background: #ccc;
 }
 
-li:first-child::after {
+.tree li:first-child::after {
     display: none;
 }
 
-input[type="checkbox"] {
+.tree input[type="checkbox"] {
     margin-right: 5px;
 }
 
-label {
+.tree label {
     font-family: Arial, sans-serif;
     font-size: 14px;
     cursor: pointer;
 }
 
-ul ul::before {
+.tree ul .tree ul::before {
     content: '';
     position: absolute;
     top: 10px;
@@ -61,7 +61,7 @@ ul ul::before {
     background: #ccc;
 }
 
-ul ul::after {
+.tree ul .tree ul::after {
     content: '';
     position: absolute;
     top: -10px;
@@ -71,7 +71,7 @@ ul ul::after {
     background: #ccc;
 }
 
-ul ul li {
+.tree ul .tree ul .tree li {
     margin-left: 20px;
 }
 </style>
@@ -141,11 +141,11 @@ ul ul li {
                 <?php
 
                     function generateTree($items) {
-                        $html = '<ul>';
+                        $html = '<ul class="tree">';
                         foreach ($items as $item) {
-                            $html .= '<li>';
-                            $html .= '<input type="checkbox" id="checkbox-' . $item['id'] . '" class="checkbox" data-id="' . $item['id'] . '" />';
-                            $html .= '<label for="checkbox-' . $item['id'] . '">' . $item['l_name'] . '</label>';
+                            $html .= '<li class="tree">';
+                            $html .= '<input type="checkbox" id="checkbox-' . $item['id'] . '" class="checkbox tree" data-id="' . $item['id'] . '" />';
+                            $html .= '<label class="tree" for="checkbox-' . $item['id'] . '">' . $item['l_name'] . '</label>';
                             if (!empty($item['children'])) {
                                 $html .= generateTree($item['children']);
                             }
