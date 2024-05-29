@@ -7,12 +7,10 @@
                 ?>
 
 <?php
-echo $_SERVER["REQUEST_URI"];
-echo "</br>".ROOT_DIR;
         if(ROOT_DIR === '/efoody/public/') {
             $curr_place = substr($_SERVER["REQUEST_URI"], 14);
         } else {
-            $curr_place = "/".$_SERVER["REQUEST_URI"];
+            $curr_place = $_SERVER["REQUEST_URI"];
         }
 foreach($_SESSION["links"] as $cat) {
     if($cat["l_type"] == 0) {
