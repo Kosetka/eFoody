@@ -42,4 +42,15 @@ class RolesNameModel
         $role->first($id);
         return $role->role_name;
     }
+
+    public function getAllRoles()
+    {
+        $query = "select * from $this->table";
+        return $this->query($query);
+    }
+    public function getRoleById($id)
+    {
+        $query = "select * from $this->table WHERE id = $id";
+        return $this->query($query);
+    }
 }
