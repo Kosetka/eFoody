@@ -27,7 +27,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('DBPASS', '#Verona123');
 	define('DBDRIVER', '');
 
-	define('ROOT', 'https://51.254.47.60'); //https://51.254.47.60
+	define('ROOT', ''); //https://51.254.47.60
 	define('ROOT_DIR', '/');
 	define('ROOT_PLUGINS', '../public/plugins/');
 	define('IMG_ROOT', '/assets/img/'); ///efoody/public/assets/img/
