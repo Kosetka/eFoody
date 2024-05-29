@@ -51,8 +51,7 @@ class Roles
         if(isset($URL[2])) {
             $id = $URL[2];
         }
-
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["role"])) {
             if(!isset($_POST["r_active"])) {
                 $_POST["r_active"] = 0;
             }
@@ -60,6 +59,31 @@ class Roles
             $roles->update($id, $_POST);
             $data['success'] = "Edycja roli pomyślna";
         }
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["prepared_items"])) {
+
+            $l_access = new Linksaccess;
+            $l_access->delete($id,"r_id");
+
+            foreach($_POST["prepared_items"] as $lid) {
+                $que = ["l_id" =>$lid, "r_id" => $id];
+                $l_access->insert($que);
+            }
+
+        }
+
+        $l_access = new Linksaccess;
+        if(!empty($l_access->getAccessByRole($id))) {
+            foreach($l_access->getAccessByRole($id) as $l_a) {
+                $data["access"][$l_a->l_id] = $l_a->l_id;
+            }
+        }
+
+        $links = new Linksmodel();
+        foreach ($links->getLinks() as $link) {
+            $temp[$link->id] = (array) $link;
+        }
+        $hierarchy = buildHierarchy($temp);
+        $data["links"] = $hierarchy;
 
         $roles = new RolesNameModel();
         $data["roles"] = $roles->getRoleById($id)[0];

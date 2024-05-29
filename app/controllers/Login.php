@@ -29,10 +29,18 @@ class Login
 						$temp = $role->getOne('roles_name', $row->u_role);
 						$tarr["ROLE"] = (object) ["id" => $temp[0]->id, "role_name" => $temp[0]->role_name, "role_description" => $temp[0]->role_description, "r_active" => $temp[0]->r_active];
 						$_SESSION['ROLE'] = $tarr["ROLE"];
+						$l_access = new Linksaccess;
+						if(!empty($l_access->getAccessByRole($_SESSION['ROLE']->id))) {
+							foreach($l_access->getAccessByRole($_SESSION['ROLE']->id) as $l_a) {
+								$data["access"][$l_a->l_id] = $l_a->l_id;
+							}
+						}
 
 						$links = new Linksmodel();
 						foreach ($links->getLinks() as $link) {
-							$temp_links[$link->id] = (array) $link;
+							if(in_array($link->id, $data["access"])) {
+								$temp_links[$link->id] = (array) $link;
+							}
 						}
 						$hierarchy = buildHierarchy($temp_links);
 						$_SESSION["links"] = $hierarchy;

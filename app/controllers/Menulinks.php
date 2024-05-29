@@ -18,7 +18,7 @@ class Menulinks
             $temp[$link->id] = (array) $link;
         }
         $hierarchy = buildHierarchy($temp);
-        $_SESSION["links"] = $hierarchy;
+        $data["links"] = $hierarchy;
 
         $this->view('links', $data);
     }
