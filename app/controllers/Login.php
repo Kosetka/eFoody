@@ -32,13 +32,13 @@ class Login
 						$l_access = new Linksaccess;
 						if(!empty($l_access->getAccessByRole($_SESSION['ROLE']->id))) {
 							foreach($l_access->getAccessByRole($_SESSION['ROLE']->id) as $l_a) {
-								$data["access"][$l_a->l_id] = $l_a->l_id;
+								$data["access_links"][$l_a->l_id] = $l_a->l_id;
 							}
 						}
 
 						$links = new Linksmodel();
 						foreach ($links->getLinks() as $link) {
-							if(in_array($link->id, $data["access"])) {
+							if(in_array($link->id, $data["access_links"])) {
 								$temp_links[$link->id] = (array) $link;
 							}
 						}
@@ -51,9 +51,9 @@ class Login
 						$query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city INNER JOIN warehouse_access as a ON a.w_id = w.id WHERE u_id = $user_id ORDER BY a.w_id ASC";
 						$temp["cities"] = $cities->query($query);
 						foreach ($temp["cities"] as $city) {
-							$data[$city->id] = (array) $city;
+							$data2[$city->id] = (array) $city;
 						}
-						$_SESSION['CITIES'] = $data;
+						$_SESSION['CITIES'] = $data2;
 
 
 						redirect('home');

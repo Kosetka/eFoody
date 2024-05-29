@@ -9,6 +9,7 @@
         <form method="post" id="changeDepartmentForm">
             <select id="changeDepartment" class="form-select" name="changeDepartment">
                 <?php
+                show($_SESSION["CITIES"]);
                 foreach ($_SESSION["CITIES"] as $city) {
                     $full_tag = $city["c_name"] . '_' . $city["wh_name"];
                     $select = '';

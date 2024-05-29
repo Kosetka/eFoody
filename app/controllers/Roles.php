@@ -59,14 +59,16 @@ class Roles
             $roles->update($id, $_POST);
             $data['success'] = "Edycja roli pomyślna";
         }
-        if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["prepared_items"])) {
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && !isset($_POST["role"])) {
 
             $l_access = new Linksaccess;
             $l_access->delete($id,"r_id");
 
-            foreach($_POST["prepared_items"] as $lid) {
-                $que = ["l_id" =>$lid, "r_id" => $id];
-                $l_access->insert($que);
+            if(isset($_POST["prepared_items"])) {
+                foreach($_POST["prepared_items"] as $lid) {
+                    $que = ["l_id" =>$lid, "r_id" => $id];
+                    $l_access->insert($que);
+                }
             }
 
         }
