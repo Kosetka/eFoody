@@ -139,21 +139,6 @@
         <div class="form-group row m-3">
             <div class="col-sm-12">
                 <?php
-
-                    function generateTree($items) {
-                        $html = '<ul class="tree">';
-                        foreach ($items as $item) {
-                            $html .= '<li class="tree">';
-                            $html .= '<input type="checkbox" id="checkbox-' . $item['id'] . '" class="checkbox tree" data-id="' . $item['id'] . '" />';
-                            $html .= '<label class="tree" for="checkbox-' . $item['id'] . '">' . $item['l_name'] . '</label>';
-                            if (!empty($item['children'])) {
-                                $html .= generateTree($item['children']);
-                            }
-                            $html .= '</li>';
-                        }
-                        $html .= '</ul>';
-                        return $html;
-                    }
                 
                     echo '<div class="tree-container">';
                     echo generateTree($data["links"]);

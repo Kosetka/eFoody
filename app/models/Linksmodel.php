@@ -27,4 +27,14 @@ class Linksmodel
         $query = "select * from $this->table WHERE l_active = 1 ORDER BY l_type ASC, id_parent ASC, l_order ASC;";
         return $this->query($query);
     }
+    public function getAllLinks()
+    {
+        $query = "select * from $this->table ORDER BY l_type ASC, id_parent ASC, l_order ASC;";
+        return $this->query($query);
+    }
+    public function getLink($id)
+    {
+        $query = "select * from $this->table WHERE id = $id";
+        return $this->query($query);
+    }
 }
