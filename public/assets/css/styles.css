@@ -11023,10 +11023,10 @@ body {
   color: rgba(255, 255, 255, 0.5);
 }
 .sb-sidenav-dark .sb-sidenav-menu .sb-sidenav-menu-heading {
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.4);
 }
 .sb-sidenav-dark .sb-sidenav-menu .nav-link {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.8);
 }
 .sb-sidenav-dark .sb-sidenav-menu .nav-link .sb-nav-link-icon {
   color: rgba(255, 255, 255, 0.25);
@@ -11036,6 +11036,7 @@ body {
 }
 .sb-sidenav-dark .sb-sidenav-menu .nav-link:hover {
   color: #fff;
+  background: rgba(255, 255, 255, 0.25);
 }
 .sb-sidenav-dark .sb-sidenav-menu .nav-link.active {
   color: #fff;
@@ -11045,6 +11046,9 @@ body {
 }
 .sb-sidenav-dark .sb-sidenav-footer {
   background-color: #343a40;
+}
+.sb-selected {
+  background: rgba(125, 125, 125, 0.5);
 }
 
 .sb-sidenav-light {

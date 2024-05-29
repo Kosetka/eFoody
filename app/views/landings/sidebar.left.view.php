@@ -7,13 +7,18 @@
                 ?>
 
 <?php
-
+        $curr_place = substr($_SERVER["REQUEST_URI"], 14);
 foreach($_SESSION["links"] as $cat) {
     if($cat["l_type"] == 0) {
         echo "<div class='sb-sidenav-menu-heading'>".$cat["l_name"]."</div>";
         foreach($cat["children"] as $sub1) {
             if(empty($sub1["children"][0])) {
-                echo "  <a class='nav-link' href='".ROOT.$sub1["l_directory"]."'>
+                if($curr_place == $sub1["l_directory"]) {
+                    $curr_css = " sb-selected ";
+                } else {
+                    $curr_css = "";
+                }
+                echo "  <a class='nav-link $curr_css' href='".ROOT.$sub1["l_directory"]."'>
                             <div class='sb-nav-link-icon'><i class='".$sub1["l_icon"]."'></i></div>
                             ".$sub1["l_name"]."
                         </a>";
@@ -346,16 +351,5 @@ foreach($_SESSION["links"] as $cat) {
 
             </div>
         </div><?php */?>
-        <div class="sb-sidenav-footer">
-            <b>
-                <?php
-                $warehoues_id = getYourData("u_warehouse");
-                $current_city = $_SESSION["CITIES"][$warehoues_id];
-                $current_city_detailed = $current_city["c_name"] . "_" . $current_city["wh_name"];
-                echo getYourData("first_name") . " " . 
-                    getYourData("last_name") . "</br>E-mail: " . 
-                    getYourData("email") . "</br> Uprawnienia: " . $_SESSION["ROLE"]->role_name . "</br>Magazyn: " . $current_city_detailed ?>
-            </b>
-        </div>
     </nav>
 </div>

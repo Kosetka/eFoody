@@ -82,10 +82,15 @@
   <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 100%">
     <?php
         if(isset($data["id_link"])) {
+            if(!isset($data["id_link_edit"])) {
+                $txt_name = "Dodaj zakładkę";
+            } else {
+                $txt_name = "Edytuj zakładkę";
+            }
     ?>
     <div class="card mb-4">
         <div class="card-header">
-            <h2 class="">Dodaj zakładkę</h2>
+            <h2 class=""><?=$txt_name?></h2>
         </div>
         <div class="form-group row m-3">
             <form method="post">

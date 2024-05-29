@@ -1,7 +1,8 @@
 <footer class="py-4 bg-light mt-auto">
     <div class="container-fluid px-4">
         <div class="d-flex align-items-center justify-content-between small">
-            <div class="text-muted">Copyright &copy; eFoody 2024</div>
+            <?php //<div class="text-muted">Copyright &copy; eFoody 2024</div> ?>
+            <div class="text-muted">W razie problemów technicznych napisz e-mail na <a href="mailto:mateusz.zybura@radluks.pl">mateusz.zybura@radluks.pl</a> lub zadzwoń <a href="tel:+48609713824">609 713 824</a> &copy; Mateusz Zybura 2024</div>
             <div>
                 <a href="#"></a>
                 &middot;
