@@ -107,6 +107,7 @@
                                         <?php
                                         $tot_plan = 0;
                                         $tot_left = 0;
+                                        $tot_tot = 0;
                                         $sp = [];
                                         /*foreach($data["split_total"] as $us) {
                                             foreach($us as $pr) {
@@ -118,11 +119,13 @@
                                             }
                                         }*/
                                         //show($data["cargo_total"]);
-                                        foreach($data["cargo_total"] as $pr) {
-                                            if(isset($sp[$pr["p_id"]])) {
-                                                $sp[$pr["p_id"]] += $pr["amount"];
-                                            } else {
-                                                $sp[$pr["p_id"]] = $pr["amount"];
+                                        if(isset($data["cargo_total"])) {
+                                            foreach($data["cargo_total"] as $pr) {
+                                                if(isset($sp[$pr["p_id"]])) {
+                                                    $sp[$pr["p_id"]] += $pr["amount"];
+                                                } else {
+                                                    $sp[$pr["p_id"]] = $pr["amount"];
+                                                }
                                             }
                                         }
                                         if(isset($data["split"])) {
@@ -146,7 +149,13 @@
                                                     } else {
                                                         $am = 0;
                                                     }
-                                                    $free = $data["planned_total"][$pid]["amount"] - $sp[$pid];
+                                                    if(isset($sp[$pid])) {
+                                                        $free = $data["planned_total"][$pid]["amount"] - $sp[$pid];
+                                                    } else {
+                                                        $free = 0;
+                                                    }
+                                                    $tot_left += $free;
+                                                    $tot_tot += $data["planned_total"][$pid]["amount"];
                                                     echo '<td>'.$free.'/'.$data["planned_total"][$pid]["amount"].'</td>';
                                                     echo "<td><input $toBlock type='number' class='form-control prepared-amount' value='$am' min='0' max = '$free' id='$pid' name='in_".$pid." data-pid='".$pid."'></td>";
                                                     
@@ -160,7 +169,7 @@
                                             <th></th>
                                             <th>Total</th>
                                             <th><?=$tot_plan?></th>
-                                            <th><?=$tot_left?></th>
+                                            <th><?php echo $tot_left . "/" . $tot_tot;?></th>
                                             <th></th>
                                         </tr>
                                     </tbody>
