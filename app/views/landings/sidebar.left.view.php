@@ -8,7 +8,8 @@
 
 <?php
 echo $_SERVER["REQUEST_URI"];
-        if(ROOT_DIR == '/efoody/public/') {
+echo "</br>".ROOT_DIR;
+        if(ROOT_DIR === '/efoody/public/') {
             $curr_place = substr($_SERVER["REQUEST_URI"], 14);
         } else {
             $curr_place = "/".$_SERVER["REQUEST_URI"];
