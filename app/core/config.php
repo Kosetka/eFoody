@@ -46,7 +46,7 @@ define('COMPANIESTYPE', [0 => "Sprzedażowa", 1 => "Zakupowa"]);
 define('STATUSNAME', [0 => "Nieaktywne", 1 => "Aktywne"]);
 define('VISITSTATUSES', [0 => "Brak sprzedaży", 1 => "Sprzedaż", 2 => "Gratisy rozdane"]);
 define('COMPANYSIZE', ["building" => "Biurowiec", "house" => "Dom", "shop" => "Sklep", "warehouse" => "Magazyn", "exclamation" => "Duży biurowiec"]);
-define('TRADERS', '1, 3');
+define('TRADERS', '3');
 define('EXCHANGESTATUS', [0 => "Oczekuje", 1 => "Zaakceptowany", 2 => "Odrzucony", 3 => "Odrzucony automatycznie", 4 => "Anulowany"]);
 define('REPORTTYPES', ['hour' => "godzinny", 'day'=>"dzienny", 'week' => "tygodniowy", 'month' => "miesięczny"]);
 

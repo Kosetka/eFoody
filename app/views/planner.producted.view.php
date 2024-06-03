@@ -24,9 +24,9 @@
                 </div>
             </div>
             <div class="alert alert-info">
-                    <h2>UWAGA!</h2>
-                    <span>Pamiętaj zapisać dane po ich uzupełnieniu!</span>
-                </div>
+                <h2>UWAGA!</h2>
+                <span>Pamiętaj zapisać dane po ich uzupełnieniu!</span>
+            </div>
             <div class="card mb-4">
                 <div class="card-header">
                 <?php

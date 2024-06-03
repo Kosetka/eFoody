@@ -14,9 +14,7 @@
                     <img id="modal-image" src="" alt="Modal Image">
                 </div>
             </div>
-            <div class="card mb-4">
-                <div class="card-header">
-                <?php
+            <?php
                 //show($data["warehouse"]);
 
                 $wh = "[".$data["warehouse"][0]->c_name."_".$data["warehouse"][0]->wh_name."] -> ".$data["warehouse"][0]->c_fullname." ".$data["warehouse"][0]->wh_fullname;
@@ -26,12 +24,23 @@
                         $date = $data["date_plan"];
                     }
                 ?>
+            <div class="alert alert-info">
+                <h3>Legenda:</h3>
+                <p>Niebieski przycisk <a class="btn btn-primary" href="#" role="button" title="Etykieta"><i class="fa-solid fa-tag"></i></a> pobiera plik LBX, który pozwala na edytowanie etykiety w specjalnym programie Brother na komputerze.</p>
+                <p>Zielony przycisk drukarki <a target="" class="btn btn-success print-pdf" href="#" role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a> otwiera w nowym oknie plik PDF z etykietą produktu. Data produkcji jest tam automatycznie ustawiana na naspeny dzień (w przypadku piątku i soboty - jest ustawiona data najbliższego poniedziałku).</p>
+                <p>Żółty przycisk kalendarza <a target="" class="btn btn-warning print-pdf" href="" role="button" title="Drukuj pdf"><i class="fas fa-calendar-alt"></i></a> podobnie jak przycisk drukarki otwiera plik PDF z etykietą, jednak data jest pobierana z tego pola:</p>
+                <p><b>Data produkcji: </b> <input type='date' style='padding: 5px; margin: 2px;border-radius: 8px;' id='date_prod' name='date_prod' value='<?php echo $date; ?>'></p>
+                <p>Po kliknięciu przycisku <a target="" class="btn btn-success print-pdf" href="#" role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a> lub <a target="" class="btn btn-warning print-pdf" href="" role="button" title="Drukuj pdf"><i class="fas fa-calendar-alt"></i></a> komórka podświetla się na jasnozielony, co oznacza że dany produkt ma już wydrukowane etykiety. Podświetlenie działa tylko do odświeżenia strony.</p>
+                
+            </div>
+            <div class="card mb-4">
+                <div class="card-header">
                     <h2 class="">Plan produkcji: <?php echo $date;?> - Magazyn: <?=$wh?></h2>
                     <div class="form-group row m-3">
                         <form method='get'>
                             <div class="col-sm-12" style='display: flex'>
                                 <label for="c_name" class="col-sm-2 col-form-label">Wybierz dzień:</label>
-                                <input type='date' class='form-control col-sm-2' name='date'
+                                <input type='date' class='form-control col-sm-1' name='date'
                                     value='<?php echo $date; ?>'>
                                 <button class='btn btn-primary' style='margin-left: 20px;' type='submit'>Pokaż</button>
                             </div>
@@ -92,11 +101,14 @@
 
                                                 echo '<td style="background: '.$color.'">'.getPercent($prod_amo, $product["amount"]).'%</td>
                                                 <td>'.substr($ids, 0, -2).'</td>
-                                                <td><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
+                                                <td id="p_name_'.$product["p_id"].'"><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
                                                 role="button" title="Etykieta"><i class="fa-solid fa-tag"></i></a>
                                                  
-                                                <a target="_blank"class="btn btn-success" href=" ' . ROOT . '/labels/generate/'.$data["fullproducts"][$product["p_id"]]["id"].'"
-                                                role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a></td>
+                                                <a target="_blank" class="btn btn-success print-pdf" data-pid="'.$product["p_id"].'" href=" ' . ROOT . '/labels/generate/'.$data["fullproducts"][$product["p_id"]]["id"].'"
+                                                role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a>
+                                                
+                                                <a target="_blank" class="btn btn-warning print-pdf prod_time" data-pid="'.$product["p_id"].'" href=" ' . ROOT . '/labels/generate/'.$data["fullproducts"][$product["p_id"]]["id"].'"
+                                                role="button" title="Drukuj pdf"><i class="fas fa-calendar-alt"></i></a></td>
                                                 ';
                                                 echo "</tr>";
                                                 $tot_plan += $product["amount"];
@@ -121,4 +133,35 @@
                     </div>
             
         </main>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const printButtons = document.querySelectorAll('.print-pdf');
+                printButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const pId = this.getAttribute('data-pid');
+                        const productNameCell = document.getElementById('p_name_' + pId);
+                        if (productNameCell) {
+                            productNameCell.style.backgroundColor = 'lightgreen'; // Zmień na dowolny kolor
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const dateInput = document.getElementById('date_prod');
+                const buttons = document.querySelectorAll('.prod_time');
+
+                dateInput.addEventListener('change', function() {
+                    const date = new Date(this.value);
+                    const formattedDate = ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear();
+
+                    buttons.forEach(button => {
+                        const currentHref = button.getAttribute('href');
+                        const newHref = currentHref.split('?')[0] + '?date=' + formattedDate;
+                        button.setAttribute('href', newHref);
+                    });
+                });
+            });
+        </script>
         <?php require_once 'landings/footer.view.php' ?>
