@@ -72,12 +72,25 @@ class Company
             $data["cities"][$city->id] = (array) $city;
         }
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            //show($_POST);die;
             $company = new Companies;
             $_POST["date"] = date("Y-m-d H:i:s");
+            $_POST["phone_number"] = $_POST["phone_numbers"][0];
             $_POST["address"] = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
             if ($company->validate($_POST)) {
                 $company->insert($_POST);
                 $data['success'] = "Konto firmy zostało pomyślnie utworzone";
+
+                $last_id = ""; // pobrać ID
+                $companies = new Companiesphone;
+                foreach($_POST["phone_numbers"] as $phone) {
+                    if ($phone != "") {
+                        $que = ["c_id" => $last_id, "c_phone" => $phone]; // sprawdzić
+                        $company->insert($que);
+                    }
+                }
+
+
                 $this->view('company.new', $data);
                 die;
             }
