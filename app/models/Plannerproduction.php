@@ -32,6 +32,11 @@ class Plannerproduction
         $query = "select * from $this->table WHERE date_plan = '$date' AND w_id = $w_id";
         return $this->query($query);
     }
+    public function getPlannedDates($date_from, $date_to, $w_id)
+    {
+        $query = "select * from $this->table WHERE date_plan >= '$date_from' AND date_plan <= '$date_to' AND w_id = $w_id";
+        return $this->query($query);
+    }
     public function getPlannedUser($date, $w_id, $u_id)
     {
         $query = "select * from $this->table WHERE date_plan = '$date' AND w_id = $w_id AND u_id = $u_id";
