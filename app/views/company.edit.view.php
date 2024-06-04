@@ -67,12 +67,34 @@
                                 value="<?= $data["companies"]->contact_last_name ?>">
                         </div>
                     </div>
-                    <div class="form-group row m-3">
-                        <label for="phone_number" class="col-sm-2 col-form-label">Tel. kontaktowy:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="phone_number" name="phone_number"
-                                value="<?= $data["companies"]->phone_number ?>">
+                    <div id="phone-number-container">
+                        <div class="form-group row m-3">
+                            <label for="phone_number" class="col-sm-2 col-form-label">Tel. kontaktowy:</label>
+                            <div class="col-sm-2">
+                                <input type="text" class="form-control" id="phone_number" name="phone_numbers[]" value="<?= $data["companies"]->phone_number ?>">
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-secondary" onclick="addPhoneNumberField()">+</button>
+                            </div>
                         </div>
+                        <?php
+                        $first = true;
+                        foreach($data["phone_numbers"] as $phone) {
+                            if($first == false) {
+                                echo '  <div class="form-group row m-3">
+                                            <label for="phone_number" class="col-sm-2 col-form-label">Dodatkowy numer:</label>
+                                            <div class="col-sm-2">
+                                            <input type="text" class="form-control" id="phone_number" name="phone_numbers[]" value="'.$phone->c_phone.'">
+                                            </div>
+                                        </div>';
+                                
+                            }
+                            if($first == true) {
+                                $first = false;
+                            }
+                        }
+
+?>
                     </div>
                     <div class="form-group row m-3">
                         <label for="guardian" class="col-sm-2 col-form-label">Opiekun handlowy:</label>
@@ -224,4 +246,34 @@
             </form>
 
         </main>
+        <script>
+            function addPhoneNumberField() {
+                // Create a new div element
+                var newDiv = document.createElement("div");
+                newDiv.className = "form-group row m-3";
+
+                // Create a new label element
+                var newLabel = document.createElement("label");
+                newLabel.className = "col-sm-2 col-form-label";
+                newLabel.innerText = "Dodatkowy numer:";
+
+                // Create a new div for input
+                var inputDiv = document.createElement("div");
+                inputDiv.className = "col-sm-2";
+
+                // Create a new input element
+                var newInput = document.createElement("input");
+                newInput.type = "text";
+                newInput.className = "form-control";
+                newInput.name = "phone_numbers[]"; // Using array notation
+
+                // Append the label and input to the new div
+                inputDiv.appendChild(newInput);
+                newDiv.appendChild(newLabel);
+                newDiv.appendChild(inputDiv);
+
+                // Append the new div to the container
+                document.getElementById("phone-number-container").appendChild(newDiv);
+            }
+        </script>
         <?php require_once 'landings/footer.view.php' ?>

@@ -74,12 +74,21 @@
                                     $active_display = 'Nieaktywna';
                                 }
                                 $edit_link = '<a href="' . ROOT . '/company/edit/' . $company->id . '">Edytuj</a>';
+                                $numbers = $company->phone_number;
+                                foreach($data["phone_numbers"] as $number_key => $number_val) {
+                                    if($number_key == $company->id) {
+                                        foreach($number_val as $numb) {
+                                            $numbers.= ", ".$numb;
+                                        }
+                                    }
+                                }
+
                                 echo "<tr>
                                     <td>$company->id</td>
                                     <td>$company->full_name</td>
                                     <td>$company->nip</td>
                                     <td>$company->contact_first_name $company->contact_last_name</td>
-                                    <td>$company->phone_number</td>
+                                    <td>$numbers</td>
                                     <td>$company->email</td>
                                     <td>$city_name</td>
                                     <td>$user_name</td>

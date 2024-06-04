@@ -9,7 +9,7 @@ class Companiesphone
 
     use Model;
 
-    protected $table = 'companies';
+    protected $table = 'companies_phone';
 
     protected $allowedColumns = [
         'id',
