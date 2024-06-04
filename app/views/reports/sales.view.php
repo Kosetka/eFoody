@@ -1,5 +1,4 @@
 <?php 
-show($data); 
 $send = $data["get"]["send"];
 
 if($send == 2) {
@@ -63,30 +62,40 @@ if($send == 2) {
                     </div>';
                         }
                         if($data["get"]["type"] == "week") {
+                            $datetime = new DateTime($data["get"]["param1"]);
+                            $param1 = $datetime->format('Y-m-d');
+                            $datetime = new DateTime($data["get"]["param2"]);
+                            $param2 = $datetime->format('Y-m-d');
                           
             echo '  <div class="form-group row m-3">
                         <label for="date_from" class="col-sm-2 col-form-label">Data od:</label>
                         <div class="col-sm-4">
                             <input type="date" class="form-control" id="date_from" name="date_from"
-                                value="'.$date_from.'" required>
+                                value="'.$param1.'" required>
                         </div>
                     </div>
                     <div class="form-group row m-3">
                         <label for="date_to" class="col-sm-2 col-form-label">Data do:</label>
                         <div class="col-sm-4">
                             <input type="date" class="form-control" id="date_to" name="date_to"
-                                value="'.$date_to.'" required>
+                                value="'.$param2.'" required>
                         </div>
                     </div>';
                         }
                         if($data["get"]["type"] == "month") {
+                            $param1 = $data["get"]["param1"];
+                            $param2 = $data["get"]["param2"];
                         
             echo '  <div class="form-group row m-3">
             <label for="date_from" class="col-sm-2 col-form-label">Miesiąc:</label>
             <div class="col-sm-4">
                 <select class="form-control" id="date_from" name="date_from" required>';
                     for ($month = 1; $month <= 12; $month++) {
-                        echo '<option value="' . $month . '">' . date("F", mktime(0, 0, 0, $month, 1)) . '</option>';
+                        $sel = "";
+                        if($param1 == $month) {
+                            $sel = "selected";
+                        }
+                        echo '<option value="' . $month . '" '.$sel.'>' . date("F", mktime(0, 0, 0, $month, 1)) . '</option>';
                     }
                     
                echo '</select>
@@ -98,7 +107,11 @@ if($send == 2) {
             <div class="col-sm-4">
                 <select class="form-control" id="date_to" name="date_to" required>';
                     for ($year = 2024; $year <= 2025; $year++) {
-                        echo '<option value="' . $year . '">' . $year . '</option>';
+                        $sel = "";
+                        if($param1 == $year) {
+                            $sel = "selected";
+                        }
+                        echo '<option value="' . $year . '" '.$sel.'>' . $year . '</option>';
                     }
                 echo '</select>
             </div>
@@ -115,10 +128,14 @@ if($send == 2) {
 
                         <?php
                         if (!isset($data["date_from"])) {
-                            echo "document.getElementById('date_from').setAttribute('value', currentDate);";
+                            if(!isset($param1)) {
+                                echo "document.getElementById('date_from').setAttribute('value', currentDate);";
+                            }
                         }
                         if (!isset($data["date_to"])) {
-                            echo "document.getElementById('date_to').setAttribute('value', currentDate);";
+                            if(!isset($param2)) {
+                                echo "document.getElementById('date_to').setAttribute('value', currentDate);";
+                            }
                         }
                         ?>
                     </script>

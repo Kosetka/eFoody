@@ -112,15 +112,6 @@ class Reports
                 $param2 = $last_sunday;
             }
         } else if ($type == "month") {
-            if($param1 == 0) {
-                $first_day_current_month = date("Y-m-01");
-                $last_day_current_month = date("Y-m-t", strtotime($first_day_current_month));
-                $last_day_previous_month = date("Y-m-t", strtotime("-1 month", strtotime($first_day_current_month)));
-                $first_day_previous_month = date("Y-m-01", strtotime("-1 month", strtotime($first_day_current_month)));
-
-                $date_from = $first_day_previous_month." 00:00:00";
-                $date_to = $last_day_previous_month." 23:59:59";
-            }
             if($param1 <> 0) {
                 if($param2 <> 0) {
                     $firstday = date("$param2-$param1-01");
@@ -129,6 +120,18 @@ class Reports
                     $date_from = $firstday." 00:00:00";
                     $date_to = $lastday." 23:59:59";
                 }
+            }
+            if($param1 == 0) {
+                $first_day_current_month = date("Y-m-01");
+                $last_day_current_month = date("Y-m-t", strtotime($first_day_current_month));
+                $last_day_previous_month = date("Y-m-t", strtotime("-1 month", strtotime($first_day_current_month)));
+                $first_day_previous_month = date("Y-m-01", strtotime("-1 month", strtotime($first_day_current_month)));
+
+                $date_from = $first_day_previous_month." 00:00:00";
+                $date_to = $last_day_previous_month." 23:59:59";
+                $timestamp = strtotime($date_from);
+                $param1 = date('m', $timestamp);
+                $param2 = date('y', $timestamp);
             }
         } else {
             echo "Błędny parametr";
@@ -247,28 +250,21 @@ class Reports
             $date_from = $today." 00:00:00";
             $date_to = $today." 23:59:59";
         } else if ($type == "week") {
-            if($param1 == 0) {
-                $last_monday = date("Y-m-d",strtotime("-7 days",strtotime("last monday")));
-                $last_sunday = date("Y-m-d", strtotime("+7 days", strtotime($last_monday)));
-                $date_from = $last_monday." 00:00:00";
-                $date_to = $last_sunday." 23:59:59";
-            }
             if($param1 <> 0) {
                 $date_from = $param1." 00:00:00";
             }
             if($param2 <> 0) {
                 $date_to = $param2." 23:59:59";
             }
-        } else if ($type == "month") {
             if($param1 == 0) {
-                $first_day_current_month = date("Y-m-01");
-                $last_day_current_month = date("Y-m-t", strtotime($first_day_current_month));
-                $last_day_previous_month = date("Y-m-t", strtotime("-1 month", strtotime($first_day_current_month)));
-                $first_day_previous_month = date("Y-m-01", strtotime("-1 month", strtotime($first_day_current_month)));
-
-                $date_from = $first_day_previous_month." 00:00:00";
-                $date_to = $last_day_previous_month." 23:59:59";
+                $last_monday = date("Y-m-d",strtotime("-7 days",strtotime("last monday")));
+                $last_sunday = date("Y-m-d", strtotime("+7 days", strtotime($last_monday)));
+                $date_from = $last_monday." 00:00:00";
+                $date_to = $last_sunday." 23:59:59";
+                $param1 = $last_monday; // tu sprawdzić
+                $param2 = $last_sunday;
             }
+        } else if ($type == "month") {
             if($param1 <> 0) {
                 if($param2 <> 0) {
                     $firstday = date("$param2-$param1-01");
@@ -277,6 +273,18 @@ class Reports
                     $date_from = $firstday." 00:00:00";
                     $date_to = $lastday." 23:59:59";
                 }
+            }
+            if($param1 == 0) {
+                $first_day_current_month = date("Y-m-01");
+                $last_day_current_month = date("Y-m-t", strtotime($first_day_current_month));
+                $last_day_previous_month = date("Y-m-t", strtotime("-1 month", strtotime($first_day_current_month)));
+                $first_day_previous_month = date("Y-m-01", strtotime("-1 month", strtotime($first_day_current_month)));
+
+                $date_from = $first_day_previous_month." 00:00:00";
+                $date_to = $last_day_previous_month." 23:59:59";
+                $timestamp = strtotime($date_from);
+                $param1 = date('m', $timestamp);
+                $param2 = date('y', $timestamp);
             }
         } else {
             echo "Błędny parametr";
