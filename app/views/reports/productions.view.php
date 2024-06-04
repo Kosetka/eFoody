@@ -1,7 +1,10 @@
 <?php
 
 $send = $data["get"]["send"];
-
+$num_traders = 0;
+foreach($data["users"] as $trader) {
+    $num_traders++;
+}
 if($send == 2) {
     if($data["get"]["type"] == "day") {
         $f1 = "dzień";
@@ -12,10 +15,7 @@ if($send == 2) {
     if($data["get"]["type"] == "month") {
         $f1 = "miesiąc";
     }
-    $num_traders = 0;
-    foreach($data["users"] as $trader) {
-        $num_traders++;
-    }
+
 
     echo '<form method="get">';
 
