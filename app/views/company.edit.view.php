@@ -79,18 +79,20 @@
                         </div>
                         <?php
                         $first = true;
-                        foreach($data["phone_numbers"] as $phone) {
-                            if($first == false) {
-                                echo '  <div class="form-group row m-3">
-                                            <label for="phone_number" class="col-sm-2 col-form-label">Dodatkowy numer:</label>
-                                            <div class="col-sm-2">
-                                            <input type="text" class="form-control" id="phone_number" name="phone_numbers[]" value="'.$phone->c_phone.'">
-                                            </div>
-                                        </div>';
-                                
-                            }
-                            if($first == true) {
-                                $first = false;
+                        if(!empty($data["phone_numbers"])) {
+                            foreach($data["phone_numbers"] as $phone) {
+                                if($first == false) {
+                                    echo '  <div class="form-group row m-3">
+                                                <label for="phone_number" class="col-sm-2 col-form-label">Dodatkowy numer:</label>
+                                                <div class="col-sm-2">
+                                                <input type="text" class="form-control" id="phone_number" name="phone_numbers[]" value="'.$phone->c_phone.'">
+                                                </div>
+                                            </div>';
+                                    
+                                }
+                                if($first == true) {
+                                    $first = false;
+                                }
                             }
                         }
 
