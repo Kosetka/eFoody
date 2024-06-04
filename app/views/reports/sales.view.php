@@ -1,4 +1,5 @@
 <?php 
+show($data); 
 $send = $data["get"]["send"];
 
 if($send == 2) {

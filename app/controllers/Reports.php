@@ -97,17 +97,19 @@ class Reports
             $date_from = $today." 00:00:00";
             $date_to = $today." 23:59:59";
         } else if ($type == "week") {
-            if($param1 == 0) {
-                $last_monday = date("Y-m-d",strtotime("-7 days",strtotime("last monday")));
-                $last_sunday = date("Y-m-d", strtotime("+7 days", strtotime($last_monday)));
-                $date_from = $last_monday." 00:00:00";
-                $date_to = $last_sunday." 23:59:59";
-            }
             if($param1 <> 0) {
                 $date_from = $param1." 00:00:00";
             }
             if($param2 <> 0) {
                 $date_to = $param2." 23:59:59";
+            }
+            if($param1 == 0) {
+                $last_monday = date("Y-m-d",strtotime("-7 days",strtotime("last monday")));
+                $last_sunday = date("Y-m-d", strtotime("+7 days", strtotime($last_monday)));
+                $date_from = $last_monday." 00:00:00";
+                $date_to = $last_sunday." 23:59:59";
+                $param1 = $last_monday; // tu sprawdzić
+                $param2 = $last_sunday;
             }
         } else if ($type == "month") {
             if($param1 == 0) {
@@ -301,6 +303,27 @@ class Reports
         $products_list = new ProductsModel();
         foreach ($products_list->getAllFullProducts() as $key => $value) {
             $data["fullproducts"][$value->id] = (array) $value;
+        }
+        $plan = new Plannerproducted();
+        if(!empty($plan->getAllDates($date_from, $date_to))) {
+            foreach ($plan->getAllDates($date_from, $date_to) as $key => $value) {
+                $data["producted"][$value->id] = (array) $value;
+            }
+        }
+        $cargo = new Cargo;
+        $date_from = $date_from.' 00:00:00';
+        $date_to = $date_to.' 23:59:59';
+        if(!empty($cargo->getFullProductsDate($date_from, $date_to))) {
+            foreach ($cargo->getFullProductsDate($date_from, $date_to) as $key => $value) {
+                $data["cargo"][$value->id] = (array) $value;
+            }
+        }
+
+        $plan = new Plannersplit();
+        if(!empty($plan->getPlannedByDates($date_from, $date_to))) {
+            foreach ($plan->getPlannedByDates($date_from, $date_to) as $key => $value) {
+                $data["split"][$value->id] = (array) $value;
+            }
         }
         
         $this->view('productions.total', $data);

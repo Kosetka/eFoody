@@ -37,6 +37,11 @@ class Plannersplit
         $query = "select * from $this->table WHERE date_split = '$date' AND u_id = $u_id";
         return $this->query($query);
     }
+    public function getPlannedByDates($date_from, $date_to)
+    {
+        $query = "select * from $this->table WHERE date_split >= '$date_from' AND date_split <= '$date_to';";
+        return $this->query($query);
+    }
 
     public function deleteByDate($date)
 	{

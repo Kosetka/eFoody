@@ -26,6 +26,11 @@ class Plannerproducted
         $query = "select * from $this->table WHERE date_producted = '$date'";
         return $this->query($query);
     }
+    public function getAllDates($date_from, $date_to)
+    {
+        $query = "select * from $this->table WHERE date_producted >= '$date_from' AND date_producted <= '$date_to'";
+        return $this->query($query);
+    }
 
     public function getProducted($date, $w_id)
     {

@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 $send = $data["get"]["send"];
 
 if($send == 2) {
@@ -125,27 +126,103 @@ if ($data["get"]["type"] == "month") {
 }
 
 $planned_array = [];
+$producted_array = [];
+$cargo_array = [];
+$split_array = [];
 
-foreach($data["planned"] as $plan) {
-    foreach($data["users"] as $trader) {
-        $planned_array[$plan["p_id"]][$trader->id] = 0;
-        $planned_array[$plan["p_id"]]["total"] = 0;
+if(isset($data["planned"])) {
+    if(isset($data["users"])) {
+        foreach($data["planned"] as $plan) {
+            foreach($data["users"] as $trader) {
+                $planned_array[$plan["p_id"]][$trader->id] = 0;
+                $planned_array[$plan["p_id"]]["total"] = 0;
+                $producted_array["total"] = 0;
+                $producted_array[$plan["p_id"]] = 0;
+                $cargo_array[$plan["p_id"]][$trader->id] = 0;
+                $cargo_array[$plan["p_id"]]["total"] = 0;
+                $split_array[$plan["p_id"]][$trader->id] = 0;
+                $split_array[$plan["p_id"]]["total"] = 0;
+            }
+        }
     }
 }
-foreach($data["planned"] as $plan) {
-    $planned_array[$plan["p_id"]][$plan["u_id"]] += $plan["amount"];
-    $planned_array[$plan["p_id"]]["total"] += $plan["amount"];
+if(isset($data["planned"])) {
+    foreach($data["planned"] as $plan) {
+        $planned_array[$plan["p_id"]][$plan["u_id"]] += $plan["amount"];
+        $planned_array[$plan["p_id"]]["total"] += $plan["amount"];
+    }
+}
+
+if(isset($data["planned"])) {
+    if(isset($data["producted"])) {
+        foreach($data["producted"] as $plan) {
+            if(!isset($producted_array[$plan["p_id"]])) {
+                $producted_array[$plan["p_id"]] = 0;
+            }
+            if(!isset($producted_array["total"])) {
+                $producted_array["total"] = 0;
+            }
+            $producted_array[$plan["p_id"]] += $plan["amount"];
+            $producted_array["total"] += $plan["amount"];
+        }
+    }
+}
+
+if(isset($data["planned"])) {
+    if(isset($data["cargo"])) {
+        foreach($data["cargo"] as $plan) {
+            foreach($data["users"] as $trader) {
+                if($plan["u_id"] == $trader->id) {
+                    if(!isset($cargo_array[$plan["p_id"]][$trader->id])) {
+                        $cargo_array[$plan["p_id"]][$trader->id] = 0;
+                    }
+                    if(!isset($cargo_array[$plan["p_id"]]["total"])) {
+                        $cargo_array[$plan["p_id"]]["total"] = 0;
+                    }
+                    $cargo_array[$plan["p_id"]][$trader->id] += $plan["amount"];
+                    $cargo_array[$plan["p_id"]]["total"] += $plan["amount"];
+                }
+            }
+        }
+    }
+}
+
+if(isset($data["planned"])) {
+    if(isset($data["split"])) {
+        foreach($data["split"] as $plan) {
+            foreach($data["users"] as $trader) {
+                if($plan["u_id"] == $trader->id) {
+                    if(!isset($split_array[$plan["p_id"]][$trader->id])) {
+                        $split_array[$plan["p_id"]][$trader->id] = 0;
+                    }
+                    if(!isset($split_array[$plan["p_id"]]["total"])) {
+                        $split_array[$plan["p_id"]]["total"] = 0;
+                    }
+                    $split_array[$plan["p_id"]][$trader->id] += $plan["amount"];
+                    $split_array[$plan["p_id"]]["total"] += $plan["amount"];
+                }
+            }
+        }
+    }
 }
 
 
 
-show($planned_array);
+$total_prod = [];
+foreach($producted_array as $prod_key => $prod_val) {
+    if(!isset($total_prod[$prod_key])) {
+        $total_prod[$prod_key] = 0;
+    }
+    $total_prod[$prod_key] += $prod_val;
+    
+}
 
 
-
-
-
-$num_rows = $num_traders*2+4;
+$sum_prod = 0;
+$sum_cargo = 0;
+$sum_wyd = [];
+$sum_split = [];
+$num_rows = $num_traders*3+7;
 $mess = "<table style='border: 1px solid'>
     <thead style='border: 1px solid'>
         <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
@@ -154,61 +231,110 @@ $mess = "<table style='border: 1px solid'>
         <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
             <th rowspan='2' style='border: 1px solid #000; width: 6%'>Produkty</th>
             <th rowspan='2' style='border: 1px solid #000; width: 6%'>SKU</th>
-            <th rowspan='2'style='border: 1px solid #000; width: 6%'>Plan. | Prod. | Wyd.</th>
-            <th rowspan='2' style='border: 1px solid #000; width: 10%'>Prod. / Plan. | Wyd. / Prod.</th>";
+            <th rowspan='2'style='border: 1px solid #000; '>Wydane</th>
+            <th rowspan='2'style='border: 1px solid #000; '>Przygotowane</th>
+            <th rowspan='2'style='border: 1px solid #000; '>Planowane</th>
+            <th rowspan='2' style='border: 1px solid #000; width: 4%'>PR/PL %</th>
+            <th rowspan='2' style='border: 1px solid #000; width: 4%'>W/PL%</th>";
             foreach($data["users"] as $trader) {
-                $mess.= "<th colspan='2' style='border: 1px solid #000; width: 12%'>$trader->first_name $trader->last_name</th>";
+                $mess.= "<th colspan='3' style='border: 1px solid #000; width: 12%'>$trader->first_name $trader->last_name</th>";
             }
         $mess.= "</tr>
         <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
             ";
             foreach($data["users"] as $trader) {
-                $mess.= "<th style='border: 1px solid #000; width: 6%'>Plan. | Prod. | Wyd.</th>";
-                $mess.= "<th style='border: 1px solid #000; width: 6%'>%</th>";
+                $mess.= "<th style='border: 1px solid #000; '>Wyd.</th>";
+                $mess.= "<th style='border: 1px solid #000; '>Plan.</th>";
+                $mess.= "<th style='border: 1px solid #000; '>W/P%</th>";
             }
-            show($data["planned"]);
 $mess.= "</tr>
     </thead>
     <tbody>";
+    
         foreach($planned_array as $product_key => $product_val) {
+            $row_num = 0;
+            if(fmod($row_num, 2)==0) {
+                $even = true;
+            } else {
+                $even = false;
+            }
+            $sum_prod += $product_val["total"];
+            $sum_cargo += $cargo_array[$product_key]["total"];
+            
             $mess.="
         <tr style='text-align: center;'>
             <td style='border: 1px solid;'>".$data["fullproducts"][$product_key]["p_name"]."</td>
             <td style='border: 1px solid;'>".$data["fullproducts"][$product_key]["sku"]."</td>
-            <td style='border: 1px solid;'>".$product_val["total"]." |  | </td>
-            <td style='border: 1px solid;'>".getPercent($sales, $stan)."%</td>";
-        foreach($data["users"] as $trader) {
-            $mess.= "<td style='border: 1px solid #000;'>".$product_val[$trader->id]." | 0 | 0</td>";
-            $mess.= "<td style='border: 1px solid #000;'>100% | 100%</td>";
+            <td style='border: 1px solid;'>".$cargo_array[$product_key]["total"]."</td>
+            <td style='border: 1px solid;'>".$total_prod[$product_key]."</td>
+            <td style='border: 1px solid;'>".$product_val["total"]."</td>
+            <td style='border: 1px solid;'>".getPercent($total_prod[$product_key], $product_val["total"], 1)."%</td>
+            <td style='border: 1px solid;'>".getPercent($cargo_array[$product_key]["total"], $product_val["total"], 1)."%</td>";
+            foreach($data["users"] as $trader) {
+                if(!isset($sum_wyd[$trader->id])) {
+                    $sum_wyd[$trader->id] = 0;
+                }
+                if(!isset($sum_split[$trader->id])) {
+                    $sum_split[$trader->id] = 0;
+                }
+                $sum_wyd[$trader->id] += $cargo_array[$product_key][$trader->id];
+                $sum_split[$trader->id] += $split_array[$product_key][$trader->id];
 
-        }
+                $bg_color = "";
+                if($even == true) {
+                    $even = false;
+                    $bg_color = " background-color: lightgray;";
+                } else {
+                    $even = true;
+                }
+
+                $mess.= "<td style='border: 1px solid; ".$bg_color."'>".$cargo_array[$product_key][$trader->id]."</td>";
+                $mess.= "<td style='border: 1px solid; ".$bg_color."'>".$split_array[$product_key][$trader->id]."</td>";
+                $mess.= "<td style='border: 1px solid; ".$bg_color."'>".getPercent($cargo_array[$product_key][$trader->id],$split_array[$product_key][$trader->id], 1)."%</td>";
+
+            }
         $mess.= "</tr>";
+        $row_num += 1;
         }
+        
         $mess.="
-    </tbody>
-    <tfoot>
-        <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
-            <td style='border: 1px solid;'>TOTAL</td>
-            <td style='border: 1px solid;'>$total_sales</td>
-            <td style='border: 1px solid;'>$total_stan2</td>
-            <td style='border: 1px solid;'>".getPercent($total_sales,$total_stan)."%</td>";
-        foreach($data["users"] as $trader) {
-            $mess.= "<td style='border: 1px solid #000;'>0 | 0 | 0</td>";
-            $mess.= "<td style='border: 1px solid #000;'>100% | 100%</td>";
+    </tbody>";
+    if(isset($data["planned"])) {
+        $mess .= "<tfoot>
+            <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
+                <td colspan='2' style='border: 1px solid;'>TOTAL</td>
+                <td style='border: 1px solid;'>".$sum_cargo."</td>
+                <td style='border: 1px solid;'>".$total_prod["total"]."</td>
+                <td style='border: 1px solid;'>".$sum_prod."</td>
+                <td style='border: 1px solid;'>".getPercent($total_prod["total"],$sum_prod, 1)."%</td>
+                <td style='border: 1px solid;'>".getPercent($total_prod["total"],$sum_cargo,1)."%</td>";
+                $even = true;
+            foreach($data["users"] as $trader) {
+                $bg_color = "";
+                if($even == true) {
+                    $even = false;
+                    $bg_color = " background-color: gray;";
+                } else {
+                    $even = true;
+                }
+                $mess.= "<td style='border: 1px solid #000; ".$bg_color."'>".$sum_wyd[$trader->id]."</td>";
+                $mess.= "<td style='border: 1px solid #000; ".$bg_color."'>".$sum_split[$trader->id]."</td>";
+                $mess.= "<td style='border: 1px solid #000; ".$bg_color."'>".getPercent($sum_wyd[$trader->id],$sum_split[$trader->id], 1)."%</td>";
 
-        }
+            }
 
-        /*    <td style='border: 1px solid;'>$total_visit</td>
-            <td style='border: 1px solid;'>$total_companies</td>
-            <td style='border: 1px solid;'>".getPercent($total_visit,$total_companies)."%</td>
-            <td style='border: 1px solid;'>$total_cargo</td>
-            <td style='border: 1px solid;'>".$total_plus - $total_minus."</td>
-            <td style='border: 1px solid;'>$total_destroy</td>
-            <td style='border: 1px solid;'>$total_returns</td>
-            <td style='border: 1px solid;'>$total_gratis</td>*/
-        $mess.= "</tr>
-    </tfoot>
-</table>";
+            /*    <td style='border: 1px solid;'>$total_visit</td>
+                <td style='border: 1px solid;'>$total_companies</td>
+                <td style='border: 1px solid;'>".getPercent($total_visit,$total_companies)."%</td>
+                <td style='border: 1px solid;'>$total_cargo</td>
+                <td style='border: 1px solid;'>".$total_plus - $total_minus."</td>
+                <td style='border: 1px solid;'>$total_destroy</td>
+                <td style='border: 1px solid;'>$total_returns</td>
+                <td style='border: 1px solid;'>$total_gratis</td>*/
+            $mess.= "</tr>
+        </tfoot>";
+    }
+$mess .= "</table>";
 
     
     echo $mess;
