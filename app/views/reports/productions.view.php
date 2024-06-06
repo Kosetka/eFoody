@@ -325,7 +325,7 @@ $mess.= "</tr>
                 <td style='border: 1px solid;'>".$total_prod["total"]."</td>
                 <td style='border: 1px solid;'>".$sum_prod."</td>
                 <td style='border: 1px solid;'>".getPercent($total_prod["total"],$sum_prod, 1)."%</td>
-                <td style='border: 1px solid;'>".getPercent($total_prod["total"],$sum_cargo,1)."%</td>";
+                <td style='border: 1px solid;'>".getPercent($sum_cargo,$sum_prod,1)."%</td>";
                 $even = true;
             foreach($data["users"] as $trader) {
                 $bg_color = "";
