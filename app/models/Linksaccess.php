@@ -23,4 +23,8 @@ class Linksaccess
         $query = "select * from $this->table WHERE r_id = $id";
         return $this->query($query);
     }
+    public function getEmailsByLinks($l_id) {
+        $query = "select * from $this->table WHERE l_id = $l_id";
+        return $this->query($query);
+    }
 }

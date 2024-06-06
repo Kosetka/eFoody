@@ -31,6 +31,12 @@ class User
 		$query = "select * from $table WHERE u_role IN ($ids)";
 		return $this->query($query);
 	}
+
+	public function getEmailsByRole($ids)
+	{
+		$query = "select email from $this->table WHERE u_role IN ($ids)";
+		return $this->query($query);
+	}
 	public function getTraders()
 	{
 		$ids = TRADERS;

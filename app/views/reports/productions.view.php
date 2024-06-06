@@ -361,15 +361,19 @@ $mess .= "</table>";
 
 
 <?php
-$to = 'mateusz.zybura@radluks.pl';
+$to = $data["emails"]; //'mateusz.zybura@radluks.pl, mateusz.zybura@gmail.com'
 $subject = "Raport $name produkcji - $dates";
 
 if($send == 1) {
     $mailer = new Mailer($to, $subject, $mess);
-    if ($mailer->send()) {
-        echo 'Wiadomość została wysłana pomyślnie.';
+    if(SEND_ON === true) {
+        if ($mailer->send()) {
+            echo 'Wiadomość została wysłana pomyślnie.';
+        } else {
+            echo 'Wystąpił problem podczas wysyłania wiadomości. Błąd: ' . print_r($mailer->getLastError(), true);
+        }
     } else {
-        echo 'Wystąpił problem podczas wysyłania wiadomości. Błąd: ' . print_r($mailer->getLastError(), true);
+        show($mailer);
     }
 }
 ?>

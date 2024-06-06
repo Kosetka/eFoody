@@ -17,6 +17,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('IMG_ROOT_UPLOAD', '../public/assets/img/');
 	define('IMG_LABELS_UPLOAD', '../public/assets/labels/');
 	define('IMG_ALERGENS_ROOT_UPLOAD', '../public/assets/img/alergens/');
+	define('SEND_ON', false);
 
 
 } else {
@@ -35,7 +36,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('IMG_ROOT_UPLOAD', '../public/assets/img/'); //../public/assets/img/
 	define('IMG_LABELS_UPLOAD', '../public/assets/labels/');
 	define('IMG_ALERGENS_ROOT_UPLOAD', '../public/assets/img/alergens/');
-
+	define('SEND_ON', true);
 }
 
 define('APP_NAME', "My Webiste");
@@ -52,3 +53,4 @@ define('REPORTTYPES', ['hour' => "godzinny", 'day' => "dzienny", 'week' => "tygo
 
 /** true means show errors **/
 define('DEBUG', true);
+

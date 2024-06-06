@@ -79,6 +79,30 @@ class Reports
             }
         }
 
+        if ($type =="day") 
+            $raport_id = 82; 
+        else if ($type == "week")
+            $raport_id = 83; 
+        else if ($type == "month") 
+            $raport_id = 84; 
+
+        $l_access = new Linksaccess;
+        $ids = [];
+        if(!empty($l_access->getEmailsByLinks($raport_id))) {
+            foreach($l_access->getEmailsByLinks($raport_id) as $l_a) {
+                $ids[] = $l_a->r_id;
+            }
+        }
+        $ids = implode(",", $ids);
+        $get_users = new User;
+        $temp_emails = $get_users->getEmailsByRole($ids);
+
+        $t_em = [];
+        foreach($temp_emails as $email) {
+            $t_em[] = $email->email;
+        }
+        $data["emails"] = implode(",", $t_em);
+
         $today = date("Y-m-d");
 
         if($type == "hour") {
@@ -240,6 +264,31 @@ class Reports
                 $param2 = $URL[4];
             }
         }
+//tu sięzaczyna - 
+
+        if ($type =="day") 
+            $raport_id = 82; 
+        else if ($type == "week")
+            $raport_id = 83; 
+        else if ($type == "month") 
+            $raport_id = 84; 
+
+        $l_access = new Linksaccess;
+        $ids = [];
+        if(!empty($l_access->getEmailsByLinks($raport_id))) {
+            foreach($l_access->getEmailsByLinks($raport_id) as $l_a) {
+                $ids[] = $l_a->r_id;
+            }
+        }
+        $ids = implode(",", $ids);
+        $get_users = new User;
+        $temp_emails = $get_users->getEmailsByRole($ids);
+
+        $t_em = [];
+        foreach($temp_emails as $email) {
+            $t_em[] = $email->email;
+        }
+        $data["emails"] = implode(",", $t_em);
 
         $today = date("Y-m-d");
 
@@ -333,6 +382,8 @@ class Reports
                 $data["split"][$value->id] = (array) $value;
             }
         }
+
+
         
         $this->view('productions.total', $data);
     }
