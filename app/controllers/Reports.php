@@ -79,12 +79,14 @@ class Reports
             }
         }
 
-        if ($type =="day") 
-            $raport_id = 82; 
+        if ($type =="hour") 
+            $raport_id = 15; 
+        elseif ($type =="day") 
+            $raport_id = 32; 
         else if ($type == "week")
-            $raport_id = 83; 
+            $raport_id = 33; 
         else if ($type == "month") 
-            $raport_id = 84; 
+            $raport_id = 34; 
 
         $l_access = new Linksaccess;
         $ids = [];
