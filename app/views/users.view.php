@@ -79,7 +79,7 @@
                                     $active_display = 'Nieaktywny';
                                 }
                                 
-                                $access = [1, 2, 4];
+                                $access = [1, 2];
                                 if(in_array($your_id,$access)) {
                                     $edit_link = '<a href="' . ROOT . '/users/edit/' . $id . '">Edytuj</a>';
                                 } else {

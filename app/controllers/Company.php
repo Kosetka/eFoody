@@ -30,6 +30,10 @@ class Company
             $data["cities"][$city->id] = (array) $city;
         }
 
+        $companies = new Companiesphone;
+        foreach($companies->getAllNumbers() as $company) {
+            $data["phone_numbers"][$company->c_id][$company->c_phone] = $company->c_phone;
+        }
 
         $this->view('company', $data);
     }
@@ -72,12 +76,27 @@ class Company
             $data["cities"][$city->id] = (array) $city;
         }
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            //show($_POST);die;
             $company = new Companies;
             $_POST["date"] = date("Y-m-d H:i:s");
+            $_POST["phone_number"] = $_POST["phone_numbers"][0];
             $_POST["address"] = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
             if ($company->validate($_POST)) {
                 $company->insert($_POST);
                 $data['success'] = "Konto firmy zostało pomyślnie utworzone";
+
+                $last_id = ""; // pobrać ID
+                $last_id = $company->getLast();
+                $last_id = $last_id[0]->id;
+                $companies = new Companiesphone;
+                foreach($_POST["phone_numbers"] as $phone) {
+                    if ($phone != "") {
+                        $que_phone = ["c_id" => $last_id, "c_phone" => $phone]; // sprawdzić
+                        $companies->insert($que_phone);
+                    }
+                }
+
+
                 $this->view('company.new', $data);
                 die;
             }
@@ -95,6 +114,7 @@ class Company
             $URL = $_GET['url'] ?? 'home';
             $URL = explode("/", trim($URL, "/"));
             $company_id = $URL[2];
+            $_POST["phone_number"] = $_POST["phone_numbers"][0];
             $company = new Companies();
             if (!isset($_POST["active"])) {
                 $_POST["active"] = 0;
@@ -103,6 +123,14 @@ class Company
                 $_POST["address"] = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
                 $company->update($company_id, $_POST);
                 $data['success'] = "Edycja firmy pomyślna!";
+                $companies = new Companiesphone;
+                $companies->delete($company_id,"c_id");
+                foreach($_POST["phone_numbers"] as $phone) {
+                    if ($phone != "") {
+                        $que_phone = ["c_id" => $company_id, "c_phone" => $phone]; // sprawdzić
+                        $companies->insert($que_phone);
+                    }
+                }
             }
         }
 
@@ -118,6 +146,10 @@ class Company
             foreach ($temp["cities"] as $city) {
                 $data["cities"][$city->id] = (array) $city;
             }
+
+            $companies = new Companiesphone;
+            $data["phone_numbers"] = $companies->getAllById($company_id);
+
             $users_list = new User();
             $data["users"] = $users_list->getAllTraders("users", "3");
 

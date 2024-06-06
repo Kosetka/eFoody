@@ -85,4 +85,9 @@ class Companies
         guardian";
         return $this->query($query);
     }
+    public function getLast()
+    {
+        $query = "select * from $this->table ORDER BY date DESC LIMIT 1";
+        return $this->query($query);
+    }
 }

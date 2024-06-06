@@ -150,13 +150,22 @@
                                                         $am = 0;
                                                     }
                                                     if(isset($sp[$pid])) {
-                                                        $free = $data["planned_total"][$pid]["amount"] - $sp[$pid];
+                                                        if(isset($data["planned_total"][$pid]["amount"])) {
+                                                            $free = $data["planned_total"][$pid]["amount"] - $sp[$pid];
+                                                        } else {
+                                                            $free = 0;
+                                                        }
                                                     } else {
                                                         $free = 0;
                                                     }
                                                     $tot_left += $free;
-                                                    $tot_tot += $data["planned_total"][$pid]["amount"];
-                                                    echo '<td>'.$free.'/'.$data["planned_total"][$pid]["amount"].'</td>';
+                                                    if(isset($data["planned_total"][$pid]["amount"])) {
+                                                        $tot_tot += $data["planned_total"][$pid]["amount"];
+                                                        echo '<td>'.$free.'/'.$data["planned_total"][$pid]["amount"].'</td>';
+                                                    } else {
+                                                        $tot_tot = 0;
+                                                        echo '<td>'.$free.'/0</td>';
+                                                    }
                                                     echo "<td><input $toBlock type='number' class='form-control prepared-amount' value='$am' min='0' max = '$free' id='$pid' name='in_".$pid." data-pid='".$pid."'></td>";
                                                     
                                                     echo "</tr>";

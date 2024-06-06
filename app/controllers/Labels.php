@@ -110,6 +110,9 @@ class Labels
             if(isset($URL[3])) {
                 $date = $URL[3]; 
             }
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"]; 
+            }
         } else {
             if(isset($_GET["id"])) {
                 $id = $_GET["id"];
