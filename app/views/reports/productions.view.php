@@ -166,7 +166,13 @@ if(isset($data["planned"])) {
 }
 if(isset($data["planned"])) {
     foreach($data["planned"] as $plan) {
+        if(!isset($planned_array[$plan["p_id"]][$plan["u_id"]])) {
+            $planned_array[$plan["p_id"]][$plan["u_id"]] = 0;
+        }
         $planned_array[$plan["p_id"]][$plan["u_id"]] += $plan["amount"];
+        if(!isset($planned_array[$plan["p_id"]]["total"])) {
+            $planned_array[$plan["p_id"]]["total"] = 0;
+        }
         $planned_array[$plan["p_id"]]["total"] += $plan["amount"];
     }
 }

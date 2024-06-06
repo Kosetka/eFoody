@@ -87,31 +87,35 @@ class Sale
             $v_sold = isset($_POST["sale_description"]) ? 2 : 1;
             $sales = new Sales;
             $check_sold = 0;
-            foreach ($_POST["p_id"] as $key => $value) {
-                if ($value > 0) {
-                    $check_sold = 1;
-                    if($h_id == 0) {
-                        $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => $sale_description, "p_id" => $key, "s_amount" => $value];
-                    } else {
-                        $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => $sale_description, "p_id" => $key, "s_amount" => $value, "h_id" => $h_id];
-                    }
-                    $sales->insert($toUpdate);
-                }
-            }
-            $placeVisited = new PlacesModel;
-            $v = $placeVisited->checkVisit($c_id);
-            if($check_sold == 1) {
-                if(empty($v)) {
-                    if($h_id == 0) {
-                        $placeVisited->insert(["u_id" => $u_id, "sold" => $v_sold, "c_id" => $c_id]);
-                    } else {
-                        $placeVisited->insert(["u_id" => $h_id, "sold" => $v_sold, "c_id" => $c_id, "h_id" => $u_id]);
+            if(isset($_POST["p_id"])) {
+                foreach ($_POST["p_id"] as $key => $value) {
+                    if ($value > 0) {
+                        $check_sold = 1;
+                        if($h_id == 0) {
+                            $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => $sale_description, "p_id" => $key, "s_amount" => $value];
+                        } else {
+                            $toUpdate = ["u_id" => $u_id, "c_id" => $c_id, "sale_description" => $sale_description, "p_id" => $key, "s_amount" => $value, "h_id" => $h_id];
+                        }
+                        $sales->insert($toUpdate);
                     }
                 }
+                $placeVisited = new PlacesModel;
+                $v = $placeVisited->checkVisit($c_id);
+                if($check_sold == 1) {
+                    if(empty($v)) {
+                        if($h_id == 0) {
+                            $placeVisited->insert(["u_id" => $u_id, "sold" => $v_sold, "c_id" => $c_id]);
+                        } else {
+                            $placeVisited->insert(["u_id" => $h_id, "sold" => $v_sold, "c_id" => $c_id, "h_id" => $u_id]);
+                        }
+                    }
+                }
+                $data['success'] = "Produkty zraportowane pomyślnie";
+                unset($_POST);
+            } else {
+                $data['errors'] = "Brak produktów do zraportowania";
+
             }
-            $data['success'] = "Produkty zraportowane pomyślnie";
-            unset($_POST);
-            $data['errors'] = $sales->errors;
         }
 
         $cities = new Shared();

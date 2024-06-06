@@ -9,7 +9,7 @@
 
                 <?php if (!empty($errors)): ?>
                     <div class="alert alert-danger">
-                        <?= implode("<br>", $errors) ?>
+                        <?=$errors?>
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($success)): ?>

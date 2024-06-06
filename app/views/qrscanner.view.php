@@ -128,7 +128,7 @@
                             </table>
                         </div>
                     </div>
-                    <button class="w-100 btn btn-lg btn-primary" id="sendButton" type="submit">Dodaj skan</button>
+                    <button class="w-100 btn btn-lg btn-primary" id="sendButton" type="submit" hidden>Dodaj skan</button>
                 </form>
                 <?php
                 ?>
