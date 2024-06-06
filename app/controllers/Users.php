@@ -69,6 +69,9 @@ class Users
                 $_POST["helper_for"] = NULL;
                 //unset($_POST["helper_for"]);
             }
+            if(!isset($_POST["active"])) {
+                $_POST["active"] = 0;
+            }
             $URL = $_GET['url'] ?? 'home';
             $URL = explode("/", trim($URL, "/"));
             $user_id = $URL[2];
