@@ -79,6 +79,11 @@ class ProductsModel
         $query = "select * from $this->table WHERE prod_type = 1";
         return $this->query($query);
     }
+    public function getAllFullProductsSorted()
+    {
+        $query = "select * from $this->table WHERE prod_type = 1 ORDER BY p_name ASC";
+        return $this->query($query);
+    }
     public function getAllSubProducts()
     {
         $query = "select * from $this->table WHERE prod_type = 0";

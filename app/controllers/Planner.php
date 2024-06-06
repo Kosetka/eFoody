@@ -428,6 +428,7 @@ class Planner
 
         $this->view('planner.splitted', $data);
     }
+
     public function myplan() {
         if (empty($_SESSION['USER']))
             redirect('login');
@@ -621,5 +622,80 @@ class Planner
         $data["date_plan"] = $date;
 
         $this->view('planner.producted', $data);
+    }
+
+    public function change() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $data["show_list"] = 0;
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+            $data["show_list"] = 3;
+        } else {
+            if(isset($_GET["date"])) {
+                $data["show_list"] = 1;
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        if(isset($URL[3])) {
+            $product_id = $URL[3];
+            $data["show_list"] = 2;
+            $data["product_id"] = $product_id;
+        }
+        //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
+        $w_id = 1;
+        
+        if(isset($_POST["wyborOpcji"])) {
+            $new_p_id = $_POST["wyborOpcji"];
+
+            $split = new Plannersplit();
+            $split->updateChange($date, $product_id, $new_p_id);
+            $planned = new Plannerproduction();
+            $planned->updateChange($date, $product_id, $new_p_id, $w_id);
+            $producted = new Plannerproducted();
+            $producted->updateChange($date, $product_id, $new_p_id, $w_id);
+            $cargo = new Cargo();
+            $cargo->updateChange($date, $product_id, $new_p_id, $w_id);
+
+            redirect('planner/change/'.$date);
+        }
+
+        $plan = new Plannersplit();
+        if(!empty($plan->getAll($date))) {
+            foreach ($plan->getAll($date) as $key => $value) {
+                $data["split"][$value->u_id][$value->p_id] = (array) $value;
+            }
+        }
+
+        $users = new User();
+        foreach ($users->getTraders() as $key => $value) {
+            $data["traders"][$value->id] = $value;
+        }
+
+        $planned = new Plannerproduction();
+        if(!empty($planned->getPlanned($date, $w_id))) {
+            foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                $data["planned"][$value->id] = (array) $value;
+            }
+        }
+        $plan = new Plannerproducted();
+        if(!empty($plan->getAll($date))) {
+            foreach ($plan->getAll($date) as $key => $value) {
+                $data["producted"][$value->p_id] = (array) $value;
+            }
+        }
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProductsSorted() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
+
+        $data["date_plan"] = $date;
+
+        $this->view('planner.change', $data);
     }
 }

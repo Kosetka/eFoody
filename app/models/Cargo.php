@@ -93,4 +93,10 @@ class Cargo
 		return false;
 
 	}
+
+    public function updateChange($date_split, $p_id, $new_p_id, $w_id)
+	{
+		$query = "UPDATE $this->table SET p_id = $new_p_id WHERE date = '$date_split 06:00:00' AND p_id = $p_id AND w_id = $w_id;";
+        return $this->query($query);
+	}
 }

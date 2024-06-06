@@ -53,4 +53,10 @@ class Plannersplit
 
 	}
 
+    public function updateChange($date_split, $p_id, $new_p_id)
+	{
+		$query = "UPDATE $this->table SET p_id = $new_p_id WHERE date_split = '$date_split' AND p_id = $p_id;";
+        return $this->query($query);
+	}
+
 }
