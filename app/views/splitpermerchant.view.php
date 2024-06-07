@@ -144,7 +144,7 @@
 
                                                     echo '<td style="width: 100px">'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
                                                     <td>'.$product["amount"].'</td>';
-                                                    if(isset($data["cargo"])) {
+                                                    if(isset($data["cargo"][$pid]["amount"])) {
                                                         $am = $data["cargo"][$pid]["amount"];
                                                     } else {
                                                         $am = 0;
