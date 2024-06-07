@@ -246,7 +246,7 @@ $sum_prod = 0;
 $sum_cargo = 0;
 $sum_wyd = [];
 $sum_split = [];
-$num_rows = $num_traders*3+7;
+$num_rows = $num_traders*3+8;
 $mess = "<table style='border: 1px solid'>
     <thead style='border: 1px solid'>
         <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
@@ -259,7 +259,8 @@ $mess = "<table style='border: 1px solid'>
             <th rowspan='2'style='border: 1px solid #000; '>Przygotowane</th>
             <th rowspan='2'style='border: 1px solid #000; '>Planowane</th>
             <th rowspan='2' style='border: 1px solid #000; width: 4%'>PR/PL %</th>
-            <th rowspan='2' style='border: 1px solid #000; width: 4%'>W/PL%</th>";
+            <th rowspan='2' style='border: 1px solid #000; width: 4%'>W/PL%</th>
+            <th rowspan='2' style='border: 1px solid #000; width: 4%'>W/PR%</th>";
             foreach($data["users"] as $trader) {
                 $mess.= "<th colspan='3' style='border: 1px solid #000; width: 12%'>$trader->first_name $trader->last_name</th>";
             }
@@ -285,6 +286,11 @@ $mess.= "</tr>
             $sum_prod += $product_val["total"];
             $sum_cargo += $cargo_array[$product_key]["total"];
             
+            $wpr = "";
+            if(getPercent($cargo_array[$product_key]["total"], $total_prod[$product_key], 1) != 100) {
+                $wpr = " background-color: red;";
+            }
+
             $mess.="
         <tr style='text-align: center;'>
             <td style='border: 1px solid;'>".$data["fullproducts"][$product_key]["p_name"]."</td>
@@ -293,7 +299,8 @@ $mess.= "</tr>
             <td style='border: 1px solid;'>".$total_prod[$product_key]."</td>
             <td style='border: 1px solid;'>".$product_val["total"]."</td>
             <td style='border: 1px solid;'>".getPercent($total_prod[$product_key], $product_val["total"], 1)."%</td>
-            <td style='border: 1px solid;'>".getPercent($cargo_array[$product_key]["total"], $product_val["total"], 1)."%</td>";
+            <td style='border: 1px solid;'>".getPercent($cargo_array[$product_key]["total"], $product_val["total"], 1)."%</td>
+            <td style='border: 1px solid; $wpr'>".getPercent($cargo_array[$product_key]["total"], $total_prod[$product_key], 1)."%</td>";
             foreach($data["users"] as $trader) {
                 if(!isset($sum_wyd[$trader->id])) {
                     $sum_wyd[$trader->id] = 0;
@@ -324,6 +331,10 @@ $mess.= "</tr>
         $mess.="
     </tbody>";
     if(isset($data["planned"])) {
+        $wpr = "";
+        if(getPercent($sum_cargo,$total_prod["total"],1) != 100) {
+            $wpr = " background-color: red;";
+        }
         $mess .= "<tfoot>
             <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
                 <td colspan='2' style='border: 1px solid;'>TOTAL</td>
@@ -331,7 +342,8 @@ $mess.= "</tr>
                 <td style='border: 1px solid;'>".$total_prod["total"]."</td>
                 <td style='border: 1px solid;'>".$sum_prod."</td>
                 <td style='border: 1px solid;'>".getPercent($total_prod["total"],$sum_prod, 1)."%</td>
-                <td style='border: 1px solid;'>".getPercent($sum_cargo,$sum_prod,1)."%</td>";
+                <td style='border: 1px solid;'>".getPercent($sum_cargo,$sum_prod,1)."%</td>
+                <td style='border: 1px solid; $wpr'>".getPercent($sum_cargo,$total_prod["total"],1)."%</td>";
                 $even = true;
             foreach($data["users"] as $trader) {
                 $bg_color = "";
