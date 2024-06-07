@@ -53,4 +53,14 @@ class Plannerproducted
         return $this->query($query);
 	}
 
+    public function getLast14Days()
+    {
+        $query = "SELECT date_producted, SUM(amount) AS total_amount
+        FROM $this->table
+        WHERE date_producted >= CURDATE() - INTERVAL 14 DAY
+        GROUP BY date_producted
+        ORDER BY date_producted ASC;";
+        return $this->query($query);
+    }
+
 }

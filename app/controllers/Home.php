@@ -30,6 +30,18 @@ class Home
 		$data["companies_added"]["today"] = $scan->getAdded($date);
 		$data["companies_added"]["yesterday"] = $scan->getAdded($date_yesterday);
 
-		$this->view('home', $data);
+		$plan = new Plannerproducted();
+        $data["producted_last14days"] = $plan->getLast14Days();
+        
+
+
+		if($_SESSION["USER"]->u_role == 1) {
+			$this->view('home.role1', $data);
+		} else {
+			$this->view('home', $data);
+
+		}
+
+
 	}
 }
