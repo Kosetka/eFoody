@@ -73,7 +73,19 @@ class ReturnsModel
         if (empty($result)) {
             return [];
         }
-    
+
+        return $result;
+    }
+    public function returnsByDate($date_from, $date_to): array
+    {
+        $query = "SELECT * FROM $this->table WHERE date BETWEEN '$date_from' AND '$date_to'";
+
+        $result = $this->query($query);
+
+        if (empty($result)) {
+            return [];
+        }
+
         return $result;
     }
 }
