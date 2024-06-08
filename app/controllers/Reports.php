@@ -582,8 +582,19 @@ class Reports
 
         //show($data["returns"]);
 
+        //$date_from = '2024-05-01';
         $sales = new Sales;
-        $data["sales"] = $sales->reportData($date_from, $date_to);
+        //$data["sales"] = $sales->getAllData($date_from, $date_to);
+        if (!empty($sales->getAllData($date_from, $date_to))) {
+            foreach ($sales->getAllData($date_from, $date_to) as $sale) {
+                if ($sale->sale_description == "") {
+                    $sale->sale_description = "scan";
+                }
+                $data["sales"][$sale->sale_description][$sale->p_id][$sale->u_id][] = $sale;
+            }
+        }
+
+        //show($data["sales"]);
 
         $this->view('profitability.total', $data);
     }
