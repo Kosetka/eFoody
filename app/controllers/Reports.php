@@ -131,7 +131,7 @@ class Reports
             }
             if ($param1 == 0) {
                 $last_monday = date("Y-m-d", strtotime("-7 days", strtotime("last monday")));
-                $last_sunday = date("Y-m-d", strtotime("+7 days", strtotime($last_monday)));
+                $last_sunday = date("Y-m-d", strtotime("+6 days", strtotime($last_monday)));
                 $date_from = $last_monday . " 00:00:00";
                 $date_to = $last_sunday . " 23:59:59";
                 $param1 = $last_monday; // tu sprawdzić
@@ -309,7 +309,7 @@ class Reports
             }
             if ($param1 == 0) {
                 $last_monday = date("Y-m-d", strtotime("-7 days", strtotime("last monday")));
-                $last_sunday = date("Y-m-d", strtotime("+7 days", strtotime($last_monday)));
+                $last_sunday = date("Y-m-d", strtotime("+6 days", strtotime($last_monday)));
                 $date_from = $last_monday . " 00:00:00";
                 $date_to = $last_sunday . " 23:59:59";
                 $param1 = $last_monday; // tu sprawdzić
@@ -494,7 +494,7 @@ class Reports
             }
             if ($param1 == 0) {
                 $last_monday = date("Y-m-d", strtotime("-7 days", strtotime("last monday")));
-                $last_sunday = date("Y-m-d", strtotime("+7 days", strtotime($last_monday)));
+                $last_sunday = date("Y-m-d", strtotime("+6 days", strtotime($last_monday)));
                 $date_from = $last_monday . " 00:00:00";
                 $date_to = $last_sunday . " 23:59:59";
                 $param1 = $last_monday; // tu sprawdzić
