@@ -33,4 +33,48 @@ class Smsapi
 
         $this->view('smsapi.result', $data);
     }
+
+    public function show() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        if(isset($URL[3])) {
+            $u_id = $URL[3];
+        } else {
+            if(isset($_GET["guardian"])) {
+                $u_id = $_GET["guardian"];
+            } else {
+                $u_id = 0;
+            }
+        }
+
+        $data["guardian"] = $u_id;
+        $data["date_plan"] = $date;
+        
+        $users = new User;
+        $data["traders"] = $users->getAllTraders("users", TRADERS);
+
+        $dateObject = new DateTime($date);
+        $dateObject->modify('-3 days');
+        $date_from = $dateObject->format('Y-m-d');
+
+        $sms = new Smsapimodel;
+        $data["sms"] = $sms->getSMS($date_from, $date);
+
+//show($data["sms"]);
+        $this->view('smsapi.show', $data);
+    }
 }
