@@ -52,4 +52,25 @@ class PriceModel
         $query = "select * from $this->table WHERE p_id = $id ORDER by date_to DESC";
         return $this->query($query);
     }
+
+    public function getGroupedPrices($date_from, $date_to) {
+        $query = "SELECT
+            p_id,
+            date_from,
+            date_to,
+            SUM(production_cost) AS total_production_cost,
+            SUM(price) AS total_price
+        FROM
+            $this->table
+        WHERE
+            date_from <= '$date_from' OR date_to >= '$date_to'
+        GROUP BY
+            p_id,
+            date_from,
+            date_to
+        ORDER BY
+            p_id,
+            date_from;";
+        return $this->query($query);
+    }
 }

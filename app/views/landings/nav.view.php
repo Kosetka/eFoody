@@ -43,16 +43,17 @@
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false"><i class="fas fa-user fa-fw"></i><?=getYourData("first_name") . " " . getYourData("last_name")?></a>
+                aria-expanded="false"><i
+                    class="fas fa-user fa-fw"></i><?= getYourData("first_name") . " " . getYourData("last_name") ?></a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <?php
+                <?php
                 /*$warehoues_id = getYourData("u_warehouse");
                 $current_city = $_SESSION["CITIES"][$warehoues_id];
                 $current_city_detailed = $current_city["c_name"] . "_" . $current_city["wh_name"];
                 echo "<b>Witaj</b>, </br>".getYourData("first_name") . " " . 
                     getYourData("last_name") . "</br>E-mail: " . 
                     getYourData("email") . "</br> Uprawnienia: " . $_SESSION["ROLE"]->role_name . "</br>Magazyn: " . $current_city_detailed */
-            ?>
+                ?>
                 <li><a class="dropdown-item" href="<?= ROOT ?>/profile/<?= getYourData("id") ?>">Twój profil</a>
                 </li>
 

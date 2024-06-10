@@ -218,8 +218,10 @@ class Products
                 $product->update($id_product, $_POST);
                 
                 $p_alergens->delete($id_product,"p_id");
-                foreach($_POST["alergens"] as $key => $value) {
-                    $p_alergens->insert(["p_id" => $id_product, "a_id" => $key]);
+                if(isset($_POST["alergens"])) {
+                    foreach($_POST["alergens"] as $key => $value) {
+                        $p_alergens->insert(["p_id" => $id_product, "a_id" => $key]);
+                    }
                 }
 
                 $data['success'] = "Edycja produktu/SKU pomyślna";

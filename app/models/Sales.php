@@ -81,22 +81,10 @@ class Sales
         return $this->query($query)[0]->total;
     }
 
-    public function getProducts(): array
+    public function getAllData($date_from, $date_to)
     {
-        $this->product = [];
-        $array = [];
-        $products = new ProductsModel;
-        $arr = $products->getAll($this->table);
-
-        foreach ($arr as $product) {
-            //foreach ($role as $r) {
-            $product = (array) $product;
-            $array[] = (array) $product;
-            //}
-        }
-        $this->products = $array;
-        //show($array);
-        return $array;
+        $query = "select * from $this->table WHERE date >= '$date_from 00:00:00' AND date <= '$date_to 23:59:59'";
+        return $this->query($query);
     }
 
     public function reportData($date_from, $date_to): array
@@ -119,10 +107,10 @@ class Sales
         if (empty($result)) {
             return [];
         }
-    
+
         return $result;
     }
 
-    
-    
+
+
 }

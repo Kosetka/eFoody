@@ -51,27 +51,27 @@
                         <label for="date_from" class="col-sm-2 col-form-label">Data od</label>
                         <div class="col-sm-10">
                             <input type="datetime-local" class="form-control" id="date_from" name="date_from"
-                                value="<?php echo $th2; ?>">
+                                value="<?php echo $th2; ?>" required>
                         </div>
                     </div>
                     <div class="form-group row m-3">
                         <label for="date_to" class="col-sm-2 col-form-label">Data do:</label>
                         <div class="col-sm-10">
                             <input type="datetime-local" class="form-control" id="date_to" name="date_to"
-                                value="<?php echo $th3; ?>">
+                                value="<?php echo $th3; ?>" required>
                         </div>
                     </div>
                     <div class="form-group row m-3">
                         <label for="production_cost" class="col-sm-2 col-form-label">Koszt produkcji:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="production_cost" name="production_cost"
-                                value="<?php echo $th4; ?>">
+                            <input type="number" class="form-control" id="production_cost" name="production_cost"
+                                value="<?php echo $th4; ?>" required min=1>
                         </div>
                     </div>
                     <div class="form-group row m-3">
                         <label for="price" class="col-sm-2 col-form-label">Cena sprzedaży:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="price" name="price" value="<?php echo $th5; ?>">
+                            <input type="number" class="form-control" id="price" name="price" value="<?php echo $th5; ?>" required min=1>
                         </div>
                     </div>
                     <div class="form-group row m-3">
