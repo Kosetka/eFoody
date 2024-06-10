@@ -61,6 +61,9 @@ class GetCargo
                 $date = date('Y-m-d');
             }
         }
+
+        $u_set_id = $_SESSION["USER"]->id;
+
         //w przyszłości zmienić gdyby było więcej magazynów
         $w_id = 1;
 
@@ -76,7 +79,7 @@ class GetCargo
                 $cargo->deleteByDateId($date_now, $u_id);
                 foreach ($prod as $key => $value) {
                     $am = $value["amount"];
-                    $toUpdate = ["w_id" => $w_id, "u_id" => $u_id, "p_id" => $key, "amount" => $am, "date" => $date_now];
+                    $toUpdate = ["w_id" => $w_id, "u_id" => $u_id, "p_id" => $key, "amount" => $am, "date" => $date_now, "u_set_id" => $u_set_id];
                     $cargo->insert($toUpdate);
                 }
                 $data['success'] = "Zapisano pomyślnie";
