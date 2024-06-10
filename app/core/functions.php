@@ -26,6 +26,9 @@ function getYourData(string $param)
 
 function getMargin($p, $c)
 {
+    if($c == 0) {
+        return 0;
+    }
 	return round(($p - $c) / $p * 100, 2);
 }
 function getPercent($p, $c, $cel = 2)

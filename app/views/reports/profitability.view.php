@@ -228,7 +228,13 @@ if (isset($data["planned"])) {
             foreach ($prod_val as $usr_key => $usr_val) {
                 //show($usr_key);
                 foreach ($usr_val as $pri) {
+                    if(!isset($prices_returns_array[$prod_key][$usr_key])) {
+                        $prices_returns_array[$prod_key][$usr_key] = 0;
+                    }
                     $prices_returns_array[$prod_key][$usr_key] += $pri->amount;
+                    if(!isset($prices_returns_array[$usr_key]["total"])) {
+                        $prices_returns_array[$usr_key]["total"] = 0;
+                    }
                     $prices_returns_array[$usr_key]["total"] += $pri->amount;
                     if (isset($data["prices"][$prod_key])) {
                         foreach ($data["prices"][$prod_key] as $price_temp) {
@@ -281,6 +287,9 @@ if (isset($data["planned"])) {
                                 $prices_cargo_price_array[$trader->id]["total"] += $price_temp->total_price * $plan["amount"];
                                 $prices_cargo_cost_array[$plan["p_id"]][$trader->id] += $price_temp->total_production_cost * $plan["amount"];
                                 $prices_cargo_cost_array[$trader->id]["total"] += $price_temp->total_production_cost * $plan["amount"];
+                                if(!isset($prices_producted_price_array[$plan["p_id"]])) {
+                                    $prices_producted_price_array[$plan["p_id"]] = 0;
+                                }
                                 $prices_producted_price_array[$plan["p_id"]] += $price_temp->total_price * $plan["amount"];
                                 $prices_producted_price_array["total"] += $price_temp->total_price * $plan["amount"];
                             }
@@ -452,6 +461,8 @@ if (isset($data["planned"])) {
     }
 }
 
+//show($data["prices"]);
+
 
 
 $total_prod = [];
@@ -523,7 +534,8 @@ foreach ($planned_array as $product_key => $product_val) {
     $color_name = "";
     if (isset($data["prices"][$product_key])) {
         foreach ($data["prices"][$product_key] as $prprr) {
-            $title .= "[Cena sprzedaży: " . $prprr->total_price . "; Koszt produkcji: " . $prprr->total_production_cost . "; Okres obowiązywania: " . $prprr->date_from . " -> " . $prprr->date_to . "] ";
+            $title .= "[Cena sprzedaży: " . $prprr->total_price . "; Koszt produkcji: " . $prprr->total_production_cost . "; Okres obowiązywania: " . $prprr->date_from . " -> " . $prprr->date_to . "]
+";
         }
         $color_name = "";
     } else {

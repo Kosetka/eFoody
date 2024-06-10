@@ -63,7 +63,7 @@ class PriceModel
         FROM
             $this->table
         WHERE
-            date_from <= '$date_from' AND date_to >= '$date_to'
+            date_from <= '$date_from' OR date_to >= '$date_to'
         GROUP BY
             p_id,
             date_from,
