@@ -95,3 +95,21 @@ function generateTreeEditing($items) {
     $html .= '</ul>';
     return $html;
 }
+
+function isDateInRange($date) { //do SMS
+    $inputDate = new DateTime($date);
+    $now = new DateTime();
+
+    // Dni tygodnia: 0 (niedziela) - 6 (sobota)
+    $today = (int)$now->format('w');
+
+    if ($today >= 2 && $today <= 5) { // od wtorku do piątku
+        $start = (clone $now)->setTime(15, 0, 0)->modify('-1 day');
+        $end = (clone $now)->setTime(15, 0, 0);
+    } else { // sobota, niedziela, poniedziałek
+        $start = (clone $now)->setTime(15, 0, 0)->modify('last Friday');
+        $end = (clone $now)->setTime(15, 0, 0);
+    }
+
+    return $inputDate >= $start && $inputDate <= $end;
+}
