@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <video
-                        style="max-height:200px; background-color: lightgrey;box-shadow: 0px 8px 20px 8px rgba(66, 68, 90, 1); margin-bottom: 30px;"
+                        style="min-height: 200px; max-height:200px; background-color: lightgrey;box-shadow: 0px 8px 20px 8px rgba(66, 68, 90, 1); margin-bottom: 30px;"
                         id="preview"></video>
                 </div>
                 <form method="post">
@@ -203,44 +203,56 @@ if(isset($_SESSION["USER"]->camera)) {
             src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
         <script type="text/javascript">
             let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false });
-    
+
             function startScanner(camIndex) {
-                Instascan.Camera.getCameras().then(function (cameras) {
-                    if (cameras.length > 0) {
-                    console.log(cameras);
-                    // 0 front
-                    // 1 back
-                    if (camIndex >= cameras.length) {
-                        alert("Invalid camera index");
-                        return;
-                    }
-                    scanner.start(cameras[camIndex]).catch(function (e) {
-                        console.error("Error starting camera:", e);
-                        alert("Error starting camera: " + e.message);
-                    });
-                    } else {
-                    alert("No cameras found.");
-                    }
-                }).catch(function (e) {
-                    console.error(e);
-                });
+            Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                console.log(cameras);
+                if (camIndex >= cameras.length) {
+                    console.log("Invalid camera index");
+                    return;
                 }
-
-                // Use this function to stop the scanner before starting it again
-                function stopScanner() {
-                scanner.stop().then(function () {
-                    console.log("Scanner stopped.");
-                }).catch(function (e) {
-                    console.error("Error stopping scanner:", e);
+                scanner.start(cameras[camIndex]).catch(function (e) {
+                    console.error("Error starting camera:", e);
+                    console.log("Error starting camera: " + e.message);
                 });
+                } else {
+                    console.log("No cameras found.");
                 }
+            }).catch(function (e) {
+                console.error(e);
+            });
+            }
 
-                // Attempt to start the scanner with a specific camera
-                startScanner(<?=$cam?>); // Pass the camera index dynamically
+            function stopScanner() {
+            scanner.stop().then(function () {
+                console.log("Scanner stopped.");
+            }).catch(function (e) {
+                console.error("Error stopping scanner:", e);
+            });
+            }
 
-                window.addEventListener("beforeunload", function () {
+            startScanner(<?=$cam?>); // Pass the camera index dynamically
+
+            document.addEventListener("visibilitychange", function () {
+            if (document.visibilityState === 'hidden') {
                 stopScanner();
-                });
+            } else if (document.visibilityState === 'visible') {
+                startScanner(<?=$cam?>);
+            }
+            });
+
+            window.addEventListener("blur", function () {
+            stopScanner();
+            });
+
+            window.addEventListener("focus", function () {
+            startScanner(<?=$cam?>);
+            });
+
+            window.addEventListener("beforeunload", function () {
+            stopScanner();
+            });
 
 
 
