@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <video
-                        style="min-height: 200px; max-height:200px; background-color: lightgrey;box-shadow: 0px 8px 20px 8px rgba(66, 68, 90, 1); margin-bottom: 30px;"
+                        style="min-height: 100px; max-height:200px; background-color: lightgrey;box-shadow: 0px 8px 20px 8px rgba(66, 68, 90, 1); margin-bottom: 30px;"
                         id="preview"></video>
                 </div>
                 <form method="post">
