@@ -111,6 +111,10 @@ class Sales
         return $result;
     }
 
-
+    public function getCompanyless($date)
+    {
+        $query = "select * from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59' AND c_id = 0 ORDER BY date DESC;";
+        return $this->query($query);
+    }
 
 }

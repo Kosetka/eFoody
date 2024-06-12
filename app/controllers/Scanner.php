@@ -141,4 +141,56 @@ class Scanner
         return $com;
     }
 
+    public function change() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        $data["date"] = $date;
+
+        if(isset($_POST) && !empty($_POST)) {
+            $sales = new Sales();
+            foreach($_POST["selected_companies"] as $change) {
+                if($change["company_id"] != 0) {
+                    $sales->update($change["id"], ["c_id" => $change["company_id"]]);
+                }
+            }
+            //zmiany zapisane
+        }
+
+
+
+
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProductsSorted() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
+        $users = new User();
+        foreach ($users->getAllUsers() as $key => $value) {
+            $data["users"][$value->id] = $value;
+        }
+        $companies = new Companies();
+        foreach ($companies->getAll("companies") as $key => $value) {
+            $data["companies"][$value->id] = $value;
+        }
+        $sales = new Sales();
+        if(!empty($sales->getCompanyless($date))) {
+            foreach ($sales->getCompanyless($date) as $key => $value) {
+                $data["scans"][$value->id] = $value;
+            }
+        }
+
+        $this->view('scanner.change', $data);
+    }
 }
