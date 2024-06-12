@@ -203,18 +203,47 @@ if(isset($_SESSION["USER"]->camera)) {
             src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
         <script type="text/javascript">
             let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false });
-            Instascan.Camera.getCameras().then(function (cameras) {
-                if (cameras.length > 0) {
+    
+            function startScanner(camIndex) {
+                Instascan.Camera.getCameras().then(function (cameras) {
+                    if (cameras.length > 0) {
                     console.log(cameras);
-                    //0 front
-                    //1 back
-                    scanner.start(cameras[<?=$cam?>]); //dla telefonów 2 // 0 dla komputerów //2 firmowe
-                } else {
-                    alert("no camera Found");
+                    // 0 front
+                    // 1 back
+                    if (camIndex >= cameras.length) {
+                        alert("Invalid camera index");
+                        return;
+                    }
+                    scanner.start(cameras[camIndex]).catch(function (e) {
+                        console.error("Error starting camera:", e);
+                        alert("Error starting camera: " + e.message);
+                    });
+                    } else {
+                    alert("No cameras found.");
+                    }
+                }).catch(function (e) {
+                    console.error(e);
+                });
                 }
-            }).catch(function (e) {
-                console.error(e);
-            });
+
+                // Use this function to stop the scanner before starting it again
+                function stopScanner() {
+                scanner.stop().then(function () {
+                    console.log("Scanner stopped.");
+                }).catch(function (e) {
+                    console.error("Error stopping scanner:", e);
+                });
+                }
+
+                // Attempt to start the scanner with a specific camera
+                startScanner(<?=$cam?>); // Pass the camera index dynamically
+
+                window.addEventListener("beforeunload", function () {
+                stopScanner();
+                });
+
+
+
             //scan then qr code part
             scanner.addListener('scan', function (c) {
             document.getElementById("tab-show").style.display = "";
