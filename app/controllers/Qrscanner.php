@@ -31,6 +31,9 @@ class QRScanner
                     $data['error'] = "Odświeżenie strony, nie dodano skanu";
                 } else {
                     $c_id = $_POST["c_fullname_id"];
+                    if($c_id == "undefined") {
+                        $c_id = 0;
+                    }
                     $p_id = $_POST["prod_p_id"];
                     $sales = new Sales;
                     if($h_id == 0) {
