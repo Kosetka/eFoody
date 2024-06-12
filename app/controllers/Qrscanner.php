@@ -54,7 +54,7 @@ class QRScanner
                             if($h_id == 0) {
                                 $placeVisited->insert(["u_id" => $u_id, "sold" => 1, "c_id" => $city_id]);
                             } else {
-                                $placeVisited->insert(["u_id" => $u_id, "sold" => 1, "c_id" => $city_id, "h_id" => $u_id]);
+                                $placeVisited->insert(["u_id" => $u_id, "sold" => 1, "c_id" => $city_id, "h_id" => $h_id]);
                             }
                         }
                     }
