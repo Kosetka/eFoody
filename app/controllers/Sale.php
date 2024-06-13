@@ -156,4 +156,94 @@ class Sale
 
         $this->view('sale.new', $data);
     }
+
+    public function report()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+       
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date_from = $URL[2];
+        } else {
+            if(isset($_GET["date_from"])) {
+                $date_from = $_GET["date_from"];
+            } else {
+                $date_from = date('Y-m-d');
+            }
+        }
+        if(isset($URL[3])) {
+            $date_to = $URL[3];
+        } else {
+            if(isset($_GET["date_from"])) {
+                $date_to = $_GET["date_to"];
+            } else {
+                $date_to = date('Y-m-d');
+            }
+        }
+        if(isset($URL[4])) {
+            $guardian = $URL[4];
+        } else {
+            if(isset($_GET["guardian"])) {
+                $guardian = $_GET["guardian"];
+            } else {
+                $guardian = 0;
+            }
+        }
+
+        $data["date_from"] = $date_from;
+        $data["date_to"] = $date_to;
+        $data["guardian"] = $guardian;
+
+        $users = new User();
+        foreach ($users->getAllTraders("users", ALLTRADERS) as $key => $value) {
+            $data["users"][$value->id] = $value;
+        }
+        $places = new PlacesModel();
+        if(!empty($places->getAllPlaces($date_from, $date_to))) {
+            foreach($places->getAllPlaces($date_from, $date_to) as $key => $value) {
+                $data["places"][$value->c_id] = $value;
+            }
+        }
+        $companies = new Companies();
+        if(!empty($companies->getAllCompanies("companies"))) {
+            foreach($companies->getAllCompanies("companies") as $key => $value) {
+                $data["companies"][$value->id] = $value;
+            }
+        }
+        $sales = new Sales;
+        if (!empty($sales->getAllData($date_from, $date_to))) {
+            foreach ($sales->getAllData($date_from, $date_to) as $sale) {
+                if ($sale->sale_description == "") {
+                    $sale->sale_description = "scan";
+                }
+                $data["sales"][$sale->sale_description][$sale->c_id]["u_id"] = $sale->u_id;
+                $data["sales"][$sale->sale_description][$sale->c_id]["h_id"] = $sale->h_id;
+                $data["sales"][$sale->sale_description][$sale->c_id][$sale->p_id]["p_id"] = $sale->p_id;
+                $data["sales"][$sale->sale_description][$sale->c_id]["date"] = $sale->date;
+                if(!isset($data["sales"][$sale->sale_description][$sale->c_id][$sale->p_id]["s_amount"])) {
+                    $data["sales"][$sale->sale_description][$sale->c_id][$sale->p_id]["s_amount"] = 0;
+                }
+                $data["sales"][$sale->sale_description][$sale->c_id][$sale->p_id]["s_amount"] += $sale->s_amount;
+            }
+        }
+
+        $products = new ProductsModel;
+        $temp = $products->getAllFullProducts();
+        foreach ($temp as $key => $value) {
+            $data["products"][$value->id] = $value;
+        }
+
+        $prices = new PriceModel();
+        foreach ($prices->getGroupedPrices($date_from, $date_to) as $price) {
+            $data["prices"][$price->p_id][] = $price;
+        }
+
+
+    
+
+        $this->view('sale.report', $data);
+    }
 }

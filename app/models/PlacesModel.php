@@ -54,4 +54,11 @@ class PlacesModel
     
         return $result;
     }
+
+    public function getAllPlaces($date_from, $date_to)
+    {
+        //$today = date("Y-m-d");
+        $query = "select * from $this->table WHERE date>= '$date_from 00:00:00' AND date <= '$date_to 23:59:59'";
+        return $this->query($query);
+    }
 }
