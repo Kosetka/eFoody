@@ -198,7 +198,7 @@ class Sale
         $data["guardian"] = $guardian;
 
         $users = new User();
-        foreach ($users->getAllUsers() as $key => $value) {
+        foreach ($users->getAllTraders("users", ALLTRADERS) as $key => $value) {
             $data["users"][$value->id] = $value;
         }
         $places = new PlacesModel();
@@ -228,6 +228,17 @@ class Sale
                 }
                 $data["sales"][$sale->sale_description][$sale->c_id][$sale->p_id]["s_amount"] += $sale->s_amount;
             }
+        }
+
+        $products = new ProductsModel;
+        $temp = $products->getAllFullProducts();
+        foreach ($temp as $key => $value) {
+            $data["products"][$value->id] = $value;
+        }
+
+        $prices = new PriceModel();
+        foreach ($prices->getGroupedPrices($date_from, $date_to) as $price) {
+            $data["prices"][$price->p_id][] = $price;
         }
 
 

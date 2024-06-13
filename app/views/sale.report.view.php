@@ -5,10 +5,16 @@
     <?php require_once 'landings/sidebar.left.view.php' ?>
     <div id="layoutSidenav_content">
     <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 100%">
+    <div id="modal" class="modal">
+                    <span class="close">&times;</span>
+                    <div class="modal-content">
+                        <img id="modal-image" src="" alt="Modal Image">
+                    </div>
+                </div>
             <div class="card mb-4">
                 <div class="card-header">
                 <?php
-                //show($data["split"]);
+                //show($data["sales"]);
                     $date_from = "";
                     $date_to = "";
                     if (isset($data["date_from"])) {
@@ -50,6 +56,9 @@
                                             foreach ($data["users"] as $user) {
                                                 $selected = "";
                                                 $full_name = $user->first_name . " " . $user->last_name;
+                                                if(!empty($user->helper_for)) {
+                                                    $full_name .= " (". $data["users"][$user->helper_for]->first_name . " " . $data["users"][$user->helper_for]->last_name .")";
+                                                }
                                                 $id = $user->id;
                                                 if($data["guardian"] == $id) {
                                                     $selected = " selected";
@@ -67,7 +76,7 @@
                 </div>
                 <?php
 
-                show($data["sales"]);
+                //show($data);
                 ?>
                     <div class="">
                         <div class="form-group row m-3">
@@ -75,7 +84,6 @@
                                 <table class="table table-bordered" id="orderedProductsTable">
                                     <thead>
                                         <tr>
-                                            <th>Data</th>
                                             <th>Firma (Adres)</th>
                                             <th>Handlowiec</th>
                                             <th>Sprzedana ilość</th>
@@ -85,43 +93,79 @@
                                     </thead>
                                     <tbody>
                                         <?php
+                                        //show($data["sales"]["scan"]);
                                         if(!empty($data["sales"]["scan"])) {
+                                            $total_result_number = 0;
+                                            $total_result_value = 0;
                                             foreach($data["sales"]["scan"] as $company_key => $company_val) {
-                                                
-
-                                                if(isset($data["companies"][$company_key]->address)) {
-                                                    $comp_add = $data["companies"][$company_key]->address;
-                                                }
-                                                if(isset($data["companies"][$company_key]->full_name)) {
-                                                    $comp_name = $data["companies"][$company_key]->full_name;
-                                                }
-                                                $trader = $data["users"][$company_val["u_id"]]->first_name." ".$data["users"][$company_val["u_id"]]->last_name;
-                                                if(!empty($company_val["h_id"])) {
-                                                    $trader = $data["users"][$company_val["h_id"]]->first_name." ".$data["users"][$company_val["h_id"]]->last_name . ' ('.$data["users"][$company_val["u_id"]]->first_name." ".$data["users"][$company_val["u_id"]]->last_name.')';
-                                                }
-
-                                                //wartość sprzedaży
-                                                $total_val = 0;
-                                                $total_num = 0;
-                                                foreach($company_val as $prod) {
-                                                    if(is_array($prod)) {
-                                                        $total_num += $prod["s_amount"];
+                                                if($company_val["u_id"] == $data["guardian"] || $data["guardian"] == 0 || $company_val["h_id"] == $data["guardian"]) {
+                                                    $comp_add = isset($data["companies"][$company_key]->address) ? $data["companies"][$company_key]->address : '';
+                                                    $comp_name = isset($data["companies"][$company_key]->full_name) ? $data["companies"][$company_key]->full_name : 'Inna';
+                                                    $trader = $data["users"][$company_val["u_id"]]->first_name." ".$data["users"][$company_val["u_id"]]->last_name;
+                                                    if(!empty($company_val["h_id"])) {
+                                                        $trader = $data["users"][$company_val["h_id"]]->first_name." ".$data["users"][$company_val["h_id"]]->last_name . ' ('.$data["users"][$company_val["u_id"]]->first_name." ".$data["users"][$company_val["u_id"]]->last_name.')';
+                                                    }
+    
+                                                    $total_num = 0;
+                                                    $total_val = 0;
+                                                    foreach($company_val as $prod) {
+                                                        if(is_array($prod)) {
+                                                            $total_num += $prod["s_amount"];
+                                                            if(isset($data["prices"][$prod["p_id"]][0]->total_price)) { // tylko pierwsza kwoata jaka jest w systemie
+                                                                $total_val += $prod["s_amount"] * $data["prices"][$prod["p_id"]][0]->total_price;
+                                                            }
+                                                        }
+                                                    }
+    
+                                                    
+    
+                                                    echo "<tr>";
+                                                    //echo "<td>".$company_val["date"]."</td>";
+                                                    echo "<td title='".$comp_add."' style='font-weight: bold;'>".$comp_name."</td>
+                                                    <td style='font-weight: bold;'>".$trader."</td>
+                                                    <td>".$total_num." Szt.</td>
+                                                    <td>".$total_val." zł</td>";
+                                                    echo "<td><button class='btn btn-primary toggle-products' data-company='".$company_key."'>Pokaż produkty</button></td>";
+                                                    echo "</tr>";
+    
+                                                    $total_result_number += $total_num;
+                                                    $total_result_value += $total_val;
+    
+                                                    foreach($company_val as $prod) {
+                                                        if(is_array($prod)) {
+                                                            if (!empty($data["products"][$prod["p_id"]]->p_photo)) {
+                                                                $photo = "<img width='40' height='40' class='obrazek' id='imageBox".$data["products"][$prod["p_id"]]->id."' src='" . IMG_ROOT . "" . $data["products"][$prod["p_id"]]->p_photo . "'>";
+                                                            } else {
+                                                                $photo = "";
+                                                            }
+                                                            echo "<tr class='product-list' data-company='".$company_key."' style='display:none; background-color: lightgray;'>";
+                                                            echo "<td>".$photo."</td>";
+                                                            echo "<td>".$data["products"][$prod["p_id"]]->p_name."</td>";
+                                                            echo "<td>".$prod["s_amount"]. ' '.$data["products"][$prod["p_id"]]->p_unit."</td>";
+                                                            $val = 0;
+                                                            if(isset($data["prices"][$prod["p_id"]][0]->total_price)) { // tylko pierwsza kwoata jaka jest w systemie
+                                                                $val += $prod["s_amount"] * $data["prices"][$prod["p_id"]][0]->total_price;
+                                                            }
+                                                            echo "<td>$val zł</td>";
+                                                            echo "<td></td>";
+    
+    
+    
+                                                            echo "</tr>";
+                                                        }
                                                     }
                                                 }
-
-                                                echo "<tr>";
-                                                echo "
-                                                <td>".$company_val["date"]."</td>
-                                                <td title='".$comp_add."'>".$comp_name."</td>
-                                                <td>".$trader."</td>
-                                                <td>".$total_num."</td>
-                                                <td>".$total_val."</td>";
-                                                echo "<td></td>";
-                                                echo "</tr>";
+                                                
                                                 
                                             }
+                                            echo "<tr style='background-color: lightgray; font-weight: bold'>
+                                                <td colspan='2'>TOTAL</td>
+                                                <td>$total_result_number Szt.</td>
+                                                <td>$total_result_value zł</td>
+                                                <td></td>
+                                                </tr>";
                                         } else {
-                                            echo "<tr><td colspan='6'>Brak sprzedaży</td></tr>";
+                                            echo "<tr><td colspan='5'>Brak sprzedaży</td></tr>";
                                         }
                                         ?>
                                     </tbody>
@@ -131,4 +175,14 @@
                     </div>
             
         </main>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".toggle-products").click(function() {
+            var companyKey = $(this).data("company");
+            $("tr.product-list[data-company='" + companyKey + "']").toggle();
+        });
+    });
+</script>
         <?php require_once 'landings/footer.view.php' ?>
