@@ -7,6 +7,10 @@
 
     $sku = $data["sku"];
     $prod_name = $data["prod_name"];
+    $prod_name = "Filet z kurczaka faszerowany suszonymi pomidorami i mozzarellą, gnochi w sosie pomidorowym, surówka coś tam jeszcze jest";
+    if (strlen($prod_name) > 101) {
+        $prod_name = substr($prod_name, 0, 101) . '...';
+    }
     $al = "Alergeny: ";
     $alergens = $data["alergens"];
     $txt = "Lista alergenów na stronie:";
@@ -42,15 +46,15 @@
 
     $pdf->Image($qrFileName, 0, 1, $imageWidth, $imageHeight); 
     $pdf->SetXY(16, 3);
-    $pdf->MultiCell(44, 3, $prod_name, 0, 1);
+    $pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
     $pdf->SetXY(0, 15); 
-    $pdf->MultiCell(62, 5, $al . $alergens, 0, 'L');
+    $pdf->MultiCell(62, 6, $al . $alergens, 0, 'L');
     $pdf->SetXY(12, 19);
     $pdf->MultiCell(62, 5, $txt, 0, 'L');
     $pdf->SetXY(11, 22);
     $pdf->MultiCell(62, 5, $link, 0, 'L');
     $pdf->SetXY(14, 10);
-    $pdf->Cell(0, 5, $prod . $date, 0, 1);
+    $pdf->Cell(0, 10, $prod . $date, 0, 1);
 
     $pdf->Output(); 
     unlink($qrFileName);
