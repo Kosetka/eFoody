@@ -7,7 +7,6 @@
 
     $sku = $data["sku"];
     $prod_name = $data["prod_name"];
-    $prod_name = "Filet z kurczaka faszerowany suszonymi pomidorami i mozzarellą, gnochi w sosie pomidorowym, surówka coś tam jeszcze jest";
     if (strlen($prod_name) > 101) {
         $prod_name = substr($prod_name, 0, 101) . '...';
     }
