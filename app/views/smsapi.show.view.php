@@ -57,6 +57,7 @@
                                             <th>Data odebrania SMS</th>
                                             <th>Numer telefonu</th>
                                             <th>Firma</th>
+                                            <th>Przyjazna nazwa</th>
                                             <th>Adres</th>
                                             <th>Handlowiec</th>
                                             <th>Treść wiadomości</th>
@@ -80,6 +81,7 @@
                                                     <td>$sms->date</td>
                                                     <td>$sms_from</td>
                                                     <td>$sms->full_name</td>
+                                                    <td>$sms->friendly_name</td>
                                                     <td>$sms->address</td>
                                                     <td style='$color_trader'>$trader</td>
                                                     <td>$sms->sms_text</td>";

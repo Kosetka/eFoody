@@ -28,6 +28,13 @@
                         </div>
                     </div>
                     <div class="form-group row m-3">
+                        <label for="friendly_name" class="col-sm-2 col-form-label">Przyjazna nazwa:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="friendly_name" name="friendly_name"
+                                value="<?= $data["companies"]->friendly_name ?>">
+                        </div>
+                    </div>
+                    <div class="form-group row m-3">
                         <label for="city_id" class="col-sm-2 col-form-label">Miasto:</label>
                         <div class="col-sm-10">
                             <select class="form-control" id="city_id" name="city_id">

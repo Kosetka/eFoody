@@ -15,6 +15,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Nazwa firmy</th>
+                                <th>Przyjazna nazwa</th>
                                 <th>NIP</th>
                                 <th>Osoba kontaktowa</th>
                                 <th>Numer telefonu</th>
@@ -35,6 +36,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Nazwa firmy</th>
+                                <th>Przyjazna nazwa</th>
                                 <th>NIP</th>
                                 <th>Osoba kontaktowa</th>
                                 <th>Numer telefonu</th>
@@ -86,6 +88,7 @@
                                 echo "<tr>
                                     <td>$company->id</td>
                                     <td>$company->full_name</td>
+                                    <td>$company->friendly_name</td>
                                     <td>$company->nip</td>
                                     <td>$company->contact_first_name $company->contact_last_name</td>
                                     <td>$numbers</td>

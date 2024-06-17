@@ -44,6 +44,7 @@ class Smsapimodel
             sms_api.sms_from,
             sms_api.sms_text,
             companies.full_name,
+            companies.friendly_name,
             companies.address,
             users.first_name,
             users.last_name,
