@@ -61,7 +61,11 @@
     <?php
     echo "const points = [";
     foreach ($data["companies"] as $company) {
-        $full_name = $company->full_name . " | " . $company->address;
+        if(!empty($company->friendly_name)) {
+            $full_name = $company->friendly_name . " | " . $company->address;
+        } else {
+            $full_name = $company->full_name . " | " . $company->address;
+        }
         $id = $company->id;
         echo "{ lat: $company->latitude, lng: $company->longitude, id: $id, name: '$full_name' },";
     }
