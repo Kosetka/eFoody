@@ -486,9 +486,9 @@ $mess = "<table style='border: 1px solid'>
             <th colspan='$num_rows'>Raport $name rentowności - $dates</th>
         </tr>
         <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
-            <th rowspan='2' style='border: 1px solid #000; width: 6%'>Produkty</th>
-            <th rowspan='2' style='border: 1px solid #000; width: 6%'>SKU</th>
-            <th rowspan='2' style='border: 1px solid #000; ' title='Wydane - ilość wydana przez kuchnię dla handlowców; Wyprodukowane - ilość wyprodukowanych potrwa przez kuchnię'>Wydane (Wyprodukowane)</th>
+            <th rowspan='2' style='border: 1px solid #000; width: 6%'>Produkty</th>";
+            //<th rowspan='2' style='border: 1px solid #000; width: 6%'>SKU</th>
+$mess .= "<th rowspan='2' style='border: 1px solid #000; ' title='Wydane - ilość wydana przez kuchnię dla handlowców; Wyprodukowane - ilość wyprodukowanych potrwa przez kuchnię'>Wydane (Wyprodukowane)</th>
             <th colspan='5' style='border: 1px solid #000; '>TOTAL</th>";
 foreach ($data["users"] as $trader) {
     $mess .= "<th colspan='4' style='border: 1px solid #000; width: 12%'>$trader->first_name $trader->last_name</th>";
@@ -534,7 +534,7 @@ foreach ($planned_array as $product_key => $product_val) {
     $color_name = "";
     if (isset($data["prices"][$product_key])) {
         foreach ($data["prices"][$product_key] as $prprr) {
-            $title .= "[Cena sprzedaży: " . $prprr->total_price . "; Koszt produkcji: " . $prprr->total_production_cost . "; Okres obowiązywania: " . $prprr->date_from . " -> " . $prprr->date_to . "]
+            $title .= "[Cena sprzedaży: " . $prprr->total_price . "; Koszt produkcji: " . number_format($prprr->total_production_cost,2) . "; Okres obowiązywania: " . $prprr->date_from . " -> " . $prprr->date_to . "]
 ";
         }
         $color_name = "";
@@ -599,14 +599,14 @@ Zniszczenia: " . $tot_waste_destroyed_num . " -> " . $tot_waste_destroyed . "zł
     }
     $mess .= "
         <tr style='text-align: center;'>
-            <td style='border: 1px solid; $color_name' title='$title'>" . $data["fullproducts"][$product_key]["p_name"] . "</td>
-            <td style='border: 1px solid;'>" . $data["fullproducts"][$product_key]["sku"] . "</td>
-            <td style='border: 1px solid; $color_cargo'>" . $cargo_array[$product_key]["total"] . " (" . $total_prod[$product_key] . ")</td>
-            <td style='border: 1px solid;'>" . $prices_producted_price_array[$product_key] . " zł</td>
-            <td style='border: 1px solid;'>" . $prices_producted_cost_array[$product_key] . " zł</td>
-            <td style='border: 1px solid;' title='$waste_title'>" . $tot_waste_tot . " zł</td>
-            <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array[$product_key] - $tot_waste_tot . " zł'>??? zł</td>
-            <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array[$product_key] - $tot_waste_tot - $prices_producted_cost_array[$product_key] . " zł'>??? zł</td>";
+            <td style='border: 1px solid; $color_name' title='$title'>" . $data["fullproducts"][$product_key]["p_name"] . "</td>";
+            //<td style='border: 1px solid;'>" . $data["fullproducts"][$product_key]["sku"] . "</td>
+    $mess .= "<td style='border: 1px solid; $color_cargo'>" . $cargo_array[$product_key]["total"] . " (" . $total_prod[$product_key] . ")</td>
+            <td style='border: 1px solid;'>" . number_format($prices_producted_price_array[$product_key],2) . " zł</td>
+            <td style='border: 1px solid;'>" . number_format($prices_producted_cost_array[$product_key],2) . " zł</td>
+            <td style='border: 1px solid;' title='$waste_title'>" . number_format($tot_waste_tot,2) . " zł</td>
+            <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array[$product_key] - $tot_waste_tot . " zł'>" . number_format($prices_producted_price_array[$product_key] - $tot_waste_tot,2) . " zł</td> 
+            <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array[$product_key] - $tot_waste_tot - $prices_producted_cost_array[$product_key] . " zł'>" . number_format($prices_producted_price_array[$product_key] - $tot_waste_tot - $prices_producted_cost_array[$product_key],2) . " zł</td>";
     foreach ($data["users"] as $trader) {
         if (!isset($sum_wyd[$trader->id])) {
             $sum_wyd[$trader->id] = 0;
@@ -642,9 +642,9 @@ Zniszczenia: " . $t_destroy[$product_key][$trader->id] . " -> " . $t_destroy_amo
         $waste = $prices_returns_amount_array[$product_key][$trader->id] + $t_gratis_amount[$product_key][$trader->id] + $t_destroy_amount[$product_key][$trader->id]; // tu dodac gratisy i zniszczenia
 
         $mess .= "<td style='border: 1px solid; " . $bg_color . "'>" . $cargo_array[$product_key][$trader->id] . "</td>";
-        $mess .= "<td style='border: 1px solid; " . $bg_color . "'>" . $prices_cargo_price_array[$product_key][$trader->id] . " zł</td>"; //spodziewany utarg po handlowcu
-        $mess .= "<td style='border: 1px solid; " . $bg_color . "' title='$waste_title'>" . $waste . " zł</td>";
-        $mess .= "<td style='border: 1px solid; " . $bg_color . "' title='z Pobranego: " . $prices_cargo_price_array[$product_key][$trader->id] - $waste . " zł'>??? zł</td>"; // - $waste
+        $mess .= "<td style='border: 1px solid; " . $bg_color . "'>" . number_format($prices_cargo_price_array[$product_key][$trader->id],2) . " zł</td>"; //spodziewany utarg po handlowcu
+        $mess .= "<td style='border: 1px solid; " . $bg_color . "' title='$waste_title'>" . number_format($waste,2) . " zł</td>";
+        $mess .= "<td style='border: 1px solid; " . $bg_color . "' title='z Pobranego: " . $prices_cargo_price_array[$product_key][$trader->id] - $waste . " zł'>" . number_format($prices_cargo_price_array[$product_key][$trader->id] - $waste,2) . " zł</td>"; // - $waste
 
     }
     $mess .= "</tr>";
@@ -660,13 +660,13 @@ Zniszczenia: " . $sum_waste_destroyed_num . " -> " . $sum_waste_destroyed . "zł
 
     $mess .= "<tfoot>
             <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
-                <td colspan='2' style='border: 1px solid;'>TOTAL</td>
+                <td colspan='1' style='border: 1px solid;'>TOTAL</td>
                 <td style='border: 1px solid;'>" . $sum_cargo . " (" . $total_prod["total"] . ")</td>
-                <td style='border: 1px solid;'>" . $prices_producted_price_array["total"] . " zł</td>
-                <td style='border: 1px solid;'>" . $prices_producted_cost_array["total"] . " zł</td>
+                <td style='border: 1px solid;'>" . number_format($prices_producted_price_array["total"],2) . " zł</td>
+                <td style='border: 1px solid;'>" . number_format($prices_producted_cost_array["total"],2) . " zł</td>
                 <td style='border: 1px solid;' title='$waste_title'>" . $sum_waste_return_tot . " zł</td>
-                <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array["total"] - $sum_waste_return_tot . " zł'>??? zł</td>
-                <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array["total"] - $prices_producted_cost_array["total"] - $sum_waste_return_tot . " zł'>??? zł</td>";
+                <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array["total"] - $sum_waste_return_tot . " zł'>" . number_format($prices_producted_price_array["total"] - $sum_waste_return_tot,2) . " zł</td>
+                <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array["total"] - $prices_producted_cost_array["total"] - $sum_waste_return_tot . " zł'>" . number_format($prices_producted_price_array["total"] - $prices_producted_cost_array["total"] - $sum_waste_return_tot,2) . " zł</td>";
     $even = true;
     foreach ($data["users"] as $trader) {
         $bg_color = "";
@@ -719,9 +719,9 @@ Zniszczenia: " . $del_c . " -> " . $del . "zł";
             $prices_cargo_price_array[$trader->id]["total"] = 0;
         }
         $mess .= "<td style='border: 1px solid #000; " . $bg_color . "'>" . $sum_wyd[$trader->id] . "</td>";
-        $mess .= "<td style='border: 1px solid #000; " . $bg_color . "'>" . $prices_cargo_price_array[$trader->id]["total"] . " zł</td>";
-        $mess .= "<td style='border: 1px solid #000; " . $bg_color . "' title='$waste_title'>" . $total_waste . " zł</td>";
-        $mess .= "<td style='border: 1px solid #000; " . $bg_color . "' title='" . $prices_cargo_price_array[$trader->id]["total"] - $total_waste . " zł'>??? zł</td>"; // -$total_waste
+        $mess .= "<td style='border: 1px solid #000; " . $bg_color . "'>" . number_format($prices_cargo_price_array[$trader->id]["total"],2) . " zł</td>";
+        $mess .= "<td style='border: 1px solid #000; " . $bg_color . "' title='$waste_title'>" . number_format($total_waste,2) . " zł</td>";
+        $mess .= "<td style='border: 1px solid #000; " . $bg_color . "' title='" . $prices_cargo_price_array[$trader->id]["total"] - $total_waste . " zł'>" . number_format($prices_cargo_price_array[$trader->id]["total"] - $total_waste,2) . " zł</td>"; // -$total_waste
 
     }
     $mess .= "</tr>
