@@ -8,7 +8,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 	define('DBPASS', '');
 	define('DBDRIVER', '');
 
-	define('ROOT', 'http://localhost/efoody/public');
+	define('ROOT', 'http://localhost/efoody/public'); //http://localhost/efoody/public
 	define('ROOT_DIR', '/efoody/public/');
 	define('ROOT_PLUGINS', '../public/plugins/');
 	define('IMG_ROOT', '/efoody/public/assets/img/');

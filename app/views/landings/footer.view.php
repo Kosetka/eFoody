@@ -85,9 +85,22 @@
 
 
 <link href="<?= ROOT ?>/assets/css/select2.css" rel="stylesheet" />
-<script src="<?= ROOT ?>/assets/js/select2.js"></script>
+<?php 
+
+    if(isset($select2_above)) {
+        echo "<script src='".ROOT."/assets/js/select2_above.js'></script>";
+    } else {
+        echo "<script src='".ROOT."/assets/js/select2.js'></script>";
+
+    }
+
+?>
 <script>
-    $(document).ready(function () { $("#c_id").select2(); });
+$(document).ready(function() {
+  $("#c_id").select2({
+    dropdownPosition: 'above'
+  });
+});
 </script>
 
 

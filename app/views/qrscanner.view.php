@@ -1,8 +1,6 @@
 <?php require_once 'landings/header.view.php' ?>
 <?php require_once 'landings/nav.view.php' ?>
 
-
-
 <div id="layoutSidenav">
     <?php require_once 'landings/sidebar.left.view.php' ?>
     <div id="layoutSidenav_content">
@@ -13,6 +11,9 @@
                         style="min-height: 100px; max-height:200px; background-color: lightgrey;box-shadow: 0px 8px 20px 8px rgba(66, 68, 90, 1); margin-bottom: 30px;"
                         id="preview"></video>
                 </div>
+                <h1 class="h3 mb-3 fw-normal"><button class="btn btn-primary" id="gpsButton">GPS</button> Dane skanu:</h1>
+                <p hidden id="lat">Lat: </p>
+                <p hidden id="long">Long: </p>
                 <form method="post">
 
                     <?php if (!empty($error)): ?>
@@ -25,13 +26,12 @@
                             <?= $success ?>
                         </div>
                     <?php endif; ?>
-                    <h1 class="h3 mb-3 fw-normal">Dane skanu:</h1>
                     <div class="text-start">
                         <div class="form-group row m-3">
                         <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>">
                             <label for="c_id" class="col-sm-2 col-form-label">Firma:</label>
                             <div class="col-sm-10">
-                                <select class="" style="width: 100%" id="c_id" name="c_id" onchange="companyChange()" placeholder="Wybierz firmę...">
+                                <select class="c_id" style="width: 100%" id="c_id" name="c_id" onchange="companyChange()" placeholder="Wybierz firmę...">
                                     <?php
                                     if (isset($_SESSION["selected_company"])) {
                                         $my_company = $_SESSION["selected_company"];
@@ -56,6 +56,95 @@
                                 </select>
                             </div>
                         </div>
+
+                        <script>
+    <?php
+    echo "const points = [";
+    foreach ($data["companies"] as $company) {
+        $full_name = $company->full_name . " | " . $company->address;
+        $id = $company->id;
+        echo "{ lat: $company->latitude, lng: $company->longitude, id: $id, name: '$full_name' },";
+    }
+    echo "];";
+    ?>
+
+    function calculateDistance(lat1, lng1, lat2, lng2) {
+      const R = 6371000; // Promień Ziemi w metrach
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distance = R * c; // Odległość w metrach
+      return distance;
+    }
+
+    function compareCurrentPositionWithPoints() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const currentLat = position.coords.latitude;
+            const currentLng = position.coords.longitude;
+
+            document.getElementById('lat').textContent = 'Lat: ' + currentLat;
+            document.getElementById('long').textContent = 'Long: ' + currentLng;
+
+            points.forEach(point => {
+              point.distance = calculateDistance(currentLat, currentLng, point.lat, point.lng);
+            });
+
+            points.sort((a, b) => a.distance - b.distance);
+
+            const selectElement = document.getElementById('c_id');
+            const myCompany = <?php echo isset($_SESSION["selected_company"]) ? $_SESSION["selected_company"] : 0; ?>;
+            
+            selectElement.innerHTML = "";
+
+            let selectedOption = null;
+
+            points.forEach((point, index) => {
+              const option = document.createElement("option");
+              option.value = point.id;
+              option.text = `${point.distance.toFixed(1)}m | ${point.name}`;
+
+              if (point.id == myCompany) {
+                option.selected = true;
+                selectedOption = option;
+              }
+
+              selectElement.appendChild(option);
+            });
+
+            const otherOption = document.createElement("option");
+            otherOption.value = '0';
+            otherOption.text = 'Inna';
+
+            if (selectedOption === null) {
+              otherOption.selected = true;
+            }
+
+            selectElement.insertBefore(otherOption, selectElement.firstChild);
+
+            if (selectedOption !== null) {
+              selectElement.insertBefore(selectedOption, selectElement.firstChild);
+            }
+          },
+          function(error) {
+            console.error("Błąd podczas pobierania pozycji:", error);
+          }
+        );
+      } else {
+        console.error("Twoja przeglądarka nie obsługuje Geolocation API.");
+      }
+    }
+
+    document.getElementById('gpsButton').addEventListener('click', compareCurrentPositionWithPoints);
+  </script>
+
+
+
                         <script>
                             let arr = [];
                             let arrid = [];
@@ -139,14 +228,14 @@
         <div class="card-header">
           <h2 class="">Ostatnie skanowania QR Code</h2>
         </div>
-        <div class="form-group row m-3">
+        <div class="form-group row">
           <div class="col-sm-12">
-            <table class="table">
+            <table class="table table-responsive">
               <thead>
                 <tr>
                   <th scope="col">Nazwa firmy</th>
                   <th scope="col">Adres</th>
-                  <th scope="col">QR Code</th>
+                  <?php /*<th scope="col">QR Code</th>*/ ?>
                   <th scope="col">Produkt</th>
                   <th scope="col">Data</th>
                   <th scope="col">Akcje</th>
@@ -164,13 +253,12 @@
                             $city_name = $data["companies"][$value->c_id]->full_name;
                             $city_address = $data["companies"][$value->c_id]->address;
                         }
-                      echo "  <tr><td>$city_name</td>
-                                                <td>$city_address</td>
-                                                <td>$prodd->sku</td>
-                                                <td>$prodd->p_name</td>
-                                                <td>$value->date</td>
-                                                <td><a class='btn btn-danger' onClick = 'clicked($key)' data-el=$key 
-                                                role='button'>Usuń</a></td>";
+                      echo "<tr><td>$city_name</td>";
+                      echo "<td>$city_address</td>";
+                      //echo "<td>$prodd->sku</td>";
+                      echo "<td>$prodd->p_name</td>";
+                      echo "<td>$value->date</td>";
+                      echo "<td><a class='btn btn-danger' onClick = 'clicked($key)' data-el=$key role='button'>Usuń</a></td>";
                       echo "</tr>";
                     }
                 }
@@ -273,4 +361,5 @@ if(isset($_SESSION["USER"]->camera)) {
             sendButton.click();
             });
         </script>
+        <?php $select2_above = true; ?>
         <?php require_once 'landings/footer.view.php' ?>
