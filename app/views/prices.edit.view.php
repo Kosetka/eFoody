@@ -65,13 +65,13 @@
                         <label for="production_cost" class="col-sm-2 col-form-label">Koszt produkcji:</label>
                         <div class="col-sm-10">
                             <input type="number" class="form-control" id="production_cost" name="production_cost"
-                                value="<?php echo $th4; ?>" required min=1>
+                                value="<?php echo $th4; ?>" required min="0.01" step="0.01">
                         </div>
                     </div>
                     <div class="form-group row m-3">
                         <label for="price" class="col-sm-2 col-form-label">Cena sprzedaży:</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" id="price" name="price" value="<?php echo $th5; ?>" required min=1>
+                            <input type="number" class="form-control" id="price" name="price" value="<?php echo $th5; ?>" required min="0.01" step="0.01">
                         </div>
                     </div>
                     <div class="form-group row m-3">
