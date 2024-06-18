@@ -16,6 +16,8 @@ function updateDateTime() {
 updateDateTime(); // Aktualizacja daty i godziny na stronie
 setInterval(updateDateTime, 1000); // Aktualizacja co sekundę
 
+let clickedStatus = 0;
+
 async function readNFC(action) {
     const output = document.getElementById('output');
     try {
@@ -49,23 +51,75 @@ function addLog(action, data) {
 // Pobranie referencji do przycisków
 const enterBtn = document.getElementById('enterBtn');
 const exitBtn = document.getElementById('exitBtn');
-const output = document.getElementById('info');
+const info = document.getElementById('info');
+const output = document.getElementById('output');
 
 // Funkcja aktualizująca tekst w elemencie output na podstawie stanu przycisków
 function updateActionText() {
     if (enterBtn.classList.contains('clicked')) {
-        output.textContent = 'Wejście';
+        info.textContent = 'Wejście';
     } else if (exitBtn.classList.contains('clicked')) {
-        output.textContent = 'Wyjście';
+        info.textContent = 'Wyjście';
     } else {
-        output.textContent = 'Oczekiwanie';
+        info.textContent = 'Oczekiwanie';
     }
 }
-
-// Funkcja obsługująca kliknięcie przycisku
 function handleButtonClick(btnId) {
     const button = document.getElementById(btnId);
+    if(btnId==="enterBtn") {
+        if(clickedStatus === 1) {
+            clickedStatus = 0
+            info.textContent = 'Oczekiwanie';
+            stopScanner();
+        } else {
+            clickedStatus = 1;
+            info.textContent = 'Wejście';
+            startScanner(0);
+        }
+    }
+    if(btnId==="exitBtn") {
+        if(clickedStatus === 2) {
+            clickedStatus = 0;
+            info.textContent = 'Oczekiwanie';
+            stopScanner();
+        } else {
+            clickedStatus = 2;
+            info.textContent = 'Wyjście';
+            startScanner(0);
+        }
+    }
+    console.log(clickedStatus);
+    updateClasses();
+}
 
+
+
+
+
+
+function updateClasses() {
+    enterBtn.classList.remove('clicked', 'disable');
+    exitBtn.classList.remove('clicked', 'disable');
+    if(clickedStatus === 1) {
+        exitBtn.classList.add('disable');
+        enterBtn.classList.add('clicked');
+    }
+    if(clickedStatus === 2) {
+        enterBtn.classList.add('disable');
+        exitBtn.classList.add('clicked');
+    }
+    if(clickedStatus === 3) {
+        enterBtn.classList.add('disable');
+        exitBtn.classList.add('disable');
+        clickedStatus = 0;
+        info.textContent = 'Wyświetlanie';
+        wait(4000);
+    }
+}
+// Funkcja obsługująca kliknięcie przycisku
+function handleButtonClick2(btnId) {
+    const button = document.getElementById(btnId);
+    clickedStatus = 0;
     if (button.classList.contains('disable')) {
         // Kliknięto przycisk z klasą disable
         enterBtn.classList.remove('clicked', 'disable');
@@ -88,6 +142,8 @@ function handleButtonClick(btnId) {
             } else if (btnId === 'exitBtn') {
                 enterBtn.classList.remove('disable');
             }
+            // Zatrzymaj skanowanie jeśli żaden przycisk nie jest kliknięty
+            stopScanner();
         } else {
             // Dodaj klasę clicked do klikniętego przycisku
             button.classList.add('clicked');
@@ -97,6 +153,8 @@ function handleButtonClick(btnId) {
             } else if (btnId === 'exitBtn') {
                 enterBtn.classList.add('disable');
             }
+            // Rozpocznij skanowanie
+            startScanner(0);
         }
     }
 
@@ -110,7 +168,3 @@ function handleButtonClick(btnId) {
 
 // Wywołanie funkcji na starcie, aby ustawić domyślny tekst
 updateActionText();
-
-
-
-

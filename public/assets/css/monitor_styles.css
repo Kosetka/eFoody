@@ -16,7 +16,7 @@ header {
     color: #FFFFFF ;
     font-weight: bold;
     padding: 10px;
-    height: 60px;
+    height: 40px;
     background: linear-gradient(to bottom,  #494949,  #2F2F2F );
 	border-radius: 0px;
 	border-bottom: 2px solid #000000;
@@ -28,7 +28,7 @@ header p {
 
 main {
     display: flex;
-    height: calc(100% - 120px); /* 100% - header height - footer height */
+    height: calc(100% - 80px); /* 100% - header height - footer height */
 }
 
 .main-left {
@@ -43,8 +43,16 @@ main {
 
 .main-right {
     flex: 1;
-    padding: 20px;
+    padding: 10px;
+    padding-bottom: 20px;
+    background-color:#F7E7CE;
     overflow-y: auto; /* Dodano przewijanie w pionie dla logu */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
 }
 
 .action-btn {
@@ -55,23 +63,45 @@ main {
     cursor: pointer;
 }
 
-.log-container {
-    border: 1px solid #ccc;
+.status-container {
+    border: 3px solid #000000;
+    background-color:#65ffff;
     padding: 10px;
+    width: 100%;
+}
+.error-container {
+    border: 3px solid #000000;
+    background-color:#fd8080;
+    padding: 10px;
+    width: 100%;
+}
+.log-container {
+    border: 3px solid #000000;
+    background-color:#dadada;
+    padding: 10px;
+    margin: 5px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
 }
 
 footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: #000000;
     color: #FFFFFF;
-    padding: 10px;
     text-align: right;
     position: absolute;
     font-style: italic;
     bottom: 0;
     width: 100%;
     font-size: 80%;
-    padding: 20px;
-    min-height: 60px;
+    padding: 10px;
+    min-height: 40px;
     background: linear-gradient(to bottom,  #2F2F2F,  #494949 );
 	border-radius: 0px;
 	border-top: 2px solid #000000;
@@ -80,11 +110,29 @@ a {
     color: #F7E7CE ;
     font-style: normal;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 13px;
 }
 
+.refresh-btn {
+    box-shadow:inset 0px -3px 7px 0px #29bbff;
+	background:linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
+	background-color:#2dabf9;
+	border-radius:3px;
+	border:1px solid #0b0e07;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding: 3px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #263666;
+    min-width: 25px;
+    min-height: 20px;
+}
 .refresh-btn:hover {
-    background-color: #0056b3;
+    background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+	background-color:#0688fa;
 }
 
 #output {
@@ -126,9 +174,49 @@ a {
   .button-out:hover {
     background-color: #F44336;
   }
-  .clicked {
-    background-color: #31d9f7;
-  }
+
   .disable {
     background-color: #bec3c4;
+  }
+
+  table.workhours {
+    margin-top: 10px;
+    border: 2px solid #000000;
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+  }
+  table.workhours td, table.workhours th {
+    border: 1px solid #FFFFFF;
+    padding: 3px 4px;
+  }
+  table.workhours tbody td {
+    font-size: 13px;
+  }
+  table.workhours td:nth-child(even) {
+    background: #EBEBEB;
+  }
+  table.workhours thead {
+    background: #FFFFFF;
+    border-bottom: 4px solid #333333;
+  }
+  table.workhours thead th {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333333;
+    text-align: center;
+    border-left: 2px solid #333333;
+  }
+  table.workhours thead th:first-child {
+    border-left: none;
+  }
+  
+  table.workhours tfoot {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333333;
+    border-top: 4px solid #333333;
+  }
+  table.workhours tfoot td {
+    font-size: 14px;
   }
