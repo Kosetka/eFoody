@@ -17,7 +17,8 @@ class ReturnsModel
         'p_id',
         'date',
         'u_id',
-        'amount'
+        'amount',
+        'u_set_id'
     ];
 
     public function getProducts(): array
@@ -88,4 +89,19 @@ class ReturnsModel
 
         return $result;
     }
+
+
+    public function deleteByDate($date)
+	{
+		$query = "delete from $this->table where date >= '$date 00:00:00' AND date <= '$date 23:59:59' ";
+		$this->query($query);
+		return false;
+	}
+
+    public function getAll($date)
+    {
+        $query = "select * from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59'";
+        return $this->query($query);
+    }
+
 }
