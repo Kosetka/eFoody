@@ -664,7 +664,7 @@ Zniszczenia: " . $sum_waste_destroyed_num . " -> " . $sum_waste_destroyed . "zł
                 <td style='border: 1px solid;'>" . $sum_cargo . " (" . $total_prod["total"] . ")</td>
                 <td style='border: 1px solid;'>" . number_format($prices_producted_price_array["total"],2) . " zł</td>
                 <td style='border: 1px solid;'>" . number_format($prices_producted_cost_array["total"],2) . " zł</td>
-                <td style='border: 1px solid;' title='$waste_title'>" . $sum_waste_return_tot . " zł</td>
+                <td style='border: 1px solid;' title='$waste_title'>" . number_format($sum_waste_return_tot,2) . " zł</td>
                 <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array["total"] - $sum_waste_return_tot . " zł'>" . number_format($prices_producted_price_array["total"] - $sum_waste_return_tot,2) . " zł</td>
                 <td style='border: 1px solid;' title='z Pobranego: " . $prices_producted_price_array["total"] - $prices_producted_cost_array["total"] - $sum_waste_return_tot . " zł'>" . number_format($prices_producted_price_array["total"] - $prices_producted_cost_array["total"] - $sum_waste_return_tot,2) . " zł</td>";
     $even = true;
