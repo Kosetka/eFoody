@@ -177,7 +177,7 @@ class Returns
         $w_id = 1;
         
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $plan = new Returnsmodel();
+            $plan = new ReturnsModel();
             $plan->deleteByDate($date);
             if(isset($_POST["ordered_products"])) {
                 $prod = $_POST["ordered_products"];
@@ -193,7 +193,7 @@ class Returns
 
         }
 
-        $plan = new Returnsmodel();
+        $plan = new ReturnsModel();
         if(!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {
                 $data["returns"][$value->u_id][$value->p_id] = (array) $value;
