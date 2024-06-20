@@ -14,7 +14,7 @@ class Monitor
 
 		$data = [];
 
-		$this->view('home', $data);
+		$this->view('monitor', $data);
 	}
 
     public function register()

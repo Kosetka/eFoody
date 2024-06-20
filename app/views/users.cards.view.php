@@ -7,7 +7,7 @@
         <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 100%">
             <div class="card mb-4">
                 <div class="card-header">
-                    <h2 class="">Lista użytkowników</h2>
+                    <h2 class="">Lista kart magnetycznych</h2>
                     
                 </div>
                 <div class="card-body">
@@ -15,31 +15,19 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>E-mail</th>
-                                <th>Imię</th>
-                                <th>Nazwisko</th>
-                                <th>Numer telefonu - służbowy</th>
-                                <th>Numer telefonu - prywatny</th>
-                                <th>Magazyn</th>
-                                <th>Stanowisko</th>
-                                <th>Aktywny</th>
+                                <th>Numer seryjny</th>
+                                <th>Status</th>
+                                <th>Właściciel</th>
                                 <th>Akcje</th>
-                                <th>Karty</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
                                 <th>ID</th>
-                                <th>E-mail</th>
-                                <th>Imię</th>
-                                <th>Nazwisko</th>
-                                <th>Numer telefonu - służbowy</th>
-                                <th>Numer telefonu - prywatny</th>
-                                <th>Magazyn</th>
-                                <th>Stanowisko</th>
-                                <th>Aktywny</th>
+                                <th>Numer seryjny</th>
+                                <th>Status</th>
+                                <th>Właściciel</th>
                                 <th>Akcje</th>
-                                <th>Karty</th>
                             </tr>
                         </tfoot>
                         <tbody>
