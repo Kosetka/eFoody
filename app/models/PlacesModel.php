@@ -32,6 +32,12 @@ class PlacesModel
         $query = "select * from $this->table WHERE c_id = $c_id AND date>= '$today 00:00:00' AND date <= '$today 23:59:59'";
         return $this->query($query);
     }
+    public function checkVisitedPlaces($u_id)
+    {
+        $today = date("Y-m-d");
+        $query = "select * from $this->table WHERE u_id = $u_id AND date>= '$today 00:00:00' AND date <= '$today 23:59:59' ORDER BY date DESC";
+        return $this->query($query);
+    }
 
     public function reportData($date_from, $date_to): array
     {

@@ -111,4 +111,78 @@ class QRScanner
 
         return $com;
     }
+
+    public function place()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $u_id = $_SESSION["USER"]->id;
+
+        // ODWRÓCONIE ID PRZY POMOCNIKU
+        $h_id = 0;
+        if(isset($_SESSION["USER"]->helper_for)) {
+            $u_id = $_SESSION["USER"]->helper_for;
+            $h_id = $_SESSION["USER"]->id;
+        }
+
+        $companies = new Companies();
+        foreach ($companies->getAll("companies") as $company) {
+            $data["companiesvisited"][$company->id] = (array) $company;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            
+            if (isset($_POST["text"])) {
+                if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
+                    $data['error'] = "Odświeżenie strony, nie dodano wizyty";
+                } else {
+                    $c_id = $_POST["c_fullname_id"];
+                    if($c_id == "undefined") {
+                        $c_id = 0;
+                    }
+                    $now = date("Y-m-d H:i:s");
+                    $city_id = $_POST["c_id"];
+                    if(isset($_POST["c_id"]) && !empty($_POST["c_id"])) {
+                        $data['success'] = "Pomyślnie zapisano wizytę: <b>" . $data["companiesvisited"][$city_id]["full_name"] . "</b> o godzinie: <b>" . $now . "</b>";
+                        $check_sold = 1;
+                        $placeVisited = new PlacesModel;
+                        //$v = $placeVisited->checkVisit($city_id); //blokowanie multiwizyt
+                        if($check_sold == 1) {
+                            if(empty($v)) {
+                                if($h_id == 0) {
+                                    $placeVisited->insert(["u_id" => $u_id, "sold" => 0, "c_id" => $city_id]);
+                                } else {
+                                    $placeVisited->insert(["u_id" => $u_id, "sold" => 0, "c_id" => $city_id, "h_id" => $h_id]);
+                                }
+                            }
+                        } 
+                    } else {
+                        $data['error'] = "Nie wybrano firmy";
+                            
+                    }
+                }
+            }
+
+            unset($_SESSION['token']);
+        }
+        
+        $token = bin2hex(random_bytes(32));
+        $_SESSION['token'] = $token;
+
+        $companies = new Companies();
+        $temp = $companies->getMyCompanies($u_id);
+        if(!empty($temp)) {
+            foreach ($temp as $key => $value) {
+                $data["companies"][$value->id] = $value;
+            }
+        }
+        $placeVisited = new PlacesModel;
+        $data["visit"] = $placeVisited->checkVisitedPlaces($u_id);
+
+        $this->view('qrscanner.place', $data);
+    }
+
 }
