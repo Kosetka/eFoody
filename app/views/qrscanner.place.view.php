@@ -174,9 +174,9 @@
                             <label for="c_fullname" class="col-sm-2 col-form-label" hidden>Adres:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="c_fullname" name="c_fullname" readonly hidden
-                                    value="<?php echo $_SESSION["selected_company_fullname"]; ?>">
+                                    value="">
                                 <input hidden type="text" class="form-control" id="c_fullname_id" name="c_fullname_id"
-                                    readonly value="<?php echo $_SESSION["selected_company"]; ?>">
+                                    readonly value="">
                             </div>
                         </div>
                         <?php /*<div class="form-group row m-3">
