@@ -31,24 +31,33 @@
                                 if (!$data) {
                                     echo "<tr><th colspan='8'>Brak danych do wyświetlenia</th></tr>";
                                 } else {
-                                    foreach ($data["costs"] as $cost) {
-                                        if ($cost->active == 1) {
-                                            $active = "<td><span class='btn btn-success'>Aktywny</span></td>";
-                                        } else if ($cost->active ==2) {
-                                            $active = "<td><span class='btn btn-danger'>Nieaktywny</span></td>";
-                                        } else {
-                                            $active = "<td><span class='btn btn-info'>Wstrzymany</span></td>";
+                                    if(!empty($data["costs"])) {
+                                        foreach ($data["costs"] as $cost) {
+                                            if ($cost->active == 1) {
+                                                $active = "<td><span class='btn btn-success'>Aktywny</span></td>";
+                                            } else if ($cost->active == 2) {
+                                                $active = "<td><span class='btn btn-info'>Wstrzymany</span></td>";
+                                            } else {
+                                                $active = "<td><span class='btn btn-danger'>Nieaktywny</span></td>";
+                                            }
+    
+                                            if( $cost->type == 5) {
+                                                $date = $cost->date;
+                                            } else {
+                                                $date = $cost->date_from ." - ".$cost->date_to;
+                                            }
+                                            echo "  <tr>
+                                                        <th scope='row'>$cost->id</th>
+                                                        <td>$cost->name</td>
+                                                        <td>".COSTTYPES[$cost->type]."</td>
+                                                        <td>$cost->price zł</td>
+                                                        <td>".COSTCATEGORIES[$cost->category]."</td>
+                                                        $active
+                                                        <td>$date</td>
+                                                        <td><a class='btn btn-info' href=' " . ROOT . "/fixedcosts/edit/$cost->id'
+                                                                role='button'>Edytuj</a></td>
+                                                    </tr>";
                                         }
-                                        echo "  <tr>
-                                                    <th scope='row'>$cost->id</th>
-                                                    <td>$cost->name</td>
-                                                    <td>$cost->type</td>
-                                                    <td>$cost->price zł</td>
-                                                    $active
-                                                    <td>$cost->date</td>
-                                                    <td><a class='btn btn-info' href=' " . ROOT . "/fixedcosts/edit/$cost->id'
-                                                            role='button'>Edytuj</a></td>
-                                                </tr>";
                                     }
                                 }
                                 ?>

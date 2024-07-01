@@ -16,67 +16,72 @@
           </div>
         <?php endif; ?>
       <form method="post">
-
-        <h1 class="h3 mb-3 fw-normal">Dodawanie nowego kosztu</h1>
+            <?php
+    if($data["edit"] === True) {
+        $edit = True;
+        $head2 = "Edytowanie kosztu";
+        $button2 = "Zapisz zmiany";
+    } else {
+        $head2 = "Dodawanie nowego kosztu";
+        $button2 = "Dodaj koszt";
+        $edit = False;
+    }
+            ?>
+        <h1 class="h3 mb-3 fw-normal"><?= $head2;?></h1>
 
         <div class="text-start">
           <div class="form-group row m-3">
             <label for="cost_name" class="col-sm-2 col-form-label">Nazwa:</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="cost_name" name="cost_name" required>
+              <input type="text" class="form-control" id="cost_name" name="cost_name" required <?php if($edit) {echo " value='".$data["cost"]->name."'"; }?>>
             </div>
           </div>
           <div class="form-group row m-3">
             <legend class="col-sm-2 col-form-label ">Typ:</legend>
             <div class="col-sm-10">
-
-                <div class='form-check'>
-                    <input class='form-check-input' type='radio' name='type' id='type1' value='1'>
-                    <label class='form-check-label' for='type1'>Dzienny</label>
-                </div>
-                <div class='form-check'>
-                    <input class='form-check-input' type='radio' name='type' id='type2' value='2'>
-                    <label class='form-check-label' for='type2'>Tygodniowy</label>
-                </div>
-                <div class='form-check'>
-                    <input class='form-check-input' type='radio' name='type' id='type3' value='3'>
-                    <label class='form-check-label' for='type3'>Miesięczny</label>
-                </div>
-                <div class='form-check'>
-                    <input class='form-check-input' type='radio' name='type' id='type4' value='4'>
-                    <label class='form-check-label' for='type4'>Roczny</label>
-                </div>
-                <div class='form-check'>
-                    <input class='form-check-input' type='radio' name='type' id='type5' value='5'>
-                    <label class='form-check-label' for='type5'>Jednorazowy</label>
-                </div>
-
+                <?php
+                    foreach(COSTTYPES as $k => $v) {
+                        if($edit) {
+                            if($data["cost"]->type == $k) {
+                                $checked = " checked";
+                            } else {
+                                $checked = "";
+                            }
+                        } else {
+                            $checked = "";
+                        }
+                        echo "<div class='form-check'>
+                                <input class='form-check-input' type='radio' name='type' id='type$k' value='$k' $checked>
+                                <label class='form-check-label' for='type$k'>$v</label>
+                            </div>";
+                    }
+                ?>
             </div>
           </div>
 
             <div class="form-group row m-3 date-field" style="display:none;">
                 <label for="date_from" class="col-sm-2 col-form-label">Data od:</label>
                 <div class="col-sm-4">
-                    <input type="date" class="form-control" id="date_from" name="date_from" required>
+                    <input type="date" class="form-control" id="date_from" name="date_from" required <?php if($edit) {echo " value='".$data["cost"]->date_from."'"; }?>>
                 </div>
             </div>
             <div class="form-group row m-3 date-field" style="display:none;">
                 <label for="date_to" class="col-sm-2 col-form-label">Data do:</label>
                 <div class="col-sm-4">
-                    <input type="date" class="form-control" id="date_to" name="date_to" required>
+                    <input type="date" class="form-control" id="date_to" name="date_to" required <?php if($edit) {echo " value='".$data["cost"]->date_to."'"; }?>>
                 </div>
             </div>
             <div class="form-group row m-3 single-date-field" style="display:none;">
                 <label for="single_date" class="col-sm-2 col-form-label">Data:</label>
                 <div class="col-sm-4">
-                    <input type="date" class="form-control" id="single_date" name="single_date" required>
+                    <input type="date" class="form-control" id="single_date" name="single_date" required <?php if($edit) {echo " value='".$data["cost"]->date."'"; }?>>
                 </div>
             </div>
 
           <div class="form-group row m-3">
             <label for="price" class="col-sm-2 col-form-label">Kwota:</label>
             <div class="col-sm-10">
-              <input type="number" step="0.01" min="0" class="form-control" id="price" name="price" required>
+              <input type="number" step="0.01" min="0" class="form-control" id="price" name="price" required <?php if($edit) {echo " value='".$data["cost"]->price."'"; }?>>
             </div>
           </div>
 
@@ -85,19 +90,20 @@
             <label class="col-sm-2 col-form-label" for="category">Kategoria:</label>
             <div class="col-sm-10">
               <select class="form-control" id="category" name="category">
-                <option value='1'>Administracja</option>
-                <option value='2'>Flota</option>
-                <option value='3'>Kuchnia</option>
-                <option value='4'>IT</option>
-                <option value='5'>Media</option>
                 <?php
-                /*
-                foreach ($data["cities"] as $city) {
-                  $full_tag = $city["c_name"] . "_" . $city["wh_name"];
-                  $full_name = $city["c_fullname"] . " -> " . $city["wh_fullname"];
-                  $id = $city["id"];
-                  echo "<option value='$id'>$full_tag : $full_name</option>";
-                }*/
+                    $checked = "";
+                    foreach(COSTCATEGORIES as $k => $v) {
+                        if($edit) {
+                            if($data["cost"]->category == $k) {
+                                $checked = " selected";
+                            } else {
+                                $checked = "";
+                            }
+                        } else {
+                            $checked = "";
+                        }
+                        echo "<option value='$k' $checked>$v</option>";
+                    }
                 ?>
               </select>
             </div>
@@ -108,10 +114,21 @@
             <label for="method" class="col-sm-2 col-form-label">Metoda płatności:</label>
             <div class="col-sm-10">
             <select class="form-control" id="method" name="method">
-                <option value='0'>-</option>
-                <option value='1'>Gotówka</option>
-                <option value='2'>Karta *1111</option>
-                <option value='3'>Przelew</option>
+                <?php
+                    $checked = "";
+                    foreach(COSTMETHODS as $k => $v) {
+                        if($edit) {
+                            if($data["cost"]->method == $k) {
+                                $checked = " selected";
+                            } else {
+                                $checked = "";
+                            }
+                        } else {
+                            $checked = "";
+                        }
+                        echo "<option value='$k' $checked>$v</option>";
+                    }
+                ?>
               </select>
             </div>
           </div>
@@ -119,18 +136,19 @@
           <div class="form-group row m-3">
             <label for="active" class="col-sm-2 col-form-label">Płatność aktywna:</label>
             <div class="col-sm-10">
-              <input type="checkbox" class="form-check-input" id="active" name="active" value="1" checked>
+              <input type="checkbox" class="form-check-input" id="active" name="active" value="1" <?php if($edit) {if($data["cost"]->active == 1) {echo " checked"; }}?>>
             </div>
           </div>
 
           <div class="form-group row m-3">
             <label for="description" class="col-sm-2 col-form-label">Opis:</label>
             <div class="col-sm-10">
-            <input type="textarea" class="form-control" id="description" name="description">
+            <input type="textarea" class="form-control" id="description" name="description" <?php if($edit) {echo " value='".$data["cost"]->description."'"; }?>>
             </div>
           </div>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Dodaj koszt</button>
+        
+        <button class="w-100 btn btn-lg btn-primary" type="submit"><?=$button2;?></button>
       </form>
 
     </main>
@@ -140,13 +158,12 @@
             const typeRadios = document.querySelectorAll('input[name="type"]');
             const dateFields = document.querySelectorAll('.date-field');
             const singleDateField = document.querySelector('.single-date-field');
-            const dateFrom = document.getElementById('date_from');
-            const dateTo = document.getElementById('date_to');
             const singleDate = document.getElementById('single_date');
 
-            typeRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    const typeValue = this.value;
+            function updateDateFields() {
+                const selectedRadio = document.querySelector('input[name="type"]:checked');
+                if (selectedRadio) {
+                    const typeValue = selectedRadio.value;
                     if (typeValue >= 1 && typeValue <= 4) {
                         dateFields.forEach(field => {
                             field.style.display = 'flex';
@@ -169,8 +186,15 @@
                         singleDateField.style.display = 'none';
                         singleDate.required = false;
                     }
-                });
+                }
+            }
+
+            typeRadios.forEach(radio => {
+                radio.addEventListener('change', updateDateFields);
             });
+
+            // Wywołaj funkcję po załadowaniu strony
+            updateDateFields();
         });
     </script>
     <?php require_once 'landings/footer.view.php' ?>

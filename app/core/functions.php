@@ -113,3 +113,19 @@ function isDateInRange($date) { //do SMS
 
     return $inputDate >= $start && $inputDate <= $end;
 }
+
+function getWeekends($year) {
+    $weekends = [];
+    $date = new DateTime("$year-01-01");
+
+    // Iterujemy przez cały rok
+    while ($date->format('Y') == $year) {
+        if ($date->format('N') == 6) { // Sobota
+            $weekends[] = ['date' => $date->format('Y-m-d'), 'reason' => 'Sobota'];
+        } elseif ($date->format('N') == 7) { // Niedziela
+            $weekends[] = ['date' => $date->format('Y-m-d'), 'reason' => 'Niedziela'];
+        }
+        $date->modify('+1 day');
+    }
+    return $weekends;
+}

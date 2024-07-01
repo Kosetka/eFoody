@@ -50,6 +50,11 @@ define('TRADERS', '3'); //define('TRADERS', '1, 3');
 define('ALLTRADERS', '3, 10'); //define('TRADERS', '1, 3');
 define('EXCHANGESTATUS', [0 => "Oczekuje", 1 => "Zaakceptowany", 2 => "Odrzucony", 3 => "Odrzucony automatycznie", 4 => "Anulowany"]);
 define('REPORTTYPES', ['hour' => "godzinny", 'day' => "dzienny", 'week' => "tygodniowy", 'month' => "miesięczny"]);
+define('COSTTYPES', [1 => "Dzienny", 2 => "Tygodniowy", 3 => "Miesięczny", 4 => "Roczny", 5 => "Jednorazowy"]);
+define('COSTCATEGORIES', [1 => "Administracja", 2 => "Flota", 3 => "Kuchnia", 4 => "IT", 5 => "Media"]);
+define('COSTMETHODS', [0 => "-", 1 => "Gotówka", 2 => "Karta *1111", 3 => "Przelew"]);
+
+                                        
 
 /** true means show errors **/
 define('DEBUG', true);

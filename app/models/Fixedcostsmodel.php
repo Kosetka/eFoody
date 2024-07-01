@@ -26,9 +26,14 @@ class Fixedcostsmodel
         'method'
     ];
 
-    public function getLink($id)
+    public function getByID($id)
     {
         $query = "select * from $this->table WHERE id = $id";
+        return $this->query($query)[0];
+    }
+    public function getAll()
+    {
+        $query = "select * from $this->table";
         return $this->query($query);
     }
 }
