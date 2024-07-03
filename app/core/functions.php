@@ -129,3 +129,11 @@ function getWeekends($year) {
     }
     return $weekends;
 }
+
+function changePolishChars($tekst) {
+    $polskieZnaki = array('ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż', 
+                          'Ą', 'Ć', 'Ę', 'Ł', 'Ń', 'Ó', 'Ś', 'Ź', 'Ż');
+    $zwykleZnaki = array('a', 'c', 'e', 'l', 'n', 'o', 's', 'z', 'z',
+                         'A', 'C', 'E', 'L', 'N', 'O', 'S', 'Z', 'Z');
+    return strtr($tekst, array_combine($polskieZnaki, $zwykleZnaki));
+}

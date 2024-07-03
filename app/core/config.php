@@ -1,6 +1,6 @@
 <?php
 
-if ($_SERVER['SERVER_NAME'] == 'localhost') {
+if ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == '192.168.1.101') {
 	/** database config **/
 	define('DBNAME', 'efoody');
 	define('DBHOST', 'localhost');

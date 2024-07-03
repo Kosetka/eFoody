@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * GetCargo class
+ */
+class Attendance
+{
+    use Controller;
+
+    public function index()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $this->view('attendance', $data);
+    }
+
+
+    public function scanner()
+    {
+        $data = [];
+
+        if(isset($_GET["sts"]) && $_GET["sts"] == "atc") {
+            $card_id = "";
+            if(isset($_GET["wid"])) {
+                $w_id = $_GET["wid"];
+            }
+            if(isset($_GET["uid"])) {
+                $card_id = $_GET["uid"];
+            }
+            $sts = $_GET["sts"];
+
+            $card = new Cards();
+            $temp= $card->getCard($card_id);
+            if(empty($temp)) {
+                //brak karty
+                $data["return"] = "OK,atcErr01";
+                $card_log = new Cardlogger();
+                $card_log->insert(["w_id" => $w_id, "card_name" => $card_id, "error" => "OK,atcErr01"]);
+            } else {
+                //jest karta
+                if($temp[0]->status == 0) {
+                    //karta zablokowana
+                    $data["return"] = "OK,atcErr02";
+                    $card_log = new Cardlogger();
+                    $card_log->insert(["w_id" => $w_id, "card_name" => $card_id, "error" => "OK,atcErr02"]);
+                } else {
+                    //wszystki git
+                    $now = date("H:i:s"); 
+                    $day = date("d-m-Y"); 
+                    $day_full = date("Y-m-d");
+                    $card_scan = new Cardscan();
+                    $scan = $card_scan->getScan($card_id);
+
+
+
+                    $cardusers = new Carduser();
+                    $carduser = $cardusers->getCardUser($card_id);
+                    if(!empty($carduser)) {
+                        $name = $carduser[0]->first_name . ' ' . $carduser[0]->last_name;
+                        $name = changePolishChars($name);
+                        if (strlen($name) > 20) {
+                            $name = substr($name, 0, 20); //skrócenie do 20 znakow
+                        }
+                    } else {
+                        $name = "Brak danych";
+                    }
+
+                    if(!empty($scan)) {
+                        $in = substr($scan[0]->date, 11, 8);
+                        $today = substr($scan[0]->date, 0, 10);
+                        if($day_full != $today) {
+                            $data["return"] = "OK,TO_Successful,$name,$day,$now";
+                            $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "in"]);
+                        } else {
+                            if($scan[0]->status == "out") {
+                                $data["return"] = "OK,TO_Successful,$name,$day,$now";
+                                $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "in"]);
+                            } else {
+                                $data["return"] = "OK,TO_Successful,$name,$day,$in,$now";
+                                $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "out"]);
+                            }
+                        }
+                    } else {
+                        $data["return"] = "OK,TO_Successful,$name,$day,$now";
+                        $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "in"]);
+                    }
+                }
+            }
+
+            //OK,TO_Successful,Test,03/07/2024,16:58:19 <- ok
+            // OK,atcErr01 <- nie ma takiej karty
+
+        }
+
+        $this->view('attendance.scanner', $data);
+    }
+}
