@@ -11,7 +11,7 @@ class Shared
     {
         $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city";
         $data = $this->query($query);
-        //return $data;
+        return $data;
     }
     public function getFullData()
     {

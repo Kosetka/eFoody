@@ -130,14 +130,4 @@ class Users
         }
     }
 
-
-    public function cards()
-    {
-        if (empty($_SESSION['USER']))
-            redirect('login');
-
-        $data = [];
-
-        $this->view('users.cards', $data);
-    }
 }

@@ -24,5 +24,10 @@ class Cardlogger
         $query = "select * from $this->table WHERE card_id = '$card_id' LIMIT 1;";
         return $this->query($query);
     }
+    public function getLast($limit)
+    {
+        $query = "select * from $this->table WHERE error = 'OK,atcErr01' ORDER BY date DESC LIMIT $limit;";
+        return $this->query($query);
+    }
     
 }

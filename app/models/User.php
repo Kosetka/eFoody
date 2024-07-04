@@ -45,7 +45,6 @@ class User
 	}
 	public function getAllUsers()
 	{
-		$ids = TRADERS;
 		$query = "select * from $this->table;";
 		return $this->query($query);
 	}

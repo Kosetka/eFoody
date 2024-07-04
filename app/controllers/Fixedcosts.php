@@ -25,9 +25,6 @@ class Fixedcosts
         $data = [];
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            //show($_POST);
-            //die;
-
             $cost = new Fixedcostsmodel;
 
             $date_from = $_POST["date_from"];
