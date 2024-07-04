@@ -29,5 +29,10 @@ class Cardlogger
         $query = "select * from $this->table WHERE error = 'OK,atcErr01' ORDER BY date DESC LIMIT $limit;";
         return $this->query($query);
     }
+    public function getAll($limit)
+    {
+        $query = "select * from $this->table ORDER BY date DESC LIMIT $limit;";
+        return $this->query($query);
+    }
     
 }

@@ -106,5 +106,23 @@ class Card
 
         $this->view('cards.new', $data);
     }
+
+    public function errors()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $carderr = new Cardlogger();
+        $data["last_errors"] = $carderr->getAll(50);
+
+        $city = new Shared();
+        foreach($city->getCitiesAndWarehouse() as $city) {
+            $data["city"][$city->id] = $city;
+        }
+
+        $this->view('card.errors', $data);
+    }
 }
 

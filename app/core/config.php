@@ -53,6 +53,7 @@ define('REPORTTYPES', ['hour' => "godzinny", 'day' => "dzienny", 'week' => "tygo
 define('COSTTYPES', [1 => "Dzienny", 2 => "Tygodniowy", 3 => "Miesięczny", 4 => "Roczny", 5 => "Jednorazowy"]);
 define('COSTCATEGORIES', [1 => "Administracja", 2 => "Flota", 3 => "Kuchnia", 4 => "IT", 5 => "Media"]);
 define('COSTMETHODS', [0 => "-", 1 => "Gotówka", 2 => "Karta *1111", 3 => "Przelew"]);
+define('ATTENDANCEERRORS', ["OK,atcErr01" => "Brak karty w systemie", "OK,atcErr02" => "Karta zablokowana"]);
 
                                         
 
