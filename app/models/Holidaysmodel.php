@@ -22,6 +22,17 @@ class Holidaysmodel
         $query = "select * from $this->table;";
         return $this->query($query);
     }
+    public function getMonth($month, $year)
+    {
+        $month = str_pad($month, 2, "0", STR_PAD_LEFT);
+
+        $startDate = "$year-$month-01";
+        $endDate = date("Y-m-t", strtotime($startDate));
+
+        $query = "SELECT * FROM $this->table WHERE date BETWEEN '$startDate' AND '$endDate' ORDER BY date ASC;";
+        
+        return $this->query($query);
+    }
     public function getWorkingDays($month_from, $year_from, $month_to = null, $year_to = null)
     {
         // Ustawienie wartości domyślnych dla month_to i year_to

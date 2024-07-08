@@ -104,4 +104,77 @@ class Workers
 
         $this->view('workers.live', $data);
     }
+
+    public function day()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $this->view('workers.day', $data);
+    }
+
+    public function month()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+
+        $month = date("m");
+        $year = date("Y");
+
+        if (isset($URL[2])) {
+            $month = $URL[2];
+            $year = $URL[3];
+        }
+
+        if (isset($_GET["search"])) {
+            if (isset($_GET["month"])) {
+                $month = $_GET["month"];
+            }
+            if (isset($_GET["year"])) {
+                $year = $_GET["year"];
+            }
+        }
+
+
+        $users = new User();
+        foreach($users->getAllActiveUsers() as $user) {
+            $data["users"][$user->id] = $user;
+            $int[$user->id] = 0;
+            $work[$user->id] = 0;
+            $break[$user->id] = 0;
+        }
+
+        $cities = new Shared();
+        $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city";
+        $temp["cities"] = $cities->query($query);
+        foreach ($temp["cities"] as $city) {
+            $data["cities"][$city->id] = (array) $city;
+        }
+
+        $roles = new RolesNameModel();
+        foreach($roles->getAllRoles() as $role) {
+            $data["roles"][$role->id] = $role;
+        }
+
+        $holidays = new Holidaysmodel();
+        foreach($holidays->getMonth($month,$year) as $holiday) {
+            $data["holidays"][$holiday->date] = $holiday;
+        }
+
+        $data["month"] = $month;
+        $data["year"] = $year;
+
+                    
+        //show($data);die;
+
+        $this->view('workers.month', $data);
+    }
+
 }

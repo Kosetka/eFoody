@@ -165,3 +165,20 @@ function timeDiffInSeconds($time1, $time2) {
     
     return $diffInSeconds;
 }
+
+function printDaysOfMonth($month, $year) {
+    // Utwórz obiekt DateTime dla pierwszego dnia podanego miesiąca
+    $date = DateTime::createFromFormat('Y-m-d', "$year-$month-01");
+
+    // Znajdź liczbę dni w podanym miesiącu
+    $daysInMonth = $date->format('t');
+
+    // Pętla od 1 do liczby dni w miesiącu
+    for ($day = 1; $day <= $daysInMonth; $day++) {
+        // Ustaw datę na odpowiedni dzień miesiąca
+        $date->setDate($year, $month, $day);
+        
+        // Wypisz datę w formacie Y-m-d
+        echo $date->format('Y-m-d') . "<br>";
+    }
+}

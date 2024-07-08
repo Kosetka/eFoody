@@ -54,6 +54,29 @@ define('COSTTYPES', [1 => "Dzienny", 2 => "Tygodniowy", 3 => "Miesięczny", 4 =>
 define('COSTCATEGORIES', [1 => "Administracja", 2 => "Flota", 3 => "Kuchnia", 4 => "IT", 5 => "Media"]);
 define('COSTMETHODS', [0 => "-", 1 => "Gotówka", 2 => "Karta *1111", 3 => "Przelew"]);
 define('ATTENDANCEERRORS', ["OK,atcErr01" => "Brak karty w systemie", "OK,atcErr02" => "Karta zablokowana"]);
+define('POLISHMONTHS',[
+    "01" => "Styczeń",
+    "1" => "Styczeń",
+    "02" => "Luty",
+    "2" => "Luty",
+    "03" => "Marzec",
+    "3" => "Marzec",
+    "04" => "Kwiecień",
+    "4" => "Kwiecień",
+    "05" => "Maj",
+    "5" => "Maj",
+    "06" => "Czerwiec",
+    "6" => "Czerwiec",
+    "07" => "Lipiec",
+    "7" => "Lipiec",
+    "08" => "Sierpień",
+    "8" => "Sierpień",
+    "09" => "Wrzesień",
+    "9" => "Wrzesień",
+    "10" => "Październik",
+    "11" => "Listopad",
+    "12" => "Grudzień"
+]);
 
                                         
 

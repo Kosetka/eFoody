@@ -26,7 +26,7 @@ class Holidays
         $holidays = new Holidaysmodel();
         $data["holidays"] = $holidays->getAll();
 
-        $data["month"] = $holidays->getWorkingDays(1,2024, 12);
+        //$data["month"] = $holidays->getWorkingDays(1,2024, 12);
 
         $this->view('holidays', $data);
     }

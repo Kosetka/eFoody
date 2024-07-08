@@ -1,0 +1,135 @@
+<?php require_once 'landings/header.view.php' ?>
+<?php require_once 'landings/nav.view.php' ?>
+
+<div id="layoutSidenav">
+    <?php require_once 'landings/sidebar.left.view.php' ?>
+    <div id="layoutSidenav_content">
+        <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 100%">
+            <div class="container-fluid px-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="">Lista godzin pracowników</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="get">
+                            <div class="form-group row m-3">
+                                <label for="month" class="col-sm-2 col-form-label">Miesiąc:</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="month" name="month" required>
+                                        <?php
+                                            for ($month = 1; $month <= 12; $month++) {
+                                                $sel = "";
+                                                if ($data["month"] == $month) {
+                                                    $sel = "selected";
+                                                }
+                                                echo '<option value="' . $month . '" ' . $sel . '>' . date("F", mktime(0, 0, 0, $month, 1)) . '</option>';
+                                            }
+                                            echo '</select>';
+                                        ?>
+                                </div>
+                            </div>
+
+                            <div class="form-group row m-3">
+                                <label for="year" class="col-sm-2 col-form-label">Rok:</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="year" name="year" required>
+                                        <?php 
+                                            for ($year = 2024; $year <= 2025; $year++) {
+                                                $sel = "";
+                                                if ($data["year"] == $year) {
+                                                    $sel = "selected";
+                                                }
+                                                echo '<option value="' . $year . '" ' . $sel . '>' . $year . '</option>';
+                                            }
+                                            echo '</select>';
+                                        ?>
+                                </div>
+                            </div>
+                            <button class="w-40 btn btn-lg btn-primary" type="submit" name="search" value=1>Pokaż dane</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid px-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="">
+                            <?php 
+                                echo POLISHMONTHS[$data["month"]] . " - " . $data["year"];
+                            ?>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th scope="col">Pracownik</th>
+                                <th scope="col">Oddział</th>
+                                <th scope="col">Stanowisko</th>
+                                <th scope="col">Suma godzin</th>
+                                <th scope="col">Wypłata</th>
+                                <?php
+                                    $year = $data["year"];
+                                    $month = $data["month"];
+                                    $date = DateTime::createFromFormat('Y-m-d', "$year-$month-01");
+                                    $daysInMonth = $date->format('t');
+                                    for ($day = 1; $day <= $daysInMonth; $day++) {
+                                        $date->setDate($year, $month, $day);
+                                        if(isset($data["holidays"][$date->format('Y-m-d')])) {
+                                            echo "<td scope='col'style='background-color: #ee8866;'>".$date->format('Y-m-d')."</td>";
+                                        } else {
+                                            echo "<th scope='col'>".$date->format('Y-m-d')."</td>";
+                                        }
+                                        
+                                    }
+                                ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                foreach($data["users"] as $user) {
+                                    echo '<tr>';
+                                    echo '<th>'.$user->first_name .' '.$user->last_name.'</th>';
+                                    echo '<th>'.$data["cities"][$user->u_warehouse]["c_fullname"].' -> '.$data["cities"][$user->u_warehouse]["wh_fullname"].'</th>';
+                                    echo '<th>'.$data["roles"][$user->u_role]->role_name.'</th>';
+                                    echo '<td></td>';
+                                    echo '<td></td>';
+                                    
+                                    for ($day = 1; $day <= $daysInMonth; $day++) {
+                                        $date->setDate($year, $month, $day);
+                                        if(isset($data["holidays"][$date->format('Y-m-d')])) {
+                                            echo "<td scope='col'style='background-color: #ffbfaa;'>".$date->format('Y-m-d')."</td>";
+                                        } else {
+                                            echo "<td scope='col'>".$date->format('Y-m-d')."</td>";
+                                        }
+                                    }
+                                    echo '</tr>';
+                                }
+                            ?>
+                            <tr>
+                                <th colspan="3" scope="col">TOTAL</th>
+                                <th scope="col">Suma godzin</th>
+                                <th scope="col">Wypłata</th>
+                                <?php
+                                    $year = $data["year"];
+                                    $month = $data["month"];
+                                    $date = DateTime::createFromFormat('Y-m-d', "$year-$month-01");
+                                    $daysInMonth = $date->format('t');
+                                    for ($day = 1; $day <= $daysInMonth; $day++) {
+                                        $date->setDate($year, $month, $day);
+                                        echo "<th scope='col'>".$date->format('Y-m-d')."</td>"; //tutaj zmienić na zaakceptowane godziny
+                                    }
+                                ?>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        
+
+
+
+        </main>
+        <?php require_once 'landings/footer.view.php' ?>
