@@ -137,3 +137,31 @@ function changePolishChars($tekst) {
                          'A', 'C', 'E', 'L', 'N', 'O', 'S', 'Z', 'Z');
     return strtr($tekst, array_combine($polskieZnaki, $zwykleZnaki));
 }
+
+function subYear($date) {
+    return substr($date, 11);
+}
+
+function showInHours($seconds) {
+    $hours = floor($seconds / 3600);
+    $minutes = floor(($seconds % 3600) / 60);
+    $seconds = $seconds % 60;
+
+    // Formatowanie do hh:mm:ss
+    return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+}
+
+function timeDiffInSeconds($time1, $time2) {
+    $datetime1 = strtotime($time1);
+    $datetime2 = strtotime($time2);
+    
+    if ($datetime1 === false || $datetime2 === false) {
+        // W przypadku nieprawidłowego formatu czasu, zwróć 0 lub rzuć wyjątek, zależnie od wymagań
+        return 0;
+    }
+    
+    // Oblicz różnicę czasu w sekundach
+    $diffInSeconds = abs($datetime2 - $datetime1);
+    
+    return $diffInSeconds;
+}

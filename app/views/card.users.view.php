@@ -102,7 +102,7 @@
                 </thead>
                 <tbody>
                     <?php
-                    if(isset($data["user_cards"])) {
+                    if(!empty($data["user_cards"])) {
                         foreach ($data["user_cards"] as $card_user) {
                             echo "<tr>";
                             echo "<td>" . $card_user->card_id . "</td>";
@@ -116,5 +116,4 @@
                 </tbody>
             </table>
         </div>
-        <?php show($data)?>
         <?php require_once 'landings/footer.view.php' ?>

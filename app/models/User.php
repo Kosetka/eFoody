@@ -48,6 +48,12 @@ class User
 		$query = "select * from $this->table;";
 		return $this->query($query);
 	}
+	public function getAllActiveUsers()
+	{
+		$query = "select * from $this->table WHERE active = 1;";
+		return $this->query($query);
+	}
+
 	public function getMyTraders($id)
 	{
 		$query = "select * from $this->table WHERE id IN ($id)";

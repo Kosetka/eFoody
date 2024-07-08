@@ -59,4 +59,13 @@ class Carduser
         $query = "select * from $this->table WHERE id = $id LIMIT 1";
         return $this->query($query)[0];
     }
+    public function getCardHolder($card_id)
+    {
+        $date = date("Y-m-d H:i:s");
+        $query = "SELECT * FROM $this->table 
+          WHERE card_id = '$card_id' 
+          AND ('$date' BETWEEN date_from AND IFNULL(date_to, NOW())) 
+          LIMIT 1";
+        return $this->query($query);
+    }
 }

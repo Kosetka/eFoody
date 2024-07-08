@@ -16,12 +16,18 @@ class Cardscan
         'card_name',
         'w_id',
         'date',
-        'status'
+        'status',
+        'user_id'
     ];
 
     public function getScan($card_id)
     {
         $query = "select * from $this->table WHERE card_name = '$card_id' ORDER BY date DESC LIMIT 1;";
+        return $this->query($query);
+    }
+    public function getScanDate($date)
+    {
+        $query = "select * from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59' ORDER BY date ASC;";
         return $this->query($query);
     }
     

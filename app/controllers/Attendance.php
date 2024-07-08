@@ -68,24 +68,31 @@ class Attendance
                         $name = "Brak danych";
                     }
 
+                    $card_user = new Carduser();
+                    if(!empty($card_user->getCardHolder($card_id))) {
+                        $user_id = $card_user->getCardHolder($card_id)[0]->u_id;
+                    } else {    
+                        $user_id = 0;
+                    }
+
                     if(!empty($scan)) {
                         $in = substr($scan[0]->date, 11, 8);
                         $today = substr($scan[0]->date, 0, 10);
                         if($day_full != $today) {
                             $data["return"] = "OK,TO_Successful,$name,$day,$now";
-                            $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "in"]);
+                            $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "in", "user_id" => $user_id]);
                         } else {
                             if($scan[0]->status == "out") {
                                 $data["return"] = "OK,TO_Successful,$name,$day,$now";
-                                $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "in"]);
+                                $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "in", "user_id" => $user_id]);
                             } else {
                                 $data["return"] = "OK,TO_Successful,$name,$day,$in,$now";
-                                $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "out"]);
+                                $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "out", "user_id" => $user_id]);
                             }
                         }
                     } else {
                         $data["return"] = "OK,TO_Successful,$name,$day,$now";
-                        $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "in"]);
+                        $card_scan->insert(["w_id" => $w_id, "card_name" => $card_id, "date" => "$day_full $now", "status" => "in", "user_id" => $user_id]);
                     }
                 }
             }
