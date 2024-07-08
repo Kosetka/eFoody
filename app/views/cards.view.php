@@ -19,6 +19,7 @@
                                 <th>Status</th>
                                 <th>Właściciel</th>
                                 <th>Akcje</th>
+                                <th>Naklejka</th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -27,6 +28,7 @@
                                 <th>Status</th>
                                 <th>Właściciel</th>
                                 <th>Akcje</th>
+                                <th>Naklejka</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -54,6 +56,8 @@
                                     
 
                                 echo "<td><a href='" . ROOT . "/card/edit/" . $card->id . "'>Edytuj</a></td>";
+                                echo '<td><a target="_blank" class="btn btn-success print-pdf" href=" ' . ROOT . '/card/generate/'.$owner.'"
+                                                role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a></td>';
                                 echo "</tr>";
                             }
                             ?>

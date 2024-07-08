@@ -53,6 +53,11 @@ class User
 		$query = "select * from $this->table WHERE id IN ($id)";
 		return $this->query($query);
 	}
+	public function getUser($id)
+	{
+		$query = "select * from $this->table WHERE id = $id";
+		return $this->query($query)[0];
+	}
 
 	public function validate($data)
 	{

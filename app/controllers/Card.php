@@ -188,5 +188,26 @@ class Card
 
         $this->view('card.users', $data);
     }
+
+    public function generate() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $id = $URL[2];
+        }
+        if ($id == 0) {
+            $data["my_name"] = "";
+        } else {
+            $my_user = new User();
+            $data["my_user"] = $my_user->getUser($id);
+            
+            $data["my_name"] = $data["my_user"]->first_name . ' ' . $data["my_user"]->last_name;
+        }
+
+        $this->view('cards.generate',$data);
+    }
 }
 
