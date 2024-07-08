@@ -84,7 +84,7 @@
                                 $access = [1, 2];
                                 if(in_array($your_id,$access)) {
                                     $edit_link = '<a href="' . ROOT . '/users/edit/' . $id . '">Edytuj</a>';
-                                    $edit_card = '<a href="' . ROOT . '/users/edit/' . $id . '">Lista</a>';
+                                    $edit_card = '<a href="' . ROOT . '/card/users/' . $id . '">Lista</a>';
                                 } else {
                                     $edit_link = "";
                                     $edit_card = "";
