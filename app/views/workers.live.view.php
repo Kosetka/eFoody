@@ -6,6 +6,20 @@
     <div id="layoutSidenav_content">
         <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 100%">
         <div class="container-fluid px-4">
+            <div class="alert alert-info">
+                <h2>UWAGA!</h2>
+                <p><b>Wejście</b> - czas pierwszego odbicia kartą danego dnia</p>
+                <p><b>Wyjście</b> - czas ostatniego odbicia kartą danego dnia</p>
+                <p><b>Czas pracy [zarejestrowany]</b> - czas jaki osoba spędziła w pracy - wyliczony czas między poszczególnymi odbiciami karty</p>
+                <p><b>Przerwy</b> - czas jaki pracownik spędził po za firmą, np. gdy musiał wyjść coś załatwić prywatnego</p>
+                <br>
+                <p>Klikając przycisk <button class='btn btn-primary show-details-btn'>Pokaż</button> pokaże się szczegółowa tabelka z każdym wejściem i wyjściem danego pracownika oraz informacją w którym lokalu był. </p>
+                <br><br>
+                <p>Kolorem <span class="table-success" style="padding: 4px;">zielonym</span> oznaczone są osoby, które są aktualnie w pracy.</p>
+                <p>Kolorem <span class="table-warning" style="padding: 4px;">żółtym</span> oznaczone są osoby, które wyszły z budynku (odbiły się kartą), a ich łączny czas pracy w danym dniu jest zbyt krótki, żeby uznać że zakończyły pracę na dziś.</p>
+                <p>Kolorem <span class="table-info" style="padding: 4px;">niebieskim</span> oznaczone są osoby, które zakończyły pracę w dniu dzisiejszym.</p>
+                <p>Kolorem <span class="table-danger" style="padding: 4px;">czerwonym</span> oznaczone są osoby, których nie ma w pracy (nie odbiły się kartą na wejściu)</p>
+            </div>
             <div class="card mb-4">
                 <div class="card-header">
                     <h2 class="">Pracownicy LIVE : <?=$data["date"];?></h2>

@@ -141,6 +141,9 @@ function changePolishChars($tekst) {
 function subYear($date) {
     return substr($date, 11);
 }
+function subDay($date) {
+    return substr($date, 0, 10);
+}
 
 function showInHours($seconds) {
     $hours = floor($seconds / 3600);

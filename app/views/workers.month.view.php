@@ -51,6 +51,9 @@
                 </div>
             </div>
 
+            <?php
+                if($data["show_table"] == true) {
+            ?>
             <div class="container-fluid px-4">
                 <div class="card mb-4">
                     <div class="card-header">
@@ -88,20 +91,46 @@
                         </thead>
                         <tbody>
                             <?php
+                                $hours = [];
+                                $daily = [];
+                                for ($day = 1; $day <= $daysInMonth; $day++) {
+                                    $date->setDate($year, $month, $day);
+                                    foreach($data["users"] as $user) {
+                                        if(!isset($hours[$user->id])) {
+                                            $hours[$user->id] = 0;
+                                        } 
+                                        if(isset($data["accepted"][$date->format('Y-m-d')][$user->id])) {
+                                            $hours[$user->id] += $data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time;
+                                        }
+                                        
+
+                                        if(!isset($daily[$date->format('Y-m-d')])) {
+                                            $daily[$date->format('Y-m-d')] = 0;
+                                        } 
+                                        if(isset($data["accepted"][$date->format('Y-m-d')][$user->id])) {
+                                            $daily[$date->format('Y-m-d')] += $data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time;
+                                        }
+                                        
+                                    }
+                                }
                                 foreach($data["users"] as $user) {
                                     echo '<tr>';
                                     echo '<th>'.$user->first_name .' '.$user->last_name.'</th>';
                                     echo '<th>'.$data["cities"][$user->u_warehouse]["c_fullname"].' -> '.$data["cities"][$user->u_warehouse]["wh_fullname"].'</th>';
                                     echo '<th>'.$data["roles"][$user->u_role]->role_name.'</th>';
-                                    echo '<td></td>';
-                                    echo '<td></td>';
+                                    echo '<td>'.showInHours($hours[$user->id]).'</td>';
+                                    echo '<td></td>'; //wypłata
                                     
                                     for ($day = 1; $day <= $daysInMonth; $day++) {
                                         $date->setDate($year, $month, $day);
+                                        $seconds = "";
+                                        if(!empty($data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time)) {
+                                            $seconds = showInHours($data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time);
+                                        }
                                         if(isset($data["holidays"][$date->format('Y-m-d')])) {
-                                            echo "<td scope='col'style='background-color: #ffbfaa;'>".$date->format('Y-m-d')."</td>";
+                                            echo "<td scope='col'style='background-color: #ffbfaa;'>".$seconds."</td>";
                                         } else {
-                                            echo "<td scope='col'>".$date->format('Y-m-d')."</td>";
+                                            echo "<td scope='col'>".$seconds."</td>";
                                         }
                                     }
                                     echo '</tr>';
@@ -109,8 +138,8 @@
                             ?>
                             <tr>
                                 <th colspan="3" scope="col">TOTAL</th>
-                                <th scope="col">Suma godzin</th>
-                                <th scope="col">Wypłata</th>
+                                <th scope="col"><?php echo showInHours(array_sum($daily));?></th>
+                                <th scope="col"></th><!-- wypłata -->
                                 <?php
                                     $year = $data["year"];
                                     $month = $data["month"];
@@ -118,15 +147,23 @@
                                     $daysInMonth = $date->format('t');
                                     for ($day = 1; $day <= $daysInMonth; $day++) {
                                         $date->setDate($year, $month, $day);
-                                        echo "<th scope='col'>".$date->format('Y-m-d')."</td>"; //tutaj zmienić na zaakceptowane godziny
+                                        if($daily[$date->format('Y-m-d')] == "0") {
+                                            echo "<th scope='col'></td>"; //tutaj zmienić na zaakceptowane godziny
+                                        } else {
+                                            echo "<th scope='col'>".showInHours($daily[$date->format('Y-m-d')])."</td>"; //tutaj zmienić na zaakceptowane godziny
+                                        }
                                     }
                                 ?>
                             </tr>
                         </tbody>
                     </table>
+                    <?php //show($daily);?>
                     </div>
                 </div>
             </div>
+            <?php
+                }
+            ?>
         
 
 
