@@ -142,6 +142,142 @@
                     <div id="calendar"></div>
                 </div>
             </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 id="calendarHeader" class="">Szczegółowa lista godzin</h2>
+                </div>
+                <div class="card-body">
+                <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Data</th>
+                                <th scope="col">Pierwsze wejście</th>
+                                <th scope="col">Ostatnie wyjście</th>
+                                <th scope="col">Czas pracy</th>
+                                <th scope="col">Wejście</th>
+                                <th scope="col">Wyjście</th>
+                                <th scope="col">Akcja</th>
+                                <?php
+                                    $year = $data["year"];
+                                    $month = $data["month"];
+                                    $date = DateTime::createFromFormat('Y-m-d', "$year-$month-01");
+                                    $daysInMonth = $date->format('t');
+                                ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                for ($day = 1; $day <= $daysInMonth; $day++) {
+                                    $date->setDate($year, $month, $day);
+                                    $holiday = "";
+                                    if(!isset($data["accepted"][$date->format('Y-m-d')])) {
+                                        foreach($data["holidays"] as $holi) {
+                                            if($holi->date == $date->format('Y-m-d')) {
+                                                $holiday = ' class="calendar-holiday"';
+                                            }
+                                        }
+                                        //nie są zaakceptowane
+                                        echo '<tr '.$holiday.'>';
+                                        echo '<td>'.$date->format('d-m-Y').'</td>';
+                                        $wymiar = "";
+                                        $in = "";
+                                        $out = "";
+                                        $work_time = "";
+                                        if(isset($data["scans_ok"][$date->format('Y-m-d')])) {
+                                            $wymiar = count($data["scans_ok"][$date->format('Y-m-d')]);
+                                            $in = $data["scans_ok"][$date->format('Y-m-d')][0]["in"];
+                                            $out = $data["scans_ok"][$date->format('Y-m-d')][$wymiar-1]["out"];
+                                            $work_time = showInHours($work[$date->format('Y-m-d')]);
+                                        }
+                                        echo '<td>'.subYear($in).'</td>';
+                                        echo '<td>'.subYear($out).'</td>';
+                                        echo '<td>'.$work_time.'</td>';
+                                        $not_accepted = false;
+
+                                        if($work_time != "") $not_accepted = true;
+
+                                        if($not_accepted == true) {
+                                            echo '<td colspan="3">Oczekuje na akceptację godzin</td>';
+                                        } else {
+                                            //zaakceptowane godziny, czyli do zmiany
+                                            echo '<form method="post">';
+                                            ?>
+                                            <td>
+                                                <div class="input-group mb-3" style="width: 140px">
+                                                    <span class="input-group-text" id="accept_in"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                                                    <input type="time" class="form-control" name="accept_in" required>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text" id="accept_in"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+                                                    <input type="time" class="form-control" name="accept_out" required>
+                                                </div>
+                                            </td>
+                                            
+                                            <?php
+                                            echo '<input hidden type="text" name="u_id" value="'.$data["u_id"].'">';
+                                            echo '<input hidden type="text" name="date_sel" value="'.$date->format('Y-m-d').'">';
+                                            echo '<td><button class="w-40 btn btn-sm btn-primary" type="submit" name="save_add" value=1>Dodaj</button></td>';
+                                            echo '</form>';
+                                        }
+                                        echo '</tr>';
+                                    } else {
+                                        //są zaakceptowane
+                                        foreach($data["holidays"] as $holi) {
+                                            if($holi->date == $date->format('Y-m-d')) {
+                                                $holiday = ' class="calendar-holiday"';
+                                            }
+                                        }
+                                        echo '<tr '.$holiday.'>';
+                                        echo '<td>'.$date->format('d-m-Y').'</td>';
+                                        $wymiar = "";
+                                        $in = "";
+                                        $out = "";
+                                        $work_time = "";
+                                        if(isset($data["accepted"][$date->format('Y-m-d')])) {
+                                            $in = $data["accepted"][$date->format('Y-m-d')]->accept_in;
+                                            $out = $data["accepted"][$date->format('Y-m-d')]->accept_out;
+                                            $work_time = showInHours($data["accepted"][$date->format('Y-m-d')]->accept_time);
+                                        }
+                                        echo '<td>'.$in.'</td>';
+                                        echo '<td>'.$out.'</td>';
+                                        echo '<td>'.$work_time.'</td>';
+
+                                        echo '<form method="post">';
+                                        ?>
+                                        <td>
+                                            <div class="input-group mb-3" style="width: 140px">
+                                                <span class="input-group-text" id="accept_in"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                                                <input type="time" class="form-control" name="accept_in" value="<?=$in;?>" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="accept_in"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+                                                <input type="time" class="form-control" name="accept_out" value="<?=$out;?>" required>
+                                            </div>
+                                        </td>
+                                        
+                                        <?php
+                                        echo '<input hidden type="text" name="u_id" value="'.$data["u_id"].'">';
+                                        echo '<input hidden type="text" name="date_sel" value="'.$date->format('Y-m-d').'">';
+                                        echo '<input hidden type="text" name="row_id" value="'.$data["accepted"][$date->format('Y-m-d')]->id.'">';
+                                        echo '<td><button class="w-40 btn btn-sm btn-primary" type="submit" name="save_edit" value=1>Zapisz zmiany</button></td>';
+                                        echo '</form>';
+                                        
+                                        echo '</tr>';
+                                    }
+
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
             <?php
                 }
             ?>

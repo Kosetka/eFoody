@@ -65,19 +65,20 @@ class Users
 
         if ($_SERVER['REQUEST_METHOD'] == "POST" && !empty($_GET)) {
 
-            if($_POST["u_role"] <> 10) {
-                $_POST["helper_for"] = NULL;
-                //unset($_POST["helper_for"]);
-            }
-            if(!isset($_POST["active"])) {
-                $_POST["active"] = 0;
-            }
             $URL = $_GET['url'] ?? 'home';
             $URL = explode("/", trim($URL, "/"));
             $user_id = $URL[2];
+            
             $user = new User();
             $warehouse_access = new WarehouseAccessModel();
             if (isset($_POST["userEdit"])) {
+                if($_POST["u_role"] <> 10) {
+                    $_POST["helper_for"] = NULL;
+                    //unset($_POST["helper_for"]);
+                }
+                if(!isset($_POST["active"])) {
+                    $_POST["active"] = 0;
+                }
                 $user->update($user_id, $_POST);
                 $u_warehouse = $_POST["u_warehouse"];
                 $update_data = ["u_id" => $user_id, "w_id" => $u_warehouse];
@@ -95,6 +96,49 @@ class Users
                 }
                 $data['success_warehouse'] = "Edycja magazynów pomyślna!";
                 //edycja dolengo formularza
+            } elseif (isset($_POST["payrate"])) {
+                $set_u_id = $_SESSION["USER"]->id;
+                $type = $_POST["type"];
+                $rate = $_POST["rate"];
+                $date_from = $_POST["date_from"];
+                $date_to = $_POST["date_to"];
+                if(empty($_POST["date_to"])) {
+                    $date_to = NULL;
+                }
+                if(isset($_POST["edit_id"])) {
+                    $que = [
+                        "type"=> $type,
+                        "rate"=> $rate,
+                        "date_from"=> $date_from,
+                        "date_to"=> $date_to,
+                        "set_u_id"=> $set_u_id
+                    ];
+                    $payrate = new Payrate();
+                    $payrate->update($_POST["edit_id"], $que);
+                    $data['success_payrate'] = "Stawka pomyślnie edytowana!";
+
+                } else {
+                    $que = [
+                        "u_id" => $user_id,
+                        "type"=> $type,
+                        "rate"=> $rate,
+                        "date_from"=> $date_from,
+                        "date_to"=> $date_to,
+                        "set_u_id"=> $set_u_id
+                    ];
+    
+                    $payrate = new Payrate();
+    
+                    $upd = $payrate->getActiveByUser($user_id);
+                    if(!empty($upd)) {
+                        $new_date = date('Y-m-d', strtotime($date_from . ' -1 day'));
+                        $payrate->update($upd[0]->id, ["date_to" => $new_date]);
+                    }
+    
+                    $payrate->insert($que);
+    
+                    $data['success_payrate'] = "Stawka pomyślnie dodana!";
+                }
             }
         }
 
@@ -102,6 +146,17 @@ class Users
             $URL = $_GET['url'] ?? 'home';
             $URL = explode("/", trim($URL, "/"));
             $user_id = $URL[2];
+
+            if(isset($URL[3])) {
+                $payrate_id = $URL[3];
+                $data["payrate_id"] = $payrate_id;
+                $pr = new Payrate();
+                $data["payrate"] = $pr->getPayrate($payrate_id);
+            } else {
+                $payrate_id = 0;
+                $data["payrate_id"] = $payrate_id;
+            }
+
             $user = new User();
             $data["user"] = $user->getOne("users", $user_id)[0];
 
@@ -125,6 +180,9 @@ class Users
             foreach ($temp2["cities"] as $city2) {
                 $data["cityList"][$city2->id] = $city2;
             }
+
+            $payrate = new Payrate();
+            $data["payrates"] = $payrate->getUserPayrate($user_id);
 
             $this->view('users.edit', $data);
         }

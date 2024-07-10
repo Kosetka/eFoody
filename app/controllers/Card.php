@@ -175,8 +175,12 @@ class Card
             $data["cards"][$c->card_id] = $c;
         }
         $card_users = new Carduser;
-        foreach($card_users->getFreeCards() as $cus) {
-            $data["free_cards"][$cus->card_id] = $cus;
+        if(!empty($card_users->getFreeCards())) {
+            foreach($card_users->getFreeCards() as $cus) {
+                $data["free_cards"][$cus->card_id] = $cus;
+            }
+        } else {
+            $data["free_cards"] = [];
         }
 
         if (isset($card_id)) {
