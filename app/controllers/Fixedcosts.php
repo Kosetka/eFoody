@@ -118,4 +118,50 @@ class Fixedcosts
 
         $this->view('fixedcosts.new', $data);
     }
+
+    public function show()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+
+        $month = date("m");
+        $year = date("Y");
+        
+        $data["show_table"] = false;
+        if (isset($URL[2])) {
+            $data["show_table"] = true;
+            $month = $URL[2];
+            $year = $URL[3];
+        }
+
+        if (isset($_GET["search"])) {
+            $data["show_table"] = true;
+            if (isset($_GET["month"])) {
+                $month = $_GET["month"];
+            }
+            if (isset($_GET["year"])) {
+                $year = $_GET["year"];
+            }
+        }
+        $data["month"] = $month;
+        $data["year"] = $year;
+
+
+
+
+
+        $holidays = new Holidaysmodel();
+        foreach($holidays->getMonth($month,$year) as $holiday) {
+            $data["holidays"][$holiday->date] = $holiday;
+        }
+        
+        $costs = new Fixedcostsmodel;
+        $data["costs"] = $costs->getAll();
+    
+        $this->view('fixedcosts.show', $data);
+    }
 }
