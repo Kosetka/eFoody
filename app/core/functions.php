@@ -31,6 +31,13 @@ function getMargin($p, $c)
     }
 	return round(($p - $c) / $p * 100, 2);
 }
+function showPrice($p, $c)
+{
+    if($c == 0) {
+        return 0;
+    }
+	return round($p / $c, 2);
+}
 function getPercent($p, $c, $cel = 2)
 {
 	$ret = 0;
@@ -38,6 +45,15 @@ function getPercent($p, $c, $cel = 2)
 		$ret = round($p / $c * 100, $cel);
 	}
 	return $ret;
+}
+
+function roundUp($number)
+{
+    // Mnożenie przez 100, zaokrąglanie w górę, a następnie dzielenie przez 100
+    $rounded = ceil($number * 100) / 100;
+    
+    // Formatowanie liczby do dwóch miejsc po przecinku
+    return number_format($rounded, 2, '.', '');
 }
 
 function buildHierarchy($data) {
@@ -184,4 +200,13 @@ function printDaysOfMonth($month, $year) {
         // Wypisz datę w formacie Y-m-d
         echo $date->format('Y-m-d') . "<br>";
     }
+}
+function removeLeadingZero($str)
+{
+    // Sprawdzenie, czy pierwszy znak to "0"
+    if (isset($str[0]) && $str[0] === '0') {
+        // Usunięcie pierwszego znaku
+        $str = substr($str, 1);
+    }
+    return $str;
 }

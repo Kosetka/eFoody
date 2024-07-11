@@ -68,7 +68,7 @@
             <div class="form-group row m-3 date-field" style="display:none;">
                 <label for="date_to" class="col-sm-2 col-form-label">Data do:</label>
                 <div class="col-sm-4">
-                    <input type="date" class="form-control" id="date_to" name="date_to" required <?php if($edit) {echo " value='".$data["cost"]->date_to."'"; }?>>
+                    <input type="date" class="form-control" id="date_to" name="date_to" <?php if($edit) {echo " value='".$data["cost"]->date_to."'"; }?>>
                 </div>
             </div>
             <div class="form-group row m-3 single-date-field" style="display:none;">
@@ -167,7 +167,7 @@
                     if (typeValue >= 1 && typeValue <= 4) {
                         dateFields.forEach(field => {
                             field.style.display = 'flex';
-                            field.querySelector('input').required = true;
+                            field.querySelector('input').required = false;
                         });
                         singleDateField.style.display = 'none';
                         singleDate.required = false;

@@ -147,6 +147,7 @@ class Fixedcosts
                 $year = $_GET["year"];
             }
         }
+        $month = removeLeadingZero($month);
         $data["month"] = $month;
         $data["year"] = $year;
 
@@ -158,9 +159,28 @@ class Fixedcosts
         foreach($holidays->getMonth($month,$year) as $holiday) {
             $data["holidays"][$holiday->date] = $holiday;
         }
-        
+        $data["working_days"] = cal_days_in_month(CAL_GREGORIAN, $month, $year) - $holidays->getWorkingDays($month,$year)[$year][$month];
+
         $costs = new Fixedcostsmodel;
         $data["costs"] = $costs->getAll();
+
+        $users = new User();
+        foreach($users->getAllActiveUsers() as $user) {
+            $data["users"][$user->id] = $user;
+        }
+        $workhour = new Workhours();
+        if(!empty($workhour->getMonth($month, $year))) {
+            foreach($workhour->getMonth($month, $year) as $wh) {
+                $data["accepted"][$wh->date][$wh->u_id] = $wh;
+            }
+        }
+
+        $payrates = new Payrate();
+        if(!empty($payrates->getRates($month, $year))) {
+            foreach($payrates->getRates($month, $year) as $pr) {
+                $data["rates"][$pr->u_id][] = $pr;
+            }
+        }
     
         $this->view('fixedcosts.show', $data);
     }

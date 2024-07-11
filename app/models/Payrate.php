@@ -38,4 +38,15 @@ class Payrate
         $query = "select * from $this->table WHERE id = $id";
         return $this->query($query);
     }
+    public function getRates($month, $year)
+    {
+        $start_date = "$year-$month-01";
+        $end_date = date("Y-m-t", strtotime($start_date));
+
+        $query = "select * from $this->table WHERE 
+                date_from <= '$end_date'
+                AND (date_to >= '$start_date' OR date_to IS NULL);";
+                
+        return $this->query($query);
+    }
 }
