@@ -117,7 +117,6 @@
                                                             $add_log = false;
                                                             $rate_log[] = "Dzień: ".$accept_days_key."; User ID: ".$temp_u_id."; Stawka: ".$t_rate->rate."; Czas pracy: ".$temp_time."; Wypłata: ".$days[$accept_days_key];
                                                         }
-                                                        //tu gdy stała kwota
 
                                                     } elseif($accept_days_key >= $t_rate->date_from && $accept_days_key <= $t_rate->date_to) {
                                                         if($t_rate->type == 2) {
@@ -126,12 +125,14 @@
                                                             $add_log = false;
                                                             $rate_log[] = "Dzień: ".$accept_days_key."; User ID: ".$temp_u_id."; Stawka: ".$t_rate->rate."; Czas pracy: ".$temp_time."; Wypłata: ".$days[$accept_days_key];
                                                         }
-                                                        //tu gdy stała kwota
                                                     }
                                                     if($t_rate->type == 1) {
+                                                        // stała stawka
                                                         $fix_rate = true;
                                                         $total_cost_workers_fixed += $t_rate->rate;
                                                         $add_log = false;
+                                                        $rate_log[] = "User ID: ".$temp_u_id."; Stawka: ".$t_rate->rate."; Stała kwota wypłaty";
+                                                        
                                                     }
                                                 }
                                                 if($add_log == true) {
