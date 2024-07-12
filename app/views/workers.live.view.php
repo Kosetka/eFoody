@@ -82,6 +82,7 @@
                                         echo "<td>".showInHours($break[$user->id])."</td>";
                                     } else {
                                         echo "<td></td>";
+                                        echo "<td></td>";
                                     }
                                     echo "<td><button type='button' class='btn btn-primary show-details-btn'>Pokaż</button></td>";
                                     echo "<td>$status_pracy</td>";
