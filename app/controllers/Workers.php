@@ -87,10 +87,6 @@ class Workers
             }
             $data["work"] = $work;
             $data["break"] = $break;
-        } else {
-            $data["work"] = 0;
-            $data["break"] = 0;
-                
         }
 
         //show($data["break"]);

@@ -77,8 +77,12 @@
                                     echo "<td scope='row'>".$data["roles"][$user->u_role]->role_name."</td>";
                                     echo "<td>".subYear($in)."</td>";
                                     echo "<td>".subYear($out)."</td>";
-                                    echo "<td>".showInHours($work[$user->id])."</td>";
-                                    echo "<td>".showInHours($break[$user->id])."</td>";
+                                    if(isset($work[$user->id])) {
+                                        echo "<td>".showInHours($work[$user->id])."</td>";
+                                        echo "<td>".showInHours($break[$user->id])."</td>";
+                                    } else {
+                                        echo "<td></td>";
+                                    }
                                     echo "<td><button type='button' class='btn btn-primary show-details-btn'>Pokaż</button></td>";
                                     echo "<td>$status_pracy</td>";
                                     echo "</tr>";
