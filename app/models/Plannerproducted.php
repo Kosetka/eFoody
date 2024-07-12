@@ -37,7 +37,19 @@ class Plannerproducted
         $query = "select * from $this->table WHERE date_producted = '$date' AND w_id = $w_id";
         return $this->query($query);
     }
+    public function getProductedMonth($month, $year)
+    {
+        $start_date = "$year-$month-01";
+        $end_date = date("Y-m-t", strtotime($start_date));
 
+        $query = "select * from $this->table WHERE 
+                date_producted <= '$end_date'
+                AND date_producted >= '$start_date';";
+        return $this->query($query);
+    }
+
+
+    
     public function deleteByDate($date)
 	{
 

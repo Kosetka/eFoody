@@ -55,6 +55,16 @@ class ReturnsModel
         $query = "select * from $this->table WHERE w_id = $w_id AND p_id = $p_id AND date >= '$date'";
         return $this->query($query);
     }
+    public function getReturnsMonth($month, $year)
+    {
+        $start_date = "$year-$month-01";
+        $end_date = date("Y-m-t", strtotime($start_date));
+
+        $query = "select * from $this->table WHERE 
+                date <= '$end_date 00:00:00'
+                AND date >= '$start_date 23:59:59';";
+        return $this->query($query);
+    }
 
     public function reportData($date_from, $date_to): array
     {

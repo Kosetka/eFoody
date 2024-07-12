@@ -32,6 +32,16 @@ class Plannerproduction
         $query = "select * from $this->table WHERE date_plan = '$date' AND w_id = $w_id";
         return $this->query($query);
     }
+    public function getPlannedMonth($month, $year)
+    {
+        $start_date = "$year-$month-01";
+        $end_date = date("Y-m-t", strtotime($start_date));
+
+        $query = "select * from $this->table WHERE 
+                date_plan <= '$end_date'
+                AND date_plan >= '$start_date';";
+        return $this->query($query);
+    }
     public function getPlannedDates($date_from, $date_to, $w_id)
     {
         $query = "select * from $this->table WHERE date_plan >= '$date_from' AND date_plan <= '$date_to' AND w_id = $w_id";

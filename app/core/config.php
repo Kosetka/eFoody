@@ -77,7 +77,7 @@ define('POLISHMONTHS',[
     "11" => "Listopad",
     "12" => "Grudzień"
 ]);
-
+define('LABELCOST',["cost" => 16.50, "labels" => 1034]);
                                         
 
 /** true means show errors **/
