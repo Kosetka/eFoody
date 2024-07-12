@@ -51,41 +51,43 @@ class Workers
         $data["scans"] = $cardscan->getScanDate($date);
 
         $data["scans_ok"] = [];
-        foreach($data["scans"] as $scan) {
-            if($scan->user_id <> 0) {
-                if($scan->status == "in") {
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["in"] = $scan->date;
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["out"] = "";
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["w_id_in"] = $scan->w_id;
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["w_id_out"] = "";
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["card_in"] = $scan->card_name;
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["card_out"] = "";
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["user"] = $scan->user_id;
-    
-                    if($int[$scan->user_id] > 0) {
-                        $datetime1 = new DateTime($data["scans_ok"][$scan->user_id][$int[$scan->user_id]-1]["out"]);
-                        $datetime2 = new DateTime($data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["in"]);
+        if(!empty($data["scans"])) {
+            foreach($data["scans"] as $scan) {
+                if($scan->user_id <> 0) {
+                    if($scan->status == "in") {
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["in"] = $scan->date;
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["out"] = "";
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["w_id_in"] = $scan->w_id;
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["w_id_out"] = "";
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["card_in"] = $scan->card_name;
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["card_out"] = "";
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["user"] = $scan->user_id;
+        
+                        if($int[$scan->user_id] > 0) {
+                            $datetime1 = new DateTime($data["scans_ok"][$scan->user_id][$int[$scan->user_id]-1]["out"]);
+                            $datetime2 = new DateTime($data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["in"]);
+                            $interval = $datetime2->getTimestamp() - $datetime1->getTimestamp();
+                            $break[$scan->user_id] += $interval;
+                        }
+        
+                    } else {
+                        //out
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["out"] = $scan->date;
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["card_out"] = $scan->card_name;
+                        $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["w_id_out"] = $scan->w_id;
+        
+                        $datetime1 = new DateTime($data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["in"]);
+                        $datetime2 = new DateTime($data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["out"]);
                         $interval = $datetime2->getTimestamp() - $datetime1->getTimestamp();
-                        $break[$scan->user_id] += $interval;
+                        $work[$scan->user_id] += $interval;
+        
+                        $int[$scan->user_id]++;
                     }
-    
-                } else {
-                    //out
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["out"] = $scan->date;
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["card_out"] = $scan->card_name;
-                    $data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["w_id_out"] = $scan->w_id;
-    
-                    $datetime1 = new DateTime($data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["in"]);
-                    $datetime2 = new DateTime($data["scans_ok"][$scan->user_id][$int[$scan->user_id]]["out"]);
-                    $interval = $datetime2->getTimestamp() - $datetime1->getTimestamp();
-                    $work[$scan->user_id] += $interval;
-    
-                    $int[$scan->user_id]++;
                 }
             }
+            $data["work"] = $work;
+            $data["break"] = $break;
         }
-        $data["work"] = $work;
-        $data["break"] = $break;
 
         //show($data["break"]);
         //show($data["work"]);
