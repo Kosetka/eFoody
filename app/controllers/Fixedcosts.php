@@ -257,12 +257,14 @@ class Fixedcosts
 
             //wcisnąć info o zwrotach ilości zameldowanej
             $products_list = new ReturnsModel();
-            foreach($products_list->getReturnsMonth($month, $year) as $return) {
-                $return_date = subDay($return->date);
-                $data2["return"][$return_date][$return->p_id] = $return; 
-                $plan_prod[$return_date][$return->p_id]["returns"] = $return->amount;
-                $data["return_log"][] = ["p_id" => $return->p_id, "day" => $return_date, "returns" => $return->amount];
-                //"Produkt ID: ".$return->p_id."; Data: ".$return_date."; Zwrócono: ".$return->amount;
+            if(!empty($products_list->getReturnsMonth($month, $year))) {
+                foreach($products_list->getReturnsMonth($month, $year) as $return) {
+                    $return_date = subDay($return->date);
+                    $data2["return"][$return_date][$return->p_id] = $return; 
+                    $plan_prod[$return_date][$return->p_id]["returns"] = $return->amount;
+                    $data["return_log"][] = ["p_id" => $return->p_id, "day" => $return_date, "returns" => $return->amount];
+                    //"Produkt ID: ".$return->p_id."; Data: ".$return_date."; Zwrócono: ".$return->amount;
+                }
             }
         }
 
