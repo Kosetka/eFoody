@@ -38,7 +38,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">SKU</th>
+                                    <th scope="col" style="width: 120px">SKU</th>
                                     <th scope="col">Zdjęcie</th>
                                     <th scope="col">Pełna nazwa</th>
                                     <th scope="col">Opis</th>

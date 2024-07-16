@@ -47,8 +47,16 @@ class ProductsModel
 
     public function getAllBySku($sku)
 	{
-		$query = "select * from $this->table WHERE sku LIKE '$sku%' ORDER BY sku ASC";
-		return $this->query($query);
+		$query = "
+        SELECT * FROM $this->table
+        WHERE sku LIKE '$sku%'
+        ORDER BY 
+            CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(sku, '-', 1), '-', -1) AS UNSIGNED),
+            CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(sku, '-', 2), '-', -1) AS UNSIGNED),
+            CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(sku, '-', 3), '-', -1) AS UNSIGNED),
+            CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(sku, '-', 4), '-', -1) AS UNSIGNED)
+        ASC";
+    return $this->query($query);
 	}
     public function getAllById($id)
 	{
