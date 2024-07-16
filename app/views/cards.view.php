@@ -11,7 +11,14 @@
                     
                 </div>
                 <div class="card-body">
-                    <a type="button" class="btn btn-primary" href="<?= ROOT ?>/card/new">Dodaj nową kartę</a>
+                    <?php
+                        $access = [1, 2];
+                        if(in_array($your_id,$access)) {
+                            echo '<a type="button" class="btn btn-primary" href="'.ROOT.'/card/new">Dodaj nową kartę</a>';
+                        }
+
+                    ?>
+                    
                     <table id="datatablesSimple">
                         <thead>
                             <tr>
@@ -55,7 +62,11 @@
                                     }
                                     
 
-                                echo "<td><a href='" . ROOT . "/card/edit/" . $card->id . "'>Edytuj</a></td>";
+                                if(in_array($your_id,$access)) {
+                                    echo "<td><a href='" . ROOT . "/card/edit/" . $card->id . "'>Edytuj</a></td>";
+                                } else {
+                                    echo "<td></td>";
+                                }
                                 echo '<td><a target="_blank" class="btn btn-success print-pdf" href=" ' . ROOT . '/card/generate/'.$owner.'"
                                                 role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a></td>';
                                 echo "</tr>";
