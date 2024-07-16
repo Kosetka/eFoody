@@ -243,6 +243,10 @@ class Fixedcosts
                                 $plan_prod[$plan_date][$price->p_id]["production_cost"] = $price->production_cost;
                                 $plan_prod[$plan_date][$price->p_id]["price"] = $price->price;
                                 $data["price_log"][] = ["p_id" => $price->p_id, "day" => $plan_date, "price" => $price->price, "production_cost" => $price->production_cost];
+                                if($price->production_cost == 0.01) {
+                                    $data["price_log_error"][] = ["p_id" => $price->p_id, "day" => $plan_date, "price" => $price->price, "production_cost" => $price->production_cost, "text" => "Brak kosztu produkcji ($price->production_cost zł)"];
+                                }
+                                
                                 //"Produkt ID: ".$price->p_id."; Data: ".$plan_date."; Cena sprzedaży: ".$price->price."; Koszt produkcji: ".$price->production_cost;
                             }
                             $add_log_price = false;

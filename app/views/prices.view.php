@@ -65,12 +65,23 @@
                                         $date_to = "";
                                         $margin = "";
                                     }
-                                    echo "  <tr><td>$value->p_name</td>
+                                    $no_production_cost = "";
+                                    if($production_cost == 0.01) {
+                                        $no_production_cost = "style='background-color: red;' ";
+                                    }
+                                    $low_margin = "";
+                                    if(getMargin($price, $production_cost) < 50) {
+                                        $low_margin = " style='background-color: yellow;'";
+                                    }
+                                    if(getMargin($price, $production_cost) > 80) {
+                                        $low_margin = " style='background-color: lime;'";
+                                    }
+                                    echo "  <tr><td $no_production_cost>$value->p_name</td>
                                             <td>$photo</td>
                                             <td>$value->sku</td>
-                                            <td>$production_cost zł</td>
+                                            <td $no_production_cost>$production_cost zł</td>
                                             <td>$price zł</td>
-                                            <td>$margin</td>
+                                            <td $low_margin>$margin</td>
                                             <td>$date_from - $date_to</td>";
                                     echo '<td>
                                     <a href= "' . ROOT . '/prices/edit/' . $value->id . '" class = "btn btn-success">
