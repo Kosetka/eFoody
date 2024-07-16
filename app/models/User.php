@@ -53,6 +53,11 @@ class User
 		$query = "select * from $this->table WHERE active = 1;";
 		return $this->query($query);
 	}
+	public function getAllActiveUsersSorted()
+	{
+		$query = "select * from $this->table WHERE active = 1 ORDER BY u_role ASC;";
+		return $this->query($query);
+	}
 
 	public function getMyTraders($id)
 	{
