@@ -9,7 +9,7 @@ $request = file_get_contents("php://input");
 $data = json_decode($request, true);
 
 // Przykład prostego logowania otrzymanych danych do pliku
-file_put_contents("webhook_log.txt", print_r($data, true), FILE_APPEND);
+file_put_contents(ROOT."/assets/img/webhook_log.txt", print_r($data, true), FILE_APPEND);
 
 // Przykład odpowiedzi na webhook - tutaj po prostu potwierdzamy odbiór
 $response = [
