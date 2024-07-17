@@ -203,13 +203,13 @@
                                             echo '<form method="post">';
                                             ?>
                                             <td>
-                                                <div class="input-group mb-3" style="width: 140px">
+                                                <div class="input-group mb-3" style="min-width: 140px">
                                                     <span class="input-group-text" id="accept_in"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
                                                     <input type="time" class="form-control" name="accept_in" required>
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="input-group mb-3">
+                                                <div class="input-group mb-3" style="min-width: 140px">
                                                     <span class="input-group-text" id="accept_in"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
                                                     <input type="time" class="form-control" name="accept_out" required>
                                                 </div>
