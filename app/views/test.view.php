@@ -1,84 +1,54 @@
 <?php
+// Endpoint URL do wysyłania wiadomości
+$url = 'https://graph.facebook.com/v20.0/363618450171455/messages';
 
-//show($data);
+// Token dostępu
+$token = 'EAAFI0kVV4xEBOZB5ZCKAJaXahdQ91ZCD7wEnElXHtwBRG6n5IFm9AE5eVsiXbLom2tqqIkM4wJeOSNsUPyZBD6ZAwH7DLrNuwKoG5xG3naRou8GbSbDROrblcVMki8K3kpBRPsuOfxSdCOE4ZCjFkwu7qzrZA4uuepdXp6dNzhZAeH0fQtueBOMMfAwegg7NxZBHZCdrCJ6hYZAVxTZADBY6MBcZD';
 
+// Numer telefonu odbiorcy
+$recipientPhoneNumber = '48609713824';
 
+// Dane do wysłania
+/*$data = [
+    'messaging_product' => 'whatsapp',
+    'to' => $recipientPhoneNumber,
+    'type' => 'template',
+    'template' => [
+        'name' => 'ulotka',
+        'language' => [
+            'code' => 'pl_PL'
+        ]
+    ]
+];*/
 
-?>
+$data = [
+    'messaging_product' => 'whatsapp',
+    "recipient_type" => "individual",
+    'to' => $recipientPhoneNumber,
+    'type' => 'text',
+    'text' => [
+        'preview_url' => true,
+        'body' => 'Witaj!'
+    ]
+];
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <table border="1">
-    <tr>
-        <td>Produkt</td>
-        <td>Pobrano</td>
-        <td>Sprzedano</td>
-        <td>Różnica</td>
-    </tr>
-    <?php
-    $comp = [];
-    foreach($data["sold"] as $s) {
-        $comp[$s->c_id][$s->p_id] = 0;
-    }
-    foreach($data["cargo"] as $prod) {
-        echo "<tr>";
-        echo "<td>".$data["products"][$prod->p_id]->p_name."</td>";
-        echo "<td>".$prod->amount."</td>";
-        $sold = 0;
-        foreach($data["sold"] as $s) {
-        if($s->p_id == $prod->p_id) {
-            $sold+=$s->s_amount;
-            $comp[$s->c_id][$s->p_id]+=$s->s_amount;
-        }
-    }
-    echo "<td>".$sold."</td>";
-    echo "<td>".$prod->amount - $sold."</td>";
-    
-    echo "</tr>";
-    //show($comp);
-}
-        ?>
-    </table>
-</br>
-</br>
-</br>
-</br>
-    <table border="1">
-    <tr>
-        <td>Firma</td>
-        <td>Sprzedano</td>
-    </tr>
-    <?php
-    //show($data);
-    foreach($comp as $k => $v) {
-        echo "<tr>";
-        echo "<td>".$data["companies"][$k]->full_name."</td>";
-        echo "<td>";
-        $sum = 0;
-        foreach($v as $kk => $vv) {
-            $sum += $vv;
-            echo $data["products"][$kk]->p_name.' : '.$vv;
-            echo "</br>";
-        }
-        echo "<b>Suma: ".$sum."</b>";
-        echo "</br>";
-        
-        echo "</td>";
+// Inicjalizacja cURL
+$ch = curl_init($url);
 
-    }
-    
-    echo "</tr>";
-    //show($comp);
+// Ustawienia cURL
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $token,
+    'Content-Type: application/json'
+]);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
-        ?>
-    </table>
+// Wykonanie zapytania
+$response = curl_exec($ch);
 
+// Zamknięcie cURL
+curl_close($ch);
 
-</body>
-</html>
+// Wyświetlenie odpowiedzi
+echo $response;
