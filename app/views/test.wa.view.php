@@ -30,7 +30,7 @@ function handlePostRequest() {
     $data = json_decode($request, true);
 
     // Przykład prostego logowania otrzymanych danych do pliku
-    file_put_contents(IMG_LABELS_UPLOAD."webhook_log.txt", print_r($data, true), FILE_APPEND);
+    file_put_contents(IMG_ROOT_UPLOAD."webhook_log.txt", print_r($data, true), FILE_APPEND);
 
     // Przykład odpowiedzi na webhook - tutaj po prostu potwierdzamy odbiór
     $response = [

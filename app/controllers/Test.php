@@ -9,8 +9,8 @@ class Test
 
     public function index()
     {
-        if (empty($_SESSION['USER']))
-            redirect('login');
+        //if (empty($_SESSION['USER']))
+        //    redirect('login');
 
         $data = [];
 
