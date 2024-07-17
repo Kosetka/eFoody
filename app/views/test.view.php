@@ -14,9 +14,9 @@ $data = [
     'to' => $recipientPhoneNumber,
     'type' => 'template',
     'template' => [
-        'name' => 'hello_world',
+        'name' => 'ulotka', //hello_world
         'language' => [
-            'code' => 'en_US'
+            'code' => 'pl_PL' //en_US
         ]
     ]
 ];
