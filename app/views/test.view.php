@@ -1,9 +1,9 @@
 <?php
 // Endpoint URL do wysyłania wiadomości
-$url = 'https://graph.facebook.com/v19.0/363618450171455/messages';
+$url = 'https://graph.facebook.com/v19.0/363635803503920/messages';
 
 // Token dostępu
-$token = 'EAAFI0kVV4xEBOZB5ZCKAJaXahdQ91ZCD7wEnElXHtwBRG6n5IFm9AE5eVsiXbLom2tqqIkM4wJeOSNsUPyZBD6ZAwH7DLrNuwKoG5xG3naRou8GbSbDROrblcVMki8K3kpBRPsuOfxSdCOE4ZCjFkwu7qzrZA4uuepdXp6dNzhZAeH0fQtueBOMMfAwegg7NxZBHZCdrCJ6hYZAVxTZADBY6MBcZD';
+$token = 'EAAFI0kVV4xEBO8vJVr9kIeB4xY0rIHR1mfkyu8F5dGujigvL5buUvcBHqLeIE5FAjVt4J3FhrNXnQgVm6dQ6sr6TByNYb0A3vfKeb6qcNM975mSTxKL9Vin000ZCSRZAGGJt2O4ouZB9ZAZBcYy16KJLUXcg4WHqhGtwj2PcQvSpSoa4LfWynGZCM36dUlmCn6YwBit2pgfQbYIA0CYaZA2';
 
 // Numer telefonu odbiorcy
 $recipientPhoneNumber = '48609713824';
@@ -14,9 +14,9 @@ $data = [
     'to' => $recipientPhoneNumber,
     'type' => 'template',
     'template' => [
-        'name' => 'hello_world', //hello_world
+        'name' => 'ulotka', //hello_world
         'language' => [
-            'code' => 'en_US' //en_US
+            'code' => 'pl' //en_US
         ]
     ]
 ];
