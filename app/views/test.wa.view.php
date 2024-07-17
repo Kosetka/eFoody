@@ -40,7 +40,6 @@ function handlePostRequest() {
 
     echo json_encode($response);
 }
-handlePostRequest();
 
 // Sprawdź metodę żądania
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
