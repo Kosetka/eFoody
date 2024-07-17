@@ -1,6 +1,6 @@
 <?php
 // Endpoint URL do wysyłania wiadomości
-$url = 'https://graph.facebook.com/v20.0/363618450171455/messages';
+$url = 'https://graph.facebook.com/v19.0/363618450171455/messages';
 
 // Token dostępu
 $token = 'EAAFI0kVV4xEBOZB5ZCKAJaXahdQ91ZCD7wEnElXHtwBRG6n5IFm9AE5eVsiXbLom2tqqIkM4wJeOSNsUPyZBD6ZAwH7DLrNuwKoG5xG3naRou8GbSbDROrblcVMki8K3kpBRPsuOfxSdCOE4ZCjFkwu7qzrZA4uuepdXp6dNzhZAeH0fQtueBOMMfAwegg7NxZBHZCdrCJ6hYZAVxTZADBY6MBcZD';
@@ -9,26 +9,15 @@ $token = 'EAAFI0kVV4xEBOZB5ZCKAJaXahdQ91ZCD7wEnElXHtwBRG6n5IFm9AE5eVsiXbLom2tqqI
 $recipientPhoneNumber = '48609713824';
 
 // Dane do wysłania
-/*$data = [
+$data = [
     'messaging_product' => 'whatsapp',
     'to' => $recipientPhoneNumber,
     'type' => 'template',
     'template' => [
-        'name' => 'ulotka',
+        'name' => 'hello_world',
         'language' => [
-            'code' => 'pl_PL'
+            'code' => 'en_US'
         ]
-    ]
-];*/
-
-$data = [
-    'messaging_product' => 'whatsapp',
-    "recipient_type" => "individual",
-    'to' => $recipientPhoneNumber,
-    'type' => 'text',
-    'text' => [
-        'preview_url' => true,
-        'body' => 'Witaj!'
     ]
 ];
 
