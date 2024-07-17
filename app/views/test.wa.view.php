@@ -40,7 +40,8 @@ function handlePostRequest() {
 
     echo json_encode($response);
 }
-
+handlePostRequest();
+die;
 // Sprawdź metodę żądania
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     verifyWebhook();
@@ -52,4 +53,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode(['error' => 'Method not allowed']);
     exit;
 }
-?>
+
