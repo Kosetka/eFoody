@@ -18,8 +18,8 @@ class Test
     }
     public function wa()
     {
-        if (empty($_SESSION['USER']))
-            redirect('login');
+        //if (empty($_SESSION['USER']))
+        //    redirect('login');
 
         $data = [];
 
