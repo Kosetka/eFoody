@@ -70,11 +70,13 @@
                                         $no_production_cost = "style='background-color: red;' ";
                                     }
                                     $low_margin = "";
-                                    if(getMargin($price, $production_cost) < 50) {
-                                        $low_margin = " style='background-color: yellow;'";
-                                    }
-                                    if(getMargin($price, $production_cost) > 80) {
-                                        $low_margin = " style='background-color: lime;'";
+                                    if($production_cost > 0) {
+                                        if(getMargin($price, $production_cost) < 50) {
+                                            $low_margin = " style='background-color: yellow;'";
+                                        }
+                                        if(getMargin($price, $production_cost) > 80) {
+                                            $low_margin = " style='background-color: lime;'";
+                                        }
                                     }
                                     echo "  <tr><td $no_production_cost>$value->p_name</td>
                                             <td>$photo</td>
