@@ -419,7 +419,7 @@ class Workers
         }
 
         $users = new User();
-        foreach($users->getAllActiveUsers() as $user) {
+        foreach($users->getAllUsers() as $user) {
             $data["users"][$user->id] = $user;
             $int[$user->id] = 0;
             $work[$user->id] = 0;
