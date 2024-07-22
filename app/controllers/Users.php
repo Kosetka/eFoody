@@ -86,6 +86,31 @@ class Users
                 if (!$relationExist) {
                     $warehouse_access->insert($update_data);
                 }
+
+                if($_POST["active"] == 0) {
+                    //zwolniony
+                    $user_history = new Userhistory();
+                    $d_last = "";
+                    $date = date("Y-m-d");
+                    if(!empty($user_history->getLast($user_id)[0])) {
+                        $d_last = $user_history->getLast($user_id)[0];
+                        $user_history->update($d_last->id,["date_to" => $date]);
+                    }
+                } else {
+                    //zatrudniony ponownie
+                    $user_history = new Userhistory();
+                    $date = date("Y-m-d");
+                    $user_history->insert([
+                        "date_from" => $date, 
+                        "date_to" => NULL, 
+                        "role" => $_POST["u_role"],
+                        "u_id" => $user_id,
+                    ]);
+                    
+                }
+
+
+
                 $data['success'] = "Edycja konta pomyślna!";
             } elseif (isset($_POST["warehouseEdit"])) {
                 $query = "delete from warehouse_access where u_id = $user_id";
@@ -160,6 +185,9 @@ class Users
             $user = new User();
             $data["user"] = $user->getOne("users", $user_id)[0];
 
+            $userhistory = new Userhistory();
+            $data["user_history"] = $userhistory->getUser($user_id);
+
             foreach($user->getAllTraders("users", TRADERS) as $trader) {
                 $data["users"][$trader->id] = $trader; 
             }
@@ -167,6 +195,9 @@ class Users
             $roles_name = new RolesNameModel();
             $roles_name->getRoles();
             $data["roles"] = $roles_name->roles;
+            foreach($roles_name->getRoles() as $role) {
+                $data["roles_history"][$role["id"]] = $role;
+            }
             $cities = new Shared();
             $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city";
             $temp["cities"] = $cities->query($query);

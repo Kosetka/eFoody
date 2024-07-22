@@ -45,6 +45,16 @@ class Signup
 				$update_data = ["u_id" => $id, "w_id" => $u_warehouse];
 				$warehouse_access->insert($update_data);
 
+				$user_history = new Userhistory;
+
+				$date = date("Y-m-d");
+				$user_history->insert([
+					"u_id" => $id,
+					"date_from"=> $date,
+					"date_to" => NULL,
+					"role" => $_POST["u_role"]
+				]);
+
 				$data['success'] = "Konto zostało pomyślnie utworzone";
 				$this->view('signup', $data);
 				//redirect('signup');

@@ -359,6 +359,41 @@
                 </div>
             </div>
 
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2 id="workHeader" class="">Historia zatrudnienia</h2>
+                </div>
+                <div class="card-body">
+                    <?php
+                        show($data["user_history"]);
+                    ?>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Data od</th>
+                                <th scope="col">Data do</th>
+                                <th scope="col">Uprawnienia</th>
+                                <th scope="col">Akcja</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if(!empty($data["user_history"])) {
+                                foreach ($data["user_history"] as $u_his) {
+                                    echo "<tr>";
+                                    echo "<td>" . $u_his->date_from . "</td>";
+                                    echo "<td>" . $u_his->date_to . "</td>";
+                                    echo "<td>" . $data["roles_history"][$u_his->role]["role_name"] . "</td>";
+                                    echo "<td><a href='" . ROOT . "/users/edit/" . $data["user"]->id . "/".$u_his->id."'>Edytuj</a></td>";
+                                    echo "</tr>";
+                                }
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </main>
 
         <script>
