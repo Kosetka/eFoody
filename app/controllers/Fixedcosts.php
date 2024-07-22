@@ -170,7 +170,7 @@ class Fixedcosts
         $data["costs"] = $costs->getByMonth($month, $year);
 
         $users = new User();
-        foreach($users->getAllActiveUsers() as $user) {
+        foreach($users->getAllUsers() as $user) {
             $data["users"][$user->id] = $user;
         }
         $workhour = new Workhours();
