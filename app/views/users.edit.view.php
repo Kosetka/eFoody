@@ -364,9 +364,6 @@
                     <h2 id="workHeader" class="">Historia zatrudnienia</h2>
                 </div>
                 <div class="card-body">
-                    <?php
-                        show($data["user_history"]);
-                    ?>
                     <table class="table">
                         <thead>
                             <tr>
