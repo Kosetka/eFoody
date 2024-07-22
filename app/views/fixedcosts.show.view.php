@@ -291,6 +291,7 @@
                                                 <th>Data</th>
                                                 <th>Użytkownik</th>
                                                 <th>Treść błędu</th>
+                                                <th>Akcje</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -301,6 +302,7 @@
                                                         echo "<td>".$error["day"]."</td>";
                                                         echo "<td>".$data["users"][$error["id"]]->first_name." ".$data["users"][$error["id"]]->last_name."</td>";
                                                         echo "<td>".$error["text"]."</td>";
+                                                        echo "<td><a href='".ROOT."/users/edit/".$error["id"]."' target=blank>Napraw</a></td>";
                                                         echo "</tr>";
                                                     }
                                                 } else {
@@ -363,6 +365,7 @@
                                                 <th>Data</th>
                                                 <th>Produkt</th>
                                                 <th>Treść błędu</th>
+                                                <th>Akcja</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -373,6 +376,7 @@
                                                         echo "<td>".$error["day"]."</td>";
                                                         echo "<td>".$data["fullproducts"][$error["p_id"]]->p_name."</td>";
                                                         echo "<td>".$error["text"]."</td>";
+                                                        echo "<td><a href='".ROOT."/prices/edit/".$error["p_id"]."' target=blank>Napraw</a></td>";
                                                         echo "</tr>";
                                                     }
                                                 } else {

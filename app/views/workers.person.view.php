@@ -59,6 +59,9 @@
             font-weight: normal;
             font-style: italic
         }
+        .strikethrough {
+            text-decoration: line-through;
+        }
     </style>
 
 <div id="layoutSidenav">
@@ -122,17 +125,28 @@
                             <div class="form-group row m-3">
                                 <label for="u_id" class="col-sm-2 col-form-label">Pracownik:</label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="u_id" name="u_id" required>
-                                        <?php 
-                                            foreach($data["users"] as $user) {
-                                                $sel = "";
-                                                if ($data["u_id"] == $user->id) {
-                                                    $sel = "selected";
+                                    <select class="select2" style="width: 100%" id="u_id" name="u_id" required>
+                                        <optgroup label="Aktywni">
+                                            <?php 
+                                                foreach($data["users"] as $user) {
+                                                    if($user->active == 1) {
+                                                        $sel = $data["u_id"] == $user->id ? "selected" : "";
+                                                        echo '<option value="' . $user->id . '" ' . $sel . '>' . $user->first_name .' '. $user->last_name . '</option>';
+                                                    }
                                                 }
-                                                echo '<option value="' . $user->id . '" ' . $sel . '>' . $user->first_name .' '. $user->last_name . '</option>';
-                                            }
-                                            echo '</select>';
-                                        ?>
+                                            ?>
+                                        </optgroup>
+                                        <optgroup label="Niepracujący">
+                                            <?php 
+                                                foreach($data["users"] as $user) {
+                                                    if($user->active == 0) {
+                                                        $sel = $data["u_id"] == $user->id ? "selected" : "";
+                                                        echo '<option value="' . $user->id . '" ' . $sel . ' class="">' . $user->first_name .' '. $user->last_name . '</option>';
+                                                    }
+                                                }
+                                            ?>
+                                        </optgroup>
+                                    </select>
                                 </div>
                             </div>
                             <button class="w-40 btn btn-lg btn-primary" type="submit" name="search" value=1>Pokaż dane</button>
@@ -157,7 +171,7 @@
                     <h2 id="calendarHeader" class="">Szczegółowa lista godzin</h2>
                 </div>
                 <div class="card-body">
-                <table class="table">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th scope="col">Data</th>
@@ -429,6 +443,23 @@
         });
 
         updateCalendar();
+    });
+
+    $(document).ready(function() {
+        $('.select2').select2({
+            templateResult: formatState,
+            templateSelection: formatState
+        });
+
+        function formatState(state) {
+            if (!state.id) {
+                return state.text;
+            }
+            var $state = $(
+                '<span class="' + ($(state.element).hasClass('strikethrough') ? 'strikethrough' : '') + '">' + state.text + '</span>'
+            );
+            return $state;
+        }
     });
 </script>
         <?php require_once 'landings/footer.view.php' ?>

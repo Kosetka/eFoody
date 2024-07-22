@@ -12,7 +12,8 @@
     <link href="<?= ROOT ?>/assets/css/styles.css" rel="stylesheet" />
     <link href="<?= ROOT ?>/assets/css/mystyles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet" />
+    
 
     <link href="<?= ROOT ?>/assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">

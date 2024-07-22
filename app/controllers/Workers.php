@@ -149,11 +149,13 @@ class Workers
 
 
         $users = new User();
-        foreach($users->getAllActiveUsers() as $user) {
-            $data["users"][$user->id] = $user;
-            $int[$user->id] = 0;
-            $work[$user->id] = 0;
-            $break[$user->id] = 0;
+        if(!empty($users->getActiveUsers($month, $year))) {
+            foreach($users->getActiveUsers($month, $year) as $user) {
+                $data["users"][$user->id] = $user;
+                $int[$user->id] = 0;
+                $work[$user->id] = 0;
+                $break[$user->id] = 0;
+            }
         }
 
         $cities = new Shared();
@@ -259,7 +261,7 @@ class Workers
 
 
         $users = new User();
-        foreach($users->getAllActiveUsers() as $user) {
+        foreach($users->getAllUsersSorted() as $user) {
             $data["users"][$user->id] = $user;
             $int[$user->id] = 0;
         }
@@ -375,6 +377,9 @@ class Workers
                 $date = $_GET["date"];
                 $data["show_list"] = true;
             }
+        } elseif(isset($_GET["show"])) {
+            $date = date("Y-m-d");
+            $data["show_list"] = true;
         } else {
             $date = date("Y-m-d");
             $data["show_list"] = false;
@@ -427,7 +432,13 @@ class Workers
         }
 
         $cardscan = new Cardscan();
-        $data["scans"] = $cardscan->getScanDate($date);
+        
+
+        if(isset($_GET["show"])) {
+            //$data["scans"] = $cardscan->getScanOld($date); // nie działa prawidłowo liczenie godzin, do poprawy
+        } else {
+            $data["scans"] = $cardscan->getScanDate($date);
+        }
 
         $data["scans_ok"] = [];
         if(!empty($data["scans"])) {
@@ -470,9 +481,17 @@ class Workers
 
 
         $workhour = new Workhours();
-        if(!empty($workhour->getByDate($date))) {
-            foreach($workhour->getByDate($date) as $wh) {
-                $data["accepted"][$wh->u_id] = $wh;
+        if(isset($data["show"])) {
+            if(!empty($workhour->getUnaccepted($date))) {
+                foreach($workhour->getUnaccepted($date) as $wh) {
+                    $data["accepted"][$wh->u_id] = $wh;
+                }
+            }
+        } else {
+            if(!empty($workhour->getByDate($date))) {
+                foreach($workhour->getByDate($date) as $wh) {
+                    $data["accepted"][$wh->u_id] = $wh;
+                }
             }
         }
 

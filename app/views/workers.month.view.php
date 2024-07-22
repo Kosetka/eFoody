@@ -95,46 +95,63 @@
                                 $daily = [];
                                 for ($day = 1; $day <= $daysInMonth; $day++) {
                                     $date->setDate($year, $month, $day);
+                                    if(!empty($data["users"])) {
+                                        foreach($data["users"] as $user) {
+                                            if(!isset($hours[$user->id])) {
+                                                $hours[$user->id] = 0;
+                                            } 
+                                            if(isset($data["accepted"][$date->format('Y-m-d')][$user->id])) {
+                                                $hours[$user->id] += $data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time;
+                                            }
+                                            
+    
+                                            if(!isset($daily[$date->format('Y-m-d')])) {
+                                                $daily[$date->format('Y-m-d')] = 0;
+                                            } 
+                                            if(isset($data["accepted"][$date->format('Y-m-d')][$user->id])) {
+                                                $daily[$date->format('Y-m-d')] += $data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time;
+                                            }
+                                            
+                                        }
+                                    }
+                                }
+                                if(!empty($data["users"])) {
                                     foreach($data["users"] as $user) {
-                                        if(!isset($hours[$user->id])) {
-                                            $hours[$user->id] = 0;
-                                        } 
-                                        if(isset($data["accepted"][$date->format('Y-m-d')][$user->id])) {
-                                            $hours[$user->id] += $data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time;
+                                        echo '<tr>';
+                                        $active_user = "";
+                                        if($user->active == 0) {
+                                            $active_user = " style='background: #ffbfaa'";
                                         }
+                                        echo '<th '.$active_user.'>'.$user->first_name .' '.$user->last_name.'</th>';
+                                        echo '<th>'.$data["cities"][$user->u_warehouse]["c_fullname"].' -> '.$data["cities"][$user->u_warehouse]["wh_fullname"].'</th>';
+                                        echo '<th>'.$data["roles"][$user->u_role]->role_name.'</th>';
+                                        echo '<td>'.showInHours($hours[$user->id]).'</td>';
+                                        echo '<td></td>'; //wypłata
                                         
+                                        for ($day = 1; $day <= $daysInMonth; $day++) {
+                                            $date->setDate($year, $month, $day);
+                                            $seconds = "";
+                                            if(!empty($data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time)) {
+                                                $seconds = showInHours($data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time);
+                                            }
 
-                                        if(!isset($daily[$date->format('Y-m-d')])) {
-                                            $daily[$date->format('Y-m-d')] = 0;
-                                        } 
-                                        if(isset($data["accepted"][$date->format('Y-m-d')][$user->id])) {
-                                            $daily[$date->format('Y-m-d')] += $data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time;
+                                            if($user->date_from > $date->format('Y-m-d')) {
+                                                echo "<td scope='col'style='background-color: #78EEFF;'></td>";
+                                            } elseif($user->date_to != NULL && $user->date_to <= $date->format('Y-m-d')) {
+                                                echo "<td scope='col'style='background-color: #0097AD;'></td>";
+                                            } else {
+                                                if(isset($data["holidays"][$date->format('Y-m-d')])) { //pracuje i dzień wolny
+                                                    echo "<td scope='col'style='background-color: #ffbfaa;'>".$seconds."</td>";
+                                                } else { //pracuje w normalny dzień
+                                                    echo "<td scope='col'>".$seconds."</td>";
+                                                }
+                                            }
+
                                         }
-                                        
+                                        echo '</tr>';
                                     }
                                 }
-                                foreach($data["users"] as $user) {
-                                    echo '<tr>';
-                                    echo '<th>'.$user->first_name .' '.$user->last_name.'</th>';
-                                    echo '<th>'.$data["cities"][$user->u_warehouse]["c_fullname"].' -> '.$data["cities"][$user->u_warehouse]["wh_fullname"].'</th>';
-                                    echo '<th>'.$data["roles"][$user->u_role]->role_name.'</th>';
-                                    echo '<td>'.showInHours($hours[$user->id]).'</td>';
-                                    echo '<td></td>'; //wypłata
-                                    
-                                    for ($day = 1; $day <= $daysInMonth; $day++) {
-                                        $date->setDate($year, $month, $day);
-                                        $seconds = "";
-                                        if(!empty($data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time)) {
-                                            $seconds = showInHours($data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time);
-                                        }
-                                        if(isset($data["holidays"][$date->format('Y-m-d')])) {
-                                            echo "<td scope='col'style='background-color: #ffbfaa;'>".$seconds."</td>";
-                                        } else {
-                                            echo "<td scope='col'>".$seconds."</td>";
-                                        }
-                                    }
-                                    echo '</tr>';
-                                }
+                                if(!empty($data["users"])) {
                             ?>
                             <tr>
                                 <th colspan="3" scope="col">TOTAL</th>
@@ -155,6 +172,11 @@
                                     }
                                 ?>
                             </tr>
+                            <?php
+                                } else {
+                                    echo "<tr><td>Brak pracowników w podamym miesiącu.</td></tr>";
+                                }
+                            ?>
                         </tbody>
                     </table>
                     <?php //show($daily);?>

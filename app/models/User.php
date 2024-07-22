@@ -48,6 +48,25 @@ class User
 		$query = "select * from $this->table;";
 		return $this->query($query);
 	}
+	public function getAllUsersSorted()
+	{
+		$query = "select * from $this->table ORDER BY first_name ASC;";
+		return $this->query($query);
+	}
+	public function getActiveUsers($month, $year)
+	{
+		$start_date = "$year-$month-01";
+        $end_date = date("Y-m-t", strtotime($start_date));
+
+        $query = "
+            SELECT * 
+            FROM users as u INNER JOIN user_history as h ON u.id = h.u_id
+            WHERE 
+                h.date_from <= '$end_date'
+                AND (h.date_to >= '$start_date' OR h.date_to IS NULL)
+        ";
+		return $this->query($query);
+	}
 	public function getAllActiveUsers()
 	{
 		$query = "select * from $this->table WHERE active = 1;";

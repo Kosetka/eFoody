@@ -36,6 +36,11 @@ class Workhours
         $query = "select * from $this->table WHERE date = '$date' ORDER BY u_id ASC;";
         return $this->query($query);
     }
+    public function getUnaccepted($date)
+    {
+        $query = "select * from $this->table WHERE date < '$date' ORDER BY u_id ASC;";
+        return $this->query($query);
+    }
     
     public function getMonth($month, $year)
     {

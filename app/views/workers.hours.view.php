@@ -52,7 +52,7 @@
                 </div>
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h2 class="">Wybierz datę</h2>
+                        <h2 class="">Wybierz datę</h2><a href="<?php echo ROOT."/workers/hours?show=1";?>" class="btn btn-sm btn-primary" name="show" value=1>Pokaż niezaakceptowane</a>
                     </div>
                     <div class="card-body">
                         <form method="get">
@@ -80,7 +80,7 @@
                         
                     ?>
 
-<table class="table">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th scope="col">Pracownik</th>
