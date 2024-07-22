@@ -255,7 +255,14 @@
                                         echo '<td>'.roundUp($day_prod_sold - $day_prod_cost - showPrice($total_cost_fixed, $working_days) - $temp_cost - ($labels_day * $label_cost)).' zł</td>';
                                         echo '<td>'.getMargin($day_prod_sold, $day_prod_cost - showPrice($total_cost_fixed, $working_days) - $temp_cost - ($labels_day * $label_cost)).' %</td>';
                                     } else {
-                                        echo '<td colspan="7"></td>';
+                                        echo '<td colspan="2"></td>';
+                                        if(isset($days[$date->format('Y-m-d')])) {
+                                            echo '<td>'.roundUp($days[$date->format('Y-m-d')]).' zł</td>';
+                                            $temp_cost = $days[$date->format('Y-m-d')] + showPrice($total_cost_workers_fixed, $working_days);
+                                        } else {
+                                            echo '<td></td>';
+                                        }
+                                        echo '<td colspan="4"></td>';
                                     }
                                     echo '</tr>'; 
                                 }

@@ -39,6 +39,14 @@
             background-color: lightgreen !important;
             color: black;
         }
+        .holiday-work-hours {
+            background-color: lightyellow !important;
+            color: black;
+        }
+        .holiday-accepted-day {
+            background-color: yellow !important;
+            color: black;
+        }
         .accept-time-black {
             font-size: 0.8em;
             color: black;
@@ -64,6 +72,8 @@
                     <p>Kolorem <span class="calendar-holiday" style="padding: 4px;">czerwonym</span> oznaczone są wolne dni od pracy - do ustalenia w Panelu Administracyjnym.</p>
                     <p>Kolorem <span class="work-hours" style="padding: 4px;">jasnozielonym</span> oznaczone są dni, w których osoba była w pracy (odbiła się kartą), ale nie ma zaakceptowanych godzin.</p>
                     <p>Kolorem <span class="accepted-day" style="padding: 4px;">zielonym</span> oznaczone są dni, w których osoba ma zaakceptowane godziny pracy.</p>
+                    <p>Kolorem <span class="holiday-work-hours" style="padding: 4px;">jasnożółtym</span> oznaczone są dni wolne, w których osoba była w pracy (odbiła się kartą), ale nie ma zaakceptowanych godzin.</p>
+                    <p>Kolorem <span class="holiday-accepted-day" style="padding: 4px;">żółtym</span> oznaczone są dni wolne, w których osoba ma zaakceptowane godziny pracy.</p>
                     <br>
                     <p><b>Przy dniach w których osoba była w pracy widnieje liczba godzin:</b>
                     <p>Dla zaakceptowanego dnia - zaakceptowane godzin</p>
@@ -342,12 +352,20 @@
                     cellClass += ' accepted-day';
                     let seconds = parseInt(accepted[dateString].accept_time); // Konwersja na liczby sekund
                     let formattedTime = formatTime(seconds); // Formatowanie czasu
-                    acceptTime = `<div class="accept-time">${formattedTime} RBH</div>`;
+                    if(freeDay) {
+                        cellClass = 'holiday-accepted-day';// work-hours
+                        acceptTime = `<div class="accept-time-black">${formattedTime} RBH</div>`;
+                    } else {
+                        acceptTime = `<div class="accept-time">${formattedTime} RBH</div>`;
+                    }
                 } else {
                     
                     // Sprawdzenie czy są godziny pracy dla tego dnia
                     if (workHour.hasOwnProperty(dateString)) {
                         cellClass += ' work-hours';
+                        if(freeDay) {
+                            cellClass = 'holiday-work-hours';
+                        }
                         let seconds = parseInt(workHour[dateString]); // Pobranie liczby sekund pracy
                         let formattedTime = formatTime(seconds); // Formatowanie czasu
                         workHoursInfo = `<div class="accept-time-black">${formattedTime} RBH</div>`;

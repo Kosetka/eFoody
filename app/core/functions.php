@@ -32,7 +32,10 @@ function getMargin($p, $c)
     if($p == 0) {
         return 0;
     }
-	return round(($p - $c) / $p * 100, 2);
+    if ($c < 0) {
+        return round(-($p - $c) / $p * 100, 2);    
+    }
+    return round(($p - $c) / $p * 100, 2);
 }
 function showPrice($p, $c)
 {
