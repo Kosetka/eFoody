@@ -42,8 +42,11 @@ class PriceModel
     }
     public function getCurrentPrice()
     {
-        $now = date("Y-m-d H:i:s");
-        $query = "select * from $this->table WHERE date_from <= '$now' AND date_to >= '$now' AND active = 1";
+        $now = date("Y-m-d");
+        $query = "SELECT * FROM $this->table 
+                WHERE date_from <= '$now' 
+                AND (date_to >= '$now' OR date_to IS NULL) 
+                AND active = 1";
         return $this->query($query);
     }
     public function getPriceMonth($month, $year)
@@ -51,15 +54,19 @@ class PriceModel
         $start_date = "$year-$month-01";
         $end_date = date("Y-m-t", strtotime($start_date));
 
-        $query = "select * from $this->table WHERE 
-                date_from <= '$end_date 00:00:00'
-                AND date_to >= '$start_date 23:59:59';";
+        $query = "SELECT * FROM $this->table WHERE 
+                date_from <= '$end_date' 
+                AND (date_to >= '$start_date' OR date_to IS NULL)";
         return $this->query($query);
     }
     public function getAllPrices($id)
     {
-        $now = date("Y-m-d H:i:s");
-        $query = "select * from $this->table WHERE p_id = $id ORDER by date_to DESC";
+        $query = "SELECT * FROM $this->table WHERE p_id = $id ORDER BY date_from DESC";
+        return $this->query($query);
+    }
+    public function getLastPrice($id)
+    {
+        $query = "SELECT * FROM $this->table WHERE p_id = $id ORDER BY date_to ASC LIMIT 1";
         return $this->query($query);
     }
 
@@ -73,7 +80,8 @@ class PriceModel
         FROM
             $this->table
         WHERE
-            date_from <= '$date_from' OR date_to >= '$date_to'
+            (date_from <= '$date_from' OR date_from IS NULL)
+            AND (date_to >= '$date_to' OR date_to IS NULL)
         GROUP BY
             p_id,
             date_from,

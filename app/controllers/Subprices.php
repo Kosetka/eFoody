@@ -3,7 +3,7 @@
 /**
  * GetCargo class
  */
-class Prices
+class Subprices
 {
     use Controller;
     public function index()
@@ -14,7 +14,7 @@ class Prices
         $data = [];
 
         $products = new ProductsModel();
-        foreach ($products->getAllFullProducts() as $product) {
+        foreach ($products->getAllSubProducts() as $product) {
             $data["products"][$product->id] = (object) $product;
         }
 
@@ -26,7 +26,7 @@ class Prices
         }
 
 
-        $this->view('prices', $data);
+        $this->view('subprices', $data);
     }
     
 
@@ -99,6 +99,6 @@ class Prices
 
         }
 
-        $this->view('prices.edit', $data);
+        $this->view('subprices.edit', $data);
     }
 }

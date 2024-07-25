@@ -23,7 +23,7 @@
                 <?php endif; ?>
 
                 <?php
-                $th1 = "Dodaj nową cenę";
+                $th1 = "Dodaj najnowszą cenę zakupu";
                 $th2 = "";
                 $th3 = "";
                 $th4 = "";
@@ -48,7 +48,7 @@
 
                 <div class="text-start">
                     <div class="form-group row m-3">
-                        <label for="date_from" class="col-sm-2 col-form-label">Data od:</label>
+                        <label for="date_from" class="col-sm-2 col-form-label">Data:</label>
                         <div class="col-sm-10">
                             <input type="date" class="form-control" id="date_from" name="date_from"
                                 value="<?php echo $th2; ?>" required>
@@ -62,16 +62,16 @@
                         </div>
                     </div>
                     <div class="form-group row m-3">
-                        <label for="production_cost" class="col-sm-2 col-form-label">Koszt produkcji:</label>
+                        <label for="production_cost" class="col-sm-2 col-form-label">Koszt zakupu:</label>
                         <div class="col-sm-10">
                             <input type="number" class="form-control" id="production_cost" name="production_cost"
                                 value="<?php echo $th4; ?>" required min="0.01" step="0.01">
                         </div>
                     </div>
-                    <div class="form-group row m-3">
+                    <div class="form-group row m-3" hidden>
                         <label for="price" class="col-sm-2 col-form-label">Cena sprzedaży:</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" id="price" name="price" value="<?php echo $th5; ?>" required min="0.01" step="0.01">
+                            <input type="number" class="form-control" id="price" name="price" value="0">
                         </div>
                     </div>
                     <div class="form-group row m-3" hidden>
@@ -90,9 +90,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Koszt produkcji</th>
-                        <th scope="col">Cena sprzedaży</th>
-                        <th scope="col">Marża</th>
+                        <th scope="col">Cena zakupu</th>
                         <th scope="col">Data od</th>
                         <th scope="col">Data do</th>
                         <th scope="col">Akcje</th>
@@ -104,11 +102,9 @@
                         foreach ($data["prices"] as $price) {
                             echo "<tr>";
                             echo "<td>" . $price->production_cost . " zł</td>";
-                            echo "<td>" . $price->price . " zł</td>";
-                            echo "<td>" . $price->price - $price->production_cost . " zł (" . getMargin($price->price, $price->production_cost) . "%)</td>";
                             echo "<td>" . $price->date_from . "</td>";
                             echo "<td>" . $price->date_to . "</td>";
-                            echo "<td><a href='" . ROOT . "/prices/edit/" . $price->p_id . "/" . $price->id . "'>Edytuj</a></td>";
+                            echo "<td><a href='" . ROOT . "/subprices/edit/" . $price->p_id . "/" . $price->id . "'>Edytuj</a></td>";
                             echo "</tr>";
                         }
                     }
