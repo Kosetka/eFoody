@@ -58,8 +58,7 @@
                                             <th>SKU</th>
                                             <th>Jednostka</th>
                                             <th>Ilość</th>
-                                            <th>Cena</th>
-                                            <th>Wartość przepisu</th>
+                                            <th>Cena (za jednostkę)</th>
                                             <th>Akcja</th>
                                         </tr>
                                     </thead>
@@ -89,7 +88,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const products = [
         <?php
         foreach($data["halfproducts"] as $product) {
-            echo "{ ID: ".$product['id'].", p_name: '".$product['p_name']."', sku: '".$product['sku']."', p_photo: '".$product['p_photo']."', p_unit: '".$product['p_unit']."' },";
+            $subprices_temp = 0;
+            if(isset($data["subprices"][$product['id']]->production_cost)) {
+                $subprices_temp = $data["subprices"][$product['id']]->production_cost;
+            }
+            echo "{ ID: ".$product['id'].", p_name: '".$product['p_name']."', sku: '".$product['sku']."', p_photo: '".$product['p_photo']."', p_unit: '".$product['p_unit']."', subprice: '".$subprices_temp."' },";
         }
         ?>
     ];
@@ -97,7 +100,11 @@ document.addEventListener("DOMContentLoaded", function() {
         <?php
         if(isset($data["planned"])) {
             foreach($data["planned"] as $product) {
-                echo "{ id: ".$product['p_id'].", amount: ".$product['amount']." },";
+                $subprices_temp = 0;
+                if(isset($data["subprices"][$product->id]->production_cost)) {
+                    $subprices_temp = $data["subprices"][$product->id]->production_cost;
+                }
+                echo "{ id: ".$product->sub_prod.", amount: ".$product->amount.", subprice: '".$subprices_temp."' },";
             }
         }
         ?>
@@ -139,8 +146,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <td>${product.sku}</td>
             <td>${product.p_unit}</td>
             <td><input type="number" class="form-control" value="${quantity}" min="1"></td>
-            <td></td>
-            <td></td>
+            <td>${product.subprice} zł</td>
             <td><button class="btn btn-danger remove-product">Usuń</button></td>
         `;
         orderedProductsTable.appendChild(tr);

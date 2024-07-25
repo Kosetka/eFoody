@@ -39,6 +39,9 @@ class Recipes
             $data["users"][$user->id] = (object) $user;
         }
 
+        //tu koszt całej receptury
+        // może w osobnej clasie 
+
 
         $this->view('recipes', $data);
     }
@@ -79,6 +82,8 @@ class Recipes
             }
         }
 
+
+
         $recipes = new RecipesModel();
         if(!empty($recipes->getById($id))) {
             $product = new ProductsModel();
@@ -91,6 +96,11 @@ class Recipes
         $recipe = new RecipeDetails();
         if(!empty($recipe->getByID($id))) {
             $data["planned"] = (array) $recipe->getByID($id);
+        }
+
+        $subprice = new PriceModel();
+        foreach($subprice->getCurrentPrice() as $sp) {
+            $data["subprices"][$sp->p_id] = $sp;
         }
 
         $products = new ProductsModel();
@@ -149,6 +159,11 @@ class Recipes
                 $recipe->insert($d);
             }
             
+        }
+
+        $subprice = new PriceModel();
+        foreach($subprice->getCurrentPrice() as $sp) {
+            $data["subprices"][$sp->p_id] = $sp;
         }
 
         $products = new ProductsModel();

@@ -49,6 +49,15 @@ class PriceModel
                 AND active = 1";
         return $this->query($query);
     }
+    public function getCurrentSubPrice()
+    {
+        $now = date("Y-m-d");
+        $query = "SELECT * FROM $this->table 
+                WHERE date_from <= '$now' 
+                AND (date_to >= '$now' OR date_to IS NULL) 
+                AND active = 1";
+        return $this->query($query);
+    }
     public function getPriceMonth($month, $year)
     {
         $start_date = "$year-$month-01";
