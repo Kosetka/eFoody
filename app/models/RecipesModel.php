@@ -21,26 +21,19 @@ class RecipesModel
         'date'
     ];
 
-    public function getRecipes(): array
+    public function getRecipes()
     {
-        $this->product = [];
-        $array = [];
-        $products = new ProductsModel;
-        $arr = $products->getAll($this->table);
-
-        foreach ($arr as $product) {
-            //foreach ($role as $r) {
-            $product = (array) $product;
-            $array[] = (array) $product;
-            //}
-        }
-        $this->products = $array;
-        //show($array);
-        return $array;
+        $query = "select * from $this->table";
+        return $this->query($query);
     }
     public function get($id)
     {
         $query = "select * from $this->table WHERE id = $id";
+        return $this->query($query);
+    }
+    public function getById($p_id)
+    {
+        $query = "select * from $this->table WHERE p_id = $p_id";
         return $this->query($query);
     }
 

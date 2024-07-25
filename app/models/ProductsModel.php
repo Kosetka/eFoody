@@ -103,4 +103,9 @@ class ProductsModel
         $query = "select * from $this->table";
         return $this->query($query);
     }
+    public function getProduct($id)
+    {
+        $query = "select * from $this->table WHERE id = $id";
+        return $this->query($query);
+    }
 }

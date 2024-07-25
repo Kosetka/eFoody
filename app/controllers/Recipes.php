@@ -14,18 +14,25 @@ class Recipes
         $data = [];
 
         $recipes = new RecipesModel();
-        foreach ($recipes->getRecipes() as $receipt) {
-            $data["recipes"][$receipt["id"]] = (object) $receipt;
+        if(!empty($recipes->getRecipes())) {
+            foreach ($recipes->getRecipes() as $receipt) {
+                $data["recipes"][$receipt->p_id] = $receipt;
+            }
         }
 
         $products = new ProductsModel();
         foreach ($products->getProducts() as $product) {
             $data["products"][$product["id"]] = (object) $product;
         }
+        
+        foreach ($products->getAllFullProducts() as $product) {
+            $data["full_products"][$product->id] = (object) $product;
+        }
 
-        $productsDetails = new RecipeDetails();
-        $data["productsDetails"] = $productsDetails->getAll("recipe_details");
-
+        $productsDetails = new RecipesModel();
+        foreach($productsDetails->getAll("recipes") as $prodDet) {
+            $data["productsDetails"][$prodDet->p_id] = $prodDet;
+        }
 
         $users = new User();
         foreach ($users->getAll("users") as $user) {
@@ -41,49 +48,58 @@ class Recipes
         if (empty($_SESSION['USER']))
             redirect('login');
 
+        $data = [];
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
         $id = $URL[2];
-        $data = [];
+
+        
+        
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            if (isset($_POST["recipeEdit"])) {
-                $_POST["u_id"] = $_SESSION["USER"]->id;
-                $recipes = new RecipesModel();
-                $recipes->update($id, $_POST);
-            }
 
-            if (isset($_POST["detailsEdit"]) && isset($_POST["sub_prod"])) {
-                //tu formularz edycji
-                $recipe = new RecipeDetails();
-                $recipe->delete($id, 'r_id');
-                foreach ($_POST["sub_prod"] as $key => $value) {
-                    $amount = $_POST["amount"][$key];
-                    $d = ["r_id" => $id, "sub_prod" => $key, "amount" => $amount];
+            if($_POST["active"] == "true") {
+                $active = 1;
+            } else {
+                $active = 0;
+            }
+            $_POST["u_id"] = $_SESSION["USER"]->id;
+            $recipes = new RecipesModel();
+            $recipes->update($id, ["active" => $active], "p_id");
+
+
+            $recipe = new RecipeDetails();
+            $recipe->delete($id, 'r_id');
+            if(!empty($_POST["ordered_products"])) {
+                foreach ($_POST["ordered_products"] as $key => $value) {
+                    $d = ["r_id" => $id, "sub_prod" => $key, "amount" => $value];
                     $recipe = new RecipeDetails();
                     $recipe->insert($d);
                 }
             }
-
         }
 
-
-
-        $data["product"] = $id;
         $recipes = new RecipesModel();
-        $data["recipes"] = $recipes->get($id);
+        if(!empty($recipes->getById($id))) {
+            $product = new ProductsModel();
+            $data["product"] = $product->getProduct($id)[0];
+            $data["product_active"] = $recipes->getById($id)[0]->active;
+        } else {
+            redirect('recipes');
+        }
+
+        $recipe = new RecipeDetails();
+        if(!empty($recipe->getByID($id))) {
+            $data["planned"] = (array) $recipe->getByID($id);
+        }
 
         $products = new ProductsModel();
         foreach ($products->getAllSubProducts() as $product) {
-            $data["sub_products"][$product->id] = (object) $product;
+            $data["halfproducts"][$product->id] = (array) $product;
         }
         $products = new ProductsModel();
         foreach ($products->getAllFullProducts() as $product) {
             $data["products"][$product->id] = (object) $product;
-        }
-        $productsDetails = new RecipeDetails();
-        foreach ($productsDetails->get($id) as $productDetail) {
-            $data["productsDetails"][$productDetail->sub_prod] = (object) $productDetail;
         }
 
         $this->view('recipes.edit', $data);
@@ -96,17 +112,48 @@ class Recipes
             redirect('login');
         $data = [];
 
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        $id = $URL[2];
+
+        $recipes = new RecipesModel();
+        if(empty($recipes->getById($id))) {
+            $product = new ProductsModel();
+            $data["product"] = $product->getProduct($id)[0];
+        } else {
+            redirect('recipes');
+        }
+
+
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            if (isset($_POST["recipeEdit"])) {
-                $_POST["u_id"] = $_SESSION["USER"]->id;
-                $recipes = new RecipesModel();
-                $recipes->insert($_POST);
+            $_POST["u_id"] = $_SESSION["USER"]->id;
+            if($_POST["active"] == "true") {
+                $_POST["active"] = 1;
+            } else {
+                $_POST["active"] = 0;
             }
+            $recipes = new RecipesModel();
+            $recipes->insert([
+                "p_id"=> $id,
+                "active"=> $_POST["active"],
+                "description"=> $data["product"]->p_name,
+                "r_name"=> $data["product"]->p_name,
+                "u_id"=> $_POST["u_id"],
+            ]);
+            $r_id = $recipes->getById($id)[0]->p_id; 
+            $recipe = new RecipeDetails();
+            $recipe->delete($r_id, 'r_id');
+            foreach ($_POST["ordered_products"] as $key => $value) {
+                $d = ["r_id" => $r_id, "sub_prod" => $key, "amount" => $value];
+                $recipe = new RecipeDetails();
+                $recipe->insert($d);
+            }
+            
         }
 
         $products = new ProductsModel();
         foreach ($products->getAllSubProducts() as $product) {
-            $data["sub_products"][$product->id] = (object) $product;
+            $data["halfproducts"][$product->id] = (array) $product;
         }
         $products = new ProductsModel();
         foreach ($products->getAllFullProducts() as $product) {

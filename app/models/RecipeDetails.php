@@ -40,4 +40,9 @@ class RecipeDetails
         $query = "select * from $this->table WHERE r_id = $id";
         return $this->query($query);
     }
+    public function getById($id)
+    {
+        $query = "select * from $this->table WHERE r_id = $id";
+        return $this->query($query);
+    }
 }
