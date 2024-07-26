@@ -69,7 +69,7 @@
                                                 <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
                                                 ';
                                                 if(isset($data["recipes"][$pid])) {
-                                                    echo '<td>'.$data["fullproducts"][$product["p_id"]]["p_name"].' [<a href="'.ROOT.'/recipes">przepis</a>]</td>';
+                                                    echo '<td>'.$data["fullproducts"][$product["p_id"]]["p_name"].' [<a href="'.ROOT.'/recipes/show/'.$product["p_id"].'">przepis</a>]</td>';
                                                 } else {
                                                     echo '<td>'.$data["fullproducts"][$product["p_id"]]["p_name"].' [<span style="color: red;">brak</span>]</td>';
                                                 }

@@ -61,6 +61,14 @@ function roundUp($number)
     // Formatowanie liczby do dwóch miejsc po przecinku
     return number_format($rounded, 2, '.', '');
 }
+function roundCost($number)
+{
+    // Zaokrąglanie liczby do dwóch miejsc po przecinku
+    $rounded = round($number, 2);
+    
+    // Formatowanie liczby do dwóch miejsc po przecinku
+    return number_format($rounded, 2, '.', '');
+}
 
 function buildHierarchy($data) {
     $tree = [];

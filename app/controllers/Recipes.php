@@ -42,6 +42,8 @@ class Recipes
         //tu koszt całej receptury
         // może w osobnej clasie 
 
+        $foodcost = new Foodcost();
+        $data["foodcost"] = $foodcost->getPriceDetailed(date("Y-m-d"));
 
         $this->view('recipes', $data);
     }
@@ -80,9 +82,8 @@ class Recipes
                     $recipe->insert($d);
                 }
             }
+            redirect('recipes');
         }
-
-
 
         $recipes = new RecipesModel();
         if(!empty($recipes->getById($id))) {
@@ -177,4 +178,74 @@ class Recipes
         $this->view('recipes.new', $data);
 
     }
+
+
+    public function show() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        $id = $URL[2];
+
+        
+        
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+            if($_POST["active"] == "true") {
+                $active = 1;
+            } else {
+                $active = 0;
+            }
+            $_POST["u_id"] = $_SESSION["USER"]->id;
+            $recipes = new RecipesModel();
+            $recipes->update($id, ["active" => $active], "p_id");
+
+
+            $recipe = new RecipeDetails();
+            $recipe->delete($id, 'r_id');
+            if(!empty($_POST["ordered_products"])) {
+                foreach ($_POST["ordered_products"] as $key => $value) {
+                    $d = ["r_id" => $id, "sub_prod" => $key, "amount" => $value];
+                    $recipe = new RecipeDetails();
+                    $recipe->insert($d);
+                }
+            }
+            redirect('recipes');
+        }
+
+        $recipes = new RecipesModel();
+        if(!empty($recipes->getById($id))) {
+            $product = new ProductsModel();
+            $data["product"] = $product->getProduct($id)[0];
+            $data["product_active"] = $recipes->getById($id)[0]->active;
+        } else {
+            redirect('recipes');
+        }
+
+        $recipe = new RecipeDetails();
+        if(!empty($recipe->getByID($id))) {
+            $data["planned"] = (array) $recipe->getByID($id);
+        }
+
+        $subprice = new PriceModel();
+        foreach($subprice->getCurrentPrice() as $sp) {
+            $data["subprices"][$sp->p_id] = $sp;
+        }
+
+        $products = new ProductsModel();
+        foreach ($products->getAllSubProducts() as $product) {
+            $data["halfproducts"][$product->id] = (array) $product;
+        }
+        $products = new ProductsModel();
+        foreach ($products->getAllFullProducts() as $product) {
+            $data["products"][$product->id] = (object) $product;
+        }
+
+        $this->view('recipes.show', $data);
+
+    }
+    
 }

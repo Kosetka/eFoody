@@ -34,7 +34,9 @@
                                 <tr>
                                     <th scope="col">Zdjęcie</th>
                                     <th scope="col">Produkt</th>
+                                    <th scope="col">Opis</th>
                                     <th scope="col">SKU</th>
+                                    <th scope="col">Jednostka</th>
                                     <th scope="col">Cena zakupu</th>
                                     <th scope="col">Ostatnia aktualizacja</th>
                                     <th scope="col">Akcje</th>
@@ -64,7 +66,9 @@
                                     }
                                     echo "  <tr><td>$photo</td>
                                             <td $no_production_cost>$value->p_name</td>
+                                            <td>$value->p_description</td>
                                             <td>$value->sku</td>
+                                            <td>$value->p_unit</td>
                                             <td $no_production_cost>$production_cost zł</td>
                                             <td>$date_from</td>";
                                     echo '<td>

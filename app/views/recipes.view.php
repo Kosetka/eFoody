@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group row m-3">
 <?php
-//show($data["productsDetails"] );
+//show($data["foodcost"]);
 ?>
                     <div class="col-sm-12">
                         <table class="table">
@@ -69,7 +69,12 @@
                                                 <td>".$value->sku."</td>";
 
                                     echo $active;
-                                    echo "<td></td>";
+                                    
+                                    $cost = "";
+                                    if(isset($data["foodcost"][$value->id][date("Y-m-d")])) {
+                                        $cost = $data["foodcost"][$value->id][date("Y-m-d")];
+                                    }
+                                    echo "<td>".roundCost((float)$cost)." zł</td>";
 
                                     if(isset($data["recipes"][$value->id])) {
                                         echo "      <td><a href='" . ROOT . "/recipes/edit/$value->id'>Edytuj</a></td>"; // lub new

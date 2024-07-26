@@ -35,6 +35,7 @@
                                     <th scope="col">Produkt</th>
                                     <th scope="col">Zdjęcie</th>
                                     <th scope="col">SKU</th>
+                                    <th scope="col">Źródło</th>
                                     <th scope="col">Koszt produkcji</th>
                                     <th scope="col">Aktualna cena</th>
                                     <th scope="col">Marża</th>
@@ -52,12 +53,18 @@
                                     } else {
                                         $photo = "";
                                     }
+                                    $source = "<td style='background-color: lightyellow'>Stała</td>";
+                                    $source_id = 0;
+                                    if(isset($data["foodcost"][$value->id])) {
+                                        $source = "<td style='background-color: lightgreen'>Auto</td>";
+                                        $source_id = 1;
+                                    }
                                     if (isset($data["prices"][$value->id])) {
                                         $price = $data["prices"][$value->id]->price;
                                         $production_cost = $data["prices"][$value->id]->production_cost;
                                         $date_from = $data["prices"][$value->id]->date_from;
                                         $date_to = $data["prices"][$value->id]->date_to;
-                                        $margin = $price - $production_cost . " zł (" . getMargin($price, $production_cost) . "%)";
+                                        $margin = roundCost($price - $production_cost) . " zł (" . getMargin($price, $production_cost) . "%)";
                                     } else {
                                         $price = "";
                                         $production_cost = "";
@@ -66,25 +73,37 @@
                                         $margin = "";
                                     }
                                     $no_production_cost = "";
-                                    if($production_cost == 0.01) {
-                                        $no_production_cost = "style='background-color: red;' ";
+                                    $dates = $date_from ." - ". $date_to;
+                                    if($source_id == 0) {
+                                        if($production_cost == 0.01) {
+                                            $no_production_cost = "style='background-color: red;' ";
+                                        }
+                                    } else {
+                                        $production_cost = $data["foodcost"][$value->id][date("Y-m-d")];
+                                        $margin = roundCost($price - $production_cost) . " zł (" . getMargin($price, $production_cost) . "%)";
+                                        $dates = "";
                                     }
                                     $low_margin = "";
                                     if($production_cost > 0) {
                                         if(getMargin($price, $production_cost) < 50) {
                                             $low_margin = " style='background-color: yellow;'";
                                         }
+                                        if(getMargin($price, $production_cost) < 0) {
+                                            $low_margin = " style='background-color: red; color: white'";
+                                        }
                                         if(getMargin($price, $production_cost) > 80) {
                                             $low_margin = " style='background-color: lime;'";
                                         }
                                     }
+                                    
                                     echo "  <tr><td $no_production_cost>$value->p_name</td>
                                             <td>$photo</td>
                                             <td>$value->sku</td>
-                                            <td $no_production_cost>$production_cost zł</td>
-                                            <td>$price zł</td>
+                                            $source
+                                            <td $no_production_cost>".roundCost($production_cost)." zł</td>
+                                            <td>".roundCost($price)." zł</td>
                                             <td $low_margin>$margin</td>
-                                            <td>$date_from - $date_to</td>";
+                                            <td>$dates</td>";
                                     echo '<td>
                                     <a href= "' . ROOT . '/prices/edit/' . $value->id . '" class = "btn btn-success">
                                         Edytuj

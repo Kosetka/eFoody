@@ -252,7 +252,9 @@ class Fixedcosts
                             $add_log_price = false;
                         } 
                         if($add_log_price) {
-                            $data["price_log_error"][] = ["p_id" => $price->p_id, "day" => $plan_date, "text" => "Brak kosztu produkcji i ceny sprzedaży"];
+                            if($price->price != 0) {
+                                $data["price_log_error"][] = ["p_id" => $price->p_id, "day" => $plan_date, "text" => "Brak kosztu produkcji i ceny sprzedaży"];
+                            }
                             //"Produkt ID: ".$price->p_id."; Data: ".$plan_date."; Brak kosztu produkcji i ceny sprzedaży.";
                         }
                     }

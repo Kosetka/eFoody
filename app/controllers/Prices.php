@@ -24,7 +24,8 @@ class Prices
                 $data["prices"][$product->p_id] = (object) $product;
             }
         }
-
+        $foodcost = new Foodcost();
+        $data["foodcost"] = $foodcost->getPriceDetailed(date("Y-m-d"));
 
         $this->view('prices', $data);
     }
