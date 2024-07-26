@@ -451,6 +451,7 @@ class Reports
                 $param2 = $URL[4];
             }
         }
+
         //tu sięzaczyna - 
 
         if ($type == "day")
@@ -483,18 +484,24 @@ class Reports
             if ($param1 <> 0) {
                 $today = $param1;
             }
+            $f_date_from = $today;
+            $f_date_to = $today;
             $date_from = $today . " 00:00:00";
             $date_to = $today . " 23:59:59";
         } else if ($type == "week") {
             if ($param1 <> 0) {
+                $f_date_from = $param1;
                 $date_from = $param1 . " 00:00:00";
             }
             if ($param2 <> 0) {
+                $f_date_to = $param2;
                 $date_to = $param2 . " 23:59:59";
             }
             if ($param1 == 0) {
                 $last_monday = date("Y-m-d", strtotime("-7 days", strtotime("last monday")));
                 $last_sunday = date("Y-m-d", strtotime("+6 days", strtotime($last_monday)));
+                $f_date_from = $last_monday;
+                $f_date_to = $last_sunday;
                 $date_from = $last_monday . " 00:00:00";
                 $date_to = $last_sunday . " 23:59:59";
                 $param1 = $last_monday; // tu sprawdzić
@@ -506,6 +513,8 @@ class Reports
                     $firstday = date("$param2-$param1-01");
                     $ld = cal_days_in_month(CAL_GREGORIAN, $param1, $param2);
                     $lastday = date("$param2-$param1-$ld");
+                    $f_date_from = sprintf("%d-%02d-%d", ...explode('-', $firstday));
+                    $f_date_to = sprintf("%d-%02d-%d", ...explode('-', $lastday));
                     $date_from = $firstday . " 00:00:00";
                     $date_to = $lastday . " 23:59:59";
                 }
@@ -515,7 +524,8 @@ class Reports
                 $last_day_current_month = date("Y-m-t", strtotime($first_day_current_month));
                 $last_day_previous_month = date("Y-m-t", strtotime("-1 month", strtotime($first_day_current_month)));
                 $first_day_previous_month = date("Y-m-01", strtotime("-1 month", strtotime($first_day_current_month)));
-
+                $f_date_from = sprintf("%d-%02d-%d", ...explode('-', $first_day_previous_month));
+                $f_date_to = sprintf("%d-%02d-%d", ...explode('-', $last_day_previous_month));
                 $date_from = $first_day_previous_month . " 00:00:00";
                 $date_to = $last_day_previous_month . " 23:59:59";
                 $timestamp = strtotime($date_from);
@@ -574,6 +584,13 @@ class Reports
         foreach ($prices->getGroupedPrices($date_from, $date_to) as $price) {
             $data["prices"][$price->p_id][] = $price;
         }
+
+        //echo "<br><br><br>".$f_date_from." ".$f_date_to;
+        $foodcost = new Foodcost();
+        $data["foodcost"] = $foodcost->getPriceDetailed($f_date_from, $f_date_to);
+
+        //show($data["prices"]);//die;
+        //show($data["foodcost"]);//die;
 
         $returns = new ReturnsModel;
         foreach ($returns->returnsByDate($date_from, $date_to) as $ret) {
