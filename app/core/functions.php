@@ -224,3 +224,11 @@ function removeLeadingZero($str)
     }
     return $str;
 }
+
+function removeElement(&$array, $id, $color) {
+    foreach ($array as $key => $item) {
+        if ($item['id'] === $id && $item['color'] === $color) {
+            unset($array[$key]);
+        }
+    }
+}

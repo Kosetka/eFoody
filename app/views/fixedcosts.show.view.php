@@ -179,14 +179,14 @@
                                     foreach($data["full_prod"] as $day_data_day) {
                                         foreach($day_data_day as $day_data) {
                                             if($day_data["amount_prod"] > 0) {
-                                                $month_prod_cost += $day_data["production_cost"] * $day_data["amount_prod"];
+                                                $month_prod_cost += (int) $day_data["production_cost"] * $day_data["amount_prod"];
                                                 $labels_month += $day_data["amount_prod"];
                                                 if($day_data["returns"] == "") {
                                                     $temp_ret = 0;
                                                 } else {
                                                     $temp_ret = $day_data["returns"];
                                                 }
-                                                $month_prod_sold += $day_data["price"] * ($day_data["amount_prod"] - $temp_ret);
+                                                $month_prod_sold += (int) $day_data["price"] * ($day_data["amount_prod"] - $temp_ret);
                                             }
                                         }
                                     }
@@ -220,16 +220,17 @@
                                         $day_prod_cost = 0;
                                         $day_prod_sold = 0;
                                         if(isset($data["full_prod"][$date->format('Y-m-d')])) {
+                                            //show($data["full_prod"][$date->format('Y-m-d')]);
                                             foreach($data["full_prod"][$date->format('Y-m-d')] as $day_data) {
                                                 if($day_data["amount_prod"] > 0) {
-                                                    $day_prod_cost += $day_data["production_cost"] * $day_data["amount_prod"];
+                                                    $day_prod_cost += (int) $day_data["production_cost"] * $day_data["amount_prod"];
                                                     $labels_day += $day_data["amount_prod"];
                                                     if($day_data["returns"] == "") {
                                                         $temp_ret = 0;
                                                     } else {
                                                         $temp_ret = $day_data["returns"];
                                                     }
-                                                    $day_prod_sold += $day_data["price"] * ($day_data["amount_prod"] - $temp_ret);
+                                                    $day_prod_sold += (int) $day_data["price"] * ($day_data["amount_prod"] - $temp_ret);
                                                 } else {
                                                     if($day_data["amount_plan"] > 0) {
                                                         $data["prod_error"][] = ["p_id" => $day_data["p_id"], "day" => $day_data["date_plan"], "plan" => $day_data["amount_plan"], "producted" => $day_data["amount_prod"], "text" => "Potencjalny brak zaraportowania produkcji"];
@@ -306,7 +307,7 @@
                                                         echo "</tr>";
                                                     }
                                                 } else {
-                                                    echo "<tr><td colspan='3'>Wszystko poprawnie</td></tr>";
+                                                    echo "<tr><td colspan='4'>Wszystko poprawnie</td></tr>";
                                                 }
                                             ?>
                                         </tbody>

@@ -159,7 +159,7 @@ class Recipes
                 $recipe = new RecipeDetails();
                 $recipe->insert($d);
             }
-            
+            redirect('recipes');
         }
 
         $subprice = new PriceModel();

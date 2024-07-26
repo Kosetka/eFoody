@@ -234,15 +234,32 @@ class Fixedcosts
             $data["price_log_error"] = [];
             $data["price_log"] = [];
             $data["return_log"] = [];
+            //show($data2["prices"]);//die;
+
+            $monthFormatted = str_pad($month, 2, '0', STR_PAD_LEFT);
+            $f_start_date = "$year-$monthFormatted-01";
+            $f_end_date = date("Y-m-t", strtotime($f_start_date));
+            $foodcost = new Foodcost();
+            $data["foodcost"] = $foodcost->getPriceDetailed($f_start_date, $f_end_date);
+            //show($data["foodcost"]);
+
             foreach($data2["prices"] as $price_prod) {
                 foreach($price_prod as $price) {
                     foreach($data2["planned"] as $plan_date => $plan) {
                         $add_log_price = true;
                         if($price->date_from <= $plan_date && $price->date_to >= $plan_date) {
                             if(isset($plan_prod[$plan_date][$price->p_id]["p_id"])) {
+                                $price_prod_cost = $price->production_cost;
+                                if(isset($data["foodcost"][$price_prod[0]->p_id][$plan_date])) { 
+                                    $price->production_cost = $data["foodcost"][$price_prod[0]->p_id][$plan_date];
+                                } 
                                 $plan_prod[$plan_date][$price->p_id]["production_cost"] = $price->production_cost;
+                                
+
+
                                 $plan_prod[$plan_date][$price->p_id]["price"] = $price->price;
                                 $data["price_log"][] = ["p_id" => $price->p_id, "day" => $plan_date, "price" => $price->price, "production_cost" => $price->production_cost];
+                        
                                 if($price->production_cost == 0.01) {
                                     $data["price_log_error"][] = ["p_id" => $price->p_id, "day" => $plan_date, "price" => $price->price, "production_cost" => $price->production_cost, "text" => "Brak kosztu produkcji ($price->production_cost zł)"];
                                 }
@@ -253,13 +270,16 @@ class Fixedcosts
                         } 
                         if($add_log_price) {
                             if($price->price != 0) {
-                                $data["price_log_error"][] = ["p_id" => $price->p_id, "day" => $plan_date, "text" => "Brak kosztu produkcji i ceny sprzedaży"];
+                                //$temp_log[$plan_date] = ["p_id" => $price->p_id, "day" => $plan_date, "text" => "Brak kosztu produkcji i ceny sprzedaży"];
+                                $data["price_log_error"][] = ["p_id" => $price->p_id, "day" => $plan_date, "text" => "Potencjalny brak kosztu produkcji i ceny sprzedaży"];
                             }
                             //"Produkt ID: ".$price->p_id."; Data: ".$plan_date."; Brak kosztu produkcji i ceny sprzedaży.";
                         }
                     }
                 }
             }
+
+            //$data["price_log_error"][] = ["p_id" => $price->p_id, "day" => $plan_date, "text" => "Brak kosztu produkcji i ceny sprzedaży"];
 
             //wcisnąć info o zwrotach ilości zameldowanej
             $products_list = new ReturnsModel();
