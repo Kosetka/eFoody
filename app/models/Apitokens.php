@@ -20,8 +20,8 @@ class Apitokens
 
     public function getToken($provider)
     {
-        $query = "select * from $this->table WHERE provider = $provider LIMIT 1;";
-        return $this->query($query);
+        $query = "select * from $this->table WHERE provider = '$provider' LIMIT 1;";
+        return $this->query($query)[0]->api_key;
     }
 
 }

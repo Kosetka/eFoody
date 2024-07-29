@@ -78,6 +78,7 @@ define('POLISHMONTHS',[
     "12" => "Grudzień"
 ]);
 define('LABELCOST',["cost" => 16.50, "labels" => 1034]);
+define('FUELTYPE',[0 => "Diesel", 1 => "Benzyna"]);
                                         
 
 /** true means show errors **/
