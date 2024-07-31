@@ -19,8 +19,8 @@ class Webfleet
     
     public function getLive()
     {
-        if (empty($_SESSION['USER']))
-            redirect('login');
+        //if (empty($_SESSION['USER']))
+            //redirect('login');
 
         $data = [];
 
@@ -117,7 +117,7 @@ class Webfleet
         
         curl_close($ch);
         
-        show($vehiclesData);
+        //show($vehiclesData);
 
         $veh_update = new Wfvehicleslive();
 
@@ -149,8 +149,11 @@ class Webfleet
             ]);
             
         }
-        show($veh_update->getNewestData());
+        //show($veh_update->getNewestData());
 
+        $data = $veh_update->getNewestData();
+
+        $this->view('webfleet.getlive', $data);
 
     }
 }

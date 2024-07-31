@@ -12,6 +12,7 @@
 
         <div class="card-header">
           <h2 class="">Miejsca do odwiedzenia</h2>
+          <a class='btn btn-warning' onClick = 'updatePosition()'  role='button'>Pobierz pozycję</a>
         </div>
         <div class="form-group row m-3">
           <div class="col-sm-12">
@@ -60,6 +61,20 @@
                       success: function (data) {
                         //alert("Oznaczono jako odwiedzone.");
                         window.location.href = window.location.href
+                      }
+                    });
+                  }
+                </script>
+                <script>
+                  function updatePosition() {
+                    $.ajax({
+                      url: '<?php echo ROOT . "/webfleet/getLive" ?>',
+                      success: function (data) {
+                        console.log(data); // Wyświetla dane w konsoli
+                        // Możesz również zrobić coś z danymi, np. wyświetlić je na stronie
+                      },
+                      error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('Błąd:', textStatus, errorThrown);
                       }
                     });
                   }
