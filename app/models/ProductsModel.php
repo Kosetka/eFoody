@@ -56,7 +56,7 @@ class ProductsModel
             CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(sku, '-', 3), '-', -1) AS UNSIGNED),
             CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(sku, '-', 4), '-', -1) AS UNSIGNED)
         ASC";
-    return $this->query($query);
+        return $this->query($query);
 	}
     public function getAllById($id)
 	{
@@ -95,6 +95,12 @@ class ProductsModel
     public function getAllSubProducts()
     {
         $query = "select * from $this->table WHERE prod_type = 0";
+        return $this->query($query);
+    }
+
+    public function getAllSubProductsSorted()
+    {
+        $query = "select * from $this->table WHERE prod_type = 0 ORDER BY p_name ASC";
         return $this->query($query);
     }
 
