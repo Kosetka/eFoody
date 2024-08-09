@@ -8,14 +8,14 @@
             <div>
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h2 class="">Wybierz datę</h2><a href="<?php echo ROOT."/stocks/add/".$data["w_id"];?>" class="btn btn-sm btn-primary" name="add" value=<?php echo $data["w_id"];?>>Inwentaryzuj teraz</a>
+                        <h2 class="">Wybierz datę</h2><a href="<?php echo ROOT."/stocks/add/".$data["user_warehouse"];?>" class="btn btn-sm btn-primary" name="add" value=<?php echo $data["user_warehouse"];?>>Inwentaryzuj teraz</a>
                     </div>
                     <div class="card-body">
                         <form method="get">
                             <div class="form-group row m-3">
                                 <label for="date" class="col-sm-2 col-form-label">Data:</label>
                                 <div class="col-sm-4">
-                                    <input class="form-control" type="date" id="date" name="date" value="<?=$data["date"];?>" required>
+                                    <input class="form-control" type="date" id="date" name="date" value="<?=$data["date_plan"];?>" required>
                                 </div>
                             </div>
                             

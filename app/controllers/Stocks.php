@@ -86,6 +86,16 @@ class Stocks
             $id_city = $URL[2];
             $data["user_warehouse"] = $id_city;
         }
+        if(isset($URL[3])) {
+            $date = $URL[3];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        $data["date_plan"] = $date;
 
         $data["cities"] = $_SESSION["CITIES"];
 
