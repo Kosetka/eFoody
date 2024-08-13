@@ -67,4 +67,9 @@ class Holidaysmodel
         }
         return $que;
     }
+    public function checkToday($date)
+    {
+        $query = "select * from $this->table WHERE date = '$date';";
+        return $this->query($query);
+    }
 }

@@ -84,4 +84,23 @@ class Cardriver
         $query = "SELECT * FROM $this->table WHERE car_id = $id ORDER BY date_to ASC LIMIT 1";
         return $this->query($query);
     }
+
+    public function getCarsWithDriversByDate($date)
+    {
+        $query = "
+            SELECT 
+                cars.*,
+                users.id AS user_id,
+                users.first_name,
+                users.last_name
+            FROM cars
+            LEFT JOIN car_driver ON cars.id = car_driver.car_id 
+                AND ('$date' >= car_driver.date_from AND ('$date' <= car_driver.date_to OR car_driver.date_to IS NULL))
+            LEFT JOIN users ON car_driver.u_id = users.id
+            ORDER BY cars.id;
+        ";
+
+        return $this->query($query);
+    }
+
 }

@@ -154,6 +154,228 @@ class Webfleet
         $data = $veh_update->getNewestData();
 
         $this->view('webfleet.getlive', $data);
+    }
 
+    public function getLogbook()
+    {
+        //if (empty($_SESSION['USER']))
+            //redirect('login');
+
+        $temp = [];
+        $todayId = [];
+
+        $carlb = new Carlogbook();
+        if(!empty($carlb->getTripIds())) {
+            foreach($carlb->getTripIds() as $tid) {
+                $todayId[] = $tid->tripid;
+            }
+        }
+        //show($todayId);
+
+        //die;
+        $today = "2024-08-12";//date("Y-m-d");//
+        $cardrivers = new Cardriver();
+        foreach($cardrivers->getCarsWithDriversByDate($today) as $car) {
+            $temp["cardrivers"][$car->objectno] = $car;
+        }
+
+        $holiday = new Holidaysmodel();
+        if(!empty($holiday->checkToday($today))) {
+            $hard_after_work = 1;
+        } else {
+            $hard_after_work = 0;
+        }
+        $flag = 0;
+        $company_id = NULL;
+        
+        //show($temp["cardrivers"]);
+
+        //die;
+        $api_key = new Apitokens();
+        $webfleet_key = $api_key->getToken("webfleet_key");
+        $webfleet_pass = $api_key->getToken("webfleet_pass");
+        $webfleet_login = $api_key->getToken("webfleet_login");
+        // URL API
+        $apiUrl = 'https://csv.webfleet.com/extern?lang=en&account=radluks&username='.$webfleet_login.'&password='.$webfleet_pass.'&apikey='.$webfleet_key.'&';
+        $endpoint = 'action=showLogbook&outputformat=json&objectgroupname=wszystkie&range_pattern=d0';
+        $apiUrl .= $endpoint;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+        
+        $vehiclesData = [];
+
+        if(curl_errno($ch)) {
+            echo 'cURL Error: ' . curl_error($ch);
+        } else {
+            // Dekodowanie odpowiedzi JSON
+            $data = json_decode($response, true);
+        
+            // Sprawdzenie, czy odpowiedź zawiera pole "errorCode"
+            if (isset($data['errorCode'])) {
+                echo "Error: " . $data['errorCode'] . " - " . $data['errorMsg'] . "\n";
+                $vf_logger = new Wflog();
+                $vf_logger->insert([
+                    "error_code"=> $data["errorCode"],
+                    "message"=> $data["errorMsg"],
+                    "endpoint"=> $endpoint,
+                    "u_id"=>0,
+                ]);
+            } else {
+                if (is_array($data)) {
+                    // Przykładowe wyświetlenie danych
+                    foreach ($data as $trip) {
+                        $tripInfo = [
+                            'tripid' => isset($trip['tripid']) ? $trip['tripid'] : 'N/A',
+                            'objectno' => isset($trip['objectno']) ? $trip['objectno'] : 'N/A',
+                            'objectname' => isset($trip['objectname']) ? $trip['objectname'] : 'N/A',
+                            'logflag' => isset($trip['logflag']) ? $trip['logflag'] : '0',
+                            'start_time' => isset($trip['start_time']) ? $trip['start_time'] : '0',
+                            'start_odometer' => isset($trip['start_odometer']) ? $trip['start_odometer'] : '0',
+                            'start_postext' => isset($trip['start_postext']) ? $trip['start_postext'] : '0',
+                            'end_time' => isset($trip['end_time']) ? $trip['end_time'] : '0',
+                            'end_odometer' => isset($trip['end_odometer']) ? $trip['end_odometer'] : '0',
+                            'end_postext' => isset($trip['end_postext']) ? $trip['end_postext'] : '0',
+                            'distance' => isset($trip['distance']) ? $trip['distance'] : '0',
+                            'objectuid' => isset($trip['objectuid']) ? $trip['objectuid'] : 'N/A',
+                            'start_latitude' => isset($trip['start_latitude']) ? $trip['start_latitude'] : '0',
+                            'start_longitude' => isset($trip['start_longitude']) ? $trip['start_longitude'] : '0',
+                            'end_latitude' => isset($trip['end_latitude']) ? $trip['end_latitude'] : '0',
+                            'end_longitude' => isset($trip['end_longitude']) ? $trip['end_longitude'] : '0',
+                            'avg_speed' => isset($trip['avg_speed']) ? $trip['avg_speed'] : '0',
+                            'max_speed' => isset($trip['max_speed']) ? $trip['max_speed'] : '0',
+                            'fuel_usage' => isset($trip['fuel_usage']) ? $trip['fuel_usage'] : '0'
+                        ];
+                        
+                        $vehiclesData[] = $tripInfo;
+                    }
+                    $vf_logger = new Wflog();
+                    $vf_logger->insert([
+                        "error_code"=> "-1",
+                        "message"=> "Successfully retrieved vehicle position.",
+                        "endpoint"=> $endpoint,
+                        "u_id"=>0,
+                    ]);
+                } else {
+                    echo "Invalid response format.";
+                    $vf_logger = new Wflog();
+                    $vf_logger->insert([
+                        "error_code"=> NULL,
+                        "message"=> "Invalid response format.",
+                        "endpoint"=> $endpoint,
+                        "u_id"=>0,
+                    ]);
+                }
+            }
+        }
+        
+        curl_close($ch);
+
+        $veh_insert = new Carlogbook();
+
+        //foreach($veh_insert->getFulldataByDate(date("Y-m-d")) as $vu) {
+        //    $temp[$vu->objectno] = $vu;
+        //}
+
+        foreach($vehiclesData as $trip) {
+            //show($trip);
+            $t_user_id = NULL;
+            //show($temp["cardrivers"][$trip["objectno"]]);
+            //echo "<br>";
+
+            if(isset($temp["cardrivers"][$trip["objectno"]])) {
+                $t_user_id = $temp["cardrivers"][$trip["objectno"]]->user_id;
+            }
+            $t_car_id = NULL;
+            if(isset($temp["cardrivers"][$trip["objectno"]])) {
+                $t_car_id = $temp["cardrivers"][$trip["objectno"]]->id;
+            }
+
+            //ustawienie czy podróż po pracy, później można zeminić po adresie
+            if($hard_after_work == 0) {
+                $datetime1 = new DateTime(date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $trip['start_time']))));
+                $datetime2 = new DateTime($today);
+                $datetime2->setTime(16, 0, 0); //tutaj możemy to rozbudować w przyszłości, jak na podstawie tego jak kierowcy zakończą pracę, to od tego momentu ustawiać im after_work
+                if ($datetime1 > $datetime2) {
+                    $after_work = 1;
+                } else {
+                    $after_work = 0;
+                }
+            } else {
+                $after_work = 1;
+            }
+            if(!in_array($trip['tripid'], $todayId)) {
+                $veh_insert->insert([
+                    'tripid' => $trip['tripid'],
+                    'objectno' => $trip['objectno'],
+                    'objectname' => $trip['objectname'],
+                    'logflag' => $trip['logflag'],
+                    'start_time' => date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $trip['start_time']))),
+                    'start_odometer' => $trip['start_odometer'],
+                    'start_postext' => $trip['start_postext'],
+                    'end_time' => date('Y-m-d H:i:s',strtotime(str_replace('/', '-', $trip['end_time']))),
+                    'end_odometer' => $trip['end_odometer'],
+                    'end_postext' => $trip['end_postext'],
+                    'distance' => $trip['distance'],
+                    'objectuid' => $trip['objectuid'],
+                    'start_latitude' => $trip['start_latitude']/1000000,
+                    'start_longitude' => $trip['start_longitude']/1000000,
+                    'end_latitude' => $trip['end_latitude']/1000000,
+                    'end_longitude' => $trip['end_longitude']/1000000,
+                    'avg_speed' => $trip['avg_speed'],
+                    'max_speed' => $trip['max_speed'],
+                    'fuel_usage' => $trip['fuel_usage'],
+                    "u_id"=> $t_user_id ,
+                    "flag"=> $flag,
+                    "date"=> $today,
+                    "car_id"=> $t_car_id,
+                    "company_id"=> $company_id,
+                    "after_work"=> $after_work,
+                ]);
+            } else {
+                //echo "już wpisane";
+            }
+        }
+
+        
+        $change_work = [];
+        if(!empty($veh_insert->getAllAfterHour($today))) {
+            foreach($veh_insert->getAllAfterHour($today) as $rec) {
+                $change_work[$rec->objectno][] = $rec;
+            }
+        }
+
+        function findFirstRecordWithWernera($data) {
+            foreach ($data as $records) {
+                foreach ($records as $record) {
+                    // Sprawdź, czy start_postext zawiera słowo "Wernera"
+                    if (strpos($record->start_postext, 'Wernera') !== false) {
+                        return $record;
+                    }
+                }
+            }
+            // Jeśli nie znaleziono pasującego rekordu, zwróć null
+            return null;
+        }
+        
+        // Przykład użycia
+        $data = [ /* Twoja tablica */ ];
+        
+        $record = findFirstRecordWithWernera($change_work);
+        
+        if ($record !== null) {
+            echo 'Znaleziono rekord: ';
+            print_r($record);
+        } else {
+            echo 'Nie znaleziono rekordu z "Wernera".';
+        }
+        
+        show($change_work);
+
+
+        $this->view('webfleet.getlogbook', $temp);
     }
 }
