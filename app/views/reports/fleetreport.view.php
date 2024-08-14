@@ -62,24 +62,24 @@ if ($data["get"]["type"] == "show") {
 
 
 
-$mess = "<table style='border: 1px solid'>
+$mess = "<table style='border: 1px solid; width: 100%'>
     <thead style='border: 1px solid'>
         <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
             <th colspan='12'>Raport $name - $dates</th>
         </tr>
         <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
-            <th rowspan='2' style='border: 1px solid #000; width: 8%'>Kierowca</th>
-            <th rowspan='2' style='border: 1px solid #000; width: 8%'>Model auta</th>
-            <th rowspan='2' style='border: 1px solid #000; width: 8%'>Rejestracja</th>
-            <th colspan='2' style='border: 1px solid #000; width: 8%'>Początek ostatniej trasy</th>
-            <th colspan='2' style='border: 1px solid #000; width: 8%'>Koniec ostatniej trasy</th>
-            <th rowspan='2' style='border: 1px solid #000; width: 8%'>Pokonane kilometry</th>
+            <th rowspan='2' style='border: 1px solid #000;'>Kierowca</th>
+            <th rowspan='2' style='border: 1px solid #000;'>Model auta</th>
+            <th rowspan='2' style='border: 1px solid #000;'>Rejestracja</th>
+            <th colspan='2' style='border: 1px solid #000;'>Początek ostatniej trasy</th>
+            <th colspan='2' style='border: 1px solid #000;'>Koniec ostatniej trasy</th>
+            <th rowspan='2' style='border: 1px solid #000;'>Pokonane kilometry</th>
         </tr>
         <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
-            <th style='border: 1px solid #000; width: 8%'>Godzina</th>
-            <th style='border: 1px solid #000; width: 8%'>Miejsce</th>
-            <th style='border: 1px solid #000; width: 8%'>Godzina</th>
-            <th style='border: 1px solid #000; width: 8%'>Miejsce</th>
+            <th style='border: 1px solid #000;'>Godzina</th>
+            <th style='border: 1px solid #000;'>Miejsce</th>
+            <th style='border: 1px solid #000;'>Godzina</th>
+            <th style='border: 1px solid #000;'>Miejsce</th>
         </tr>
     </thead>
     <tbody>";
@@ -142,6 +142,40 @@ $mess .= "
     </tbody>
 </table>";
 
+foreach($data["logbook"] as $car_key => $car_value) {
+    $mess .= "<table style='border: 1px solid; width: 100%''>
+        <thead style='border: 1px solid'>
+            <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
+                <th colspan='5'>Szczegóły - ".$data["cars"][$car_key]->plate."</th>
+            </tr>
+            <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+                <th colspan='2' style='border: 1px solid #000; width: 40%;'>Początek trasy</th>
+                <th colspan='2' style='border: 1px solid #000; width: 40%;'>Koniec trasy</th>
+                <th rowspan='2' style='border: 1px solid #000; width: 20%;'>Długość trasy</th>
+            </tr>
+            <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+                <th style='border: 1px solid #000; width: 10%;'>Godzina</th>
+                <th style='border: 1px solid #000; width: 25%;'>Miejsce</th>
+                <th style='border: 1px solid #000; width: 10%;'>Godzina</th>
+                <th style='border: 1px solid #000; width: 25%;'>Miejsce</th>
+            </tr>
+        </thead>
+        <tbody>";
+    foreach($car_value as $route) {
+        $mess .= "<tr style='text-align: center;'>";
+        $mess .= "<td style='border: 1px solid;'>$route->start_time</td>";
+        $mess .= "<td style='border: 1px solid;'>$route->start_postext</td>";
+        $mess .= "<td style='border: 1px solid;'>$route->end_time</td>";
+        $mess .= "<td style='border: 1px solid;'>$route->end_postext</td>";
+        $mess .= "<td style='border: 1px solid;'>".round($route->distance / 1000,1) ." km</td>";
+        $mess .= "</tr>";
+    }
+    $mess .= "
+        </tbody>
+    </table>";
+}
+
+//show($data["logbook"]);
 
 echo $mess;
 ?>
