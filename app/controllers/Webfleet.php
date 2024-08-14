@@ -173,7 +173,7 @@ class Webfleet
         //show($todayId);
 
         //die;
-        $today = date("Y-m-d");//"2024-08-13";//
+        $today = date("Y-m-d");//"2024-08-13";//date("Y-m-d");//
         $cardrivers = new Cardriver();
         foreach($cardrivers->getCarsWithDriversByDate($today) as $car) {
             $temp["cardrivers"][$car->objectno] = $car;
@@ -340,7 +340,13 @@ class Webfleet
             }
         }
 
-        
+        $this->view('webfleet.getlogbook', $temp);
+    }
+    public function updateAfterhourStatus() 
+    {
+        $today = date("Y-m-d", strtotime("-1 day"));
+
+        $veh_insert = new Carlogbook();
         $change_work = [];
         if(!empty($veh_insert->getAllAfterHour($today))) {
             foreach($veh_insert->getAllAfterHour($today) as $rec) {
@@ -349,32 +355,40 @@ class Webfleet
         }
 
         function findFirstRecordWithWernera($data) {
-            foreach ($data as $records) {
-                foreach ($records as $record) {
-                    // Sprawdź, czy start_postext zawiera słowo "Wernera"
-                    if (strpos($record->start_postext, 'Wernera') !== false) {
-                        return $record;
-                    }
+            foreach ($data as $record) {
+                // Sprawdź, czy start_postext zawiera słowo "Wernera"
+                if (stripos($record->start_postext, 'Wernera') !== false || stripos($record->start_postext, 'Rapackiego') !== false || stripos($record->start_postext, 'Barlickiego') !== false) {
+                    return $record;
                 }
             }
-            // Jeśli nie znaleziono pasującego rekordu, zwróć null
             return null;
         }
         
-        // Przykład użycia
-        
-        $record = findFirstRecordWithWernera($change_work);
-        
-        if ($record !== null) {
-            echo 'Znaleziono rekord: ';
-            show($record);
-        } else {
-            echo 'Nie znaleziono rekordu z "Wernera".';
+        //show($change_work);
+        foreach($change_work as $car) {
+            $record = findFirstRecordWithWernera($car);
+            
+            if ($record !== null) {
+                //echo 'Znaleziono rekord: ';
+                //show($record);
+                $to_change = true;
+                foreach($car as $rec) {
+                    if($to_change == true) {
+                        if($record->tripid == $rec->tripid) {
+                            $to_change = false;
+                        } else {
+                            //tu zmienić status
+                            //show($rec);
+                            $veh_insert->update($rec->tripid,["after_work" => 1],"tripid");
+                        }
+                    }
+                }
+            } else {
+                echo 'Nie znaleziono rekordu z "Wernera".';
+            }
         }
         
-        show($change_work);
-
-
-        $this->view('webfleet.getlogbook', $temp);
+        //show($change_work);
+        $this->view('webfleet.getlogbook', $change_work);
     }
 }
