@@ -59,6 +59,10 @@ if ($data["get"]["type"] == "show") {
     $new_date_format = date("d-m-Y", strtotime($data["get"]["day"]));
     $dates = $new_date_format;
 }
+if ($data["get"]["type"] == "send") {
+    $new_date_format = date("d-m-Y", strtotime($data["get"]["day"]));
+    $dates = $new_date_format;
+}
 
 
 

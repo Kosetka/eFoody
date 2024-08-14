@@ -46,7 +46,6 @@ class Fleetreport
             }
             //show($URL);
             $raport_id = 113; 
-
             $l_access = new Linksaccess;
             $ids = [];
             if (!empty($l_access->getEmailsByLinks($raport_id))) {
