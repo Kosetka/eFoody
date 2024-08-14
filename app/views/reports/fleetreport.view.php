@@ -68,12 +68,18 @@ $mess = "<table style='border: 1px solid'>
             <th colspan='12'>Raport $name - $dates</th>
         </tr>
         <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
-            <th style='border: 1px solid #000; width: 8%'>Kierowca</th>
-            <th style='border: 1px solid #000; width: 8%'>Model auta</th>
-            <th style='border: 1px solid #000; width: 8%'>Rejestracja</th>
-            <th style='border: 1px solid #000; width: 8%'>Data zgaszenia silnika</th>
-            <th style='border: 1px solid #000; width: 8%'>Adres ostatniego postoju</th>
-            <th style='border: 1px solid #000; width: 8%'>Pokonane kilometry</th>
+            <th rowspan='2' style='border: 1px solid #000; width: 8%'>Kierowca</th>
+            <th rowspan='2' style='border: 1px solid #000; width: 8%'>Model auta</th>
+            <th rowspan='2' style='border: 1px solid #000; width: 8%'>Rejestracja</th>
+            <th colspan='2' style='border: 1px solid #000; width: 8%'>Początek ostatniej trasy</th>
+            <th colspan='2' style='border: 1px solid #000; width: 8%'>Koniec ostatniej trasy</th>
+            <th rowspan='2' style='border: 1px solid #000; width: 8%'>Pokonane kilometry</th>
+        </tr>
+        <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+            <th style='border: 1px solid #000; width: 8%'>Godzina</th>
+            <th style='border: 1px solid #000; width: 8%'>Miejsce</th>
+            <th style='border: 1px solid #000; width: 8%'>Godzina</th>
+            <th style='border: 1px solid #000; width: 8%'>Miejsce</th>
         </tr>
     </thead>
     <tbody>";
@@ -83,6 +89,8 @@ foreach ($data["cars"] as $car) {
     $total_km = 0;
     $last_date = "";
     $last_place = "";
+    $first_date = "";
+    $first_place = "";
     $bg_color = "lightblue";
     if(isset($data["logbook"][$objectno])) {
         foreach($data["logbook"][$objectno] as $logb) {
@@ -90,8 +98,14 @@ foreach ($data["cars"] as $car) {
             if($last_date == "") {
                 $last_date = $logb->end_time;
             }
+            if($first_date == "") {
+                $first_date = $logb->start_time;
+            }
             if($last_place == "") {
                 $last_place = $logb->end_postext;
+            }
+            if($first_place == "") {
+                $first_place = $logb->start_postext;
             }
         }
         $total_km = round($total_km / 1000,1) ." km";
@@ -102,6 +116,8 @@ foreach ($data["cars"] as $car) {
         if(isset($data["logbook_visit"][$objectno])) {
             $last_date = $data["logbook_visit"][$objectno][0]->end_time;
             $last_place = $data["logbook_visit"][$objectno][0]->end_postext;
+            $first_date = $data["logbook_visit"][$objectno][0]->start_time;
+            $first_place = $data["logbook_visit"][$objectno][0]->start_postext;
             if(substr($last_date, 0, 10) == $data["get"]["day"]) {
                 $bg_color = "lightgreen"; 
             }
@@ -113,6 +129,8 @@ foreach ($data["cars"] as $car) {
             <td style='border: 1px solid;'>$u_name</td>
             <td style='border: 1px solid;'>$car->model</td>
             <td style='border: 1px solid;'>$car->plate</td>
+            <td style='border: 1px solid;'>$first_date</td>
+            <td style='border: 1px solid;'>$first_place</td>
             <td style='border: 1px solid;'>$last_date</td>
             <td style='border: 1px solid;'>$last_place</td>
             <td style='border: 1px solid;'>$total_km</td>

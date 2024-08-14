@@ -173,7 +173,7 @@ class Webfleet
         //show($todayId);
 
         //die;
-        $today = "2024-08-12";//date("Y-m-d");//
+        $today = "2024-08-13";//date("Y-m-d");//
         $cardrivers = new Cardriver();
         foreach($cardrivers->getCarsWithDriversByDate($today) as $car) {
             $temp["cardrivers"][$car->objectno] = $car;
@@ -362,13 +362,12 @@ class Webfleet
         }
         
         // Przykład użycia
-        $data = [ /* Twoja tablica */ ];
         
         $record = findFirstRecordWithWernera($change_work);
         
         if ($record !== null) {
             echo 'Znaleziono rekord: ';
-            print_r($record);
+            show($record);
         } else {
             echo 'Nie znaleziono rekordu z "Wernera".';
         }
