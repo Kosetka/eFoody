@@ -36,6 +36,7 @@ class Fleetreport
         if(isset($URL[2])) {
             $type = $URL[2];
             $data["hide"] = true;
+            $day = date("Y-m-d", strtotime("-1 day"));
         }
 
         if ($type == "send") {
@@ -44,7 +45,7 @@ class Fleetreport
                 $day = $URL[3];
             }
             //show($URL);
-            $raport_id = 113; //zmienić na ID 32
+            $raport_id = 113; 
 
             $l_access = new Linksaccess;
             $ids = [];
