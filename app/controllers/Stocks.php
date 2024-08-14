@@ -59,7 +59,7 @@ class Stocks
         foreach ($user_list as $user) {
             $data["users"][$user->id] = $user;
         }
-        $products = new Productsmodel();
+        $products = new ProductsModel();
         foreach ($products->getAllSubProductsSorted() as $product) {
             $data["products"][$product->id] = $product;
         }
@@ -110,7 +110,7 @@ class Stocks
         foreach ($user_list as $user) {
             $data["users"][$user->id] = $user;
         }
-        $products = new Productsmodel();
+        $products = new ProductsModel();
         foreach ($products->getAllSubProductsSorted() as $product) {
             $data["products"][$product->id] = $product;
         }
