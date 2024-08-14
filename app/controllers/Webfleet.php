@@ -173,7 +173,7 @@ class Webfleet
         //show($todayId);
 
         //die;
-        $today = "2024-08-13";//date("Y-m-d");//
+        $today = date("Y-m-d");//"2024-08-13";//
         $cardrivers = new Cardriver();
         foreach($cardrivers->getCarsWithDriversByDate($today) as $car) {
             $temp["cardrivers"][$car->objectno] = $car;
