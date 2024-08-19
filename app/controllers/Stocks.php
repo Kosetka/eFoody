@@ -122,4 +122,29 @@ class Stocks
 
         $this->view('stocks.history', $data);
     }
+
+    public function add()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $data["cities"] = $_SESSION["CITIES"];
+
+        foreach ($_SESSION["CITIES"] as $key => $value) {
+            $prod = new ProductsQuantity();
+            $id = $value["id"];
+            $data["sets"][$id] = $prod->getAllSetByWarehouse($key);
+        }
+
+        $users = new UsersModel();
+        $user_list = $users->getAllUsers();
+        foreach ($user_list as $user) {
+            $data["users"][$user->id] = $user;
+
+        }
+
+        $this->view('stocks.add', $data);
+    }
 }

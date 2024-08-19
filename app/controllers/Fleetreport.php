@@ -19,8 +19,8 @@ class Fleetreport
 
     public function day()
     {
-        if (empty($_SESSION['USER']))
-            redirect('login');
+        //if (empty($_SESSION['USER']))
+        //    redirect('login');
 
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
