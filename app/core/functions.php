@@ -64,6 +64,9 @@ function roundUp($number)
 function roundCost($number)
 {
     // Zaokrąglanie liczby do dwóch miejsc po przecinku
+    if(is_string($number)) {
+        return 0;
+    }
     $rounded = round($number, 2);
     
     // Formatowanie liczby do dwóch miejsc po przecinku

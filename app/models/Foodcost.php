@@ -55,8 +55,10 @@ class Foodcost
         // Wykonanie zapytania z parametrem
         $all = $this->query($query, ['date_from' => $dateFrom]);
         
-        foreach($all as $one) {
-            $temp[$one->p_id][] = $one;
+        if(!empty($all)) {
+            foreach($all as $one) {
+                $temp[$one->p_id][] = $one;
+            }
         }
         //show($temp);
 
