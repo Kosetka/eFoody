@@ -115,7 +115,7 @@ class Attendance
         $now = date("Y-m-d H:m:i");
 
         $cv = new Cardvisit();
-        $cv->insert(["w_id" => $w_id, "date" => $now]);
+        $cv->insert(["w_id" => $w_id, "date_now" => $now]);
 
 
         //$this->view('attendance.scanner', $data);

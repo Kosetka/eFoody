@@ -15,7 +15,7 @@ class Cardvisit
         'id',
         'date',
         'w_id',
-        'date'
+        'date_now'
     ];
 
     public function getAll()
