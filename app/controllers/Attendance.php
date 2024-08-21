@@ -112,7 +112,7 @@ class Attendance
         $URL = explode("/", trim($URL, "/"));
         $w_id = $URL[2];
 
-        $now = date("Y-m-d H:m:i");
+        $now = date("Y-m-d H:i:s");
 
         $cv = new Cardvisit();
         $cv->insert(["w_id" => $w_id, "date_now" => $now]);
