@@ -104,4 +104,18 @@ class Attendance
 
         $this->view('attendance.scanner', $data);
     }
+
+    public function logger() {
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        $w_id = $URL[2];
+
+        $cv = new Cardvisit();
+        $cv->insert(["w_id" => $w_id]);
+
+
+        //$this->view('attendance.scanner', $data);
+    }
 }
