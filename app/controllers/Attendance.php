@@ -112,8 +112,10 @@ class Attendance
         $URL = explode("/", trim($URL, "/"));
         $w_id = $URL[2];
 
+        $now = date("Y-m-d H:m:i");
+
         $cv = new Cardvisit();
-        $cv->insert(["w_id" => $w_id]);
+        $cv->insert(["w_id" => $w_id, "date" => $now]);
 
 
         //$this->view('attendance.scanner', $data);

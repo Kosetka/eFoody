@@ -14,7 +14,8 @@ class Cardvisit
     protected $allowedColumns = [
         'id',
         'date',
-        'w_id'
+        'w_id',
+        'date'
     ];
 
     public function getAll()
