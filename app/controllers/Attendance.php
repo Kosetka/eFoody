@@ -120,4 +120,29 @@ class Attendance
 
         //$this->view('attendance.scanner', $data);
     }
+    public function offlines() {
+
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        
+        $cv = new Cardvisit();
+        if(!empty($cv->getOffline())) {
+            foreach($cv->getOffline() as $rec) {
+                $data["breaks"][$rec->w_id][] = $rec;
+            }
+        }
+        if(!empty($cv->getStatus())) {
+            foreach($cv->getStatus() as $rec) {
+                $data["status"][$rec->w_id][] = $rec;
+            }
+        }
+        $data["now"] = date("Y-m-d H:i:s");
+        $city = new Shared();
+        foreach($city->getCitiesAndWarehouse() as $city) {
+            $data["city"][$city->id] = $city;
+        }
+
+        $this->view('attendance.offline', $data);
+    }
 }
