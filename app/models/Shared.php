@@ -13,6 +13,12 @@ class Shared
         $data = $this->query($query);
         return $data;
     }
+    public function getActiveCitiesAndWarehouse()
+    {
+        $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city WHERE w_active = 1";
+        $data = $this->query($query);
+        return $data;
+    }
     public function getFullData()
     {
         $query = "SELECT *, ps.date as ps_date, w.id as wh_id, ps.id as ps_id FROM product_scans as ps INNER JOIN products as p ON ps.p_id = p.id INNER JOIN users as u ON ps.u_id = u.id INNER JOIN warehouses as w ON ps.s_warehouse = w.id INNER JOIN cities as c ON c.id = w.id_city WHERE ps_active = 1 ORDER BY ps.date DESC LIMIT 10";

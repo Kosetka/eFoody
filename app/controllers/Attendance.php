@@ -139,7 +139,7 @@ class Attendance
         }
         $data["now"] = date("Y-m-d H:i:s");
         $city = new Shared();
-        foreach($city->getCitiesAndWarehouse() as $city) {
+        foreach($city->getActiveCitiesAndWarehouse() as $city) {
             $data["city"][$city->id] = $city;
         }
 
