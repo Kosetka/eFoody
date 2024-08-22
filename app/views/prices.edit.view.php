@@ -23,6 +23,7 @@
                 <?php endif; ?>
 
                 <?php
+                $edit_stage = false;
                 $th1 = "Dodaj nową cenę";
                 $th2 = "";
                 $th3 = "";
@@ -30,7 +31,9 @@
                 $th5 = "";
                 $th6 = "";
                 $th7 = "Dodaj cenę";
+                //show($data["price"]);
                 if (isset($data["price"])) {
+                    $edit_stage = true;
                     $th1 = "Edytuj cenę";
                     $th2 = $data["price"]->date_from;
                     $th3 = $data["price"]->date_to;
@@ -45,13 +48,22 @@
                 ?>
 
                 <h1 class="h3 mb-3 fw-normal"><?php echo $th1; ?></h1>
+                <?php
+                    if(isset($data["price"]->p_id)) {
+                        echo "<h5><a href='".ROOT."/prices/edit/".$data["price"]->p_id."'>Wróć do dodawania ceny</a></h5>";
+                    } else {
+                        echo "<h5><a href='".ROOT."/prices'>Wróć do listy produktów</a></h5>";
+                    }
+
+                ?>
+                
 
                 <div class="text-start">
-                    <div class="form-group row m-3">
+                    <div class="form-group row m-3" <?php if($edit_stage) echo "hidden";?>>
                         <label for="date_from" class="col-sm-2 col-form-label">Data od:</label>
                         <div class="col-sm-10">
                             <input type="date" class="form-control" id="date_from" name="date_from"
-                                value="<?php echo $th2; ?>" required>
+                                value="<?php echo $th2; ?>" <?php if(!$edit_stage) echo "required";?>>
                         </div>
                     </div>
                     <div class="form-group row m-3" hidden>
