@@ -13,8 +13,12 @@ if($data["hide"] == false) {
 
         echo '<h1 class="h3 mb-3 fw-normal">Wybierz ' . $f1 . ' do wyświetlenia raportu:</h1>';
         $date = "";
+        $date_to = "";
         if (isset($data["get"]["day"])) {
             $date = $data["get"]["day"];
+        }
+        if (isset($data["get"]["day_to"])) {
+            $date_to = $data["get"]["day_to"];
         }
 
         ?>
@@ -23,10 +27,17 @@ if($data["hide"] == false) {
             if ($data["get"]["type"] == "show") {
 
                 echo '  <div class="form-group row m-3">
-                            <label for="date" class="col-sm-2 col-form-label">Dzień:</label>
+                            <label for="date" class="col-sm-2 col-form-label">Dzień od:</label>
                             <div class="col-sm-4">
                                 <input type="date" class="form-control" id="date" name="date"
                                     value="' . $date . '" required>
+                            </div>
+                        </div>
+                        <div class="form-group row m-3">
+                            <label for="date_to" class="col-sm-2 col-form-label">Dzień do:</label>
+                            <div class="col-sm-4">
+                                <input type="date" class="form-control" id="date_to" name="date_to"
+                                    value="' . $date_to . '" required>
                             </div>
                         </div>';
             }
@@ -42,6 +53,9 @@ if($data["hide"] == false) {
                 <?php
                 if (!isset($data["get"]["day"])) {
                     echo "document.getElementById('date').setAttribute('value', currentDate);";
+                }
+                if (!isset($data["get"]["day_to"])) {
+                    echo "document.getElementById('date_to').setAttribute('value', currentDate);";
                 }
                 ?>
                                 </script>
@@ -63,88 +77,7 @@ if ($data["get"]["type"] == "send") {
     $new_date_format = date("d-m-Y", strtotime($data["get"]["day"]));
     $dates = $new_date_format;
 }
-
-
-
-$mess = "<table style='border: 1px solid; width: 100%'>
-    <thead style='border: 1px solid'>
-        <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
-            <th colspan='12'>Raport $name - $dates</th>
-        </tr>
-        <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
-            <th rowspan='2' style='border: 1px solid #000;'>Kierowca</th>
-            <th rowspan='2' style='border: 1px solid #000;'>Model auta</th>
-            <th rowspan='2' style='border: 1px solid #000;'>Rejestracja</th>
-            <th colspan='2' style='border: 1px solid #000;'>Początek ostatniej trasy</th>
-            <th colspan='2' style='border: 1px solid #000;'>Koniec ostatniej trasy</th>
-            <th rowspan='2' style='border: 1px solid #000;'>Pokonane kilometry</th>
-        </tr>
-        <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
-            <th style='border: 1px solid #000;'>Godzina</th>
-            <th style='border: 1px solid #000;'>Miejsce</th>
-            <th style='border: 1px solid #000;'>Godzina</th>
-            <th style='border: 1px solid #000;'>Miejsce</th>
-        </tr>
-    </thead>
-    <tbody>";
-foreach ($data["cars"] as $car) {
-    $u_name = $car->first_name .' '. $car->last_name;
-    $objectno = $car->objectno;
-    $total_km = 0;
-    $last_date = "";
-    $last_place = "";
-    $first_date = "";
-    $first_place = "";
-    $bg_color = "lightblue";
-    if(isset($data["logbook"][$objectno])) {
-        foreach($data["logbook"][$objectno] as $logb) {
-            $total_km += $logb->distance;
-            if($last_date == "") {
-                $last_date = $logb->end_time;
-            }
-            if($first_date == "") {
-                $first_date = $logb->start_time;
-            }
-            if($last_place == "") {
-                $last_place = $logb->end_postext;
-            }
-            if($first_place == "") {
-                $first_place = $logb->start_postext;
-            }
-        }
-        $total_km = round($total_km / 1000,1) ." km";
-        $bg_color = "lightcoral";
-    }
-    if($total_km == 0) {
-        $total_km = "";
-        if(isset($data["logbook_visit"][$objectno])) {
-            $last_date = $data["logbook_visit"][$objectno][0]->end_time;
-            $last_place = $data["logbook_visit"][$objectno][0]->end_postext;
-            $first_date = $data["logbook_visit"][$objectno][0]->start_time;
-            $first_place = $data["logbook_visit"][$objectno][0]->start_postext;
-            if(substr($last_date, 0, 10) == $data["get"]["day"]) {
-                $bg_color = "lightgreen"; 
-            }
-        }
-    }
-
-    $mess .= "
-        <tr style='text-align: center; background-color: $bg_color'>
-            <td style='border: 1px solid;'>$u_name</td>
-            <td style='border: 1px solid;'>$car->model</td>
-            <td style='border: 1px solid;'>$car->plate</td>
-            <td style='border: 1px solid;'>$first_date</td>
-            <td style='border: 1px solid;'>$first_place</td>
-            <td style='border: 1px solid;'>$last_date</td>
-            <td style='border: 1px solid;'>$last_place</td>
-            <td style='border: 1px solid;'>$total_km</td>
-        </tr>";
-}
-
-
-$mess .= "
-    </tbody>
-</table>";
+$mess = "";
 
 foreach($data["logbook"] as $car_key => $car_value) {
     $mess .= "<table style='border: 1px solid; width: 100%''>

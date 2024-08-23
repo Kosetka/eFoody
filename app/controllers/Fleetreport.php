@@ -115,6 +115,13 @@ class Fleetreport
         $type = "show";
         $send = 0;
         $data["hide"] = false;
+        $date_from = $day;
+        $date_to = $day;
+
+        if(isset($_GET["search"])) { // wysłane zapytanie GETem
+            $date_from = $_GET["date"];
+            $date_to = $_GET["date_to"];
+        }
 
         if(isset($URL[2])) {
             $type = $URL[2];
@@ -125,10 +132,11 @@ class Fleetreport
         if ($type == "send") {
             $send = 1;
             if (isset($URL[3])) {
-                $day = $URL[3];
+                $date_from = $URL[3];
+                $date_to = $URL[4];
             }
             //show($URL);
-            $raport_id = 113; 
+            $raport_id = 0;//113; 
             $l_access = new Linksaccess;
             $ids = [];
             if (!empty($l_access->getEmailsByLinks($raport_id))) {
@@ -148,12 +156,8 @@ class Fleetreport
         } else if ($type == "show") {
             $send = 2;
             if(isset($URL[3])) {
-                $day = $URL[3];
-            }
-            if(isset($_GET["search"])) { // wysłane zapytanie GETem
-                if (isset($_GET["date"])) {
-                    $day = $_GET["date"];
-                }
+                $date_from = $URL[3];
+                $date_to = $URL[4];
             }
         }
 
@@ -164,9 +168,6 @@ class Fleetreport
         }
         $data["logbook"] = [];
         $carlogbook = new Carlogbook();
-
-        $date_from = '2024-08-19';
-        $date_to = '2024-08-23';
 
         if(!empty($carlogbook->getAllRoute($date_from, $date_to))) {
             foreach($carlogbook->getAllRoute($date_from, $date_to) as $log) {
@@ -183,7 +184,8 @@ class Fleetreport
 
         $data["get"]["send"] = $send;
         $data["get"]["type"] = $type;
-        $data["get"]["day"] = $day;
+        $data["get"]["day"] = $date_from;
+        $data["get"]["day_to"] = $date_to;
 
         $this->view('route.report', $data);
     }
