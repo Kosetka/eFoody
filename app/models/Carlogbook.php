@@ -58,6 +58,11 @@ class Carlogbook
         $query = "select * from $this->table WHERE date = '$date' AND after_work = 1 ORDER BY tripid DESC, objectno ASC;";
         return $this->query($query);
     }
+    public function getAllRoute($date_from, $date_to)
+    {
+        $query = "select * from $this->table WHERE date >= '$date_from' AND date <= '$date_to' AND after_work = 0 ORDER BY tripid DESC, objectno ASC;";
+        return $this->query($query);
+    }
     public function getLastRecord($date)
     {
         // Ustawienie końcowej godziny na 23:59:59
