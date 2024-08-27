@@ -215,6 +215,7 @@ class Products
                     }
                 }
 
+                show($_POST);die;
                 $product->update($id_product, $_POST);
                 
                 $p_alergens->delete($id_product,"p_id");
