@@ -235,3 +235,85 @@ function removeElement(&$array, $id, $color) {
         }
     }
 }
+
+function timeDiff($datetime1, $datetime2) {
+    // Tworzenie obiektów DateTime z przekazanych parametrów
+    $date1 = new DateTime($datetime1);
+    $date2 = new DateTime($datetime2);
+
+    // Obliczenie różnicy między datami
+    $interval = $date1->diff($date2);
+
+    // Zwrócenie różnicy w formacie H:i:s
+    return $interval->format('%H:%I:%S');
+}
+
+function checkWords($text1, $text2) {
+    $wordsToCheck = ['Wernera', 'Barlickiego', 'Rapackiego'];
+    
+    foreach ($wordsToCheck as $word) {
+        if (strpos($text1, $word) !== false && strpos($text2, $word) !== false) {
+            return true; 
+        }
+    }
+
+    return false;
+}
+function checkWord($text1) {
+    $wordsToCheck = ['Wernera', 'Barlickiego', 'Rapackiego'];
+    
+    foreach ($wordsToCheck as $word) {
+        if (strpos($text1, $word) !== false) {
+            return true; 
+        }
+    }
+
+    return false;
+}
+
+function timeToSeconds($time) {
+    list($hours, $minutes, $seconds) = explode(':', $time);
+
+    $totalSeconds = ($hours * 3600) + ($minutes * 60) + $seconds;
+
+    return $totalSeconds;
+}
+function secondsToTime($seconds) {
+    $hours = floor($seconds / 3600);
+
+    $minutes = floor(($seconds % 3600) / 60);
+
+    $remainingSeconds = $seconds % 60;
+
+    return sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
+}
+
+function averageStopTime($seconds, $stops) {
+    if ($stops <= 0) {
+        return false;
+    }
+
+    $averageSeconds = $seconds / $stops;
+
+    $hours = floor($averageSeconds / 3600);
+    $minutes = floor(($averageSeconds % 3600) / 60);
+    $remainingSeconds = $averageSeconds % 60;
+
+    return sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
+}
+function avgDistance($distance, $stops) {
+    if ($stops <= 0) {
+        return false;
+    }
+    return round(($distance / $stops) / 1000,1);
+}
+
+function amountPerPoint($amount, $points) {
+    if ($points <= 0) {
+        return 0;
+    }
+
+    $amountPerPoint = $amount / $points;
+
+    return floor($amountPerPoint * 100) / 100;
+}

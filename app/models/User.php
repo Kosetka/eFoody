@@ -48,6 +48,16 @@ class User
 		$query = "select * from $this->table;";
 		return $this->query($query);
 	}
+
+	public function getAllDrivers()
+	{
+		$query = "SELECT u.*, r.role_name
+			FROM $this->table AS u
+			INNER JOIN roles_name AS r ON r.id = u.u_role
+			WHERE u.u_role IN (3, 5) AND u.active = 1;";
+		return $this->query($query);
+	}
+
 	public function getAllUsersSorted()
 	{
 		$query = "select * from $this->table ORDER BY first_name ASC;";

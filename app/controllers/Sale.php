@@ -246,4 +246,75 @@ class Sale
 
         $this->view('sale.report', $data);
     }
+
+
+    public function dailyprofit()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+
+        if (isset($URL[2])) {
+            $date = $URL[2];
+        }
+
+        if (isset($_GET["search"])) {
+            if (isset($_GET["date"])) {
+                $date = $_GET["date"];
+                $data["show_list"] = true;
+            }
+        } elseif(isset($_GET["show"])) {
+            $date = date("Y-m-d");
+            $data["show_list"] = true;
+        } else {
+            $date = date("Y-m-d");
+            $data["show_list"] = false;
+        }
+
+        $gain = new Gainsmodel();
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+            show($gain->checkExists($date, $_POST["u_id"]));
+            if(!empty($gain->checkExists($date, $_POST["u_id"]))) {
+                $t_id = $gain->checkExists($date, $_POST["u_id"])[0]->id;
+                $gain->delete($t_id);
+            }
+
+            //show($_POST);
+            $to_insert = [
+                "u_id" => $_POST["u_id"],
+                "date" => $date,
+                "profit" => $_POST["cash"] + $_POST["card"],
+                "insert_u_id" => $_SESSION["USER"]->id,
+                "main_u_id" => $_POST["u_id"],
+                "card" => $_POST["card"],
+                "cash" => $_POST["cash"]
+            ];
+            
+            $gain->insert($to_insert);
+        }
+
+        $data["gains"] = [];
+        if(!empty($gain->getByDate($date))) {
+            foreach($gain->getByDate($date) as $g) {
+                $data["gains"][$g->u_id] = $g;
+            }
+        }
+        //show($data);
+
+
+        $users = new User();
+        foreach($users->getAllDrivers() as $user) {
+            $data["users"][$user->id] = $user;
+        }
+
+
+        $data["date"] = $date;
+        $this->view('sale.dailyprofit', $data);
+    }
 }

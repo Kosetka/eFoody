@@ -179,6 +179,14 @@ class Fleetreport
                 $data["logbook_visit"][$log->objectno][] = $log;
             }
         }
+
+        $gains = new Gainsmodel();
+        if(!empty($gains->getByDates($date_from, $date_to))) {
+            foreach($gains->getByDates($date_from, $date_to) as $rr) {
+                $data["gains"][$rr->date][$rr->u_id] = $rr;
+            }
+        }
+
         //show($data["logbook_visit"]);
 
 
