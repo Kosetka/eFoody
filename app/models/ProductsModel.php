@@ -19,7 +19,8 @@ class ProductsModel
         'ean',
         'p_unit',
         'p_photo',
-        'prod_type'
+        'prod_type',
+        'kcal'
     ];
 
     public function validate($data)

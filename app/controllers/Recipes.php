@@ -30,8 +30,10 @@ class Recipes
         }
 
         $productsDetails = new RecipesModel();
-        foreach($productsDetails->getAll("recipes") as $prodDet) {
-            $data["productsDetails"][$prodDet->p_id] = $prodDet;
+        if(!empty($productsDetails->getAll("recipes"))) {
+            foreach($productsDetails->getAll("recipes") as $prodDet) {
+                $data["productsDetails"][$prodDet->p_id] = $prodDet;
+            }
         }
 
         $users = new User();

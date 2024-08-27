@@ -95,9 +95,11 @@
 
                 <?php
                     $recipes = [];
-                    foreach($data["recipes"] as $key => $value) {
-                        foreach($value as $k => $v) {
-                            $recipes[$k] = 0;
+                    if(!empty($data["recipes"])) {
+                        foreach($data["recipes"] as $key => $value) {
+                            foreach($value as $k => $v) {
+                                $recipes[$k] = 0;
+                            }
                         }
                     }
                     //show($data["planned"]);

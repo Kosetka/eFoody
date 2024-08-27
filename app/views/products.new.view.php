@@ -42,16 +42,22 @@
                             <input type="text" class="form-control" id="p_name" name="p_name">
                         </div>
                     </div>
-                    <div class="form-group row m-3">
+                    <div class="form-group row m-3" hidden>
                         <label for="p_description" class="col-sm-2 col-form-label">Opis:</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="p_description" name="p_description">
                         </div>
                     </div>
-                    <div class="form-group row m-3">
+                    <div class="form-group row m-3" hidden>
                         <label for="ean" class="col-sm-2 col-form-label">EAN:</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="ean" name="ean">
+                        </div>
+                    </div>
+                    <div class="form-group row m-3">
+                        <label for="kcal" class="col-sm-2 col-form-label">Kalorie:</label>
+                        <div class="col-sm-10">
+                            <input type="number" min="0" class="form-control" id="kcal" name="kcal">
                         </div>
                     </div>
                     <div class="form-group row m-3">

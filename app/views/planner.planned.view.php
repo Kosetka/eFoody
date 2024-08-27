@@ -60,6 +60,7 @@
                                             <th>Przygotowana ilość</th>
                                             <th>% Realizacji</th>
                                             <th>Alergeny</th>
+                                            <th>Kalorie</th>
                                             <th>Akcje</th>
                                         </tr>
                                     </thead>
@@ -101,7 +102,8 @@
 
                                                 echo '<td style="background: '.$color.'">'.getPercent($prod_amo, $product["amount"]).'%</td>
                                                 <td>'.substr($ids, 0, -2).'</td>
-                                                <td id="p_name_'.$product["p_id"].'"><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
+                                                <td>'.$data["fullproducts"][$product["p_id"]]["kcal"].'</td> '; //// TU ZMIENIĆ
+                                                echo '<td id="p_name_'.$product["p_id"].'"><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
                                                 role="button" title="Etykieta"><i class="fa-solid fa-tag"></i></a>
                                                  
                                                 <a target="_blank" class="btn btn-success print-pdf" data-pid="'.$product["p_id"].'" href=" ' . ROOT . '/labels/generate/'.$data["fullproducts"][$product["p_id"]]["id"].'"

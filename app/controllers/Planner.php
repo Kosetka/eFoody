@@ -540,8 +540,10 @@ class Planner
         }
 
         $recipes = new RecipesModel();
-        foreach ($recipes->getFullRecipes() as $key => $value) {
-            $data["recipes"][$value->p_id][$value->sub_prod] = $value;
+        if(!empty($recipes->getFullRecipes() )) {
+            foreach ($recipes->getFullRecipes() as $key => $value) {
+                $data["recipes"][$value->p_id][$value->sub_prod] = $value;
+            }
         }
 
         $data["date_plan"] = $date;
