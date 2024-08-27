@@ -161,6 +161,10 @@ class Fleetreport
             }
         }
 
+        $get_user = new User;
+        foreach($get_user->getAllDrivers() as $us) {
+            $data["drivers_show"][$us->id] = $us;
+        }
 
         $cardriver = new Cardriver();
         foreach($cardriver->getCarsWithDriversByDate($day) as $car) {

@@ -267,6 +267,9 @@ function checkWord($text1) {
             return true; 
         }
     }
+    if ($text1 == 0) {
+        return true; 
+    }
 
     return false;
 }

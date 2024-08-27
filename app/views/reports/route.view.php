@@ -111,9 +111,12 @@ foreach($data["logbook"] as $car_key => $car_value) {
         $total_km = 0;
         $total_time = 0;
         $total_stops = 0;
+        $show_sum = false;
     foreach($car_value as $route_key => $route) {
         $if_count = true;
-        if(end($car_value)->tripid != $route->tripid) {
+        if(end($car_value)->tripid == $route->tripid) {
+            $show_sum = true;
+        }
             //show(end($car_value)->tripid);
             //show($route->tripid);
             if($lastDay == "") {
@@ -134,14 +137,18 @@ foreach($data["logbook"] as $car_key => $car_value) {
                 $first_row = true;
             }
             $lastDay = subDay($route->start_time);
-            if(!$first_row) {
+            
                 $mess .= "<tr style='text-align: center;'>";
                 $mess .= "<td style='border: 1px solid;'>$route->start_time</td>";
                 $mess .= "<td style='border: 1px solid;'>$route->start_postext</td>";
                 $mess .= "<td style='border: 1px solid;'>$route->end_time</td>";
                 $mess .= "<td style='border: 1px solid;'>$route->end_postext</td>";
                 $mess .= "<td style='border: 1px solid;'>".round($route->distance / 1000,1) ." km</td>";
-                $mess .= "<td style='border: 1px solid;'>".timeDiff($route->end_time, $car_value[$route_key-1]->start_time)."</td>";
+                if($route_key-1== -1) {
+                    $mess .= "<td style='border: 1px solid;'></td>";
+                } else {
+                    $mess .= "<td style='border: 1px solid;'>".timeDiff($route->end_time, $car_value[$route_key-1]->start_time)."</td>";
+                }
                 $grouped[$lastDay][$data["cars"][$car_key]->plate]["total_km"] = $total_km;
                 $grouped[$lastDay][$data["cars"][$car_key]->plate]["total_time"] = $total_time;
                 $grouped[$lastDay][$data["cars"][$car_key]->plate]["total_stops"] = $total_stops;
@@ -154,10 +161,16 @@ foreach($data["logbook"] as $car_key => $car_value) {
                 if(checkWord($route->end_postext)) {
                     $if_count = false;
                 }
-
+                if($first_row) {
+                    $if_count = false;
+                }
                 if($if_count) {
                     $total_km += $route->distance;
-                    $total_time += timeToSeconds(timeDiff($route->end_time, $car_value[$route_key-1]->start_time));
+                    if($route_key-1== -1) {
+                        $total_time = 0;
+                    } else {
+                        $total_time += timeToSeconds(timeDiff($route->end_time, $car_value[$route_key-1]->start_time));
+                    }
                     $total_stops += 1;
                 }
                 $last_id = $route_key;
@@ -168,10 +181,11 @@ foreach($data["logbook"] as $car_key => $car_value) {
                 }
                 $mess .= "<td style='border: 1px solid; $stop_txt'></td>";
                 $mess .= "</tr>";
-            } else {
+
+            if($first_row) {
                 $first_row = false;
             }
-        } else {
+        if($show_sum) {
             $mess .= "<tr style='background-color: #4a4a4a; color: #e6e6e6;'>";
             $mess .= "<td style='border: 1px solid #000;' colspan='4'>$lastDay</td>";
             $mess .= "<td style='border: 1px solid #000;'>".round($total_km / 1000,1)." km [".avgDistance($total_km, $total_stops)." km]</td>";
@@ -186,7 +200,7 @@ foreach($data["logbook"] as $car_key => $car_value) {
     </table>";
 }
 
-//show($data["logbook"]);
+show($data);
 
 echo $mess;
 echo '<br><br><br>';
@@ -217,8 +231,18 @@ foreach($grouped as $date_gr => $grup) {
     $tot_time = 0;
     $tot_stops = 0;
     $tot_profit = 0;
+    $to_add = false;
+    $bg_col = "";
     foreach($grup as $plate_gr => $gdata) {
-        $det .= "<tr>";
+        if(!isset($data["drivers_show"][$gdata["driver_id"]])) {
+            $bg_col = "style='background-color: lightcoral;'";
+            $to_add = false;
+        } else {
+            $bg_col = "";
+            $to_add = true;
+        }
+
+        $det .= "<tr $bg_col>";
         $det .= "<td style='border: 1px solid #000;'>$plate_gr</td>";
         $det .= "<td style='border: 1px solid #000;'>".$gdata["driver"]."</td>";
         $det .= "<td style='border: 1px solid #000;'>".round($gdata["total_km"] / 1000,1)." km</td>";
@@ -234,10 +258,13 @@ foreach($grouped as $date_gr => $grup) {
         $det .= "<td style='border: 1px solid #000;'>".amountPerPoint($profit, $gdata["total_stops"])." zł</td>";
         $det .= "<td style='border: 1px solid #000;'>".amountPerPoint($profit, ($gdata["total_time"]/60))." zł</td>";
         $det .= "<td style='border: 1px solid #000;'>".amountPerPoint($profit, ($gdata["total_km"]/1000))." zł</td>";
-        $tot_km += $gdata["total_km"];
-        $tot_time += $gdata["total_time"];
-        $tot_stops += $gdata["total_stops"];
-        $tot_profit += $profit;
+
+        if($to_add) {
+            $tot_km += $gdata["total_km"];
+            $tot_time += $gdata["total_time"];
+            $tot_stops += $gdata["total_stops"];
+            $tot_profit += $profit;
+        }
 
 
 
