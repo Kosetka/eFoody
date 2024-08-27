@@ -131,6 +131,7 @@ class Labels
                 $temp["product"] = (object) $product;
             }
             $data["prod_name"] = $temp["product"]->p_name;
+            $data["kcal"] = $temp["product"]->kcal;
             $data["sku"] = $temp["product"]->sku;
             $pid = $temp["product"]->id;
             $alergens = new Productalergens();

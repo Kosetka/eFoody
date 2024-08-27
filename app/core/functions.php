@@ -320,3 +320,20 @@ function amountPerPoint($amount, $points) {
 
     return floor($amountPerPoint * 100) / 100;
 }
+
+function roundToNearest5($number)
+{
+    $rounded = round($number);
+
+    $lastDigit = $rounded % 10;
+
+    if ($lastDigit < 3) {
+        $rounded -= $lastDigit;
+    } elseif ($lastDigit < 8) {
+        $rounded += (5 - $lastDigit);
+    } else {
+        $rounded += (10 - $lastDigit);
+    }
+
+    return $rounded;
+}

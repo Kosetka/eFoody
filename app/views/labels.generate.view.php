@@ -12,9 +12,14 @@
     }
     $al = "Alergeny: ";
     $alergens = $data["alergens"];
-    $txt = "Lista alergenów na stronie:";
     $link = "www.pan-obiadek.pl/alergeny";
+    $txt = "Lista alergenów: ".$link;
     $prod = "Data produkcji: ";
+    if($data["kcal"] > 0) {
+        $kcal = "Kalorie: ".$data["kcal"]."kcal";
+    } else {
+        $kcal = "";
+    }
     $date = $data["date"];
 
     $prod_name = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $prod_name);
@@ -48,10 +53,10 @@
     $pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
     $pdf->SetXY(0, 15); 
     $pdf->MultiCell(62, 6, $al . $alergens, 0, 'L');
-    $pdf->SetXY(12, 19);
+    $pdf->SetXY(0, 19);
+    $pdf->MultiCell(62, 5, $kcal, 0, 'L');
+    $pdf->SetXY(0, 22);
     $pdf->MultiCell(62, 5, $txt, 0, 'L');
-    $pdf->SetXY(11, 22);
-    $pdf->MultiCell(62, 5, $link, 0, 'L');
     $pdf->SetXY(14, 10);
     $pdf->Cell(0, 10, $prod . $date, 0, 1);
 

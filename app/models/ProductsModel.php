@@ -115,4 +115,12 @@ class ProductsModel
         $query = "select * from $this->table WHERE id = $id";
         return $this->query($query);
     }
+    public function getKcalByProducts($ids)
+    {
+        $idsList = implode(',', array_map('intval', $ids));
+        
+        $query = "SELECT DISTINCT kcal, id FROM $this->table WHERE id IN ($idsList);";
+        
+        return $this->query($query);
+    }
 }

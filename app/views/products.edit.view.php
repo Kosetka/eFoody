@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <?php 
-                    if($data['product']->prod_type == 1) { ?>
+                    if($data['product']->prod_type == 1 || $data['product']->prod_type == 0) { ?>
                     <div class="form-group row m-3">
                         <label for="alergens" class="col-sm-2 col-form-label">Alergeny:</label>
                         <div class="col-sm-10">

@@ -38,5 +38,12 @@ class Productalergens
         GROUP BY p_id;";
         return $this->query($query);
     }
+    public function getAlergensByProducts($ids)
+    {
+        $idsList = implode(',', array_map('intval', $ids));
         
+        $query = "SELECT DISTINCT a_id FROM $this->table WHERE p_id IN ($idsList);";
+        
+        return $this->query($query);
+    }
 }

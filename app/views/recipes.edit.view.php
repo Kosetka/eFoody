@@ -65,6 +65,7 @@
                                             <th>Jednostka</th>
                                             <th>Ilość</th>
                                             <th>Cena (za jednostkę)</th>
+                                            <th>Kalorie (jednostka)</th>
                                             <th>Akcja</th>
                                         </tr>
                                     </thead>
@@ -98,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if(isset($data["subprices"][$product['id']]->production_cost)) {
                 $subprices_temp = $data["subprices"][$product['id']]->production_cost;
             }
-            echo "{ ID: ".$product['id'].", p_name: '".$product['p_name']."', sku: '".$product['sku']."', p_photo: '".$product['p_photo']."', p_unit: '".$product['p_unit']."', subprice: '".$subprices_temp."' },";
+            echo "{ ID: ".$product['id'].", p_name: '".$product['p_name']."', sku: '".$product['sku']."', kcal: '".$product['kcal']."', p_photo: '".$product['p_photo']."', p_unit: '".$product['p_unit']."', subprice: '".$subprices_temp."' },";
         }
         ?>
     ];
@@ -153,6 +154,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <td>${product.p_unit}</td>
             <td><input type="number" class="form-control" value="${quantity}" min="1"></td>
             <td>${product.subprice} zł</td>
+            <td>${product.kcal}</td>
             <td><button class="btn btn-danger remove-product">Usuń</button></td>
         `;
         orderedProductsTable.appendChild(tr);

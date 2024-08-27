@@ -74,6 +74,33 @@ class Recipes
             $recipes = new RecipesModel();
             $recipes->update($id, ["active" => $active], "p_id");
 
+            $allergens = new Productalergens();
+            $allergens->delete($id,"p_id");
+            $ids = [];
+            foreach($_POST["ordered_products"] as $pprod_key => $pprod_val) {
+                $ids[] = $pprod_key;
+            } 
+            if(!empty($allergens->getAlergensByProducts($ids))) {
+                foreach($allergens->getAlergensByProducts($ids) as $al) {
+                    $allergens->insert([
+                            "p_id" => $id,
+                            "a_id" => $al->a_id
+                            ]);
+                }
+            }
+            $pproducts = new ProductsModel();
+            $pids = [];
+            foreach($_POST["ordered_products"] as $pprod_key => $pprod_val) {
+                $pids[] = $pprod_key;
+            } 
+            
+            $pcal = [];
+            if(!empty($pproducts->getKcalByProducts($pids))) {
+                foreach($pproducts->getKcalByProducts($ids) as $al) {
+                    $pcal[$al->id] = $al; 
+                }
+            }
+            $kcal = 0;
 
             $recipe = new RecipeDetails();
             $recipe->delete($id, 'r_id');
@@ -82,8 +109,11 @@ class Recipes
                     $d = ["r_id" => $id, "sub_prod" => $key, "amount" => $value];
                     $recipe = new RecipeDetails();
                     $recipe->insert($d);
+                    $kcal += $pcal[$key]->kcal * $value;
                 }
             }
+            $kcal = roundToNearest5($kcal);
+            $pproducts->update($id, ["kcal" => $kcal]);
             redirect('recipes');
         }
 
@@ -139,11 +169,38 @@ class Recipes
 
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            
             $_POST["u_id"] = $_SESSION["USER"]->id;
             if($_POST["active"] == "true") {
                 $_POST["active"] = 1;
             } else {
                 $_POST["active"] = 0;
+            }
+            $allergens = new Productalergens();
+            $allergens->delete($id,"p_id");
+            $ids = [];
+            foreach($_POST["ordered_products"] as $pprod_key => $pprod_val) {
+                $ids[] = $pprod_key;
+            } 
+            if(!empty($allergens->getAlergensByProducts($ids))) {
+                foreach($allergens->getAlergensByProducts($ids) as $al) {
+                    $allergens->insert([
+                            "p_id" => $id,
+                            "a_id" => $al->a_id
+                            ]);
+                }
+            }
+            $pproducts = new ProductsModel();
+            $pids = [];
+            foreach($_POST["ordered_products"] as $pprod_key => $pprod_val) {
+                $pids[] = $pprod_key;
+            } 
+            
+            $pcal = [];
+            if(!empty($pproducts->getKcalByProducts($pids))) {
+                foreach($pproducts->getKcalByProducts($ids) as $al) {
+                    $pcal[$al->id] = $al; 
+                }
             }
             $recipes = new RecipesModel();
             $recipes->insert([
@@ -156,11 +213,16 @@ class Recipes
             $r_id = $recipes->getById($id)[0]->p_id; 
             $recipe = new RecipeDetails();
             $recipe->delete($r_id, 'r_id');
+            $kcal = 0;
             foreach ($_POST["ordered_products"] as $key => $value) {
                 $d = ["r_id" => $r_id, "sub_prod" => $key, "amount" => $value];
                 $recipe = new RecipeDetails();
                 $recipe->insert($d);
+                $kcal += $pcal[$key]->kcal * $value;
             }
+            $kcal = roundToNearest5($kcal);
+            $pproducts->update($id, ["kcal" => $kcal]);
+            //die;
             redirect('recipes');
         }
 
