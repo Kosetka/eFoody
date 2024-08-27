@@ -215,7 +215,10 @@ class Products
                     }
                 }
 
-                show($_POST);die;
+                //show($_POST);die;
+                if($_POST["kcal"] == "") {
+                    $_POST["kcal"] = NULL;
+                }
                 $product->update($id_product, $_POST);
                 
                 $p_alergens->delete($id_product,"p_id");
