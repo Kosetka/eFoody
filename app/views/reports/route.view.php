@@ -200,7 +200,7 @@ foreach($data["logbook"] as $car_key => $car_value) {
     </table>";
 }
 
-show($data);
+//show($data);
 
 echo $mess;
 echo '<br><br><br>';
