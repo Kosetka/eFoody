@@ -76,7 +76,7 @@
                                     $dates = $date_from ." - ". $date_to;
                                     if($source_id == 0) {
                                         if($production_cost == 0.01) {
-                                            $no_production_cost = "style='background-color: red;' ";
+                                            $no_production_cost = "style='background-color: lightcoral;' ";
                                         }
                                     } else {
                                         $production_cost = $data["foodcost"][$value->id][date("Y-m-d")];
@@ -85,15 +85,40 @@
                                     }
                                     $low_margin = "";
                                     if($production_cost > 0) {
-                                        if(getMargin($price, $production_cost) < 50) {
-                                            $low_margin = " style='background-color: yellow;'";
+                                        if(getMargin($price, $production_cost) >= 10) {
+                                            $low_margin = " style='background-color: #ff5232;'";
+                                        }
+                                        if(getMargin($price, $production_cost) >= 20) {
+                                            $low_margin = " style='background-color: #ff5232;'";
+                                        }
+                                        if(getMargin($price, $production_cost) >= 30) {
+                                            $low_margin = " style='background-color: #ff7b5a;'";
+                                        }
+                                        if(getMargin($price, $production_cost) >= 40) {
+                                            $low_margin = " style='background-color: #ebe939;'";
+                                        }
+                                        if(getMargin($price, $production_cost) >= 50) {
+                                            $low_margin = " style='background-color: #b7d5ac;'";
+                                        }
+                                        if(getMargin($price, $production_cost) >= 60) {
+                                            $low_margin = " style='background-color: #93bf85;'";
+                                        }
+                                        if(getMargin($price, $production_cost) >= 70) {
+                                            $low_margin = " style='background-color: #6eaa5e;'";
+                                        }
+                                        if(getMargin($price, $production_cost) >= 80) {
+                                            $low_margin = " style='background-color: #469536; color:white;'";
+                                        }
+                                        if(getMargin($price, $production_cost) >= 90) {
+                                            $low_margin = " style='background-color: #008000; color:white; font-weight: bold;'";
+                                        }
+                                        if(getMargin($price, $production_cost) >= 99) {
+                                            $low_margin = " style='background-color: white;'";
                                         }
                                         if(getMargin($price, $production_cost) < 0) {
-                                            $low_margin = " style='background-color: red; color: white'";
+                                            $low_margin = " style='background-color: red; color: red'";
                                         }
-                                        if(getMargin($price, $production_cost) > 80) {
-                                            $low_margin = " style='background-color: lime;'";
-                                        }
+                                        
                                     }
                                     
                                     echo "  <tr><td $no_production_cost>$value->p_name</td>
