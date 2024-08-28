@@ -99,7 +99,7 @@
                                             echo '<button type="button" style="margin-left: 70px;"class="btn btn-primary" onclick="submitSingleForm(' . $key . ')">Zapisz</button>';
                                             echo "</td>";
                                             
-                                            $counted_stan = $amount + $p_tot;
+                                            $counted_stan = (float) $amount + (float) $p_tot;
 
                                             echo "<td>$counted_stan</td>";
                                             echo "<td></td>";
