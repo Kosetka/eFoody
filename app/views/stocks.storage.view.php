@@ -7,7 +7,7 @@
         <main class="form-signin container h-100 text-center" style="padding-top: 40px; max-width: 100%">
             <div class="card mb-4">
                 <div class="card-header">
-                    <h2 class="">Lista magazynów</h2>
+                    <h2 class="">Lista magazynów - wprowadzanie zakupów</h2>
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -19,8 +19,7 @@
                                 <th scope="col">Opis</th>
                                 <th scope="col">Ostatnia inwentaryzacja</th>
                                 <th scope="col">Osoba</th>
-                                <th scope="col">Aktualny stan</th>
-                                <th scope="col">Historyczny stan</th>
+                                <th colspan="2" scope="col">Akcje</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,8 +44,8 @@
                                         <td>$opis</td>
                                         <td class='last-update'>$date</td>
                                         <td>$user</td>";
-                                echo "<td><a href='" . ROOT . "/stocks/show/" . $id . "'>Pokaż aktualny</a></td>";
-                                echo "<td><a href='" . ROOT . "/stocks/history/" . $id . "'>Pokaż historyczny</a></td>";
+                                echo "<td><a href='" . ROOT . "/stocks/storageadd/" . $id . "'>Dodaj stan (PZ)</a></td>";
+                                echo "<td><a href='" . ROOT . "/stocks/storagesub/" . $id . "'>Zdejmij ze stanu (WZ)</a></td>";
                                 echo "</tr>";
                             }
 

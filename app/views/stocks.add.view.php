@@ -51,11 +51,9 @@
                                             <th scope="col">Ostatnia aktualizacja</th>
                                             <th scope="col">Ilość [Jednostka]</th>
                                             <th scope="col">Stan faktyczny</th>
-                                            <th scope="col">Akcja</th>
                                             <th scope="col">Stan wyliczony</th>
-                                            <th scope="col">Stan po dodaniach</th>
-                                            <th scope="col">Zejścia po przepisach</th>
-                                            <th scope="col">WZ/PZ</th>
+                                            <th scope="col">Zejście według raportu produkcji</th>
+                                            <th scope="col">PZ/WZ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -79,18 +77,34 @@
                                                     $last_date = $data["sets"][$value->id]->date;
                                                 }
                                             }
+                                            $p_add = 0;
+                                            $p_sub = 0;
+                                            if(isset($data["sets_all"][$key]["add"])) {
+                                                $p_add = $data["sets_all"][$key]["add"];
+                                            }
+                                            if(isset($data["sets_all"][$key]["sub"])) {
+                                                $p_sub = $data["sets_all"][$key]["sub"];
+                                            }
+                                            
+                                            $p_tot = $p_add - $p_sub;
+
                                             echo "  <tr><td>$photo</td>";
                                             echo "<td>$product_p_name</td>";
                                             echo "<td>$product_sku</td>";
                                             echo '<td class="last-update">'.$last_date.'</td>';
-                                            echo "<td>$amount [$product_p_unit]</td>";
+                                            echo "<td>$amount $product_p_unit</td>";
                                             echo "<td>";
                                             echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id_' . $key . '" name="p_id[' . $key . ']" value="0" min="0" step="0.1">';
                                             echo '<input type="number" hidden class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id_old_' . $key . '" name="p_id_old[' . $key . ']" value="'.$amount.'">';
                                             echo '<button type="button" style="margin-left: 70px;"class="btn btn-primary" onclick="submitSingleForm(' . $key . ')">Zapisz</button>';
                                             echo "</td>";
                                             
+                                            $counted_stan = $amount + $p_tot;
+
+                                            echo "<td>$counted_stan</td>";
                                             echo "<td></td>";
+                                            
+                                            echo "<td><span style='color: green; font-weight: bold;'>$p_add</span> / <span style='color: red; font-weight: bold;'>-$p_sub</span></td>";
                                             echo "</tr>";
                                         }
                                         ?>

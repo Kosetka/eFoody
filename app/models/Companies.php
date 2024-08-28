@@ -65,6 +65,11 @@ class Companies
         $query = "select * from $table WHERE company_type = 0";
         return $this->query($query);
     }
+    public function getAllCompaniesBuy()
+    {
+        $query = "select * from $this->table WHERE company_type = 1";
+        return $this->query($query);
+    }
     public function getMyCompanies($u_id)
     {
         $query = "select * from $this->table WHERE company_type = 0 AND guardian = $u_id AND active = 1";

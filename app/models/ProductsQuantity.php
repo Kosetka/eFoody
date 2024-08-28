@@ -99,10 +99,55 @@ class ProductsQuantity
             INNER JOIN (
                 SELECT p_id, MAX(date) AS max_date
                 FROM $this->table
+                WHERE w_id = $w_id AND transaction_type = 'set'
+                GROUP BY p_id
+            ) t2 ON t1.p_id = t2.p_id AND t1.date = t2.max_date
+            WHERE t1.w_id = $w_id
+        ";
+
+        return $this->query($query);
+    }
+    public function getLast($w_id, $p_id)
+    {
+        $query = "select * from $this->table WHERE `w_id` = $w_id AND `p_id` = $p_id ORDER BY id DESC LIMIT 1";
+
+        return $this->query($query);
+    }
+    public function getLastTransactions($w_id)
+    {
+        $query = "
+            SELECT t1.*
+            FROM $this->table t1
+            INNER JOIN (
+                SELECT p_id, MAX(date) AS max_date
+                FROM $this->table
                 WHERE w_id = $w_id
                 GROUP BY p_id
             ) t2 ON t1.p_id = t2.p_id AND t1.date = t2.max_date
             WHERE t1.w_id = $w_id
+        ";
+
+        return $this->query($query);
+    }
+
+    public function getLastTransactionsWithAddAndSub($w_id)
+    {
+        $query = "
+            SELECT t.*
+            FROM $this->table t
+            INNER JOIN (
+                SELECT p_id, MAX(date) AS max_set_date
+                FROM $this->table
+                WHERE w_id = $w_id AND transaction_type = 'set'
+                GROUP BY p_id
+            ) last_set ON t.p_id = last_set.p_id
+            WHERE t.w_id = $w_id 
+            AND (
+                (t.transaction_type = 'set' AND t.date = last_set.max_set_date)
+                OR 
+                (t.transaction_type IN ('add', 'sub') AND t.date > last_set.max_set_date)
+            )
+            ORDER BY t.p_id, t.date ASC
         ";
 
         return $this->query($query);
@@ -116,7 +161,7 @@ class ProductsQuantity
             INNER JOIN (
                 SELECT p_id, MAX(date) AS max_date
                 FROM $this->table
-                WHERE w_id = $w_id
+                WHERE w_id = $w_id AND transaction_type = 'set'
                 AND date <= '$date'
                 GROUP BY p_id
             ) t2 ON t1.p_id = t2.p_id AND t1.date = t2.max_date

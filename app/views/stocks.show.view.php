@@ -8,6 +8,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h2 class="">Aktualny stan magazynowy</h2>
+                    <h5 class="">Na podstawie inwentaryzacji</h5>
                     
                 </div>
                 <div class="card-body">
