@@ -92,19 +92,38 @@ class ProductsQuantity
     }
 
     public function getLastTransactionsByProduct($w_id)
-{
-    $query = "
-        SELECT t1.*
-        FROM $this->table t1
-        INNER JOIN (
-            SELECT p_id, MAX(date) AS max_date
-            FROM $this->table
-            WHERE w_id = $w_id
-            GROUP BY p_id
-        ) t2 ON t1.p_id = t2.p_id AND t1.date = t2.max_date
-        WHERE t1.w_id = $w_id
-    ";
+    {
+        $query = "
+            SELECT t1.*
+            FROM $this->table t1
+            INNER JOIN (
+                SELECT p_id, MAX(date) AS max_date
+                FROM $this->table
+                WHERE w_id = $w_id
+                GROUP BY p_id
+            ) t2 ON t1.p_id = t2.p_id AND t1.date = t2.max_date
+            WHERE t1.w_id = $w_id
+        ";
 
-    return $this->query($query);
-}
+        return $this->query($query);
+    }
+    public function getLastTransactionsByProductAndMaxDate($w_id, $date)
+    {
+        $date = $date." 23:59:59";
+        $query = "
+            SELECT t1.*
+            FROM $this->table t1
+            INNER JOIN (
+                SELECT p_id, MAX(date) AS max_date
+                FROM $this->table
+                WHERE w_id = $w_id
+                AND date <= '$date'
+                GROUP BY p_id
+            ) t2 ON t1.p_id = t2.p_id AND t1.date = t2.max_date
+            WHERE t1.w_id = $w_id
+            AND t1.date <= '$date'
+        ";
+
+        return $this->query($query);
+    }
 }

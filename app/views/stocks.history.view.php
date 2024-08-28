@@ -75,7 +75,7 @@
                                                     <td style='white-space: nowrap'>$prod_val->sku</td>";
                                         if(isset($data["sets"][$prod_val->id]) ) {
                                             echo "      <td>".$data["sets"][$prod_val->id]->amount ." ".$prod_val->p_unit."</td>";
-                                            echo "      <td>".$data["sets"][$prod_val->id]->date."</td>";
+                                            echo '<td class="last-update">'.$data["sets"][$prod_val->id]->date.'</td>';
                                             echo "      <td>".$data["users"][$data["sets"][$prod_val->id]->u_id]->first_name." ".$data["users"][$data["sets"][$prod_val->id]->u_id]->last_name."</td>";
                                         } else {
                                             echo "      <td>0 $prod_val->p_unit</td>";
@@ -91,4 +91,47 @@
             </div>
 
         </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Pobierz bieżącą datę
+        const today = new Date();
+        const todayYear = today.getFullYear();
+        const todayMonth = today.getMonth();
+        const todayDate = today.getDate();
+
+        // Funkcja sprawdzająca i kolorująca daty
+        function checkAndColorDates() {
+            const cells = document.querySelectorAll(".last-update");
+            cells.forEach(cell => {
+                const cellDateStr = cell.textContent.trim();
+                const cellDate = new Date(cellDateStr);
+                
+                // Porównanie tylko roku, miesiąca i dnia
+                const cellYear = cellDate.getFullYear();
+                const cellMonth = cellDate.getMonth();
+                const cellDay = cellDate.getDate();
+
+                if (cellYear === todayYear && cellMonth === todayMonth && cellDay === todayDate) {
+                    // Dzisiaj
+                    cell.style.backgroundColor = "lightgreen";
+                } else {
+                    // Różnica dni między dzisiejszą datą a datą z komórki
+                    const timeDifference = today - cellDate;
+                    const dayDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+
+                    if (dayDifference >= 1 && dayDifference <= 7) {
+                        // Od wczoraj do 7 dni wstecz
+                        cell.style.backgroundColor = "lightyellow";
+                    } else if (dayDifference > 7) {
+                        // Więcej niż 7 dni
+                        cell.style.backgroundColor = "lightcoral";
+                    }
+                }
+            });
+        }
+
+        checkAndColorDates();
+    });
+</script>
         <?php require_once 'landings/footer.view.php' ?>

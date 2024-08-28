@@ -116,7 +116,7 @@ class Stocks
         }
 
         $prod_quant = new ProductsQuantity();
-        foreach($prod_quant->getLastTransactionsByProduct($id_city) as $res) {
+        foreach($prod_quant->getLastTransactionsByProductAndMaxDate($id_city, $date) as $res) {
             $data["sets"][$res->p_id] = $res;
         }
 
@@ -131,6 +131,33 @@ class Stocks
         $data = [];
 
         $data["cities"] = $_SESSION["CITIES"];
+        $data["user_warehouse"] = 0;
+        if (!empty($_GET)) {
+            $URL = $_GET['url'] ?? 'home';
+            $URL = explode("/", trim($URL, "/"));
+            $id_city = $URL[2];
+            $data["user_warehouse"] = $id_city;
+        }
+        $date = date("Y-m-d H:i:s");
+        $u_id = $_SESSION["USER"]->id;
+
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            //show($_POST);
+            $prodqua = new ProductsQuantity();
+            foreach($_POST["p_id"] as $p_key => $p_val) {
+                $prodqua->insert([
+                    "w_id" => $id_city,
+                    "p_id" => $p_key,
+                    "u_id" => $u_id,
+                    "amount" => $p_val,
+                    "date" => $date,
+                    "old_amount" => $_POST["p_id_old"][$p_key],
+                    "transaction_type" => "set"
+                ]);
+            }
+            //die;
+        }
 
         foreach ($_SESSION["CITIES"] as $key => $value) {
             $prod = new ProductsQuantity();
@@ -142,8 +169,20 @@ class Stocks
         $user_list = $users->getAllUsers();
         foreach ($user_list as $user) {
             $data["users"][$user->id] = $user;
-
         }
+
+        $products = new ProductsModel();
+        foreach ($products->getAllSubProductsSorted() as $product) {
+            $data["products"][$product->id] = $product;
+        }
+
+        $prod_quant = new ProductsQuantity();
+        foreach($prod_quant->getLastTransactionsByProduct($id_city) as $res) {
+            $data["sets"][$res->p_id] = $res;
+        }
+
+        //show($data);
+        $data["cities"] = $_SESSION["CITIES"];
 
         $this->view('stocks.add', $data);
     }

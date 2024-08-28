@@ -44,6 +44,7 @@
                                         <td>$full_name</td>
                                         <td>$opis</td>
                                         <td>$date</td>
+                                        <td class='last-update'>$date</td>
                                         <td>$user</td>";
                                 echo "<td><a href='" . ROOT . "/stocks/show/" . $id . "'>Pokaż aktualny</a></td>";
                                 echo "<td><a href='" . ROOT . "/stocks/history/" . $id . "'>Pokaż historyczny</a></td>";
@@ -57,4 +58,46 @@
             </div>
 
         </main>
+        <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Pobierz bieżącą datę
+        const today = new Date();
+        const todayYear = today.getFullYear();
+        const todayMonth = today.getMonth();
+        const todayDate = today.getDate();
+
+        // Funkcja sprawdzająca i kolorująca daty
+        function checkAndColorDates() {
+            const cells = document.querySelectorAll(".last-update");
+            cells.forEach(cell => {
+                const cellDateStr = cell.textContent.trim();
+                const cellDate = new Date(cellDateStr);
+                
+                // Porównanie tylko roku, miesiąca i dnia
+                const cellYear = cellDate.getFullYear();
+                const cellMonth = cellDate.getMonth();
+                const cellDay = cellDate.getDate();
+
+                if (cellYear === todayYear && cellMonth === todayMonth && cellDay === todayDate) {
+                    // Dzisiaj
+                    cell.style.backgroundColor = "lightgreen";
+                } else {
+                    // Różnica dni między dzisiejszą datą a datą z komórki
+                    const timeDifference = today - cellDate;
+                    const dayDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
+
+                    if (dayDifference >= 1 && dayDifference <= 7) {
+                        // Od wczoraj do 7 dni wstecz
+                        cell.style.backgroundColor = "lightyellow";
+                    } else if (dayDifference > 7) {
+                        // Więcej niż 7 dni
+                        cell.style.backgroundColor = "lightcoral";
+                    }
+                }
+            });
+        }
+
+        checkAndColorDates();
+    });
+</script>
         <?php require_once 'landings/footer.view.php' ?>
