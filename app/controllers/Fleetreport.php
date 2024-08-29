@@ -136,7 +136,7 @@ class Fleetreport
                 $date_to = $URL[4];
             }
             //show($URL);
-            $raport_id = 0;//113; 
+            $raport_id = 120;// 
             $l_access = new Linksaccess;
             $ids = [];
             if (!empty($l_access->getEmailsByLinks($raport_id))) {
@@ -192,7 +192,12 @@ class Fleetreport
         }
 
         //show($data["logbook_visit"]);
-
+        $holi = new Holidaysmodel();
+        if(isset($holi->checkToday(date("Y-m-d"))[0])) {
+            $data["holi"] = true;
+        } else {
+            $data["holi"] = false;
+        }
 
         $data["get"]["send"] = $send;
         $data["get"]["type"] = $type;
@@ -201,5 +206,6 @@ class Fleetreport
 
         $this->view('route.report', $data);
     }
+    
 
 }

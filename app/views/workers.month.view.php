@@ -122,7 +122,7 @@
                                         if($user->active == 0) {
                                             $active_user = " style='background: #ffbfaa'";
                                         }
-                                        echo '<th '.$active_user.'>'.$user->first_name .' '.$user->last_name.' '.$user->u_id.'</th>';
+                                        echo '<th '.$active_user.'>'.$user->first_name .' '.$user->last_name.'</th>';
                                         echo '<th>'.$data["cities"][$user->u_warehouse]["c_fullname"].' -> '.$data["cities"][$user->u_warehouse]["wh_fullname"].'</th>';
                                         echo '<th>'.$data["roles"][$user->u_role]->role_name.'</th>';
                                         echo '<td>'.showInHours($hours[$user->u_id]).'</td>';

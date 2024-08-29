@@ -66,6 +66,8 @@ if($data["hide"] == false) {
                         </form>
             <?php
     }
+} else {
+    $date = date("Y-m-d");
 }
 
 $name = "dziennego używania aut firmowych po pracy";
@@ -148,6 +150,9 @@ foreach($data["logbook"] as $car_key => $car_value) {
                     $mess .= "<td style='border: 1px solid;'></td>";
                 } else {
                     $mess .= "<td style='border: 1px solid;'>".timeDiff($route->end_time, $car_value[$route_key-1]->start_time)."</td>";
+                    if(timeToSeconds(timeDiff($route->end_time, $car_value[$route_key-1]->start_time)) >= 3600) { //STOP z czasem powyżej 1h nie wlicza się
+                        $if_count = false;
+                    }
                 }
                 $grouped[$lastDay][$data["cars"][$car_key]->plate]["total_km"] = $total_km;
                 $grouped[$lastDay][$data["cars"][$car_key]->plate]["total_time"] = $total_time;
@@ -164,6 +169,8 @@ foreach($data["logbook"] as $car_key => $car_value) {
                 if($first_row) {
                     $if_count = false;
                 }
+
+                
                 if($if_count) {
                     $total_km += $route->distance;
                     if($route_key-1== -1) {
@@ -201,15 +208,16 @@ foreach($data["logbook"] as $car_key => $car_value) {
 }
 
 //show($data);
-
-echo $mess;
-echo '<br><br><br>';
+if($send == 0) {
+    echo $mess;
+    echo '<br><br><br>';
+}
 $det = "";
 
 $det .= "<table style='border: 1px solid; width: 100%''>
         <thead style='border: 1px solid'>
             <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
-                <th colspan='11'>Podsumowanie kierowców</th>
+                <th colspan='11'>Podsumowanie kierowców - ".$date."</th>
             </tr>
             <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                 <th style='border: 1px solid #000;'>Numer rejestracyjny</th>
@@ -298,6 +306,7 @@ $det .= "
         </tbody>
     </table>";
 echo $det;
+
 ?>
 
 
@@ -307,15 +316,20 @@ echo $det;
 if ($send == 1) {
     $to = $data["emails"]; //'mateusz.zybura@radluks.pl, mateusz.zybura@gmail.com'
     $subject = "Raport $name - $dates";
-    $mailer = new Mailer($to, $subject, $mess);
-    if (SEND_ON === TRUE) {
-        if ($mailer->send()) {
-            echo 'Wiadomość została wysłana pomyślnie.';
+    $mailer = new Mailer($to, $subject, $det);
+    if($data["holi"] == false) {
+        if (SEND_ON === TRUE) {
+            if ($mailer->send()) {
+                echo 'Wiadomość została wysłana pomyślnie.';
+            } else {
+                echo 'Wystąpił problem podczas wysyłania wiadomości. Błąd: ' . print_r($mailer->getLastError(), true);
+            }
         } else {
-            echo 'Wystąpił problem podczas wysyłania wiadomości. Błąd: ' . print_r($mailer->getLastError(), true);
+            show($mailer);
+            show($data["emails"]);
         }
     } else {
-        show($mailer);
+        echo "Wolne";
     }
 }
 ?>
