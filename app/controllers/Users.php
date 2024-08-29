@@ -64,6 +64,7 @@ class Users
             redirect('login');
 
         if ($_SERVER['REQUEST_METHOD'] == "POST" && !empty($_GET)) {
+            //show($_POST);die;
 
             $URL = $_GET['url'] ?? 'home';
             $URL = explode("/", trim($URL, "/"));
@@ -87,6 +88,49 @@ class Users
                     $warehouse_access->insert($update_data);
                 }
 
+                if($_POST["u_role"] == 10) {
+                    $helper_history = new Helperhistory();
+                    $d_last = "";
+                    $date = date("Y-m-d");
+                    if(!empty($helper_history->getLast($user_id)[0])) {
+                        if($helper_history->getLast($user_id)[0]->helper_for != $_POST["helper_for"]) {
+                            $d_last = $helper_history->getLast($user_id)[0];
+                            $helper_history->update($d_last->id,["date_to" => date("Y-m-d", strtotime($date . " -1 day"))]);
+                            $helper_history->insert([
+                                'u_id' => $user_id,
+                                'date_from' => $date,
+                                'date_to' => NULL,
+                                'helper_for' => $_POST["helper_for"]
+                            ]);
+                        } else {
+                             if($helper_history->getLast($user_id)[0]->date_to != NULL) {
+                                $helper_history->insert([
+                                    'u_id' => $user_id,
+                                    'date_from' => $date,
+                                    'date_to' => NULL,
+                                    'helper_for' => $_POST["helper_for"]
+                                ]);
+                            }
+                        }
+                    } else {
+                        $helper_history->insert([
+                            'u_id' => $user_id,
+                            'date_from' => $date,
+                            'date_to' => NULL,
+                            'helper_for' => $_POST["helper_for"]
+                        ]);
+                    }
+                } else {
+                    $helper_history = new Helperhistory();
+                    $d_last = "";
+                    $date = date("Y-m-d");
+                    //show($helper_history->getLast($user_id)[0]);die;
+                    if(!empty($helper_history->getLast($user_id)[0])) {
+                        $d_last = $helper_history->getLast($user_id)[0];
+                        $helper_history->update($d_last->id,["date_to" => date("Y-m-d", strtotime($date . " -1 day"))]);
+                    }
+                }
+
                 if($_POST["active"] == 0) {
                     //zwolniony
                     $user_history = new Userhistory();
@@ -94,18 +138,36 @@ class Users
                     $date = date("Y-m-d");
                     if(!empty($user_history->getLast($user_id)[0])) {
                         $d_last = $user_history->getLast($user_id)[0];
-                        $user_history->update($d_last->id,["date_to" => $date]);
+                        $user_history->update($d_last->id,["date_to" => date("Y-m-d", strtotime($date . " -1 day"))]);
                     }
                 } else {
                     //zatrudniony ponownie
                     $user_history = new Userhistory();
+                    $d_last = "";
                     $date = date("Y-m-d");
-                    $user_history->insert([
-                        "date_from" => $date, 
-                        "date_to" => NULL, 
-                        "role" => $_POST["u_role"],
-                        "u_id" => $user_id,
-                    ]);
+                    if(!empty($user_history->getLast($user_id)[0])) {
+                        $d_last = $user_history->getLast($user_id)[0];
+                        if($d_last->date_to != NULL){
+                            $user_history->insert([
+                                "date_from" => $date, 
+                                "date_to" => NULL, 
+                                "role" => $_POST["u_role"],
+                                "u_id" => $user_id,
+                                "helper_for" => $_POST["helper_for"],
+                            ]);
+                        } else {
+                            $user_history->update($d_last->id,["date_to" => date("Y-m-d", strtotime($date . " -1 day"))]);
+                            $user_history->insert([
+                                "date_from" => $date, 
+                                "date_to" => NULL, 
+                                "role" => $_POST["u_role"],
+                                "u_id" => $user_id,
+                                "helper_for" => $_POST["helper_for"],
+                            ]);
+                        }
+
+                    }
+                    
                     
                 }
 

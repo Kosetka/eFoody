@@ -17,7 +17,8 @@ class Userhistory
         'date_from',
         'date_to',
         'date',
-        'role'
+        'role',
+        'helper_for'
     ];
 
     public function getUser($u_id)
@@ -27,7 +28,7 @@ class Userhistory
     }
     public function getLast($u_id)
     {
-        $query = "select * from $this->table WHERE u_id = $u_id ORDER BY date DESC LIMIT 1;";
+        $query = "select * from $this->table WHERE u_id = $u_id ORDER BY date DESC, id DESC LIMIT 1;";
         return $this->query($query);
     }
 

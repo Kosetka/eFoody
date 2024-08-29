@@ -171,6 +171,13 @@ class Fleetreport
             $data["drivers_show"][$us->id] = $us;
         }
 
+        $getHelpers = new Helperhistory();
+
+        foreach($getHelpers->getLastHelpers() as $gh) {
+            $data["helpers"][$gh->helper_for][$gh->u_id] = $gh;
+        }
+        //show($data);
+
         $cardriver = new Cardriver();
         foreach($cardriver->getCarsWithDriversByDate($day) as $car) {
             $data["cars"][$car->objectno] = $car;

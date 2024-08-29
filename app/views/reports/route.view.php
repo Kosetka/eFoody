@@ -103,7 +103,7 @@ foreach($data["logbook"] as $car_key => $car_value) {
                 <th style='border: 1px solid #000; width: 25%;'>Miejsce</th>
             </tr>
         </thead>
-        <tbody>";
+        <tbody>";//        <th rowspan='2' style='border: 1px solid #000; width: 20%;'>Współczynnik trasa - postój</th>
         $show_break = false;
         $lastDay = "";
         $first_row = true;
@@ -130,6 +130,7 @@ foreach($data["logbook"] as $car_key => $car_value) {
                 $mess .= "<td style='border: 1px solid #000;' colspan='4'>$lastDay</td>";
                 $mess .= "<td style='border: 1px solid #000;'>".round($total_km / 1000,1)." km [".avgDistance($total_km, $total_stops)." km]</td>";
                 $mess .= "<td style='border: 1px solid #000;'>".secondsToTime($total_time)." [".averageStopTime($total_time, $total_stops)."]</td>";
+                //$mess .= "<td style='border: 1px solid #000;'></td>";
                 $mess .= "<td style='border: 1px solid #000;'>".$total_stops."</td>";
                 $mess .= "</tr>";
                 $lastDay = subDay($route->start_time);
@@ -192,6 +193,7 @@ foreach($data["logbook"] as $car_key => $car_value) {
                     $maps_stop = $route->end_latitude.",".$route->end_longitude;
                     $link_maps = "<a target='_blank' href='https://www.google.com/maps/dir/?api=1&origin=$maps_start&destination=$maps_stop'><i class='fa-solid fa-map'></i></a>";
                 }
+                //$mess .= "<td style='border: 1px solid;'>".round($route->distance / timeToSeconds(timeDiff($route->end_time, $car_value[$route_key-1]->start_time)),4)."</td>";
                 $mess .= "<td style='border: 1px solid; $stop_txt'>$link_maps</td>";
                 $mess .= "</tr>";
 
@@ -203,6 +205,7 @@ foreach($data["logbook"] as $car_key => $car_value) {
             $mess .= "<td style='border: 1px solid #000;' colspan='4'>$lastDay</td>";
             $mess .= "<td style='border: 1px solid #000;'>".round($total_km / 1000,1)." km [".avgDistance($total_km, $total_stops)." km]</td>";
             $mess .= "<td style='border: 1px solid #000;'>".secondsToTime($total_time)." [".averageStopTime($total_time, $total_stops)."]</td>";
+            //$mess .= "<td style='border: 1px solid #000;'></td>";
             $mess .= "<td style='border: 1px solid #000;'>".$total_stops."</td>";
             $mess .= "</tr>";
             $lastDay = subDay($route->start_time);
@@ -262,7 +265,27 @@ foreach($grouped as $date_gr => $grup) {
         } else {
             $det .= "<td style='border: 1px solid #000;'>$plate_gr</td>";
         }
-        $det .= "<td style='border: 1px solid #000;'>".$gdata["driver"]."</td>";
+        $helper_for = "";
+        $minus_profit = 0;
+        $i = 0;
+        if(isset($data["helpers"][$gdata["driver_id"]])) {
+            foreach($data["helpers"][$gdata["driver_id"]] as $hel) {
+                if($i == 0) {
+                    $helper_for .= "Pomocnicy: ";
+                } else {
+                    $helper_for .= ", ";
+                }
+                $helper_for .= $data["drivers_show"][$hel->u_id]->first_name." ".$data["drivers_show"][$hel->u_id]->last_name;
+                if(isset($data["gains"][$date_gr][$gdata["driver_id"]])) {
+                    if(isset($data["gains"][$date_gr][$hel->u_id])) {
+                        $minus_profit += $data["gains"][$date_gr][$hel->u_id]->profit;
+                    }
+                }
+            
+                $i++;
+            }
+        }
+        $det .= "<td style='border: 1px solid #000;' title='$helper_for'>".$gdata["driver"]."</td>";
         $det .= "<td style='border: 1px solid #000;'>".round($gdata["total_km"] / 1000,1)." km</td>";
         $det .= "<td style='border: 1px solid #000;'>".avgDistance($gdata["total_km"],$gdata["total_stops"])." km</td>";
         $det .= "<td style='border: 1px solid #000;'>".secondsToTime($gdata["total_time"])."</td>";
@@ -272,6 +295,7 @@ foreach($grouped as $date_gr => $grup) {
         if(isset($data["gains"][$date_gr][$gdata["driver_id"]])) {
             $profit = $data["gains"][$date_gr][$gdata["driver_id"]]->profit;
         }
+        $profit -= $minus_profit;
         $det .= "<td style='border: 1px solid #000;'>$profit zł</td>";
         $det .= "<td style='border: 1px solid #000;'>".amountPerPoint($profit, $gdata["total_stops"])." zł</td>";
         $det .= "<td style='border: 1px solid #000;'>".amountPerPoint($profit, ($gdata["total_time"]/60))." zł</td>";
