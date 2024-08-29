@@ -173,8 +173,10 @@ class Fleetreport
 
         $getHelpers = new Helperhistory();
 
-        foreach($getHelpers->getLastHelpers() as $gh) {
-            $data["helpers"][$gh->helper_for][$gh->u_id] = $gh;
+        if(!empty($getHelpers->getLastHelpers())) {
+            foreach($getHelpers->getLastHelpers() as $gh) {
+                $data["helpers"][$gh->helper_for][$gh->u_id] = $gh;
+            }
         }
         //show($data);
 
