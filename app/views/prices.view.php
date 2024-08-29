@@ -66,8 +66,8 @@
                                         $date_to = $data["prices"][$value->id]->date_to;
                                         $margin = roundCost($price - $production_cost) . " zł (" . getMargin($price, $production_cost) . "%)";
                                     } else {
-                                        $price = "";
-                                        $production_cost = "";
+                                        $price = 0;
+                                        $production_cost = 0;
                                         $date_from = "";
                                         $date_to = "";
                                         $margin = "";

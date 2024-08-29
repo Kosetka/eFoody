@@ -21,6 +21,7 @@
                                 <th scope="col">Osoba</th>
                                 <th scope="col">Aktualny stan</th>
                                 <th scope="col">Historyczny stan</th>
+                                <th scope="col">Inwentaryzuj teraz</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,6 +48,7 @@
                                         <td>$user</td>";
                                 echo "<td><a href='" . ROOT . "/stocks/show/" . $id . "'>Pokaż aktualny</a></td>";
                                 echo "<td><a href='" . ROOT . "/stocks/history/" . $id . "'>Pokaż historyczny</a></td>";
+                                echo "<td><a href='" . ROOT . "/stocks/add/" . $id . "'><button class='btn btn-primary'>Inwentaryzuj</button></a></td>";
                                 echo "</tr>";
                             }
 
