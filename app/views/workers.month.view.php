@@ -97,19 +97,19 @@
                                     $date->setDate($year, $month, $day);
                                     if(!empty($data["users"])) {
                                         foreach($data["users"] as $user) {
-                                            if(!isset($hours[$user->id])) {
-                                                $hours[$user->id] = 0;
+                                            if(!isset($hours[$user->u_id])) {
+                                                $hours[$user->u_id] = 0;
                                             } 
-                                            if(isset($data["accepted"][$date->format('Y-m-d')][$user->id])) {
-                                                $hours[$user->id] += $data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time;
+                                            if(isset($data["accepted"][$date->format('Y-m-d')][$user->u_id])) {
+                                                $hours[$user->u_id] += $data["accepted"][$date->format('Y-m-d')][$user->u_id]->accept_time;
                                             }
                                             
     
                                             if(!isset($daily[$date->format('Y-m-d')])) {
                                                 $daily[$date->format('Y-m-d')] = 0;
                                             } 
-                                            if(isset($data["accepted"][$date->format('Y-m-d')][$user->id])) {
-                                                $daily[$date->format('Y-m-d')] += $data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time;
+                                            if(isset($data["accepted"][$date->format('Y-m-d')][$user->u_id])) {
+                                                $daily[$date->format('Y-m-d')] += $data["accepted"][$date->format('Y-m-d')][$user->u_id]->accept_time;
                                             }
                                             
                                         }
@@ -122,17 +122,17 @@
                                         if($user->active == 0) {
                                             $active_user = " style='background: #ffbfaa'";
                                         }
-                                        echo '<th '.$active_user.'>'.$user->first_name .' '.$user->last_name.'</th>';
+                                        echo '<th '.$active_user.'>'.$user->first_name .' '.$user->last_name.' '.$user->u_id.'</th>';
                                         echo '<th>'.$data["cities"][$user->u_warehouse]["c_fullname"].' -> '.$data["cities"][$user->u_warehouse]["wh_fullname"].'</th>';
                                         echo '<th>'.$data["roles"][$user->u_role]->role_name.'</th>';
-                                        echo '<td>'.showInHours($hours[$user->id]).'</td>';
+                                        echo '<td>'.showInHours($hours[$user->u_id]).'</td>';
                                         echo '<td></td>'; //wypłata
                                         
                                         for ($day = 1; $day <= $daysInMonth; $day++) {
                                             $date->setDate($year, $month, $day);
                                             $seconds = "";
-                                            if(!empty($data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time)) {
-                                                $seconds = showInHours($data["accepted"][$date->format('Y-m-d')][$user->id]->accept_time);
+                                            if(!empty($data["accepted"][$date->format('Y-m-d')][$user->u_id]->accept_time)) {
+                                                $seconds = showInHours($data["accepted"][$date->format('Y-m-d')][$user->u_id]->accept_time);
                                             }
 
                                             if($user->date_from > $date->format('Y-m-d')) {
@@ -189,6 +189,8 @@
         
 
 
-
+<?php
+//show($data);
+?>
         </main>
         <?php require_once 'landings/footer.view.php' ?>

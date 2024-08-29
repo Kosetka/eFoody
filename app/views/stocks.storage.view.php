@@ -44,7 +44,7 @@
                                         <td>$opis</td>
                                         <td class='last-update'>$date</td>
                                         <td>$user</td>";
-                                echo "<td><a href='" . ROOT . "/stocks/storageadd/" . $id . "'>Dodaj stan (PZ)</a></td>";
+                                echo "<td><a href='" . ROOT . "/stocks/storageadd/" . $id . "'>Dodaj zakupy (PZ)</a></td>";
                                 echo "<td><a href='" . ROOT . "/stocks/storagesub/" . $id . "'>Zdejmij ze stanu (WZ)</a></td>";
                                 echo "</tr>";
                             }
