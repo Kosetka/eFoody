@@ -85,7 +85,7 @@ $mess = "";
 
 foreach($data["logbook"] as $car_key => $car_value) {
     $mess .= "<table style='border: 1px solid; width: 100%''>
-        <thead style='border: 1px solid'>
+        <thead style='border: 1px solid' id='".$data["cars"][$car_key]->plate."'>
             <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
                 <th colspan='7'>Szczegóły - ".$data["cars"][$car_key]->plate." - Kierowca: ".$data["cars"][$car_key]->first_name." ".$data["cars"][$car_key]->last_name."</th>
             </tr>
@@ -186,7 +186,13 @@ foreach($data["logbook"] as $car_key => $car_value) {
                 } else {
                     $stop_txt = "background-color: LightCoral;"; 
                 }
-                $mess .= "<td style='border: 1px solid; $stop_txt'></td>";
+                $link_maps = "";
+                if($send == 0) {
+                    $maps_start = $route->start_latitude.",".$route->start_longitude;
+                    $maps_stop = $route->end_latitude.",".$route->end_longitude;
+                    $link_maps = "<a target='_blank' href='https://www.google.com/maps/dir/?api=1&origin=$maps_start&destination=$maps_stop'><i class='fa-solid fa-map'></i></a>";
+                }
+                $mess .= "<td style='border: 1px solid; $stop_txt'>$link_maps</td>";
                 $mess .= "</tr>";
 
             if($first_row) {
@@ -251,7 +257,11 @@ foreach($grouped as $date_gr => $grup) {
         }
 
         $det .= "<tr $bg_col>";
-        $det .= "<td style='border: 1px solid #000;'>$plate_gr</td>";
+        if($send == 0) {
+            $det .= "<td style='border: 1px solid #000;'><a href='#$plate_gr'>$plate_gr</a></td>";
+        } else {
+            $det .= "<td style='border: 1px solid #000;'>$plate_gr</td>";
+        }
         $det .= "<td style='border: 1px solid #000;'>".$gdata["driver"]."</td>";
         $det .= "<td style='border: 1px solid #000;'>".round($gdata["total_km"] / 1000,1)." km</td>";
         $det .= "<td style='border: 1px solid #000;'>".avgDistance($gdata["total_km"],$gdata["total_stops"])." km</td>";
