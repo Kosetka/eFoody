@@ -112,7 +112,7 @@ class Fleetreport
         $day = date("Y-m-d");
         $data = [];
 
-        $type = "show";
+        $type = "";
         $send = 0;
         $data["hide"] = false;
         $date_from = $day;
@@ -151,6 +151,9 @@ class Fleetreport
             $t_em = [];
             foreach ($temp_emails as $email) {
                 $t_em[] = $email->email;
+                if(!empty($email->priv_email)) {
+                    $t_em[] = $email->priv_email;
+                }
             }
             $data["emails"] = implode(",", $t_em);
         } else if ($type == "show") {
@@ -159,8 +162,10 @@ class Fleetreport
                 $date_from = $URL[3];
                 $date_to = $URL[4];
             }
+        } else {
+            $send = 0;
         }
-
+        //show($send);
         $get_user = new User;
         foreach($get_user->getAllDrivers() as $us) {
             $data["drivers_show"][$us->id] = $us;

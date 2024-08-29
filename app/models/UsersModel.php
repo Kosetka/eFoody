@@ -24,7 +24,8 @@ class UsersModel
 		'phone_business',
 		'phone_private',
 		'camera',
-        'helper_for'
+        'helper_for',
+		'priv_email'
     ];
 
     public function getAllUsers(): array

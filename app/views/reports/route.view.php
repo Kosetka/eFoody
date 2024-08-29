@@ -5,7 +5,7 @@ $send = $data["get"]["send"];
 $grouped = [];
 
 if($data["hide"] == false) {
-    if ($send == 2) {
+    if ($send == 2 || $send == 0) {
         if ($data["get"]["type"] == "show") {
             $f1 = "dzień";
         }
@@ -13,7 +13,7 @@ if($data["hide"] == false) {
 
         echo '<form method="get">';
 
-        echo '<h1 class="h3 mb-3 fw-normal">Wybierz ' . $f1 . ' do wyświetlenia raportu:</h1>';
+        echo '<h1 class="h3 mb-3 fw-normal">Wybierz dzień do wyświetlenia raportu:</h1>';
         $date = "";
         $date_to = "";
         if (isset($data["get"]["day"])) {
@@ -26,7 +26,7 @@ if($data["hide"] == false) {
         ?>
         <div class="text-start">
             <?php
-            if ($data["get"]["type"] == "show") {
+            if ($data["get"]["type"] == "show" || $send == 0) {
 
                 echo '  <div class="form-group row m-3">
                             <label for="date" class="col-sm-2 col-form-label">Dzień od:</label>

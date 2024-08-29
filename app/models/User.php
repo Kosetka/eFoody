@@ -23,7 +23,8 @@ class User
 		'phone_business',
 		'phone_private',
 		'camera',
-		'helper_for'
+		'helper_for',
+		'priv_email'
 	];
 
 	public function getAllTraders($table, $ids)
@@ -34,7 +35,7 @@ class User
 
 	public function getEmailsByRole($ids)
 	{
-		$query = "select email from $this->table WHERE u_role IN ($ids)";
+		$query = "select email, priv_email from $this->table WHERE u_role IN ($ids)";
 		return $this->query($query);
 	}
 	public function getTraders()
