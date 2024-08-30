@@ -147,7 +147,7 @@ class Stocks
             $prodqua = new ProductsQuantity();
             foreach($_POST["p_id"] as $p_key => $p_val) {
                 $old = $_POST["p_id_old"][$p_key];
-                if(!isset($_POST["p_id_old"][$p_key])) {
+                if($_POST["p_id_old"][$p_key] == "") {
                     $old = 0;
                 }
                 $prodqua->insert([
