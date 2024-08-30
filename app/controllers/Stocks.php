@@ -146,6 +146,9 @@ class Stocks
             //show($_POST);
             $prodqua = new ProductsQuantity();
             foreach($_POST["p_id"] as $p_key => $p_val) {
+                if(!isset($_POST["p_id_old"][$p_key])) {
+                    $_POST["p_id_old"][$p_key] = 0;
+                }
                 $prodqua->insert([
                     "w_id" => $id_city,
                     "p_id" => $p_key,
@@ -182,18 +185,20 @@ class Stocks
                 $data["sets"][$res->p_id] = $res;
             }
         }
-        foreach($prod_quant->getLastTransactionsWithAddAndSub($id_city) as $res) {
-            if($res->transaction_type == "add") {
-                if(!isset($data["sets_all"][$res->p_id]["add"])) {
-                    $data["sets_all"][$res->p_id]["add"] = 0;
+        if(!empty($prod_quant->getLastTransactionsWithAddAndSub($id_city))) {
+            foreach($prod_quant->getLastTransactionsWithAddAndSub($id_city) as $res) {
+                if($res->transaction_type == "add") {
+                    if(!isset($data["sets_all"][$res->p_id]["add"])) {
+                        $data["sets_all"][$res->p_id]["add"] = 0;
+                    }
+                    $data["sets_all"][$res->p_id]["add"] += $res->amount;
                 }
-                $data["sets_all"][$res->p_id]["add"] += $res->amount;
-            }
-            if($res->transaction_type == "sub") {
-                if(!isset($data["sets_all"][$res->p_id]["sub"])) {
-                    $data["sets_all"][$res->p_id]["sub"] = 0;
+                if($res->transaction_type == "sub") {
+                    if(!isset($data["sets_all"][$res->p_id]["sub"])) {
+                        $data["sets_all"][$res->p_id]["sub"] = 0;
+                    }
+                    $data["sets_all"][$res->p_id]["sub"] += $res->amount;
                 }
-                $data["sets_all"][$res->p_id]["sub"] += $res->amount;
             }
         }
         //show($data["sets_all"]);
