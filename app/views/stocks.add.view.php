@@ -71,7 +71,7 @@
                                             $product_p_unit = $value->p_unit;
                                             $amount = "";
                                             $last_date = "";
-                                            if(isset($data["sets"][$value->id])) {
+                                            if(isset($data["sets"][$value->id]->transaction_type)) {
                                                 if($data["sets"][$value->id]->transaction_type == "set") {
                                                     $amount = $data["sets"][$value->id]->amount;
                                                     $last_date = $data["sets"][$value->id]->date;

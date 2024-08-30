@@ -177,8 +177,10 @@ class Stocks
         }
 
         $prod_quant = new ProductsQuantity();
-        foreach($prod_quant->getLastTransactionsByProduct($id_city) as $res) {
-            $data["sets"][$res->p_id] = $res;
+        if(!empty($prod_quant->getLastTransactionsByProduct($id_city))) {
+            foreach($prod_quant->getLastTransactionsByProduct($id_city) as $res) {
+                $data["sets"][$res->p_id] = $res;
+            }
         }
         foreach($prod_quant->getLastTransactionsWithAddAndSub($id_city) as $res) {
             if($res->transaction_type == "add") {
