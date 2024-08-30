@@ -231,15 +231,15 @@ $det .= "<table style='border: 1px solid; width: 100%''>
             <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                 <th style='border: 1px solid #000;'>Numer rejestracyjny</th>
                 <th style='border: 1px solid #000;'>Kierowca</th>
-                <th style='border: 1px solid #000;'>Długość trasy</th>
+                <th style='border: 1px solid #000;'>Przejechane km</th>
                 <th style='border: 1px solid #000;'>Średnia długość trasy</th>
-                <th style='border: 1px solid #000;'>Czas postojów</th>
+                <th style='border: 1px solid #000;'>Łączny czas postojów</th>
                 <th style='border: 1px solid #000;'>Średnia czas postoju</th>
                 <th style='border: 1px solid #000;'>Ilość postojów</th>
                 <th style='border: 1px solid #000;'>Utarg</th>
                 <th style='border: 1px solid #000;'>Utarg / punkt</th>
                 <th style='border: 1px solid #000;'>Utarg / czas postoju (minutę)</th>
-                <th style='border: 1px solid #000;'>Utarg / pokonane km</th>
+                <th style='border: 1px solid #000;'>Utarg / przejechane km</th>
             </tr>
         </thead>
         <tbody>";
@@ -307,9 +307,6 @@ foreach($grouped as $date_gr => $grup) {
             $tot_stops += $gdata["total_stops"];
             $tot_profit += $profit;
         }
-
-
-
 
         $det .= "</tr>";
     }
