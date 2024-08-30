@@ -73,7 +73,7 @@
                                                     <td>$prod_val->p_name</td>
                                                     <td>$prod_val->p_description</td>
                                                     <td style='white-space: nowrap'>$prod_val->sku</td>";
-                                        if(isset($data["sets"][$prod_val->id]) ) {
+                                        if(isset($data["sets"][$prod_val->id]) && !empty($data["sets"][$prod_val->id])) {
                                             echo "      <td>".$data["sets"][$prod_val->id]->amount ." ".$prod_val->p_unit."</td>";
                                             echo '<td class="last-update">'.$data["sets"][$prod_val->id]->date.'</td>';
                                             echo "      <td>".$data["users"][$data["sets"][$prod_val->id]->u_id]->first_name." ".$data["users"][$data["sets"][$prod_val->id]->u_id]->last_name."</td>";

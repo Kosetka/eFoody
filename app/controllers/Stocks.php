@@ -118,8 +118,10 @@ class Stocks
         }
 
         $prod_quant = new ProductsQuantity();
-        foreach($prod_quant->getLastTransactionsByProductAndMaxDate($id_city, $date) as $res) {
-            $data["sets"][$res->p_id] = $res;
+        if(!empty($prod_quant->getLastTransactionsByProductAndMaxDate($id_city, $date)) ) {
+            foreach($prod_quant->getLastTransactionsByProductAndMaxDate($id_city, $date) as $res) {
+                $data["sets"][$res->p_id] = $res;
+            }
         }
 
         $this->view('stocks.history', $data);
