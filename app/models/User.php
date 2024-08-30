@@ -35,7 +35,7 @@ class User
 
 	public function getEmailsByRole($ids)
 	{
-		$query = "select email, priv_email from $this->table WHERE u_role IN ($ids)";
+		$query = "select email, priv_email from $this->table WHERE u_role IN ($ids) AND active = 1";
 		return $this->query($query);
 	}
 	public function getTraders()
