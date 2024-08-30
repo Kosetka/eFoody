@@ -146,6 +146,7 @@ class Stocks
             //show($_POST);
             $prodqua = new ProductsQuantity();
             foreach($_POST["p_id"] as $p_key => $p_val) {
+                show($_POST);
                 if(!isset($_POST["p_id_old"][$p_key])) {
                     $_POST["p_id_old"][$p_key] = 0;
                 }
