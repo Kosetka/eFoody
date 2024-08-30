@@ -275,7 +275,7 @@ foreach($grouped as $date_gr => $grup) {
                 } else {
                     $helper_for .= ", ";
                 }
-                $helper_for .= $data["drivers_show"][$hel->u_id]->first_name." ".$data["drivers_show"][$hel->u_id]->last_name;
+                $helper_for .= $data["users_all"][$hel->u_id]->first_name." ".$data["users_all"][$hel->u_id]->last_name;
                 if(isset($data["gains"][$date_gr][$gdata["driver_id"]])) {
                     if(isset($data["gains"][$date_gr][$hel->u_id])) {
                         $minus_profit += $data["gains"][$date_gr][$hel->u_id]->profit;

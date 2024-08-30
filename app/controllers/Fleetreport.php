@@ -170,6 +170,9 @@ class Fleetreport
         foreach($get_user->getAllDrivers() as $us) {
             $data["drivers_show"][$us->id] = $us;
         }
+        foreach($get_user->getAllUsersWithRole() as $us) {
+            $data["users_all"][$us->id] = $us;
+        }
 
         $getHelpers = new Helperhistory();
 
