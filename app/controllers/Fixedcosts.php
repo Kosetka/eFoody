@@ -219,9 +219,11 @@ class Fixedcosts
                     $plan_prod[$plan_date][$prod_plan["p_id"]]["amount_prod"] = "";
                 }
             }
-            foreach($data2["producted"] as $prod_date => $prod) {
-                foreach($prod as $prod_plan_prod) {
-                    $plan_prod[$prod_date][$prod_plan_prod["p_id"]]["amount_prod"] = $prod_plan_prod["amount"];
+            if(!empty($data2["producted"])) {
+                foreach($data2["producted"] as $prod_date => $prod) {
+                    foreach($prod as $prod_plan_prod) {
+                        $plan_prod[$prod_date][$prod_plan_prod["p_id"]]["amount_prod"] = $prod_plan_prod["amount"];
+                    }
                 }
             }
             //wcisnąć info o koszcie produkcji i sprzedaży
