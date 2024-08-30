@@ -55,8 +55,8 @@ class Products
         foreach($alergen->getAlergens() as $ale) {
             $data["alergens"][$ale->id] = $ale;
         }
-        $alergens = new Productalergens();
-        foreach($alergens->getGrouped() as $ale) {
+        $p_alergens = new Productalergens();
+        foreach($p_alergens->getGrouped() as $ale) {
             $data["prod_alergens"][$ale->p_id] = $ale;
         }
         $this->view('products', $data);
@@ -80,6 +80,10 @@ class Products
         if(isset($URL[2])) {
             $data["target_sku"] = $URL[2];
             $data["target_type"] = substr($URL[2],0,1);
+        }
+        $alergen = new Alergen();
+        foreach($alergen->getAlergens() as $ale) {
+            $data["alergens"][$ale->id] = $ale;
         }
         
 
@@ -135,10 +139,23 @@ class Products
 
             $product = new ProductsModel;
             if ($product->validate($_POST)) {
+                if(!isset($_POST["kcal"])) {
+                    $_POST["kcal"] = 0;
+                }
                 $product->insert($_POST);
                 $data['success'] = "Produkt/SKU został pomyślnie dodany";
                 //redirect('signup');
+                $id_product = $product->getLast();
+
+                $p_alergens = new Productalergens;
+                if(isset($_POST["alergens"])) {
+                    foreach($_POST["alergens"] as $key => $value) {
+                        $p_alergens->insert(["p_id" => $id_product, "a_id" => $key]);
+                    }
+                }
             }
+
+            // tu ogarnąć alergeny
 
             $data['errors'] = $product->errors;
         }

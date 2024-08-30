@@ -57,7 +57,7 @@
                     <div class="form-group row m-3">
                         <label for="kcal" class="col-sm-2 col-form-label">Kalorie:</label>
                         <div class="col-sm-10">
-                            <input type="number" min="0" class="form-control" id="kcal" name="kcal">
+                            <input type="number" min="0" class="form-control" id="kcal" name="kcal" required>
                         </div>
                     </div>
                     <div class="form-group row m-3">
@@ -95,6 +95,21 @@
                                 }
                                 ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row m-3">
+                        <label for="alergens" class="col-sm-2 col-form-label">Alergeny:</label>
+                        <div class="col-sm-10">
+                            <?php
+                                foreach($data["alergens"] as $alergen) {
+                                    if (!empty($alergen->a_photo)) {
+                                        $photo = "<img width='40' height='40' class='obrazek' id='imageBox$alergen->id' src='" . IMG_ALERGENS_ROOT . "" . $alergen->a_photo . "'>";
+                                    } else {
+                                        $photo = "";
+                                    }
+                                    echo '<input style="margin-top: 15px;" type="checkbox" class="form-check-input" id="alergens'.$alergen->id.'" name="alergens['.$alergen->id.']" value="1">['.$alergen->id.'] '. $photo .' '. $alergen->a_name.'</input></br>';
+                                }
+                            ?>
                         </div>
                     </div>
                 </div>

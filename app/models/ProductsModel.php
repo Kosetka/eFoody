@@ -115,6 +115,11 @@ class ProductsModel
         $query = "select * from $this->table WHERE id = $id";
         return $this->query($query);
     }
+    public function getLast()
+    {
+        $query = "select * from $this->table ORDER BY ID DESC LIMIT 1";
+        return $this->query($query)[0]->id;
+    }
     public function getKcalByProducts($ids)
     {
         $idsList = implode(',', array_map('intval', $ids));

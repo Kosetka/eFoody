@@ -28,6 +28,9 @@
                             $sekcje = explode('-', $ostatniElement);
                             if(isset($sekcje[2])) {
                                 $sekcje[2] = $sekcje[2] + 1;
+                                if($sekcje[2] < 10) {
+                                    $sekcje[2] = "0" . $sekcje[2];
+                                }
                                 $nowyElement = implode('-', $sekcje);
                             } else {
                                 $nowyElement = "";
