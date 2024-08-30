@@ -146,9 +146,9 @@ class Stocks
             //show($_POST);
             $prodqua = new ProductsQuantity();
             foreach($_POST["p_id"] as $p_key => $p_val) {
-                show($_POST);
+                $old = $_POST["p_id_old"][$p_key];
                 if(!isset($_POST["p_id_old"][$p_key])) {
-                    $_POST["p_id_old"][$p_key] = 0;
+                    $old = 0;
                 }
                 $prodqua->insert([
                     "w_id" => $id_city,
@@ -156,7 +156,7 @@ class Stocks
                     "u_id" => $u_id,
                     "amount" => $p_val,
                     "date" => $date,
-                    "old_amount" => $_POST["p_id_old"][$p_key],
+                    "old_amount" => $old,
                     "transaction_type" => "set"
                 ]);
             }
