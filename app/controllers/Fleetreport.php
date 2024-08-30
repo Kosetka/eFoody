@@ -167,7 +167,7 @@ class Fleetreport
         }
         //show($send);
         $get_user = new User;
-        foreach($get_user->getAllDrivers() as $us) {
+        foreach($get_user->getAllUsersWithRole() as $us) {
             $data["drivers_show"][$us->id] = $us;
         }
 
