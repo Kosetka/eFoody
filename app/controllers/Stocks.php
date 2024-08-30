@@ -65,8 +65,10 @@ class Stocks
         }
 
         $prod_quant = new ProductsQuantity();
-        foreach($prod_quant->getLastTransactionsByProduct($id_city) as $res) {
-            $data["sets"][$res->p_id] = $res;
+        if(!empty($prod_quant->getLastTransactionsByProduct($id_city))) {
+            foreach($prod_quant->getLastTransactionsByProduct($id_city) as $res) {
+                $data["sets"][$res->p_id] = $res;
+            }
         }
 
         $this->view('stocks.show', $data);
