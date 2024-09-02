@@ -191,9 +191,11 @@
                         </thead>
                         <tbody>
                             <?php
+                            $total_work_time = 0;
                                 for ($day = 1; $day <= $daysInMonth; $day++) {
                                     $date->setDate($year, $month, $day);
                                     $holiday = "";
+
                                     if(!isset($data["accepted"][$date->format('Y-m-d')])) {
                                         foreach($data["holidays"] as $holi) {
                                             if($holi->date == $date->format('Y-m-d')) {
@@ -263,6 +265,7 @@
                                             $in = $data["accepted"][$date->format('Y-m-d')]->accept_in;
                                             $out = $data["accepted"][$date->format('Y-m-d')]->accept_out;
                                             $work_time = showInHours($data["accepted"][$date->format('Y-m-d')]->accept_time);
+                                            $total_work_time += $data["accepted"][$date->format('Y-m-d')]->accept_time;
                                         }
                                         echo '<td>'.$in.'</td>';
                                         echo '<td>'.$out.'</td>';
@@ -295,6 +298,15 @@
 
                                 }
                             ?>
+                            <tr>
+                                <th>TOTAL</th>
+                                <td></td>
+                                <td></td>
+                                <th><?=showInHours($total_work_time);?></th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -317,8 +329,20 @@
 <script>
     $(document).ready(function() {
         let today = new Date();
-        let currentMonth = today.getMonth();
-        let currentYear = today.getFullYear();
+        <?PHP
+        if(isset($data["month"]) ) {
+            $mon = $data["month"] - 1;
+            echo "let currentMonth = ".$mon.";";
+        } else {
+            echo "let currentMonth = today.getMonth();";
+        }
+        if(isset($data["year"]) ) {
+            echo "let currentYear = ".$data["year"].";";
+        } else {
+            echo "let currentYear = today.getFullYear();";
+        }
+        ?>
+        
         const monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
 
         // Importowanie danych z PHP
