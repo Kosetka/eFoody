@@ -275,11 +275,11 @@ if(isset($photo_ids[2])) {
     $los += 1;
 }
 if(isset($photo_ids[3])) {
-    for($i = $count; $i<=$los; $i++) {
+    //for($i = $count; $i<=$los; $i++) {
         $losowa_liczba = rand(0, count($photo_ids[3]) - 1);
         $food_img[$count] = $photo_ids[3][$losowa_liczba]->p_photo; 
         $count++;
-    }
+    //}
     $los++;
 } else {
     $los += 1;
