@@ -189,7 +189,7 @@ foreach($data["list"] as $row_key => $row_val) {
                 }
             }
             $price = $data["prices"][$dan->id]->price;
-            $menu_txt .= $int.".".$vege." ".$dan->p_name." - ".$price."zł\n";
+            $menu_txt .= $int.".".$vege." ".$prod_name." - ".$price."zł\n";
             $int++;
         }
     } else if($row_key == "1-01"){
@@ -199,11 +199,12 @@ foreach($data["list"] as $row_key => $row_val) {
                 $photo_ids[3][] = $dan;
             }
             $prod_name = $dan->p_name;
+            //show($dan);
             if(isset($dan->friendly_name)) {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
-            $menu_txt .= "   ".$dan->p_name." - ".$price."zł\n";
+            $menu_txt .= "   ".$prod_name." - ".$price."zł\n";
         }
         $int++;
     } else if($row_key == "1-02"){
@@ -217,7 +218,7 @@ foreach($data["list"] as $row_key => $row_val) {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
-            $menu_txt .= "   ".$dan->p_name." - ".$price."zł\n";
+            $menu_txt .= "   ".$prod_name." - ".$price."zł\n";
         }
         $int++;
     } else if($row_key == "3"){
@@ -231,7 +232,7 @@ foreach($data["list"] as $row_key => $row_val) {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
-            $menu_txt .= "   ".$dan->p_name." - ".$price."zł\n";
+            $menu_txt .= "   ".$prod_name." - ".$price."zł\n";
         }
         $int++;
     } else {
@@ -250,6 +251,7 @@ foreach($data["list"] as $row_key => $row_val) {
     
     }
 }
+//die;
 $food_img = [];
 $los = 1;
 $count = 1;
@@ -314,10 +316,26 @@ $header_logo = imagecreatefrompng(IMG_ROOT_UPLOAD.'tlo.png');
 $po_name = imagecreatefrompng(IMG_ROOT_UPLOAD.'panobiadek-name.png');
 $word_menu = imagecreatefrompng(IMG_ROOT_UPLOAD.'word-menu.png');
 $day_ss = imagecreatefrompng(IMG_ROOT_UPLOAD.'d-1.png'); //numer dniazmieniać
-$food_1 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.$food_img[1]); 
-$food_2 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.$food_img[2]); 
-$food_3 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.$food_img[3]); 
-$food_4 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.$food_img[4]); 
+if (file_exists(IMG_ROOT_UPLOAD.$food_img[1])) {
+    $food_1 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.$food_img[1]); 
+} else {
+    $food_1 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.'blank.jpg'); 
+}
+if (file_exists(IMG_ROOT_UPLOAD.$food_img[2])) {
+    $food_2 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.$food_img[2]); 
+} else {
+    $food_2 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.'blank.jpg'); 
+}
+if (file_exists(IMG_ROOT_UPLOAD.$food_img[3])) {
+    $food_3 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.$food_img[3]); 
+} else {
+    $food_3 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.'blank.jpg'); 
+}
+if (file_exists(IMG_ROOT_UPLOAD.$food_img[4])) {
+    $food_4 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.$food_img[4]); 
+} else {
+    $food_4 = imagecreatefromjpeg(IMG_ROOT_UPLOAD.'blank.jpg'); 
+}
 
 // Tworzenie nowego obrazu dla przeskalowanego tła
 $header_logo_new = imagecreatetruecolor($szerokosc, $wysokoscTlo);

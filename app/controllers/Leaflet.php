@@ -3,14 +3,14 @@
 /**
  * Company class
  */
-class Test
+class Leaflet
 {
     use Controller;
 
-    public function index()
+    public function day()
     {
-        //if (empty($_SESSION['USER']))
-        //    redirect('login');
+        if (empty($_SESSION['USER']))
+            redirect('login');
 
         $data = [];
 
@@ -89,26 +89,34 @@ class Test
 
         //show($data);
         //die;
-        $this->view('test', $data);
-    }
-    public function wa()
-    {
-        //if (empty($_SESSION['USER']))
-        //    redirect('login');
-
-        $data = [];
-
-        $this->view('test.wa', $data);
+        $this->view('leaflet', $data);
     }
 
-    public function me()
+    public function index()
     {
-        //if (empty($_SESSION['USER']))
-        //    redirect('login');
-
+        if (empty($_SESSION['USER']))
+            redirect('login');
         $data = [];
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        $show = false;
+        if(isset($URL[2])) {
+            $date = $URL[2];
+            $show = true;
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+                $show = true;
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        if($show) {
+            redirect('leaflet/day/'.$date);
+        }
 
-        $this->view('test.me', $data);
+        $data["date"] = date("Y-m-d");
+        $this->view('leaflet.index', $data);
     }
 
 }
