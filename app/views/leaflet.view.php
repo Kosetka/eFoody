@@ -297,7 +297,7 @@ if(isset($photo_ids[4])) {
 
 show($los);
 show($food_img);
-show($photo_ids);die;
+show($photo_ids);
 
 // Tworzenie pustego obrazu
 $obraz = imagecreatetruecolor($szerokosc, $wysokosc);
