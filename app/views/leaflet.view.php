@@ -402,7 +402,7 @@ imagecopy($obraz, $po_name_new, 50, $wysokoscTlo, 0, 0, $menu_szer - 100, $po_lo
 imagettftext($obraz, $fontSize, 0, ($menu_szer - 100) / 2, $wysokoscTlo + $po_logo_wys + $fontSize - 7, $kolorTekstu, $font, "MENU");
 
 $fontSize = 30; // Rozmiar czcionki
-$kolorTekstu = imagecolorallocate($obraz, 200, 0, 0);
+$kolorTekstu = imagecolorallocate($obraz, 255, 0, 0);
 imagettftext($obraz, $fontSize, 0, $day_from_left, $wysokoscTlo + $po_logo_wys + $word_menu_wys + $fontSize, $kolorTekstu, $font, $days[$day]);
 //imagecopy($obraz, $day_ss_new, $day_from_left, $wysokoscTlo + $po_logo_wys + $word_menu_wys, 0, 0, 300, $day_wys);
 
