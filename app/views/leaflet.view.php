@@ -453,7 +453,7 @@ foreach ($lines as $line) {
         
         if (substr($linia, -3,3) === "zł") {
             $temp_txt = "";
-            $str_len = mb_strlen($linia);
+            $str_len = iconv_strlen($linia, 'UTF-8');;//mb_strlen($linia);
             for ($i == 0; $str_len > $i+2; $i++) {
                 $temp_txt .= " ";
             }
