@@ -2,7 +2,7 @@
 $max_chars = 20; // Maksymalna liczba znaków na linię, uwzględniając "asd"
 
 $days = [
-    0 => "NIEDZIELA",
+    7 => "NIEDZIELA",
     1 => "PONIEDZIAŁEK",
     2 => "WTOREK",
     3 => "ŚRODA",
@@ -20,7 +20,7 @@ $offs = [
     6 => 65
 ];
 
-$day = 3;
+$day = $data["day_num"];
 
 function podziel_tekst_na_linie($tekst, $max_chars) {
     $wynik = '';
@@ -133,7 +133,7 @@ function roundCorners($source, $radius) {
 // Ustawienia obrazu
 $szerokosc = 707; // Szerokość obrazu
 $wysokosc = 1000; // Wysokość obrazu
-$wysokoscTlo = 140; // Wysokość obrazka tła
+$wysokoscTlo = 100; // Wysokość obrazka tła
 $menu_szer = 400;
 $po_logo_wys = 60;
 $word_menu_wys = 30;
@@ -168,23 +168,27 @@ foreach($data["list"] as $row_key => $row_val) {
     if($row_key == "1-03" || $row_key == "1-04") {
         foreach($row_val as $dan) {
             if($row_key == "1-03") {
-                if($dan->p_photo != NULL) {
+                if($dan->p_photo != NULL && file_exists(IMG_ROOT_UPLOAD.$dan->p_photo)) {
                     $photo_ids[1][] = $dan;
                 }
             }
             if($row_key == "1-04") {
-                if($dan->p_photo != NULL) {
+                if($dan->p_photo != NULL && file_exists(IMG_ROOT_UPLOAD.$dan->p_photo)) {
                     $photo_ids[2][] = $dan;
                 }
             }
             $prod_name = $dan->p_name;
             $vege = "";
-            if(isset($dan->friendly_name)) {
+            if(isset($dan->friendly_name)&& $dan->friendly_name != "") {
                 $prod_name = $dan->friendly_name;
             }
             if(isset($dan->vege)) {
                 if($dan->vege == true) {
-                    $prod_name = $dan->friendly_name;
+                    if(isset($dan->friendly_name) && $dan->friendly_name != "") {
+                        $prod_name = $dan->friendly_name;
+                    } else {
+                        $prod_name = $dan->p_name;
+                    }
                     $vege = " VEGE";
                 }
             }
@@ -195,12 +199,12 @@ foreach($data["list"] as $row_key => $row_val) {
     } else if($row_key == "1-01"){
         $menu_txt .= $int.". Sałatki:\n";
         foreach($row_val as $dan) {
-            if($dan->p_photo != NULL) {
+            if($dan->p_photo != NULL && file_exists(IMG_ROOT_UPLOAD.$dan->p_photo)) {
                 $photo_ids[3][] = $dan;
             }
             $prod_name = $dan->p_name;
             //show($dan);
-            if(isset($dan->friendly_name)) {
+            if(isset($dan->friendly_name)&& $dan->friendly_name != "") {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
@@ -210,11 +214,11 @@ foreach($data["list"] as $row_key => $row_val) {
     } else if($row_key == "1-02"){
         $menu_txt .= $int.". Kanapki:\n";
         foreach($row_val as $dan) {
-            if($dan->p_photo != NULL) {
+            if($dan->p_photo != NULL && file_exists(IMG_ROOT_UPLOAD.$dan->p_photo)) {
                 $photo_ids[4][] = $dan;
             }
             $prod_name = $dan->p_name;
-            if(isset($dan->friendly_name)) {
+            if(isset($dan->friendly_name)&& $dan->friendly_name != "") {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
@@ -224,11 +228,11 @@ foreach($data["list"] as $row_key => $row_val) {
     } else if($row_key == "3"){
         $menu_txt .= $int.". Granola:\n";
         foreach($row_val as $dan) {
-            if($dan->p_photo != NULL) {
+            if($dan->p_photo != NULL && file_exists(IMG_ROOT_UPLOAD.$dan->p_photo)) {
                 $photo_ids[4][] = $dan;
             }
             $prod_name = $dan->p_name;
-            if(isset($dan->friendly_name)) {
+            if(isset($dan->friendly_name)&& $dan->friendly_name != "") {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
@@ -237,11 +241,11 @@ foreach($data["list"] as $row_key => $row_val) {
         $int++;
     } else {
         foreach($row_val as $dan) {
-            if($dan->p_photo != NULL) {
+            if($dan->p_photo != NULL && file_exists(IMG_ROOT_UPLOAD.$dan->p_photo)) {
                 $photo_ids[4][] = $dan;
             }
             $prod_name = $dan->p_name;
-            if(isset($dan->friendly_name)) {
+            if(isset($dan->friendly_name)&& $dan->friendly_name != "") {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
@@ -265,9 +269,9 @@ if(isset($photo_ids[1])) {
 }
 //show($los);
 if(isset($photo_ids[2])) {
-    for($i = $count; $i<=$los; $i++) {
-        $losowa_liczba = rand(0, count($photo_ids[2]) - 1);
-        $food_img[$count] = $photo_ids[2][$losowa_liczba]->p_photo; 
+    $unique_keys = array_rand($photo_ids[2], $los); // Losuje $los unikalnych kluczy
+    foreach ($unique_keys as $key) {
+        $food_img[$count] = $photo_ids[2][$key]->p_photo; 
         $count++;
     }
     $los++;
@@ -285,9 +289,9 @@ if(isset($photo_ids[3])) {
     $los += 1;
 }
 if(isset($photo_ids[4])) {
-    for($i = $count; $i<=$los; $i++) {
-        $losowa_liczba = rand(0, count($photo_ids[4]) - 1);
-        $food_img[$count] = $photo_ids[4][$losowa_liczba]->p_photo; 
+    $unique_keys = array_rand($photo_ids[4], $los); // Losuje $los unikalnych kluczy
+    foreach ($unique_keys as $key) {
+        $food_img[$count] = $photo_ids[4][$key]->p_photo;
         $count++;
     }
 } else {
@@ -403,8 +407,8 @@ imagettftext($obraz, $fontSize, 0, $day_from_left, $wysokoscTlo + $po_logo_wys +
 //imagecopy($obraz, $day_ss_new, $day_from_left, $wysokoscTlo + $po_logo_wys + $word_menu_wys, 0, 0, 300, $day_wys);
 
 for($i = 0; $i<=3; $i++) {
-    imagecopy($obraz, $black, $szerokosc - $food_szer - 30 - $border, $wysokoscTlo + 20 + (($food_wys+40) * $i) - $border, 0, 0, $food_szer+($border*2), $food_wys+($border*2));
-    imagecopy($obraz, $food_new[$i+1], $szerokosc - $food_szer - 30, $wysokoscTlo + 20 + (($food_wys+40) * $i), 0, 0, $food_szer, $food_wys);
+    imagecopy($obraz, $black, $szerokosc - $food_szer - 10 - $border, $wysokoscTlo + 20 + (($food_wys+40) * $i) - $border, 0, 0, $food_szer+($border*2), $food_wys+($border*2));
+    imagecopy($obraz, $food_new[$i+1], $szerokosc - $food_szer - 10, $wysokoscTlo + 20 + (($food_wys+40) * $i), 0, 0, $food_szer, $food_wys);
 }
 
 
@@ -415,7 +419,7 @@ $tekst = "Smak domu na Twoim talerzu";
 $kolorTekstu = imagecolorallocate($obraz, 255, 0, 0); // Czarny kolor tekstu
 $fontSize = 14; // Rozmiar czcionki
 $x = 20; // Pozycja X tekstu
-$y = 70; // Pozycja Y tekstu (pod tłem)
+$y = $wysokoscTlo /2 + 10; // Pozycja Y tekstu (pod tłem)
 for ($i = 0; $i <= 1; $i++) {
     for ($j = 0; $j <= 0; $j++) {
         imagettftext($obraz, $fontSize, 0, $x + $i, $y + $j, $kolorTekstu, $font, $tekst);

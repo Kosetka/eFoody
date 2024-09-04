@@ -85,7 +85,7 @@ class Leaflet
         }
 
         
-        $data["day_num"] = 1;
+        $data["day_num"] = date('N', strtotime($date));
 
         //show($data);
         //die;
