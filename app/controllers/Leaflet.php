@@ -52,13 +52,13 @@ class Leaflet
         if(!empty($planned->getPlanned($date, $w_id))) {
             foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->p_id] = $value;
-                if (substr($value->p_name,0,6) == "Grzank") { //grzanka łososiowa |\ grzanka z serem ziołowym
+                if (substr($data["fullproducts"][$value->p_id]->p_name,0,6) == "Grzank") { //grzanka łososiowa |\ grzanka z serem ziołowym
                     $data["list"][1][] = $data["fullproducts"][$value->p_id];
                     $int++;
                 } else if ($value->p_id == 14) { //Naleśniki
                     $data["list"][2][] = $data["fullproducts"][$value->p_id];
                     $int++;
-                } else if ($value->p_id == 40 || $value->p_id == 41) { //Granola mus owocowy || Granola Toffi //$value->p_id == 11 || $value->p_id == 622 || 
+                } else if ($value->p_id == 40 || $value->p_id == 41) { //Granola mus owocowy || Granola Toffi
                     $data["list"][3][] = $data["fullproducts"][$value->p_id];
                     $int++;
                 } else if ($value->p_id == 199 || $value->p_id == 200) { //Wrap kurczak || Wrap wołowina
