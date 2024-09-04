@@ -58,7 +58,7 @@ class Prices
                     if(!isset($last)) {
                         $ndate = new DateTime($date_from);
                         $ndate->modify('-1 day');
-                        $new_date_to = $ndate->format('Y-m-d');
+                        $new_date_to = $ndate->format('Y-m-d')." 23:59:59";
                         $price->update($price->getLastPrice($p_id)[0]->id,["date_to" => $new_date_to]);
                     }
                 }
