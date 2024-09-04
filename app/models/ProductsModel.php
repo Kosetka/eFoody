@@ -20,7 +20,9 @@ class ProductsModel
         'p_unit',
         'p_photo',
         'prod_type',
-        'kcal'
+        'kcal',
+        'friendly_name',
+        'vege'
     ];
 
     public function validate($data)

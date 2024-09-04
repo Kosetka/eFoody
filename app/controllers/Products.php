@@ -142,6 +142,15 @@ class Products
                 if(!isset($_POST["kcal"])) {
                     $_POST["kcal"] = 0;
                 }
+                if(isset($_POST["vege"])) {
+                    $_POST["vege"] = TRUE;
+                } else {
+                    $_POST["vege"] = FALSE;
+                }
+                if(!isset($_POST["friendly_name"]) && $_POST["friendly_name"] == "") {
+                    $_POST["friendly_name"] = NULL;
+                    //unset($_POST["friendly_name"]);
+                }
                 $product->insert($_POST);
                 $data['success'] = "Produkt/SKU został pomyślnie dodany";
                 //redirect('signup');
@@ -235,6 +244,15 @@ class Products
                 //show($_POST);die;
                 if($_POST["kcal"] == "") {
                     $_POST["kcal"] = NULL;
+                }
+                if(isset($_POST["vege"])) {
+                    $_POST["vege"] = TRUE;
+                } else {
+                    $_POST["vege"] = FALSE;
+                }
+                if(!isset($_POST["friendly_name"]) && $_POST["friendly_name"] == "") {
+                    $_POST["friendly_name"] = NULL;
+                    //unset($_POST["friendly_name"]);
                 }
                 $product->update($id_product, $_POST);
                 

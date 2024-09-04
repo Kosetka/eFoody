@@ -43,6 +43,26 @@
                             <input type="text" class="form-control" id="p_name" name="p_name" <?php echo "value = '" . $data['product']->p_name . "'"; ?>>
                         </div>
                     </div>
+                    <div class="form-group row m-3">
+                        <label for="friendly_name" class="col-sm-2 col-form-label">Przyjazna nazwa:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="friendly_name" name="friendly_name" <?php echo "value = '" . $data['product']->friendly_name . "'"; ?>>
+                        </div>
+                    </div>
+                    <div class="form-group row m-3">
+                        <label for="vege" class="col-sm-2 col-form-label">VEGE:</label>
+                        <div class="col-sm-10">
+                            <?php
+                            if($data['product']->vege == TRUE) {
+                                $checked = " checked";
+                            } else {
+                                $checked = "";
+                            }
+
+                            ?>
+                            <input type="checkbox" class="form-check-input" id="vege" name="vege" value="0" <?=$checked;?>>
+                        </div>
+                    </div>
                     <div class="form-group row m-3" hidden>
                         <label for="p_description" class="col-sm-2 col-form-label">Opis:</label>
                         <div class="col-sm-10">
