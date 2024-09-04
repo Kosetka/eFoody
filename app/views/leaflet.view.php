@@ -433,11 +433,25 @@ $x = 10; // Pozycja X tekstu
 $y = $wysokoscTlo + $po_logo_wys + $word_menu_wys + $day_wys; // Pozycja Y tekstu (pod tłem)
 // Łamanie tekstu menu na linie
 $lines = explode("\n", $menu_txt);
-$lineHeight = 15; // Wysokość jednej linii
+$lineHeight = 20; // Wysokość jednej linii
 $y += 20; // Odstęp od górnej krawędzi obrazu
-
-
+$total_height = 0;
 $max_chars = 41;
+
+while($total_height > 720 || $total_height == 0) {
+    $total_height = 0;
+    foreach ($lines as $line) {
+        $podzielone_linie = podziel_tekst_na_linie($line, $max_chars);
+        $linie_do_wyswietlenia = explode("\n", $podzielone_linie);
+        foreach ($linie_do_wyswietlenia as $linia) {
+            $total_height += $lineHeight + 5; // + 5
+        }
+        $total_height += $lineHeight-4;
+    }
+    //echo "Wysokość wynosi: $total_height dla linii: $lineHeight <br>";
+    $lineHeight--;
+}
+
 foreach ($lines as $line) {
     // Podziel linie, jeśli są dłuższe niż $max_chars
     $podzielone_linie = podziel_tekst_na_linie($line, $max_chars);
@@ -468,9 +482,9 @@ foreach ($lines as $line) {
                 imagettftext($obraz, $fontSize, 0, $x + $i, $y, imagecolorallocate($obraz, 20, 20, 20), $font, $temp_txt);
             }
         } 
-        $y += $lineHeight + 2; // + 5
+        $y += $lineHeight + 5; // + 5
     }
-    $y += $lineHeight-3;
+    $y += $lineHeight-4;
 }
 
 // Nagłówek HTTP informujący przeglądarkę, że zwracany plik to obraz JPEG
