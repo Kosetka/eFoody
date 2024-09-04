@@ -295,9 +295,9 @@ if(isset($photo_ids[4])) {
 }
 
 
-show($los);
-show($food_img);
-show($photo_ids);
+//show($los);
+//show($food_img);
+//show($photo_ids);
 
 // Tworzenie pustego obrazu
 $obraz = imagecreatetruecolor($szerokosc, $wysokosc);
@@ -474,7 +474,7 @@ header('Content-Type: image/jpeg');
 
 // Zapisanie obrazu do pliku
 $plik = IMG_ROOT_UPLOAD.'obrazek.jpg';
-imagejpeg($obraz, $plik, 100); // 100 to maksymalna jakość (0-100)
+//imagejpeg($obraz, $plik, 100); // 100 to maksymalna jakość (0-100)
 
 // Wyświetlenie obrazu
 imagejpeg($obraz);
