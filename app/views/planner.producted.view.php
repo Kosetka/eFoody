@@ -76,13 +76,16 @@
                                             foreach($data["planned"] as $product) {
                                                 $pid = $data["fullproducts"][$product["p_id"]]["id"];
                                                 $tot_plan += $product["amount"];
-
+                                                $vege = "";
+                                                if($data["fullproducts"][$product["p_id"]]["vege"] == 1) {
+                                                    $vege = "<span style='color: green; font-weight: bold;'>VEGE</span>";
+                                                }
                                                 echo "<tr>";
                                                 echo '
                                                 <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
                                                 ';
                                                 
-                                                echo '<td>'.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>';
+                                                echo '<td>'.$vege.' '.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>';
                                                 $am = 0;
                                                 if(isset($data["producted"])) {
                                                     $am = $data["producted"][$pid]["amount"];

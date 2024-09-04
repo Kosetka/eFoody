@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const products = [
         <?php
         foreach($data["fullproducts"] as $product) {
-            echo "{ ID: ".$product['id'].", p_name: '".$product['p_name']."', sku: '".$product['sku']."', p_photo: '".$product['p_photo']."' },";
+            echo "{ ID: ".$product['id'].", p_name: '".$product['p_name']."', sku: '".$product['sku']."', p_photo: '".$product['p_photo']."', vege: '".$product['vege']."' },";
         }
         ?>
     ];
@@ -138,11 +138,20 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function addProductToTable(product, quantity) {
+        /*$vege = "";
+        if($product->vege == 1) {
+            $vege = "<span style='color: green; font-weight: bold;'>VEGE </span>";
+        }*/
+        let vege = "";
+        if(product.vege == 1) {
+            vege = "<span style='color: green; font-weight: bold;'>VEGE </span>";
+        }
+        console.log(product.vege);
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${product.ID}</td>
             <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="<?php echo IMG_ROOT;?>${product.p_photo}"></td>
-            <td>${product.p_name}</td>
+            <td>`+vege+` ${product.p_name}</td>
             <td>${product.sku}</td>
             <td><input <?=$toBlock;?> type="number" class="form-control" value="${quantity}" min="1"></td>
             <td><button <?=$toBlockButton;?> class="btn btn-danger remove-product">Usuń</button></td>

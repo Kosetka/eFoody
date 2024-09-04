@@ -72,12 +72,15 @@
                                                     $ids .=$number.", ";
                                                 }
                                             }
-
+                                            $vege = "";
+                                            if($product->vege == 1) {
+                                                $vege = "<span style='color: green; font-weight: bold;'>VEGE </span>";
+                                            }
                                             echo "  <tr>
                                                         <th scope='row'>$product->id</th>
                                                         <td>$product->sku</td>
                                                         <td>$photo</td>
-                                                        <td>$product->p_name</td>
+                                                        <td>$vege $product->p_name</td>
                                                         <td>$product->p_description</td>
                                                         <td>".substr($ids, 0, -2)."</td>
                                                         <td>$product->p_unit</td>

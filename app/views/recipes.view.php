@@ -63,9 +63,13 @@
                                             $active = "<td class='bg-success'>Aktywne</td>";
                                         }
                                     }
+                                    $vege = "";
+                                            if($value->vege == 1) {
+                                                $vege = "<span style='color: green; font-weight: bold;'>VEGE</span>";
+                                            }
                                     echo "  <tr>
                                                 <td>$photo</td>
-                                                <td>".$value->p_name."</td>
+                                                <td>".$vege." ".$value->p_name."</td>
                                                 <td>".$value->sku."</td>";
 
                                     echo $active;

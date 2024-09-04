@@ -91,10 +91,14 @@
                                                 $photo = "";
                                             }
                                             //if ($amount_left > 0) {
+                                                $vege = "";
+                                                if($data["products"][$value->p_id]->vege == 1) {
+                                                    $vege = "<span style='color: green; font-weight: bold;'>VEGE</span>";
+                                                }
                                                 echo "  <tr>
                                                     <td>".$value->p_id."</td>
                                                     <td>$photo</td>
-                                                    <td>".$data["products"][$value->p_id]->p_name."</td>
+                                                    <td>".$vege.' '.$data["products"][$value->p_id]->p_name."</td>
                                                     <td style='width: 100px'>".$data["products"][$value->p_id]->sku."</td>
                                                     <td>";
                                                 echo '<input type="number" class="form-check-input p-2" style="width: 80px; height: 30px" id="p_id" name="p_id[' . $value->p_id . ']" value="' . $amount_left . '" min=0 max = "' . $amount_left . '">';

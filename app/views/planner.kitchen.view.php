@@ -63,15 +63,18 @@
                                             foreach($data["planned"] as $product) {
                                                 $pid = $data["fullproducts"][$product["p_id"]]["id"];
                                                 $tot_plan += $product["amount"];
-
+                                                $vege = "";
+                                                if($data["fullproducts"][$product["p_id"]]["vege"] == 1) {
+                                                    $vege = "<span style='color: green; font-weight: bold;'>VEGE</span>";
+                                                }
                                                 echo "<tr>";
                                                 echo '
                                                 <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
                                                 ';
                                                 if(isset($data["recipes"][$pid])) {
-                                                    echo '<td>'.$data["fullproducts"][$product["p_id"]]["p_name"].' [<a href="'.ROOT.'/recipes/show/'.$product["p_id"].'">przepis</a>]</td>';
+                                                    echo '<td>'.$vege.' '.$data["fullproducts"][$product["p_id"]]["p_name"].' [<a href="'.ROOT.'/recipes/show/'.$product["p_id"].'">przepis</a>]</td>';
                                                 } else {
-                                                    echo '<td>'.$data["fullproducts"][$product["p_id"]]["p_name"].' [<span style="color: red;">brak</span>]</td>';
+                                                    echo '<td>'.$vege.' '.$data["fullproducts"][$product["p_id"]]["p_name"].' [<span style="color: red;">brak</span>]</td>';
                                                 }
 
                                                 echo '<td style="width: 100px">'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>

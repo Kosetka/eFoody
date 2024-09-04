@@ -78,10 +78,14 @@
                                                         $ids .=$number.", ";
                                                     }
                                                 }
+                                                $vege = "";
+                                                if($data["fullproducts"][$product["p_id"]]["vege"] == 1) {
+                                                    $vege = "<span style='color: green; font-weight: bold;'>VEGE </span>";
+                                                }
                                                 echo "<tr>";
                                                 echo '
                                                 <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
-                                                <td>'.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>
+                                                <td>'.$vege.' '.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>
                                                 <td>'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
                                                 <td>'.$product["amount"].'</td>';
                                                 $prod_amo = 0;

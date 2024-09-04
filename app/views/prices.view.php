@@ -120,8 +120,11 @@
                                         }
                                         
                                     }
-                                    
-                                    echo "  <tr><td $no_production_cost>$value->p_name</td>
+                                    $vege = "";
+                                    if($value->vege == 1) {
+                                        $vege = "<span style='color: green; font-weight: bold;'>VEGE</span>";
+                                    }
+                                    echo "  <tr><td $no_production_cost>$vege $value->p_name</td>
                                             <td>$photo</td>
                                             <td>$value->sku</td>
                                             $source
