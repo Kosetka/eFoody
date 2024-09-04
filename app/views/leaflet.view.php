@@ -466,7 +466,7 @@ foreach ($lines as $line) {
     }
     $y += $lineHeight-3;
 }
-
+/*
 // Nagłówek HTTP informujący przeglądarkę, że zwracany plik to obraz JPEG
 header('Content-Type: image/jpeg');
 
@@ -485,3 +485,4 @@ imagedestroy($po_name_new);
 imagedestroy($word_menu);
 imagedestroy($word_menu_new);
 imagedestroy($obraz);
+*/
