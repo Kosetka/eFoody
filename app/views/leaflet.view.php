@@ -429,7 +429,7 @@ $kolorTekstu = imagecolorallocate($obraz, 0, 0, 0); // Czarny kolor tekstu
 
 $font = IMG_ROOT_UPLOAD . '/FiraCode-VariableFont_wght.ttf';//HelveticaWorld-Regular.ttf
 $fontSize = 14; // Rozmiar czcionki
-$x = 20; // Pozycja X tekstu
+$x = 10; // Pozycja X tekstu
 $y = $wysokoscTlo + $po_logo_wys + $word_menu_wys + $day_wys; // Pozycja Y tekstu (pod tłem)
 // Łamanie tekstu menu na linie
 $lines = explode("\n", $menu_txt);
@@ -437,7 +437,7 @@ $lineHeight = 15; // Wysokość jednej linii
 $y += 20; // Odstęp od górnej krawędzi obrazu
 
 
-$max_chars = 40;
+$max_chars = 41;
 foreach ($lines as $line) {
     // Podziel linie, jeśli są dłuższe niż $max_chars
     $podzielone_linie = podziel_tekst_na_linie($line, $max_chars);
