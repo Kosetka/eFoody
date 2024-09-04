@@ -433,12 +433,13 @@ $x = 10; // Pozycja X tekstu
 $y = $wysokoscTlo + $po_logo_wys + $word_menu_wys + $day_wys; // Pozycja Y tekstu (pod tłem)
 // Łamanie tekstu menu na linie
 $lines = explode("\n", $menu_txt);
-$lineHeight = 20; // Wysokość jednej linii
+$lineHeight = 30; // Wysokość jednej linii
 $y += 20; // Odstęp od górnej krawędzi obrazu
 $total_height = 0;
 $max_chars = 41;
 
-while($total_height > 720 || $total_height == 0) {
+while($total_height > 800 || $total_height == 0) {
+    $lineHeight--;
     $total_height = 0;
     foreach ($lines as $line) {
         $podzielone_linie = podziel_tekst_na_linie($line, $max_chars);
@@ -449,7 +450,6 @@ while($total_height > 720 || $total_height == 0) {
         $total_height += $lineHeight-4;
     }
     //echo "Wysokość wynosi: $total_height dla linii: $lineHeight <br>";
-    $lineHeight--;
 }
 
 foreach ($lines as $line) {
