@@ -143,9 +143,9 @@ class Products
                     $_POST["kcal"] = 0;
                 }
                 if(isset($_POST["vege"])) {
-                    $_POST["vege"] = TRUE;
+                    $_POST["vege"] = 1;
                 } else {
-                    $_POST["vege"] = FALSE;
+                    $_POST["vege"] = 0;
                 }
                 if(!isset($_POST["friendly_name"]) && $_POST["friendly_name"] == "") {
                     $_POST["friendly_name"] = NULL;
