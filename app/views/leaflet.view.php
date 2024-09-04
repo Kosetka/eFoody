@@ -417,8 +417,8 @@ for($i = 0; $i<=3; $i++) {
 // Dodanie tekstu do obrazu (pod tłem)
 $tekst = "Smak domu na Twoim talerzu";
 $kolorTekstu = imagecolorallocate($obraz, 255, 0, 0); // Czarny kolor tekstu
-$fontSize = 14; // Rozmiar czcionki
-$x = 20; // Pozycja X tekstu
+$fontSize = 17; // Rozmiar czcionki
+$x = 10; // Pozycja X tekstu
 $y = $wysokoscTlo /2 + 10; // Pozycja Y tekstu (pod tłem)
 for ($i = 0; $i <= 1; $i++) {
     for ($j = 0; $j <= 0; $j++) {
