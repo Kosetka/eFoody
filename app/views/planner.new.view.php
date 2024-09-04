@@ -33,7 +33,7 @@
                     }
                     $toBlock = "";
                     $toBlockButton = "";
-                    if($date<=date("Y-m-d")) {
+                    if($date<date("Y-m-d")) {
                         $toBlock = " disabled";
                         $toBlockButton = " hidden";
                     }

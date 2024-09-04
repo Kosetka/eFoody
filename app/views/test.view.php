@@ -1,6 +1,27 @@
 <?php
 $max_chars = 20; // Maksymalna liczba znaków na linię, uwzględniając "asd"
 
+$days = [
+    0 => "NIEDZIELA",
+    1 => "PONIEDZIAŁEK",
+    2 => "WTOREK",
+    3 => "ŚRODA",
+    4 => "CZWARTEK",
+    5 => "PIĄTEK",
+    6 => "SOBOTA"
+];
+$offs = [
+    0 => 40,
+    1 => 0,
+    2 => 60,
+    3 => 70,
+    4 => 40,
+    5 => 65,
+    6 => 65
+];
+
+$day = 3;
+
 function podziel_tekst_na_linie($tekst, $max_chars) {
     $wynik = '';
     $prefix = "   ";
@@ -42,6 +63,73 @@ function podziel_tekst_na_linie($tekst, $max_chars) {
 
     return $wynik;
 }
+
+function roundCorners($source, $radius) {
+    $ws = imagesx($source);
+    $hs = imagesy($source);
+
+    $corner = $radius + 2;
+    $s = $corner*2;
+
+    $src = imagecreatetruecolor($s, $s);
+    imagecopy($src, $source, 0, 0, 0, 0, $corner, $corner);
+    imagecopy($src, $source, $corner, 0, $ws - $corner, 0, $corner, $corner);
+    imagecopy($src, $source, $corner, $corner, $ws - $corner, $hs - $corner, $corner, $corner);
+    imagecopy($src, $source, 0, $corner, 0, $hs - $corner, $corner, $corner);
+
+    $q = 8; # change this if you want
+    $radius *= $q;
+
+    # find unique color
+    do {
+        $r = rand(0, 255);
+        $g = rand(0, 255);
+        $b = rand(0, 255);
+    } while (imagecolorexact($src, $r, $g, $b) < 0);
+
+    $ns = $s * $q;
+
+    $img = imagecreatetruecolor($ns, $ns);
+    $alphacolor = imagecolorallocatealpha($img, $r, $g, $b, 127);
+    imagealphablending($img, false);
+    imagefilledrectangle($img, 0, 0, $ns, $ns, $alphacolor);
+
+    imagefill($img, 0, 0, $alphacolor);
+    imagecopyresampled($img, $src, 0, 0, 0, 0, $ns, $ns, $s, $s);
+    imagedestroy($src);
+
+    imagearc($img, $radius - 1, $radius - 1, $radius * 2, $radius * 2, 180, 270, $alphacolor);
+    imagefilltoborder($img, 0, 0, $alphacolor, $alphacolor);
+    imagearc($img, $ns - $radius, $radius - 1, $radius * 2, $radius * 2, 270, 0, $alphacolor);
+    imagefilltoborder($img, $ns - 1, 0, $alphacolor, $alphacolor);
+    imagearc($img, $radius - 1, $ns - $radius, $radius * 2, $radius * 2, 90, 180, $alphacolor);
+    imagefilltoborder($img, 0, $ns - 1, $alphacolor, $alphacolor);
+    imagearc($img, $ns - $radius, $ns - $radius, $radius * 2, $radius * 2, 0, 90, $alphacolor);
+    imagefilltoborder($img, $ns - 1, $ns - 1, $alphacolor, $alphacolor);
+    imagealphablending($img, true);
+    imagecolortransparent($img, $alphacolor);
+
+    # resize image down
+    $dest = imagecreatetruecolor($s, $s);
+    imagealphablending($dest, false);
+    imagefilledrectangle($dest, 0, 0, $s, $s, $alphacolor);
+    imagecopyresampled($dest, $img, 0, 0, 0, 0, $s, $s, $ns, $ns);
+    imagedestroy($img);
+
+    # output image
+    imagealphablending($source, false);
+    imagecopy($source, $dest, 0, 0, 0, 0, $corner, $corner);
+    imagecopy($source, $dest, $ws - $corner, 0, $corner, 0, $corner, $corner);
+    imagecopy($source, $dest, $ws - $corner, $hs - $corner, $corner, $corner, $corner, $corner);
+    imagecopy($source, $dest, 0, $hs - $corner, 0, $corner, $corner, $corner);
+    imagealphablending($source, true);
+    imagedestroy($dest);
+
+    return $source;
+}
+
+
+
 // Ustawienia obrazu
 $szerokosc = 707; // Szerokość obrazu
 $wysokosc = 1000; // Wysokość obrazu
@@ -52,8 +140,10 @@ $word_menu_wys = 30;
 $word_menu_szer = 100;
 $day_from_left = 0;
 $day_wys = 40;
-$food_wys = 256;
-$food_szer = 192;
+$food_wys = 171; //256
+$food_szer = 228; //192
+$radius = 20;
+$border = 3;
 
 $menu_txt = "1. Zupa szczawiowa z jajkiem - 10zł\n"
           . "2. Makaron w sosie serowo-brokułowym z kurczakiem - 20zł\n"
@@ -71,8 +161,76 @@ $menu_txt = "1. Zupa szczawiowa z jajkiem - 10zł\n"
           . "7. Grzanki z łososiem i awokado - 15zł\n"
           . "8. Naleśniki z serem i musem owocowym - 16zł";
 
+$menu_txt = "";
+$int = 1;
+foreach($data["list"] as $row_key => $row_val) {
+    if($row_key == "1-03" || $row_key == "1-04") {
+        foreach($row_val as $dan) {
+            $prod_name = $dan->p_name;
+            $vege = "";
+            if(isset($dan->friendly_name)) {
+                $prod_name = $dan->friendly_name;
+            }
+            if(isset($dan->vege)) {
+                if($dan->vege == true) {
+                    $prod_name = $dan->friendly_name;
+                    $vege = "VEGE";
+                }
+            }
+            $menu_txt .= $int.".".$vege." ".$dan->p_name." - xxzł\n";
+            $int++;
+        }
+    } else if($row_key == "1-01"){
+        $menu_txt .= $int.". Sałatki:\n";
+        foreach($row_val as $dan) {
+            $prod_name = $dan->p_name;
+            if(isset($dan->friendly_name)) {
+                $prod_name = $dan->friendly_name;
+            }
+            $menu_txt .= "   ".$dan->p_name." - xxzł\n";
+        }
+        $int++;
+    } else if($row_key == "1-02"){
+        $menu_txt .= $int.". Kanapki:\n";
+        foreach($row_val as $dan) {
+            $prod_name = $dan->p_name;
+            if(isset($dan->friendly_name)) {
+                $prod_name = $dan->friendly_name;
+            }
+            $menu_txt .= "   ".$dan->p_name." - xxzł\n";
+        }
+        $int++;
+    } else if($row_key == "3"){
+        $menu_txt .= $int.". Granola:\n";
+        foreach($row_val as $dan) {
+            $prod_name = $dan->p_name;
+            if(isset($dan->friendly_name)) {
+                $prod_name = $dan->friendly_name;
+            }
+            $menu_txt .= "   ".$dan->p_name." - xxzł\n";
+        }
+        $int++;
+    } else {
+        foreach($row_val as $dan) {
+            $prod_name = $dan->p_name;
+            if(isset($dan->friendly_name)) {
+                $prod_name = $dan->friendly_name;
+            }
+            $menu_txt .= $int.". ".$dan->p_name." - xxzł\n";
+        }
+        $int++;
+    
+    }
+}
+
+
+
 // Tworzenie pustego obrazu
 $obraz = imagecreatetruecolor($szerokosc, $wysokosc);
+
+$black = imagecreatetruecolor($food_szer + ($border * 2), $food_wys + ($border*2));
+$czarny = imagecolorallocate($black, 0, 0, 0);
+imagefill($black, 0, 0, $czarny);
 
 // Definiowanie kolorów (R, G, B)
 $kolorTla = imagecolorallocate($obraz, 240, 240, 240); // Biały kolor tła
@@ -131,30 +289,51 @@ imagecopyresampled($food_new[2], $food_2, 0, 0, 0, 0, $food_szer, $food_wys, ima
 imagecopyresampled($food_new[3], $food_3, 0, 0, 0, 0, $food_szer, $food_wys, imagesx($food_3), imagesy($food_3));
 imagecopyresampled($food_new[4], $food_4, 0, 0, 0, 0, $food_szer, $food_wys, imagesx($food_4), imagesy($food_4));
 
-$day_from_left = ($menu_szer - imagesx($day_ss) / 2 )/2 ;
+$food_new[1] = roundCorners($food_new[1],  $radius);
+$food_new[2] = roundCorners($food_new[2],  $radius);
+$food_new[3] = roundCorners($food_new[3],  $radius);
+$food_new[4] = roundCorners($food_new[4],  $radius);
+$black = roundCorners($black,  $radius+3);
+
+$day_from_left = 84 + $offs[$day]; //12 //7 //84 // 60
 // Kopiowanie przeskalowanego tła na główny obraz
+
+$font = IMG_ROOT_UPLOAD . '/FreckleFace-Regular.ttf';
+$fontSize = 40; // Rozmiar czcionki
+$kolorTekstu = imagecolorallocate($obraz, 0, 200, 0);
+
 imagecopy($obraz, $header_logo_new, 0, 0, 0, 0, $szerokosc, $wysokoscTlo);
 imagecopy($obraz, $po_name_new, 50, $wysokoscTlo, 0, 0, $menu_szer - 100, $po_logo_wys);
-imagecopy($obraz, $word_menu_new, ($menu_szer - 100) / 2, $wysokoscTlo + $po_logo_wys, 0, 0, $word_menu_szer, $word_menu_wys);
-imagecopy($obraz, $day_ss_new, $day_from_left, $wysokoscTlo + $po_logo_wys + $word_menu_wys, 0, 0, 300, $day_wys);
+//imagecopy($obraz, $word_menu_new, ($menu_szer - 100) / 2, $wysokoscTlo + $po_logo_wys, 0, 0, $word_menu_szer, $word_menu_wys);
+imagettftext($obraz, $fontSize, 0, ($menu_szer - 100) / 2, $wysokoscTlo + $po_logo_wys + $fontSize - 7, $kolorTekstu, $font, "MENU");
 
-for($i = 0; $i<=2; $i++) {
-    imagecopy($obraz, $food_new[$i+1], $szerokosc - $food_szer - 30, $wysokoscTlo + 20 + (($food_wys+20) * $i), 0, 0, $food_szer, $food_wys);
+$fontSize = 30; // Rozmiar czcionki
+$kolorTekstu = imagecolorallocate($obraz, 200, 0, 0);
+imagettftext($obraz, $fontSize, 0, $day_from_left, $wysokoscTlo + $po_logo_wys + $word_menu_wys + $fontSize, $kolorTekstu, $font, $days[$day]);
+//imagecopy($obraz, $day_ss_new, $day_from_left, $wysokoscTlo + $po_logo_wys + $word_menu_wys, 0, 0, 300, $day_wys);
+
+for($i = 0; $i<=3; $i++) {
+    imagecopy($obraz, $black, $szerokosc - $food_szer - 30 - $border, $wysokoscTlo + 20 + (($food_wys+40) * $i) - $border, 0, 0, $food_szer+($border*2), $food_wys+($border*2));
+    imagecopy($obraz, $food_new[$i+1], $szerokosc - $food_szer - 30, $wysokoscTlo + 20 + (($food_wys+40) * $i), 0, 0, $food_szer, $food_wys);
 }
 
 
-$font = IMG_ROOT_UPLOAD . '/FiraCode-VariableFont_wght.ttf';//HelveticaWorld-Regular.ttf
+
+
 // Dodanie tekstu do obrazu (pod tłem)
 $tekst = "Smak domu na Twoim talerzu";
+$kolorTekstu = imagecolorallocate($obraz, 255, 0, 0); // Czarny kolor tekstu
 $fontSize = 14; // Rozmiar czcionki
 $x = 20; // Pozycja X tekstu
 $y = 70; // Pozycja Y tekstu (pod tłem)
-for ($i = -1; $i <= 1; $i++) {
-    for ($j = -1; $j <= 1; $j++) {
+for ($i = 0; $i <= 1; $i++) {
+    for ($j = 0; $j <= 0; $j++) {
         imagettftext($obraz, $fontSize, 0, $x + $i, $y + $j, $kolorTekstu, $font, $tekst);
     }
 }
+$kolorTekstu = imagecolorallocate($obraz, 0, 0, 0); // Czarny kolor tekstu
 
+$font = IMG_ROOT_UPLOAD . '/FiraCode-VariableFont_wght.ttf';//HelveticaWorld-Regular.ttf
 $fontSize = 14; // Rozmiar czcionki
 $x = 20; // Pozycja X tekstu
 $y = $wysokoscTlo + $po_logo_wys + $word_menu_wys + $day_wys; // Pozycja Y tekstu (pod tłem)
@@ -164,7 +343,7 @@ $lineHeight = 15; // Wysokość jednej linii
 $y += 20; // Odstęp od górnej krawędzi obrazu
 
 
-$max_chars = 38;
+$max_chars = 40;
 foreach ($lines as $line) {
     // Podziel linie, jeśli są dłuższe niż $max_chars
     $podzielone_linie = podziel_tekst_na_linie($line, $max_chars);
@@ -195,9 +374,9 @@ foreach ($lines as $line) {
                 imagettftext($obraz, $fontSize, 0, $x + $i, $y, imagecolorallocate($obraz, 20, 20, 20), $font, $temp_txt);
             }
         } 
-        $y += $lineHeight + 5;
+        $y += $lineHeight + 2; // + 5
     }
-    $y += $lineHeight;
+    $y += $lineHeight-3;
 }
 
 // Nagłówek HTTP informujący przeglądarkę, że zwracany plik to obraz JPEG

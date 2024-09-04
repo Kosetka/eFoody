@@ -29,5 +29,10 @@ class Skumodel
         $query = "select * from $this->table WHERE id = '$id' ORDER BY full_type ASC;";
         return $this->query($query);
     }
+    public function getByParent($id)
+    {
+        $query = "select * from $this->table WHERE parent = '$id' ORDER BY full_type ASC;";
+        return $this->query($query);
+    }
     
 }
