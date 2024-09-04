@@ -208,7 +208,7 @@ foreach($data["list"] as $row_key => $row_val) {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
-            $menu_txt .= "   ".$prod_name." - ".$price."zł\n";
+            $menu_txt .= "   - ".$prod_name." - ".$price."zł\n";
         }
         $int++;
     } else if($row_key == "1-02"){
@@ -222,7 +222,7 @@ foreach($data["list"] as $row_key => $row_val) {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
-            $menu_txt .= "   ".$prod_name." - ".$price."zł\n";
+            $menu_txt .= "   - ".$prod_name." - ".$price."zł\n";
         }
         $int++;
     } else if($row_key == "3"){
@@ -236,7 +236,7 @@ foreach($data["list"] as $row_key => $row_val) {
                 $prod_name = $dan->friendly_name;
             }
             $price = $data["prices"][$dan->id]->price;
-            $menu_txt .= "   ".$prod_name." - ".$price."zł\n";
+            $menu_txt .= "   - ".$prod_name." - ".$price."zł\n";
         }
         $int++;
     } else {
