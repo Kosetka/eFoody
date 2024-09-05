@@ -337,3 +337,24 @@ function roundToNearest5($number)
 
     return $rounded;
 }
+
+function getPolishMonthName($monthNumber) {
+    // Tablica z polskimi nazwami miesięcy
+    $polishMonths = [
+        1 => "Styczeń",
+        2 => "Luty",
+        3 => "Marzec",
+        4 => "Kwiecień",
+        5 => "Maj",
+        6 => "Czerwiec",
+        7 => "Lipiec",
+        8 => "Sierpień",
+        9 => "Wrzesień",
+        10 => "Październik",
+        11 => "Listopad",
+        12 => "Grudzień"
+    ];
+
+    // Zwraca polską nazwę miesiąca na podstawie numeru miesiąca
+    return $polishMonths[$monthNumber] ?? "Nieznany miesiąc";
+}

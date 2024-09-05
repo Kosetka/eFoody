@@ -151,12 +151,15 @@ class Workers
         $users = new User();
         if(!empty($users->getActiveUsers($month, $year))) {
             foreach($users->getActiveUsers($month, $year) as $user) {
-                $data["users"][$user->id] = $user;
+                $data["users"][$user->u_id] = $user;
+                $data["users_dates"][$user->u_id][] = $user;
                 $int[$user->id] = 0;
                 $work[$user->id] = 0;
                 $break[$user->id] = 0;
             }
         }
+        //show($data["users"]);
+        //die;
 
         $cities = new Shared();
         $query = "SELECT * FROM `cities` as c INNER JOIN `warehouses` as w ON c.id = w.id_city";

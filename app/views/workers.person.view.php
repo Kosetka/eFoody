@@ -100,7 +100,7 @@
                                                 if ($data["month"] == $month) {
                                                     $sel = "selected";
                                                 }
-                                                echo '<option value="' . $month . '" ' . $sel . '>' . date("F", mktime(0, 0, 0, $month, 1)) . '</option>';
+                                                echo '<option value="' . $month . '" ' . $sel . '>' . getPolishMonthName($month) . '</option>';
                                             }
                                             echo '</select>';
                                         ?>

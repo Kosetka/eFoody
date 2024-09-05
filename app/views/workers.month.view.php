@@ -22,7 +22,7 @@
                                                 if ($data["month"] == $month) {
                                                     $sel = "selected";
                                                 }
-                                                echo '<option value="' . $month . '" ' . $sel . '>' . date("F", mktime(0, 0, 0, $month, 1)) . '</option>';
+                                                echo '<option value="' . $month . '" ' . $sel . '>' . getPolishMonthName($month) . '</option>';
                                             }
                                             echo '</select>';
                                         ?>
@@ -71,8 +71,8 @@
                                 <th scope="col">Oddział</th>
                                 <th scope="col">Stanowisko</th>
                                 <th scope="col">Suma godzin</th>
-                                <th scope="col">Wypłata</th>
                                 <?php
+                                //echo '<th scope="col">Wypłata</th>';
                                     $year = $data["year"];
                                     $month = $data["month"];
                                     $date = DateTime::createFromFormat('Y-m-d', "$year-$month-01");
@@ -115,6 +115,8 @@
                                         }
                                     }
                                 }
+                                //show($data);
+                                $users_da = [];
                                 if(!empty($data["users"])) {
                                     foreach($data["users"] as $user) {
                                         echo '<tr>';
@@ -126,8 +128,25 @@
                                         echo '<th>'.$data["cities"][$user->u_warehouse]["c_fullname"].' -> '.$data["cities"][$user->u_warehouse]["wh_fullname"].'</th>';
                                         echo '<th>'.$data["roles"][$user->u_role]->role_name.'</th>';
                                         echo '<td>'.showInHours($hours[$user->u_id]).'</td>';
-                                        echo '<td></td>'; //wypłata
+                                        //echo '<td></td>'; //wypłata
                                         
+                                        foreach($data["users_dates"][$user->u_id] as $ur) {
+                                            for ($day = 1; $day <= $daysInMonth; $day++) {
+                                                $date->setDate($year, $month, $day);
+                                                $nd = $date->format('Y-m-d');
+                                                
+                                                //show($date);
+                                                if($ur->date_from <= $nd) {
+                                                    if($ur->date_to >= $nd || $ur->date_to == NULL) {
+                                                        $users_da[$nd][$ur->u_id] = $ur;
+                                                    }
+                                                }
+                                                //tu zrobić tablicę dla każdego dnia i każdej osoby osobno
+                                            }
+                                        }
+                                        
+                                        
+                                        $user_not_working_yet = true;
                                         for ($day = 1; $day <= $daysInMonth; $day++) {
                                             $date->setDate($year, $month, $day);
                                             $seconds = "";
@@ -135,7 +154,22 @@
                                                 $seconds = showInHours($data["accepted"][$date->format('Y-m-d')][$user->u_id]->accept_time);
                                             }
 
-                                            if($user->date_from > $date->format('Y-m-d')) {
+                                            if(isset($users_da[$date->format('Y-m-d')][$user->u_id])) {
+                                                if(isset($data["holidays"][$date->format('Y-m-d')])) { //pracuje i dzień wolny
+                                                    echo "<td scope='col'style='background-color: #ffbfaa;'>".$seconds."</td>";
+                                                } else { //pracuje w normalny dzień
+                                                    echo "<td scope='col'>".$seconds."</td>";
+                                                }
+                                                $user_not_working_yet = false;
+                                            } else {
+                                                if($user_not_working_yet) {
+                                                    echo "<td scope='col'style='background-color: #78EEFF;'></td>";
+                                                } else {
+                                                    echo "<td scope='col'style='background-color: #0097AD;'></td>";
+                                                }
+                                            }
+
+                                            /*if($user->date_from > $date->format('Y-m-d')) {
                                                 echo "<td scope='col'style='background-color: #78EEFF;'></td>";
                                             } elseif($user->date_to != NULL && $user->date_to <= $date->format('Y-m-d')) {
                                                 echo "<td scope='col'style='background-color: #0097AD;'></td>";
@@ -145,7 +179,7 @@
                                                 } else { //pracuje w normalny dzień
                                                     echo "<td scope='col'>".$seconds."</td>";
                                                 }
-                                            }
+                                            }*/
 
                                         }
                                         echo '</tr>';
@@ -156,8 +190,8 @@
                             <tr>
                                 <th colspan="3" scope="col">TOTAL</th>
                                 <th scope="col"><?php echo showInHours(array_sum($daily));?></th>
-                                <th scope="col"></th><!-- wypłata -->
                                 <?php
+                                //echo '<th scope="col"></th>';//wypłata
                                     $year = $data["year"];
                                     $month = $data["month"];
                                     $date = DateTime::createFromFormat('Y-m-d', "$year-$month-01");
@@ -185,6 +219,7 @@
             </div>
             <?php
                 }
+                //show($users_da);
             ?>
         
 
