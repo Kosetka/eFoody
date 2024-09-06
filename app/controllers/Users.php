@@ -145,6 +145,7 @@ class Users
                     $user_history = new Userhistory();
                     $d_last = "";
                     $date = date("Y-m-d");
+                    //show($user_history->getLast($user_id)[0]);die;
                     if(!empty($user_history->getLast($user_id)[0])) {
                         $d_last = $user_history->getLast($user_id)[0];
                         if($d_last->date_to != NULL){
@@ -156,14 +157,16 @@ class Users
                                 "helper_for" => $_POST["helper_for"],
                             ]);
                         } else {
-                            $user_history->update($d_last->id,["date_to" => date("Y-m-d", strtotime($date . " -1 day"))]);
-                            $user_history->insert([
-                                "date_from" => $date, 
-                                "date_to" => NULL, 
-                                "role" => $_POST["u_role"],
-                                "u_id" => $user_id,
-                                "helper_for" => $_POST["helper_for"],
-                            ]);
+                            if($d_last->role != $_POST["u_role"]) {
+                                $user_history->update($d_last->id,["date_to" => date("Y-m-d", strtotime($date . " -1 day"))]);
+                                $user_history->insert([
+                                    "date_from" => $date, 
+                                    "date_to" => NULL, 
+                                    "role" => $_POST["u_role"],
+                                    "u_id" => $user_id,
+                                    "helper_for" => $_POST["helper_for"],
+                                ]);
+                            }
                         }
 
                     }
