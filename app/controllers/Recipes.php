@@ -77,27 +77,35 @@ class Recipes
             $allergens = new Productalergens();
             $allergens->delete($id,"p_id");
             $ids = [];
-            foreach($_POST["ordered_products"] as $pprod_key => $pprod_val) {
-                $ids[] = $pprod_key;
-            } 
-            if(!empty($allergens->getAlergensByProducts($ids))) {
-                foreach($allergens->getAlergensByProducts($ids) as $al) {
-                    $allergens->insert([
-                            "p_id" => $id,
-                            "a_id" => $al->a_id
-                            ]);
+            if(!empty($_POST["ordered_products"])) {
+                foreach($_POST["ordered_products"] as $pprod_key => $pprod_val) {
+                    $ids[] = $pprod_key;
+                } 
+            }
+            if(!empty($_POST["ordered_products"])) {
+                if(!empty($allergens->getAlergensByProducts($ids))) {
+                    foreach($allergens->getAlergensByProducts($ids) as $al) {
+                        $allergens->insert([
+                                "p_id" => $id,
+                                "a_id" => $al->a_id
+                                ]);
+                    }
                 }
             }
             $pproducts = new ProductsModel();
             $pids = [];
-            foreach($_POST["ordered_products"] as $pprod_key => $pprod_val) {
-                $pids[] = $pprod_key;
-            } 
+            if(!empty($_POST["ordered_products"])) {
+                foreach($_POST["ordered_products"] as $pprod_key => $pprod_val) {
+                    $pids[] = $pprod_key;
+                } 
+            }
             
             $pcal = [];
-            if(!empty($pproducts->getKcalByProducts($pids))) {
-                foreach($pproducts->getKcalByProducts($ids) as $al) {
-                    $pcal[$al->id] = $al; 
+            if(!empty($_POST["ordered_products"])) {
+                if(!empty($pproducts->getKcalByProducts($pids))) {
+                    foreach($pproducts->getKcalByProducts($ids) as $al) {
+                        $pcal[$al->id] = $al; 
+                    }
                 }
             }
             $kcal = 0;
