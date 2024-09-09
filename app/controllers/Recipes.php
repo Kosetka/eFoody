@@ -35,6 +35,20 @@ class Recipes
                 $data["productsDetails"][$prodDet->p_id] = $prodDet;
             }
         }
+        if(!empty($productsDetails->getFullRecipes())) {
+            foreach($productsDetails->getFullRecipes() as $prodDet) {
+                $data["reciptDetails"][$prodDet->p_id][$prodDet->sub_prod]["amount"] = $prodDet->amount;
+                $data["reciptDetails"][$prodDet->p_id][$prodDet->sub_prod]["sub_prod"] = $prodDet->sub_prod;
+                $data["reciptDetails"][$prodDet->p_id][$prodDet->sub_prod]["kcal"] = $data["products"][$prodDet->sub_prod]->kcal;
+            }
+        }
+        $data["kcal_calc"] = [];
+        foreach($data["reciptDetails"] as $prod_id_key => $prod_id_val) {
+            $data["kcal_calc"][$prod_id_key] = 0;
+            foreach($prod_id_val as $sub_prod) {
+                $data["kcal_calc"][$prod_id_key] += $sub_prod["amount"] * $sub_prod["kcal"];
+            }
+        }
 
         $users = new User();
         foreach ($users->getAll("users") as $user) {
@@ -43,6 +57,7 @@ class Recipes
 
         //tu koszt całej receptury
         // może w osobnej clasie 
+
 
         $foodcost = new Foodcost();
         $data["foodcost"] = $foodcost->getPriceDetailed(date("Y-m-d"));

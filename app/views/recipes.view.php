@@ -41,6 +41,7 @@
                                     <th scope="col">SKU</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Koszt produkcji</th>
+                                    <th scope="col">Kalorie</th>
                                     <th scope="col">Akcja</th>
 
                                 </tr>
@@ -79,6 +80,11 @@
                                         $cost = $data["foodcost"][$value->id][date("Y-m-d")];
                                     }
                                     echo "<td>".roundCost((float)$cost)." zł</td>";
+                                    if(isset($data["kcal_calc"][$value->id])) {
+                                        echo "<td><span title='".$data["kcal_calc"][$value->id]." kcal (wyliczone z przepisu)'>".roundToNearest5($data["kcal_calc"][$value->id])." kcal</span></td>";
+                                    } else {
+                                        echo "<td></td>";
+                                    }
 
                                     if(isset($data["recipes"][$value->id])) {
                                         echo "      <td><a href='" . ROOT . "/recipes/edit/$value->id'>Edytuj</a></td>"; // lub new
