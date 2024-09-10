@@ -46,7 +46,7 @@
                     </div>
                     <?php
                     $hid_show = "";
-                    if($data["product"]->prod_type <> 2) {
+                    if($data["product"]->prod_type == 2) {
                         $hid_show = " hidden";
                     }
                     ?>
