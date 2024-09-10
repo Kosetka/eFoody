@@ -172,8 +172,8 @@ Sos: ".$data["kcal_calc"][$data["kcal_sauce"][$value->id]]." kcal'>".roundToNear
                                     echo $active;
                                     
                                     $cost = "";
-                                    if(isset($data["foodcost"][$value->id][date("Y-m-d")])) {
-                                        $cost = $data["foodcost"][$value->id][date("Y-m-d")];
+                                    if(isset($data["foodcost"][$value->id][date("Y-m-d")]["total"])) {
+                                        $cost = $data["foodcost"][$value->id][date("Y-m-d")]["total"];
                                     }
                                     echo "<td>".roundCost((float)$cost)." zł</td>";
                                     if(isset($data["kcal_calc"][$value->id])) {

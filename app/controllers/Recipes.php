@@ -72,7 +72,7 @@ class Recipes
         $foodcost = new Foodcost();
         $data["foodcost"] = $foodcost->getPriceDetailedWithSauce(date("Y-m-d"));
 
-        //show($data["kcal_calc"]);
+        //show($data["foodcost"]);
         //die;
 
         $this->view('recipes', $data);
@@ -216,7 +216,7 @@ class Recipes
         if(!empty($sauce->getSauce($id))) {
             $data["sauce"] = $sauce->getSauce($id);
         }
-        //show($data["sauce"]);
+    //show($data);die;
 
         $this->view('recipes.edit', $data);
 

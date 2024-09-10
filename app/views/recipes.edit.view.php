@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <?php
-                    //show($data["sauce"]);
+                    if($data["product"]->prod_type <> 2) {
                     ?>
                     <div class="form-group row m-3">
                         <label for="is_sauce" class="col-sm-2 col-form-label">Dodaj sos:</label>
@@ -78,6 +78,9 @@
                             </select>
                         </div>
                     </div>
+                    <?php
+                    }
+                    ?>
                     <div class="">
                         <div class="form-group row m-3">
                             <label for="p_id" class="col-sm-2 col-form-label">Produkt:</label>
@@ -98,8 +101,8 @@
                                             <th>SKU</th>
                                             <th>Jednostka</th>
                                             <th>Ilość</th>
-                                            <th>Cena (za jednostkę)</th>
-                                            <th>Kalorie (jednostka)</th>
+                                            <th>Cena (porcja / jednostka)</th>
+                                            <th>Kalorie (porcja / jednostka)</th>
                                             <th>Akcja</th>
                                         </tr>
                                     </thead>
@@ -180,6 +183,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function addProductToTable(product, quantity) {
         const tr = document.createElement('tr');
+        let pr = (product.subprice === 0 || !isFinite(quantity / product.subprice)) 
+                ? 0 
+                : (quantity / product.subprice).toFixed(6);
+        let prk = (product.kcal === 0 || !isFinite(quantity * product.kcal)) 
+                ? 0 
+                : (quantity * product.kcal).toFixed(1);
         tr.innerHTML = `
             <td>${product.ID}</td>
             <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="<?php echo IMG_ROOT;?>${product.p_photo}"></td>
@@ -187,8 +196,8 @@ document.addEventListener("DOMContentLoaded", function() {
             <td>${product.sku}</td>
             <td>${product.p_unit}</td>
             <td><input type="number" class="form-control" value="${quantity}" min="1"></td>
-            <td>${product.subprice} zł</td>
-            <td>${product.kcal}</td>
+            <td>${pr} zł / ${product.subprice} zł</td>
+            <td>${prk} / ${product.kcal}</td>
             <td><button class="btn btn-danger remove-product">Usuń</button></td>
         `;
         orderedProductsTable.appendChild(tr);
