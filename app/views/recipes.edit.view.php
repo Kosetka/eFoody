@@ -45,9 +45,12 @@
                         </div>
                     </div>
                     <?php
+                    $hid_show = "";
                     if($data["product"]->prod_type <> 2) {
+                        $hid_show = " hidden";
+                    }
                     ?>
-                    <div class="form-group row m-3">
+                    <div class="form-group row m-3" <?=$hid_show;?>>
                         <label for="is_sauce" class="col-sm-2 col-form-label">Dodaj sos:</label>
                         <div class="col-sm-10">
                             <?php
@@ -78,9 +81,6 @@
                             </select>
                         </div>
                     </div>
-                    <?php
-                    }
-                    ?>
                     <div class="">
                         <div class="form-group row m-3">
                             <label for="p_id" class="col-sm-2 col-form-label">Produkt:</label>
@@ -183,9 +183,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function addProductToTable(product, quantity) {
         const tr = document.createElement('tr');
-        let pr = (product.subprice === 0 || !isFinite(quantity / product.subprice)) 
+        let pr = (product.subprice === 0 || !isFinite(quantity * product.subprice)) 
                 ? 0 
-                : (quantity / product.subprice).toFixed(6);
+                : (quantity * product.subprice).toFixed(2);
         let prk = (product.kcal === 0 || !isFinite(quantity * product.kcal)) 
                 ? 0 
                 : (quantity * product.kcal).toFixed(1);
