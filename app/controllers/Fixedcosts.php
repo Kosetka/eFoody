@@ -242,7 +242,7 @@ class Fixedcosts
             $f_start_date = "$year-$monthFormatted-01";
             $f_end_date = date("Y-m-t", strtotime($f_start_date));
             $foodcost = new Foodcost();
-            $data["foodcost"] = $foodcost->getPriceDetailed($f_start_date, $f_end_date);
+            $data["foodcost"] = $foodcost->getPriceDetailedWithSauce($f_start_date, $f_end_date);
             //show($data["foodcost"]);
 
             foreach($data2["prices"] as $price_prod) {
@@ -252,8 +252,8 @@ class Fixedcosts
                         if($price->date_from <= $plan_date && $price->date_to >= $plan_date) {
                             if(isset($plan_prod[$plan_date][$price->p_id]["p_id"])) {
                                 $price_prod_cost = $price->production_cost;
-                                if(isset($data["foodcost"][$price_prod[0]->p_id][$plan_date])) { 
-                                    $price->production_cost = $data["foodcost"][$price_prod[0]->p_id][$plan_date];
+                                if(isset($data["foodcost"][$price_prod[0]->p_id][$plan_date]["total"])) { 
+                                    $price->production_cost = $data["foodcost"][$price_prod[0]->p_id][$plan_date]["total"];
                                 } 
                                 $plan_prod[$plan_date][$price->p_id]["production_cost"] = $price->production_cost;
                                 

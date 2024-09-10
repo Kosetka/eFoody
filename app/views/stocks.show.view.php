@@ -28,6 +28,9 @@
                             <img id="modal-image" src="" alt="Modal Image">
                         </div>
                     </div>
+                    <?php
+    //show($data["user_warehouse"]);
+                    ?>
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -58,10 +61,14 @@
                                                     <td style='white-space: nowrap'>$prod_val->sku</td>";
                                         if(isset($data["sets"][$prod_val->id]) && !empty($data["sets"][$prod_val->id]) ) {
                                             if(is_array($data["sets"][$prod_val->id])) {
-                                                echo "      <td>".$data["sets"][$prod_val->id][0]->amount ." ".$prod_val->p_unit."</td>";
+                                                /*echo "      <td>".$data["sets"][$prod_val->id][0]->amount ."ss ".$prod_val->p_unit."</td>";
                                                 echo '<td class="last-update">'.$data["sets"][$prod_val->id][0]->date.'</td>';
                                                 echo "      <td>".$data["users"][$data["sets"][$prod_val->id][0]->u_id]->first_name." ".$data["users"][$data["sets"][$prod_val->id][0]->u_id]->last_name."</td>";
-                                            //show($data["sets"][$prod_val->id]);
+                                                */
+                                                echo "      <td>0 $prod_val->p_unit</td>";
+                                                echo "      <td colspan='2'>Brak na magazynie</td>";
+                                            
+                                                //show($data["sets"][$prod_val->id]);
                                             } else {
                                                 echo "      <td>".$data["sets"][$prod_val->id]->amount ." ".$prod_val->p_unit."</td>";
                                                 echo '<td class="last-update">'.$data["sets"][$prod_val->id]->date.'</td>';

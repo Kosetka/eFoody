@@ -587,7 +587,7 @@ class Reports
 
         //echo "<br><br><br>".$f_date_from." ".$f_date_to;
         $foodcost = new Foodcost();
-        $data["foodcost"] = $foodcost->getPriceDetailed($f_date_from, $f_date_to);
+        $data["foodcost"] = $foodcost->getPriceDetailedWithSauce($f_date_from, $f_date_to);
 
         //show($data["prices"]);//die;
         //show($data["foodcost"]);//die;

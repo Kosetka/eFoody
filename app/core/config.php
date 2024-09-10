@@ -41,7 +41,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == '192.16
 define('APP_NAME', "My Webiste");
 define('APP_DESC', "Best website on the planet");
 
-define('PRODUCTTYPENAMES', [0 => "Półprodukt", 1 => "Gotowy produkt"]);
+define('PRODUCTTYPENAMES', [0 => "Półprodukt", 1 => "Gotowy produkt", 2 => "Sos własny"]);
 define('COMPANIESTYPE', [0 => "Sprzedażowa", 1 => "Zakupowa"]);
 define('STATUSNAME', [0 => "Nieaktywne", 1 => "Aktywne"]);
 define('VISITSTATUSES', [0 => "Brak sprzedaży", 1 => "Sprzedaż", 2 => "Gratisy rozdane"]);

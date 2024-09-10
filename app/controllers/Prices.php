@@ -25,7 +25,7 @@ class Prices
             }
         }
         $foodcost = new Foodcost();
-        $data["foodcost"] = $foodcost->getPriceDetailed(date("Y-m-d"));
+        $data["foodcost"] = $foodcost->getPriceDetailedWithSauce(date("Y-m-d"));
 
         $this->view('prices', $data);
     }

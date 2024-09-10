@@ -309,7 +309,7 @@ class Sale
 
 
         $users = new User();
-        foreach($users->getAllDrivers() as $user) {
+        foreach($users->getAllDriversActive() as $user) {
             $data["users"][$user->id] = $user;
         }
 

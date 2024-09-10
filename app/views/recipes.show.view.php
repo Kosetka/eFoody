@@ -27,7 +27,7 @@
                     <div class="form-group row m-3">
                         <label for="r_name" class="col-sm-2 col-form-label">Produkt:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="r_name" name="r_name" value="<?php echo $data["product"]->p_name;?>" readonly>
+                            <label type="text" class="form-control" id="r_name" name="r_name"> <?php echo $data["product"]->p_name;?></label>
                             <input type="text" class="form-control" id="p_id" name="p_id" value="<?php echo $data["product"]->id;?>" hidden>
                             <input type="text" class="form-control" id="description" name="description" value="<?php echo $data["product"]->p_name;?>" hidden>
                         </div>
@@ -42,6 +42,22 @@
                                 }
                             ?>
                             <input type="checkbox" disabled class="form-check-input" id="active" name="active" value="1" <?= $checked; ?>>
+                        </div>
+                    </div>
+                    <div class="form-group row m-3">
+                        <label for="is_sauce" class="col-sm-2 col-form-label">Sos:</label>
+                        <div class="col-sm-10">
+                            <?php
+                                $show_checked = "Brak";
+                                if(!empty($data["sauce"])) {
+                                    $show_checked = $data["sauce"][0]->p_name;
+                                }
+                            ?>
+                            <label type="text" class="form-control" id="sauce" name="sauce"> <?php echo $show_checked;?></label>
+                        </div>
+                        <label for="is_sauce" class="col-sm-2 col-form-label">Cena za porcję:</label>
+                        <div class="col-sm-10">
+                            <label type="text" class="form-control" id="sauce" name="sauce"><?php echo roundCost((float)$data["foodcost"][$data["product"]->id][date("Y-m-d")]["sauce"]);?> zł</label>
                         </div>
                     </div>
                     <div class="">
@@ -64,7 +80,7 @@
                                             <th>SKU</th>
                                             <th>Jednostka</th>
                                             <th>Ilość</th>
-                                            <th>Cena (za jednostkę)</th>
+                                            <th>Cena (porcja / jednostka)</th>
                                             <th>Akcja</th>
                                         </tr>
                                     </thead>
@@ -87,6 +103,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const products = [
         <?php
+        $date_today = date("Y-m-d");
         foreach($data["halfproducts"] as $product) {
             $subprices_temp = 0;
             if(isset($data["subprices"][$product['id']]->production_cost)) {
@@ -96,6 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         ?>
     ];
+    console.log(products);
     const initialOrder = [
         <?php
         if(isset($data["planned"])) {
@@ -109,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         ?>
     ];
+    console.log(initialOrder);
 
     const selectElement = document.getElementById('c_id');
     const orderedProductsTable = document.getElementById('orderedProductsTable').querySelector('tbody');
@@ -139,6 +158,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function addProductToTable(product, quantity) {
         const tr = document.createElement('tr');
+        let pr = (product.subprice === 0 || !isFinite(quantity / product.subprice)) 
+                ? 0 
+                : (quantity / product.subprice).toFixed(4);
         tr.innerHTML = `
             <td>${product.ID}</td>
             <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="<?php echo IMG_ROOT;?>${product.p_photo}"></td>
@@ -146,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <td>${product.sku}</td>
             <td>${product.p_unit}</td>
             <td><input type="number" disabled class="form-control" value="${quantity}" min="1"></td>
-            <td>${product.subprice} zł</td>
+            <td>${pr} zł / ${product.subprice} zł</td>
             <td hidden><button class="btn btn-danger remove-product">Usuń</button></td>
         `;
         orderedProductsTable.appendChild(tr);

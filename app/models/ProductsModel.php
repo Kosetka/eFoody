@@ -90,6 +90,11 @@ class ProductsModel
         $query = "select * from $this->table WHERE prod_type = 1";
         return $this->query($query);
     }
+    public function getAllSauces()
+    {
+        $query = "select * from $this->table WHERE prod_type = 2";
+        return $this->query($query);
+    }
     public function getAllFullProductsSorted()
     {
         $query = "select * from $this->table WHERE prod_type = 1 ORDER BY p_name ASC";

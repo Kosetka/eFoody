@@ -53,4 +53,11 @@ class RecipesModel
         WHERE recipes.active = 1;";
         return $this->query($query);
     }
+    public function getFullRecipe($id) {
+        $query = "SELECT recipes.*, recipe_details.*
+        FROM recipes
+        INNER JOIN recipe_details ON recipes.p_id = recipe_details.r_id
+        WHERE recipes.active = 1 AND recipes.p_id = $id";
+        return $this->query($query);
+    }
 }

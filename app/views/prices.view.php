@@ -79,7 +79,7 @@
                                             $no_production_cost = "style='background-color: lightcoral;' ";
                                         }
                                     } else {
-                                        $production_cost = $data["foodcost"][$value->id][date("Y-m-d")];
+                                        $production_cost = $data["foodcost"][$value->id][date("Y-m-d")]["total"];
                                         $margin = roundCost($price - $production_cost) . " zł (" . getMargin($price, $production_cost) . "%)";
                                         $dates = "";
                                     }

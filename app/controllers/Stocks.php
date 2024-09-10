@@ -52,6 +52,7 @@ class Stocks
             $prod = new ProductsQuantity();
             $id = $value["id"];
             $data["sets"][$id] = $prod->getAllSetByWarehouse($key);
+            //show($prod->getAllSetByWarehouse($key));
         }
 
         $users = new UsersModel();
@@ -70,7 +71,7 @@ class Stocks
                 $data["sets"][$res->p_id] = $res;
             }
         }
-
+//show($data["sets"]);//die;
         $this->view('stocks.show', $data);
     }
 

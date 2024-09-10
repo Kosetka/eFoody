@@ -58,6 +58,14 @@ class User
 			WHERE u.u_role IN (3, 5, 10) ;";//AND u.active = 1
 		return $this->query($query);
 	}
+	public function getAllDriversActive()
+	{
+		$query = "SELECT u.*, r.role_name
+			FROM $this->table AS u
+			INNER JOIN roles_name AS r ON r.id = u.u_role
+			WHERE u.u_role IN (3, 5, 10) AND u.active = 1;";//
+		return $this->query($query);
+	}
 	public function getAllUsersWithRole()
 	{
 		$query = "SELECT u.*, r.role_name

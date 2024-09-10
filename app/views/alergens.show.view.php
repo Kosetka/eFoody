@@ -35,33 +35,31 @@
                         } else {
                             $photo = "";
                         }
-                        
-                      echo "  <tr><td>$photo</td>
-                                <td>".$data["product"][$key]->p_name."</td>
-                                <td>".$data["product"][$key]->sku."</td>";
-
-                        $numbers = explode(",", $data["prod_alergens"][$key]->lista_a_id);
-                        $photo2 = "";
-                        $ids = "";
-                        $names = "";
-                        foreach ($numbers as $number) {
-                            $ids .=$number.", ";
-                            $names .=$data["alergens"][$number]->a_name.", ";
-                            if (!empty($data["alergens"][$number]->a_photo)) {
-                                $photo2 .= "<img width='40' height='40' class='obrazek' title='".$data["alergens"][$number]->a_name."' id='imageBox".$key."_".$number."' src='" . IMG_ALERGENS_ROOT . "" . $data["alergens"][$number]->a_photo . "'>";
+                        if(isset($data["product"][$key])) {
+                          echo "  <tr><td>$photo</td>
+                                    <td>".$data["product"][$key]->p_name."</td>
+                                    <td>".$data["product"][$key]->sku."</td>";
+    
+                            $numbers = explode(",", $data["prod_alergens"][$key]->lista_a_id);
+                            $photo2 = "";
+                            $ids = "";
+                            $names = "";
+                            foreach ($numbers as $number) {
+                                $ids .=$number.", ";
+                                $names .=$data["alergens"][$number]->a_name.", ";
+                                if (!empty($data["alergens"][$number]->a_photo)) {
+                                    $photo2 .= "<img width='40' height='40' class='obrazek' title='".$data["alergens"][$number]->a_name."' id='imageBox".$key."_".$number."' src='" . IMG_ALERGENS_ROOT . "" . $data["alergens"][$number]->a_photo . "'>";
+                                }
                             }
+    
+                            echo "<td>".$photo2."</td>";
+                            echo "<td>".substr($names, 0, -2)."</td>";
+                            echo "<td>".substr($ids, 0, -2)."</td>";
+
+                          echo "<td><a href='".ROOT."/products/edit/".$key."' class='btn btn-primary' role='button'>Edytuj</a></td>"; 
+                          //          <a href='".ROOT."/alergens/show/".$key."' class='btn btn-success' role='button'>Pokaż produkty</a>";
+                          echo "</tr>";
                         }
-
-                        echo "<td>".$photo2."</td>";
-                        echo "<td>".substr($names, 0, -2)."</td>";
-                        echo "<td>".substr($ids, 0, -2)."</td>";
-
-
-
-
-                      echo "<td><a href='".ROOT."/products/edit/".$key."' class='btn btn-primary' role='button'>Edytuj</a></td>"; 
-                      //          <a href='".ROOT."/alergens/show/".$key."' class='btn btn-success' role='button'>Pokaż produkty</a>";
-                      echo "</tr>";
                     }
                 }
                 ?>

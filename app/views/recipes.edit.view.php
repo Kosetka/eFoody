@@ -44,6 +44,40 @@
                             <input type="checkbox" class="form-check-input" id="active" name="active" value="1" <?= $checked; ?>>
                         </div>
                     </div>
+                    <?php
+                    //show($data["sauce"]);
+                    ?>
+                    <div class="form-group row m-3">
+                        <label for="is_sauce" class="col-sm-2 col-form-label">Dodaj sos:</label>
+                        <div class="col-sm-10">
+                            <?php
+                                $show_checked = "";
+                                if(!empty($data["sauce"])) {
+                                    $show_checked = "checked";
+                                }
+                            ?>
+                            <input type="checkbox" class="form-check-input" id="is_sauce" name="is_sauce" value="1" <?=$show_checked;?>>
+                        </div>
+                    </div>
+                    <div class="form-group row m-3" id="sauce-selection" hidden>
+                        <label for="sauce" class="col-sm-2 col-form-label">Sosy:</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="sauce" name="sauce" required>
+                                <?php
+                                
+                                    foreach($data["sauces"] as $sauce) {
+                                        $sel = "";
+                                        if(isset($data["sauce"])) {
+                                            if($sauce["id"] == $data["sauce"][0]->r_id) {
+                                                $sel = " selected";
+                                            }
+                                        }
+                                        echo '<option value="' . $sauce["id"] . '" ' . $sel . '>' . $sauce["p_name"] . '</option>';
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="">
                         <div class="form-group row m-3">
                             <label for="p_id" class="col-sm-2 col-form-label">Produkt:</label>
@@ -251,6 +285,25 @@ document.addEventListener("DOMContentLoaded", function() {
         inputActive.value = activeValue;
         form.appendChild(inputActive);
 
+        // Obsługa checkboxa "Dodaj sos"
+        const sauceCheckbox = document.getElementById('is_sauce');
+        const sauceSelected = sauceCheckbox.checked ? document.getElementById('sauce').value : '';
+
+        // Dodaj informacje o sosie do formularza
+        const inputSauceChecked = document.createElement('input');
+        inputSauceChecked.type = 'hidden';
+        inputSauceChecked.name = 'is_sauce';
+        inputSauceChecked.value = sauceCheckbox.checked ? '1' : '0';
+        form.appendChild(inputSauceChecked);
+
+        if (sauceSelected) {
+            const inputSauce = document.createElement('input');
+            inputSauce.type = 'hidden';
+            inputSauce.name = 'selected_sauce';
+            inputSauce.value = sauceSelected;
+            form.appendChild(inputSauce);
+        }
+
         // Dodaj formularz do body dokumentu i wyślij
         document.body.appendChild(form);
         form.submit();
@@ -258,4 +311,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
         </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const sauceCheckbox = document.getElementById('is_sauce');
+        const sauceSelection = document.getElementById('sauce-selection');
+        
+        // Funkcja do ukrywania/pokazywania sosów
+        function toggleSauceSelection() {
+            if (sauceCheckbox.checked) {
+                sauceSelection.removeAttribute('hidden');
+            } else {
+                sauceSelection.setAttribute('hidden', true);
+            }
+        }
+
+        // Sprawdź stan początkowy przy ładowaniu strony
+        toggleSauceSelection();
+        
+        // Dodaj nasłuchiwanie na kliknięcia checkboxa
+        sauceCheckbox.addEventListener('change', toggleSauceSelection);
+    });
+</script>
         <?php require_once 'landings/footer.view.php' ?>

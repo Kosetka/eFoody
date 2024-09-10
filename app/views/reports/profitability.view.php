@@ -213,13 +213,13 @@ if (isset($data["planned"])) {
                 foreach ($data["prices"][$plan["p_id"]] as $price_temp) { //ustawienie cen wyproduwanych produktów
                     if ($plan["date_producted"] >= $price_temp->date_from && $plan["date_producted"] <= $price_temp->date_to) {
 
-                        if(!isset($data["foodcost"][$plan["p_id"]][$plan["date_producted"]])) {
+                        if(!isset($data["foodcost"][$plan["p_id"]][$plan["date_producted"]]["total"])) {
                             $prices_producted_cost_array[$plan["p_id"]] += $price_temp->total_production_cost * $plan["amount"];
                             $prices_producted_cost_array["total"] += $price_temp->total_production_cost * $plan["amount"];
                         } else {
                             //echo $plan["date_producted"]." ".$plan["p_id"]." - ".$data["foodcost"][$plan["p_id"]][$plan["date_producted"]]." ".$plan["amount"] ."<br>";
-                            $prices_producted_cost_array[$plan["p_id"]] += (float) $data["foodcost"][$plan["p_id"]][$plan["date_producted"]] * $plan["amount"];
-                            $prices_producted_cost_array["total"] += (float) $data["foodcost"][$plan["p_id"]][$plan["date_producted"]] * $plan["amount"];
+                            $prices_producted_cost_array[$plan["p_id"]] += (float) $data["foodcost"][$plan["p_id"]][$plan["date_producted"]]["total"] * $plan["amount"];
+                            $prices_producted_cost_array["total"] += (float) $data["foodcost"][$plan["p_id"]][$plan["date_producted"]]["total"] * $plan["amount"];
                         }
                     }
                 }
