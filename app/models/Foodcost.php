@@ -133,10 +133,12 @@ class Foodcost
                 $temp[$one->p_id][] = $one;
             }
         }
-
+        $data["kcal_sauce"] = [];
         $sauce = new Sauce();
-        foreach($sauce->getSauces() as $sauce) {
-            $data["kcal_sauce"][$sauce->p_id] = $sauce->r_id;
+        if(!empty($sauce->getSauces())) {
+            foreach($sauce->getSauces() as $sauce) {
+                $data["kcal_sauce"][$sauce->p_id] = $sauce->r_id;
+            }
         }
         
 
@@ -163,13 +165,15 @@ class Foodcost
                 
             }
         }
-        foreach($data["kcal_sauce"] as $sau_key => $sau_value) {
-            $date_temp = $dateFrom;
-                while($date_temp <= $date_to) {
-                    $result[$sau_key][$date_temp]["sauce"] = $result[$sau_value][$date_temp]["cost"];
-                    $result[$sau_key][$date_temp]["total"] = $result[$sau_key][$date_temp]["cost"] + $result[$sau_key][$date_temp]["sauce"];
-                    $date_temp = date('Y-m-d', strtotime($date_temp . ' +1 day'));
-                }
+        if(!empty($data["kcal_sauce"])) {
+            foreach($data["kcal_sauce"] as $sau_key => $sau_value) {
+                $date_temp = $dateFrom;
+                    while($date_temp <= $date_to) {
+                        $result[$sau_key][$date_temp]["sauce"] = $result[$sau_value][$date_temp]["cost"];
+                        $result[$sau_key][$date_temp]["total"] = $result[$sau_key][$date_temp]["cost"] + $result[$sau_key][$date_temp]["sauce"];
+                        $date_temp = date('Y-m-d', strtotime($date_temp . ' +1 day'));
+                    }
+            }
         }
         return $result;
     }
