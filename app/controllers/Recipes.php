@@ -58,8 +58,10 @@ class Recipes
         }
 
         $sauce = new Sauce();
-        foreach($sauce->getSauces() as $sauce) {
-            $data["kcal_sauce"][$sauce->p_id] = $sauce->r_id;
+        if(!empty($sauce->getSauces())) {
+            foreach($sauce->getSauces() as $sauce) {
+                $data["kcal_sauce"][$sauce->p_id] = $sauce->r_id;
+            }
         }
 
         $users = new User();
