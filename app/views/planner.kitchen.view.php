@@ -116,9 +116,15 @@
                                     }
                                 }
                             }
+                            foreach($data["sauces"] as $sauce_key => $sauce_value) {
+                                if($p == $sauce_key) { // produkt ma przepis
+                                    foreach($data["recipes"][$sauce_value] as $kk => $vv) {
+                                        $recipes[$kk] += $vv->amount * $value["amount"]; //tu pomnożyć razy ilości z planów
+                                    }
+                                }
+                            }
                         }
                     }
-                    //show($recipes);
                 ?>
                 <div class="alert alert-info">
                     <h2>UWAGA!</h2>

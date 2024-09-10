@@ -546,6 +546,13 @@ class Planner
             }
         }
 
+        $sauce = new Sauce();
+        if(!empty($sauce->getSauces())) {
+            foreach($sauce->getSauces() as $sauce) {
+                $data["sauces"][$sauce->p_id] = $sauce->r_id;
+            }
+        }
+
         $data["date_plan"] = $date;
 
         $this->view('planner.kitchen', $data);
