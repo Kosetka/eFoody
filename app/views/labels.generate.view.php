@@ -61,7 +61,7 @@
             $prod_name = substr($prod_name, 0, 51) . '...';
         }
         $dateTime = DateTime::createFromFormat('d.m.Y', $date);
-        $dateTime->modify('+1 day');
+        $dateTime->modify('+2 day');
         $newDate = $dateTime->format('d.m.Y');
         $pdf->SetXY(15, 10);
         $pdf->Cell(0, 10, $term . $newDate, 0, 1);
