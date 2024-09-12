@@ -55,9 +55,13 @@
                             ?>
                             <label type="text" class="form-control" id="sauce" name="sauce"> <?php echo $show_checked;?></label>
                         </div>
-                        <label for="is_sauce" class="col-sm-2 col-form-label">Cena za porcję:</label>
+                        <label for="is_sauce" class="col-sm-2 col-form-label">Cena za porcję sosu:</label>
                         <div class="col-sm-10">
-                            <label type="text" class="form-control" id="sauce" name="sauce"><?php echo roundCost((float)$data["foodcost"][$data["product"]->id][date("Y-m-d")]["sauce"]);?> zł</label>
+                            <?php
+                                if(isset($data["foodcost"][$data["product"]->id])) {
+                                    echo '<label type="text" class="form-control" id="sauce" name="sauce">'.roundCost((float)$data["foodcost"][$data["product"]->id][date("Y-m-d")]["sauce"]).' zł</label>';
+                                }
+                            ?>
                         </div>
                     </div>
                     <div class="">
