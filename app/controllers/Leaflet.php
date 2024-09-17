@@ -118,5 +118,84 @@ class Leaflet
         $data["date"] = date("Y-m-d");
         $this->view('leaflet.index', $data);
     }
+    public function add()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $target_dir = IMG_ROOT_UPLOAD;
+            $uploadOk = 1;
+            $file_name = "";
+            
+            $date = $_POST["selectedDate"];
+        
+            // Pobierz rozszerzenie pliku
+            $imageFileType = strtolower(pathinfo($_FILES["fileInput"]["name"], PATHINFO_EXTENSION));
+            
+            if (!empty($_FILES["fileInput"]["name"])) {
+                // Nowa nazwa pliku w formacie data_menu.xxx
+                $file_name = $date . "_menu." . $imageFileType;
+                $target_file = $target_dir . $file_name;
+                
+                // Sprawdzenie, czy plik jest rzeczywiście obrazem
+                $check = getimagesize($_FILES["fileInput"]["tmp_name"]);
+                if ($check !== false) {
+                    $data['errors'] = "File is an image - " . $check["mime"] . ".";
+                    $uploadOk = 1;
+                } else {
+                    $data['errors'] = "File is not an image.";
+                    $uploadOk = 0;
+                }
+        
+                // Check file size
+                if ($_FILES["fileInput"]["size"] > 5000000) {
+                    $data['errors'] = "Sorry, your file is too large.";
+                    $uploadOk = 0;
+                }
+        
+                // Allow certain file formats
+                if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                    $data['errors'] = "Sorry, only JPG, JPEG, PNG files are allowed.";
+                    $uploadOk = 0;
+                }
+        
+                // Sprawdzenie, czy wszystko jest OK
+                if ($uploadOk == 0) {
+                    $data['errors'] = "Sorry, your file was not uploaded.";
+                } else {
+                    // Próba przesłania pliku
+                    if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $target_file)) {
+                        $data['errors'] = "The file " . htmlspecialchars($file_name) . " has been uploaded.";
+                        $_POST["p_photo"] = $file_name;
+                    } else {
+                        $data['errors'] = "Sorry, there was an error uploading your file.";
+                    }
+                }
+            }
+
+            $ll = new Leafletmodel();
+            $ll->delete($date, "date");
+            if ($uploadOk == 1) {
+                $ll->insert([
+                    "img_name" => $file_name,
+                    "date" => $date,
+                    "u_id" => $_SESSION["USER"]->id
+                ]);
+            }
+        }
+
+
+        $data["leaflet"] = [];
+        $leaflets = new Leafletmodel();
+        if(!empty($leaflets->getLeafletsWeekly())) {
+            foreach($leaflets->getLeafletsWeekly() as $leaflet) {
+                $data["leaflet"][$leaflet->date] = $leaflet;
+            }
+        }
+
+        $this->view('leaflet.add', $data);
+    }
 
 }
