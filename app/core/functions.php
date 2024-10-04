@@ -2,78 +2,79 @@
 
 function show($stuff)
 {
-	echo "<pre>";
-	print_r($stuff);
-	echo "</pre>";
+    echo "<pre>";
+    print_r($stuff);
+    echo "</pre>";
 }
 
 function esc($str)
 {
-	return htmlspecialchars($str);
+    return htmlspecialchars($str);
 }
 
 function redirect($path)
 {
-	header("Location: " . ROOT . "/" . $path);
-	die;
+    header("Location: " . ROOT . "/" . $path);
+    die;
 }
 
 function getYourData(string $param)
 {
-	$arr = (array) $_SESSION["USER"];
-	return $arr[$param];
+    $arr = (array) $_SESSION["USER"];
+    return $arr[$param];
 }
 
 function getMargin($p, $c)
 {
-    if($c == 0) {
+    if ($c == 0) {
         return 0;
     }
-    if($p == 0) {
+    if ($p == 0) {
         return 0;
     }
     if ($c < 0) {
-        return round(-($p - $c) / $p * 100, 2);    
+        return round(-($p - $c) / $p * 100, 2);
     }
     return round(($p - $c) / $p * 100, 2);
 }
 function showPrice($p, $c)
 {
-    if($c == 0) {
+    if ($c == 0) {
         return 0;
     }
-	return round($p / $c, 2);
+    return round($p / $c, 2);
 }
 function getPercent($p, $c, $cel = 2)
 {
-	$ret = 0;
-	if($c > 0) {
-		$ret = round($p / $c * 100, $cel);
-	}
-	return $ret;
+    $ret = 0;
+    if ($c > 0) {
+        $ret = round($p / $c * 100, $cel);
+    }
+    return $ret;
 }
 
 function roundUp($number)
 {
     // Mnożenie przez 100, zaokrąglanie w górę, a następnie dzielenie przez 100
     $rounded = ceil($number * 100) / 100;
-    
+
     // Formatowanie liczby do dwóch miejsc po przecinku
     return number_format($rounded, 2, '.', '');
 }
 function roundCost($number)
 {
     // Zaokrąglanie liczby do dwóch miejsc po przecinku
-    if(is_string($number)) {
+    if (is_string($number)) {
         return 0;
     }
     $rounded = round($number, 2);
-    
+
     // Formatowanie liczby do dwóch miejsc po przecinku
     return number_format($rounded, 2, '.', '');
 }
 
-function buildHierarchy($data) {
+function buildHierarchy($data)
+{
     $tree = [];
     $indexed = [];
 
@@ -95,7 +96,8 @@ function buildHierarchy($data) {
     return $tree;
 }
 
-function generateTree($items) {
+function generateTree($items)
+{
     $html = '<ul class="tree">';
     foreach ($items as $item) {
         $html .= '<li class="tree">';
@@ -110,16 +112,17 @@ function generateTree($items) {
     return $html;
 }
 
-function generateTreeEditing($items) {
+function generateTreeEditing($items)
+{
     $html = '<ul class="tree">';
     foreach ($items as $item) {
         $html .= '<li class="tree">';
         //$html .= '<input type="checkbox" id="checkbox-' . $item['id'] . '" class="checkbox tree" data-id="' . $item['id'] . '" />';
         $color = "";
-        if($item["l_active"] == 0) {
+        if ($item["l_active"] == 0) {
             $color = ' style="color: red; text-decoration: line-through;" ';
         }
-        $html .= '<label class="tree" '.$color.'>' . $item['l_name'] . ' [<a style="color: green;" href="'.ROOT.'/tabs/add/'.$item["id"].'">Dodaj</a>] [<a href="'.ROOT.'/tabs/edit/'.$item["id"].'">Edytuj</a>]</label>';
+        $html .= '<label class="tree" ' . $color . '>' . $item['l_name'] . ' [<a style="color: green;" href="' . ROOT . '/tabs/add/' . $item["id"] . '">Dodaj</a>] [<a href="' . ROOT . '/tabs/edit/' . $item["id"] . '">Edytuj</a>]</label>';
         if (!empty($item['children'])) {
             $html .= generateTreeEditing($item['children']);
         }
@@ -129,12 +132,13 @@ function generateTreeEditing($items) {
     return $html;
 }
 
-function isDateInRange($date) { //do SMS
+function isDateInRange($date)
+{ //do SMS
     $inputDate = new DateTime($date);
     $now = new DateTime();
 
     // Dni tygodnia: 0 (niedziela) - 6 (sobota)
-    $today = (int)$now->format('w');
+    $today = (int) $now->format('w');
 
     if ($today >= 2 && $today <= 5) { // od wtorku do piątku
         $start = (clone $now)->setTime(15, 0, 0)->modify('-1 day');
@@ -147,7 +151,8 @@ function isDateInRange($date) { //do SMS
     return $inputDate >= $start && $inputDate <= $end;
 }
 
-function getWeekends($year) {
+function getWeekends($year)
+{
     $weekends = [];
     $date = new DateTime("$year-01-01");
 
@@ -163,22 +168,74 @@ function getWeekends($year) {
     return $weekends;
 }
 
-function changePolishChars($tekst) {
-    $polskieZnaki = array('ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż', 
-                          'Ą', 'Ć', 'Ę', 'Ł', 'Ń', 'Ó', 'Ś', 'Ź', 'Ż');
-    $zwykleZnaki = array('a', 'c', 'e', 'l', 'n', 'o', 's', 'z', 'z',
-                         'A', 'C', 'E', 'L', 'N', 'O', 'S', 'Z', 'Z');
+function changePolishChars($tekst)
+{
+    $polskieZnaki = array(
+        'ą',
+        'ć',
+        'ę',
+        'ł',
+        'ń',
+        'ó',
+        'ś',
+        'ź',
+        'ż',
+        'Ą',
+        'Ć',
+        'Ę',
+        'Ł',
+        'Ń',
+        'Ó',
+        'Ś',
+        'Ź',
+        'Ż'
+    );
+    $zwykleZnaki = array(
+        'a',
+        'c',
+        'e',
+        'l',
+        'n',
+        'o',
+        's',
+        'z',
+        'z',
+        'A',
+        'C',
+        'E',
+        'L',
+        'N',
+        'O',
+        'S',
+        'Z',
+        'Z'
+    );
     return strtr($tekst, array_combine($polskieZnaki, $zwykleZnaki));
 }
 
-function subYear($date) {
+function getPayment($czasWSekundach, $stawkaGodzinowa)
+{
+    if ($czasWSekundach == 0 || $stawkaGodzinowa == 0) {
+        return '0.00';
+    }
+
+    $czasWGodzinach = $czasWSekundach / 3600;
+    $zarobki = $czasWGodzinach * $stawkaGodzinowa;
+
+    return number_format($zarobki, 2, '.', '');
+}
+
+function subYear($date)
+{
     return substr($date, 11);
 }
-function subDay($date) {
+function subDay($date)
+{
     return substr($date, 0, 10);
 }
 
-function showInHours($seconds) {
+function showInHours($seconds)
+{
     $hours = floor($seconds / 3600);
     $minutes = floor(($seconds % 3600) / 60);
     $seconds = $seconds % 60;
@@ -187,22 +244,24 @@ function showInHours($seconds) {
     return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 }
 
-function timeDiffInSeconds($time1, $time2) {
+function timeDiffInSeconds($time1, $time2)
+{
     $datetime1 = strtotime($time1);
     $datetime2 = strtotime($time2);
-    
+
     if ($datetime1 === false || $datetime2 === false) {
         // W przypadku nieprawidłowego formatu czasu, zwróć 0 lub rzuć wyjątek, zależnie od wymagań
         return 0;
     }
-    
+
     // Oblicz różnicę czasu w sekundach
     $diffInSeconds = abs($datetime2 - $datetime1);
-    
+
     return $diffInSeconds;
 }
 
-function printDaysOfMonth($month, $year) {
+function printDaysOfMonth($month, $year)
+{
     // Utwórz obiekt DateTime dla pierwszego dnia podanego miesiąca
     $date = DateTime::createFromFormat('Y-m-d', "$year-$month-01");
 
@@ -213,7 +272,7 @@ function printDaysOfMonth($month, $year) {
     for ($day = 1; $day <= $daysInMonth; $day++) {
         // Ustaw datę na odpowiedni dzień miesiąca
         $date->setDate($year, $month, $day);
-        
+
         // Wypisz datę w formacie Y-m-d
         echo $date->format('Y-m-d') . "<br>";
     }
@@ -228,7 +287,8 @@ function removeLeadingZero($str)
     return $str;
 }
 
-function removeElement(&$array, $id, $color) {
+function removeElement(&$array, $id, $color)
+{
     foreach ($array as $key => $item) {
         if ($item['id'] === $id && $item['color'] === $color) {
             unset($array[$key]);
@@ -236,7 +296,8 @@ function removeElement(&$array, $id, $color) {
     }
 }
 
-function timeDiff($datetime1, $datetime2) {
+function timeDiff($datetime1, $datetime2)
+{
     // Tworzenie obiektów DateTime z przekazanych parametrów
     $date1 = new DateTime($datetime1);
     $date2 = new DateTime($datetime2);
@@ -248,40 +309,44 @@ function timeDiff($datetime1, $datetime2) {
     return $interval->format('%H:%I:%S');
 }
 
-function checkWords($text1, $text2) {
+function checkWords($text1, $text2)
+{
     $wordsToCheck = ['Wernera', 'Barlickiego', 'Rapackiego'];
-    
+
     foreach ($wordsToCheck as $word) {
         if (strpos($text1, $word) !== false && strpos($text2, $word) !== false) {
-            return true; 
+            return true;
         }
     }
 
     return false;
 }
-function checkWord($text1) {
+function checkWord($text1)
+{
     $wordsToCheck = ['Wernera', 'Barlickiego', 'Rapackiego'];
-    
+
     foreach ($wordsToCheck as $word) {
         if (strpos($text1, $word) !== false) {
-            return true; 
+            return true;
         }
     }
     if ($text1 == 0) {
-        return true; 
+        return true;
     }
 
     return false;
 }
 
-function timeToSeconds($time) {
+function timeToSeconds($time)
+{
     list($hours, $minutes, $seconds) = explode(':', $time);
 
     $totalSeconds = ($hours * 3600) + ($minutes * 60) + $seconds;
 
     return $totalSeconds;
 }
-function secondsToTime($seconds) {
+function secondsToTime($seconds)
+{
     $hours = floor($seconds / 3600);
 
     $minutes = floor(($seconds % 3600) / 60);
@@ -291,7 +356,8 @@ function secondsToTime($seconds) {
     return sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
 }
 
-function averageStopTime($seconds, $stops) {
+function averageStopTime($seconds, $stops)
+{
     if ($stops <= 0) {
         return false;
     }
@@ -304,14 +370,16 @@ function averageStopTime($seconds, $stops) {
 
     return sprintf('%02d:%02d:%02d', $hours, $minutes, $remainingSeconds);
 }
-function avgDistance($distance, $stops) {
+function avgDistance($distance, $stops)
+{
     if ($stops <= 0) {
         return false;
     }
-    return round(($distance / $stops) / 1000,1);
+    return round(($distance / $stops) / 1000, 1);
 }
 
-function amountPerPoint($amount, $points) {
+function amountPerPoint($amount, $points)
+{
     if ($points <= 0) {
         return 0;
     }
@@ -338,7 +406,8 @@ function roundToNearest5($number)
     return $rounded;
 }
 
-function getPolishMonthName($monthNumber) {
+function getPolishMonthName($monthNumber)
+{
     // Tablica z polskimi nazwami miesięcy
     $polishMonths = [
         1 => "Styczeń",
