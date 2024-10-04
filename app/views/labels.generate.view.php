@@ -65,7 +65,7 @@
     $imageHeight = 16;
 
     $prod_type = substr($sku,0,4);
-    if($prod_type == "1-01" || $date_show_to > 0) {
+    if($date_show_to > 0) {
         if (strlen($prod_name) > 51) {
             $prod_name = substr($prod_name, 0, 51) . '...';
         }
