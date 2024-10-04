@@ -133,6 +133,7 @@ class Labels
             $data["prod_name"] = $temp["product"]->p_name;
             $data["kcal"] = $temp["product"]->kcal;
             $data["sku"] = $temp["product"]->sku;
+            $data["id"] = $temp["product"]->id;
             $pid = $temp["product"]->id;
             $alergens = new Productalergens();
             if(!empty($alergens->getByProduct($pid)) ) {

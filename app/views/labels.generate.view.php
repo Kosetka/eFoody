@@ -7,6 +7,8 @@
 
     $sku = $data["sku"];
     $prod_name = $data["prod_name"];
+    $prod_name_type = substr($prod_name,0,7);
+    $prod_name_nal = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $prod_name);
 
     $array = explode(", ", $data["alergens"]);
     sort($array);
@@ -56,7 +58,7 @@
     $imageHeight = 16;
 
     $prod_type = substr($sku,0,4);
-    if($prod_type == "1-01") {
+    if($prod_type == "1-01" || $prod_name_type == "Granola" || $data["id"] == 14) {
         if (strlen($prod_name) > 51) {
             $prod_name = substr($prod_name, 0, 51) . '...';
         }
