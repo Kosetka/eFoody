@@ -61,6 +61,7 @@
                                             <th>% Realizacji</th>
                                             <th>Alergeny</th>
                                             <th>Kalorie</th>
+                                            <th>Termin ważności</th>
                                             <th>Akcje</th>
                                         </tr>
                                     </thead>
@@ -103,10 +104,14 @@
                                                 } else if($product["amount"] > $prod_amo) {
                                                     $color = "red";
                                                 }
-
+                                                $show_prod_date = "";
+                                                if($data["fullproducts"][$product["p_id"]]["show_prod_date"] == 1) {
+                                                    $show_prod_date = "TAK";
+                                                }
                                                 echo '<td style="background: '.$color.'">'.getPercent($prod_amo, $product["amount"]).'%</td>
                                                 <td>'.substr($ids, 0, -2).'</td>
-                                                <td>'.$data["fullproducts"][$product["p_id"]]["kcal"].'</td> '; //// TU ZMIENIĆ
+                                                <td>'.$data["fullproducts"][$product["p_id"]]["kcal"].'</td>
+                                                <td>'.$show_prod_date.'</td> '; 
                                                 echo '<td id="p_name_'.$product["p_id"].'"><a class="btn btn-primary" href=" ' . ROOT . '/assets/labels/'.$data["fullproducts"][$product["p_id"]]["sku"].'.lbx"
                                                 role="button" title="Etykieta"><i class="fa-solid fa-tag"></i></a>
                                                  
@@ -129,6 +134,7 @@
                                             <th><?=$tot_plan;?></th>
                                             <th><?=$tot_pro;?></th>
                                             <th><?=getPercent($tot_pro, $tot_plan)?>%</th>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                         </tr>

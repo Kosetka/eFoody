@@ -54,6 +54,12 @@
                             <input type="checkbox" class="form-check-input" id="vege" name="vege" value="0">
                         </div>
                     </div>
+                    <div class="form-group row m-3">
+                        <label for="show_prod_date" class="col-sm-2 col-form-label">Pokaż datę ważności:</label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" class="form-check-input" id="show_prod_date" name="show_prod_date" value="0">
+                        </div>
+                    </div>
                     <div class="form-group row m-3" hidden>
                         <label for="p_description" class="col-sm-2 col-form-label">Opis:</label>
                         <div class="col-sm-10">

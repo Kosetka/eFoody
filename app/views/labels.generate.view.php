@@ -5,6 +5,13 @@
     require(ROOT_PLUGINS.'fpdf/fpdf.php');//require('fpdf/fpdf.php');
     include(ROOT_PLUGINS.'phpqrcode/qrlib.php');//include('phpqrcode/qrlib.php');
 
+
+    if($data["show_prod_date"] == 1) {
+        $date_show_to = 2; // ile dni terminu przydatku
+    } else {
+        $date_show_to = 0;
+    }
+
     $sku = $data["sku"];
     $prod_name = $data["prod_name"];
     $prod_name_type = substr($prod_name,0,7);
@@ -58,7 +65,7 @@
     $imageHeight = 16;
 
     $prod_type = substr($sku,0,4);
-    if($prod_type == "1-01" || $prod_name_type == "Granola" || $data["id"] == 14) {
+    if($prod_type == "1-01" || $date_show_to > 0) {
         if (strlen($prod_name) > 51) {
             $prod_name = substr($prod_name, 0, 51) . '...';
         }

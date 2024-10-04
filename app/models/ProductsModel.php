@@ -22,7 +22,8 @@ class ProductsModel
         'prod_type',
         'kcal',
         'friendly_name',
-        'vege'
+        'vege',
+        'show_prod_date'
     ];
 
     public function validate($data)

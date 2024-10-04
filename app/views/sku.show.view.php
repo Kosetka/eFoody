@@ -48,6 +48,7 @@
                                     <th scope="col">Alergeny</th>
                                     <th scope="col">Jednostka</th>
                                     <th scope="col">Kalorie</th>
+                                    <th scope="col">Termin ważności</th>
                                     <th scope="col">Typ produktu</th>
                                     <th scope="col" colspan="2">Akcja</th>
                                 </tr>
@@ -76,6 +77,10 @@
                                             if($product->vege == 1) {
                                                 $vege = "<span style='color: green; font-weight: bold;'>VEGE </span>";
                                             }
+                                            $show_prod_date = "";
+                                            if($product->show_prod_date == 1) {
+                                                $show_prod_date = "TAK";
+                                            }
                                             echo "  <tr>
                                                         <th scope='row'>$product->id</th>
                                                         <td>$product->sku</td>
@@ -85,6 +90,7 @@
                                                         <td>".substr($ids, 0, -2)."</td>
                                                         <td>$product->p_unit</td>
                                                         <td>$product->kcal</td>
+                                                        <td>$show_prod_date</td>
                                                         <td>" . PRODUCTTYPENAMES[$product->prod_type] . "</td>
                                                         <td><a class='btn btn-info' href=' " . ROOT . "/products/edit/$product->id'
                                                                 role='button'>Edytuj</a></td>";

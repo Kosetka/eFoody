@@ -147,6 +147,11 @@ class Products
                 } else {
                     $_POST["vege"] = 0;
                 }
+                if(isset($_POST["show_prod_date"])) {
+                    $_POST["show_prod_date"] = 1;
+                } else {
+                    $_POST["show_prod_date"] = 0;
+                }
                 if(!isset($_POST["friendly_name"]) && $_POST["friendly_name"] == "") {
                     $_POST["friendly_name"] = NULL;
                     //unset($_POST["friendly_name"]);
@@ -249,6 +254,11 @@ class Products
                     $_POST["vege"] = 1;
                 } else {
                     $_POST["vege"] = 0;
+                }
+                if(isset($_POST["show_prod_date"])) {
+                    $_POST["show_prod_date"] = 1;
+                } else {
+                    $_POST["show_prod_date"] = 0;
                 }
                 if(!isset($_POST["friendly_name"]) && $_POST["friendly_name"] == "") {
                     $_POST["friendly_name"] = NULL;
