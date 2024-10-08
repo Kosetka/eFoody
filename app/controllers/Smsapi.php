@@ -24,6 +24,9 @@ class Smsapi
 
             $sms = new Smsapimodel;
             $sms->insert(["sms_from" => "$sms_from", "sms_to" => "$sms_to", "sms_date" => "$sms_date", "sms_text" => "$sms_text", "username"=>"$username"]);
+            
+            $dc = new Discord;
+            $dc->sendMsg("Nowa wiadomość SMS z numeru: $sms_from");
 
             echo "OK"; //wymagane przez API
         } else {
@@ -72,7 +75,10 @@ class Smsapi
         $date_from = $dateObject->format('Y-m-d');
 
         $sms = new Smsapimodel;
-        $data["sms"] = $sms->getSMS($date_from, $date);
+        $data["sms"] = $sms->getSMSFrom($date_from);
+
+        $cf = new Contactform;
+        $data["cf"] = $cf->getFrom($date_from);
 
 //show($data["sms"]);
         $this->view('smsapi.show', $data);

@@ -55,13 +55,18 @@ class Login
 						}
 						$_SESSION['CITIES'] = $data2;
 
-
+						$dc = new Discord;
+            			$dc->logins(1, ["first_name" => $_SESSION['USER']->first_name, "last_name" => $_SESSION['USER']->last_name, "role" => $_SESSION['ROLE']->role_name]);
 						redirect('home');
 					} else {
 						$user->errors['email'] = "Twoje konto jest zablokowane!";
+						$dc = new Discord;
+            			$dc->logins(2, ["first_name" => $row->first_name, "last_name" => $row->last_name]);
 					}
 				} else {
 					$user->errors['email'] = "Błędne adres e-mail lub hasło!";
+					$dc = new Discord;
+					$dc->logins(3, []);
 				}
 			} else {
 				$user->errors['email'] = "Logowanie nieudane!";

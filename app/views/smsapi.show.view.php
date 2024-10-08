@@ -16,7 +16,7 @@
                         $date = $data["date_plan"];
                     }
                 ?>
-                    <h2 class="">Odebrane SMS z dnia: <?php echo $date;?></h2>
+                    <h2 class="">Odebrane wiadomości od dnia: <?php echo $date;?></h2>
                     <div class="form-group row m-3">
                         <form method='get'>
                             <div class="col-sm-12" style='display: flex'>
@@ -54,8 +54,10 @@
                                 <table class="table table-bordered" id="orderedProductsTable">
                                     <thead>
                                         <tr>
-                                            <th>Data odebrania SMS</th>
+                                            <th>Źródło</th>
+                                            <th>Data odebrania</th>
                                             <th>Numer telefonu</th>
+                                            <th>E-mail</th>
                                             <th>Firma</th>
                                             <th>Przyjazna nazwa</th>
                                             <th>Adres</th>
@@ -65,6 +67,7 @@
                                     </thead>
                                     <tbody>
                                         <?php
+                                        $is_msg = false;
                                         if(!empty($data["sms"])) {
                                             foreach($data["sms"] as $sms) {
                                                 $sms_from = substr($sms->sms_from,2);
@@ -78,8 +81,10 @@
                                                 if($sms->id == $data["guardian"] || $data["guardian"]==0) {
                                                     echo "<tr>";
                                                     echo "
+                                                    <td>SMS</td>
                                                     <td>$sms->date</td>
                                                     <td>$sms_from</td>
+                                                    <td>$sms->email</td>
                                                     <td>$sms->full_name</td>
                                                     <td>$sms->friendly_name</td>
                                                     <td>$sms->address</td>
@@ -88,8 +93,32 @@
                                                     echo "</tr>";
                                                 }
                                             }
-                                        } else {
-                                            echo "<tr><td colspan='6'>Brak wiadomości SMS</td></tr>";
+                                            $is_msg = true;
+                                        } 
+                                        if(!empty($data["cf"])) {
+                                            foreach($data["cf"] as $sms) {
+                                                if($sms->id == $data["guardian"] || $data["guardian"]==0) {
+                                                    echo "<tr>";
+                                                    echo "
+                                                    <td>e-mail</td>
+                                                    <td>$sms->date</td>
+                                                    <td>$sms->phone</td>
+                                                    <td>$sms->email</td>
+                                                    <td></td>
+                                                    <td>$sms->full_name</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>$sms->txt</td>";
+                                                    echo "</tr>";
+                                                }
+                                            }
+                                            $is_msg = true;
+                                        } 
+
+
+
+                                        if(!$is_msg) {
+                                            echo "<tr><td colspan='8'>Brak wiadomości</td></tr>";
                                         }
                                         ?>
                                     </tbody>

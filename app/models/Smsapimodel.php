@@ -62,4 +62,30 @@ class Smsapimodel
     
         return $this->query($query);
     }
+    public function getSMSFrom($date_from) {
+        $query = "
+        SELECT 
+            sms_api.date,
+            sms_api.sms_from,
+            sms_api.sms_text,
+            companies.full_name,
+            companies.friendly_name,
+            companies.address,
+            companies.email,
+            users.first_name,
+            users.last_name,
+            users.id
+        FROM 
+            sms_api
+        LEFT JOIN 
+            companies_phone ON SUBSTRING(sms_api.sms_from, 3) = companies_phone.c_phone
+        LEFT JOIN 
+            companies ON companies_phone.c_id = companies.id
+        LEFT JOIN 
+            users ON companies.guardian = users.id
+        WHERE 
+            sms_api.date >= '$date_from 00:00:00';";
+    
+        return $this->query($query);
+    }
 }
