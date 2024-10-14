@@ -27,7 +27,6 @@
                     </div>
                 </div>
                 <div class="form-group row m-3">
-
                     <div class="col-sm-12">
                         <table class="table">
                             <thead>
@@ -39,6 +38,7 @@
                                     <th scope="col">Koszt produkcji</th>
                                     <th scope="col">Aktualna cena</th>
                                     <th scope="col">Marża</th>
+                                    <th scope="col">Cena w sklepach</th>
                                     <th scope="col">Data obowiązywania</th>
                                     <th scope="col">Akcje</th>
 
@@ -124,6 +124,14 @@
                                     if($value->vege == 1) {
                                         $vege = "<span style='color: green; font-weight: bold;'>VEGE</span>";
                                     }
+                                    $shop_price = "";
+                                    if(isset($data["prices"][$value->id]->priceshops)) {
+                                        $shop_price = $data["prices"][$value->id]->priceshops;
+                                        $shop_price_show = roundCost($shop_price) . " zł";
+                                    } else {
+                                        $shop_price_show = "";
+                                    }
+                                    
                                     echo "  <tr><td $no_production_cost>$vege $value->p_name</td>
                                             <td>$photo</td>
                                             <td>$value->sku</td>
@@ -131,6 +139,7 @@
                                             <td $no_production_cost>".roundCost($production_cost)." zł</td>
                                             <td>".roundCost($price)." zł</td>
                                             <td $low_margin>$margin</td>
+                                            <td>".$shop_price_show."</td>
                                             <td>$dates</td>";
                                     echo '<td>
                                     <a href= "' . ROOT . '/prices/edit/' . $value->id . '" class = "btn btn-success">

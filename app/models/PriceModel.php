@@ -20,7 +20,8 @@ class PriceModel
         'date',
         'u_id',
         'production_cost',
-        'price'
+        'price',
+        'priceshops'
     ];
 
     public function getPrices(): array
@@ -86,6 +87,27 @@ class PriceModel
             date_to,
             SUM(production_cost) AS total_production_cost,
             SUM(price) AS total_price
+        FROM
+            $this->table
+        WHERE
+            date_from <= '$date_to'
+            AND (date_to >= '$date_from' OR date_to IS NULL)
+        GROUP BY
+            p_id,
+            date_from,
+            date_to
+        ORDER BY
+            p_id,
+            date_from;";
+        return $this->query($query);
+    }
+    public function getGroupedPrice($date_from, $date_to) {
+        $query = "SELECT
+            p_id,
+            date_from,
+            date_to,
+            price,
+            priceshops
         FROM
             $this->table
         WHERE

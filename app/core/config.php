@@ -42,7 +42,7 @@ define('APP_NAME', "My Webiste");
 define('APP_DESC', "Best website on the planet");
 
 define('PRODUCTTYPENAMES', [0 => "Półprodukt", 1 => "Gotowy produkt", 2 => "Sos własny"]);
-define('COMPANIESTYPE', [0 => "Sprzedażowa", 1 => "Zakupowa"]);
+define('COMPANIESTYPE', [0 => "Sprzedażowa (Handlowcy)", 1 => "Zakupowa", 2 => "Sprzedażowa (Dostawa)"]);
 define('STATUSNAME', [0 => "Nieaktywne", 1 => "Aktywne"]);
 define('VISITSTATUSES', [0 => "Brak sprzedaży", 1 => "Sprzedaż", 2 => "Gratisy rozdane"]);
 define('COMPANYSIZE', ["building" => "Biurowiec", "house" => "Dom", "shop" => "Sklep", "warehouse" => "Magazyn", "exclamation" => "Duży biurowiec"]);

@@ -361,9 +361,32 @@ class Planner
             }
         }
 
+        $cargo = new Cargo;
+        $date_from = $date . ' 00:00:00';
+        $date_to = $date . ' 23:59:59';
+        if (!empty($cargo->getAllFullProductsDateAndShops($date_from, $date_to))) {
+            foreach ($cargo->getAllFullProductsDateAndShops($date_from, $date_to) as $key => $value) {
+                $data["cargo_temp"][$value->p_id][] = (array) $value;
+            }
+        }
+        //show($data["cargo_temp"]);
+        if(isset($data["cargo_temp"])) {
+            foreach($data["cargo_temp"] as $product) {
+                foreach($product as $entry) {
+                    if(!isset($data["cargo"][$entry["p_id"]])) {
+                        $data["cargo"][$entry["p_id"]] = 0;
+                    }
+                    $data["cargo"][$entry["p_id"]] += $entry["amount"];
+                }
+            }
+        }
+
         $users = new User();
-        foreach ($users->getTraders() as $key => $value) {
-            $data["traders"][$value->id] = $value;
+        $data["traders"] = [];
+        if(!empty($users->getTraders($date))) {
+            foreach ($users->getTraders($date) as $key => $value) {
+                $data["traders"][$value->id] = $value;
+            }
         }
 
         $planned = new Plannerproduction();
@@ -409,8 +432,35 @@ class Planner
         }
 
         $users = new User();
-        foreach ($users->getTraders() as $key => $value) {
-            $data["traders"][$value->id] = $value;
+        $data["traders"] = [];
+        if(!empty($users->getTraders($date))) {
+            foreach ($users->getTraders($date) as $key => $value) {
+                $data["traders"][$value->id] = $value;
+            }
+        }
+        $cargo = new Cargo;
+        $date_from = $date . ' 00:00:00';
+        $date_to = $date . ' 23:59:59';
+        if (!empty($cargo->getAllFullProductsDateAndShops($date_from, $date_to))) {
+            foreach ($cargo->getAllFullProductsDateAndShops($date_from, $date_to) as $key => $value) {
+                $data["cargo_temp"][$value->p_id][] = (array) $value;
+            }
+        }
+        //show($data["cargo_temp"]);
+        if(isset($data["cargo_temp"])) {
+            foreach($data["cargo_temp"] as $product) {
+                foreach($product as $entry) {
+                    if(!isset($data["cargo"][$entry["p_id"]])) {
+                        $data["cargo"][$entry["p_id"]] = 0;
+                    }
+                    $data["cargo"][$entry["p_id"]] += $entry["amount"];
+
+                    if(!isset($data["cargo_comp"][$entry["c_id"]][$entry["p_id"]])) {
+                        $data["cargo_comp"][$entry["c_id"]][$entry["p_id"]] = 0;
+                    }
+                    $data["cargo_comp"][$entry["c_id"]][$entry["p_id"]] += $entry["amount"];
+                }
+            }
         }
 
         $planned = new Plannerproduction();
@@ -423,6 +473,16 @@ class Planner
         foreach ($products_list->getAllFullProducts() as $key => $value) {
             $data["fullproducts"][$value->id] = (array) $value;
         }
+
+        $companies = new Companies();
+        $data["shops"] = [];
+        if(!empty($companies->getAllShops())) {
+            foreach ($companies->getAllShops() as $key => $value) {
+                $data["shops"][$value->id] = $value;
+            }
+        }
+
+
 
         $data["date_plan"] = $date;
 
@@ -472,8 +532,11 @@ class Planner
         }
 
         $users = new User();
-        foreach ($users->getMyTraders($u_id) as $key => $value) {
-            $data["traders"][$value->id] = $value;
+        $data["traders"] = [];
+        if(!empty($users->getTraders($date))) {
+            foreach ($users->getTraders($date) as $key => $value) {
+                $data["traders"][$value->id] = $value;
+            }
         }
 
         $planned = new Plannerproduction();
@@ -519,8 +582,11 @@ class Planner
         }
 
         $users = new User();
-        foreach ($users->getTraders() as $key => $value) {
-            $data["traders"][$value->id] = $value;
+        $data["traders"] = [];
+        if(!empty($users->getTraders($date))) {
+            foreach ($users->getTraders($date) as $key => $value) {
+                $data["traders"][$value->id] = $value;
+            }
         }
 
         $planned = new Plannerproduction();
@@ -607,8 +673,11 @@ class Planner
         }
 
         $users = new User();
-        foreach ($users->getTraders() as $key => $value) {
-            $data["traders"][$value->id] = $value;
+        $data["traders"] = [];
+        if(!empty($users->getTraders($date))) {
+            foreach ($users->getTraders($date) as $key => $value) {
+                $data["traders"][$value->id] = $value;
+            }
         }
 
         $planned = new Plannerproduction();
@@ -682,8 +751,11 @@ class Planner
         }
 
         $users = new User();
-        foreach ($users->getTraders() as $key => $value) {
-            $data["traders"][$value->id] = $value;
+        $data["traders"] = [];
+        if(!empty($users->getTraders($date))) {
+            foreach ($users->getTraders($date) as $key => $value) {
+                $data["traders"][$value->id] = $value;
+            }
         }
 
         $planned = new Plannerproduction();

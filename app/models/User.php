@@ -38,12 +38,41 @@ class User
 		$query = "select email, priv_email from $this->table WHERE u_role IN ($ids) AND active = 1";
 		return $this->query($query);
 	}
-	public function getTraders()
+	public function getTradersOld()
 	{
 		$ids = TRADERS;
 		$query = "select * from $this->table WHERE u_role IN ($ids)";
 		return $this->query($query);
 	}
+	public function getTraders($date_from = null, $date_to = null)
+	{
+		$currentDate = date('Y-m-d');
+		if (!$date_from) {
+			$date_from = $currentDate;
+		}
+		if (!$date_to) {
+			$date_to = $date_from;
+		}
+
+		$ids = TRADERS;
+
+		$query = "
+			SELECT DISTINCT u.* 
+			FROM $this->table u
+			JOIN user_history uh ON u.id = uh.u_id
+			WHERE uh.role IN ($ids)
+			AND uh.date_from <= :date_to
+			AND (uh.date_to >= :date_from OR uh.date_to IS NULL)
+		";
+
+		$params = [
+			':date_from' => $date_from,
+			':date_to'   => $date_to
+		];
+
+		return $this->query($query, $params);
+	}
+
 	public function getAllUsers()
 	{
 		$query = "select * from $this->table;";

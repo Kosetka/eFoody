@@ -147,4 +147,101 @@ class GetCargo
 
         $this->view('splitpermerchant', $data);
     }
+    public function splitshops()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if (isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if (isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+
+        $u_set_id = $_SESSION["USER"]->id;
+
+        //w przyszłości zmienić gdyby było więcej magazynów
+        $w_id = 1;
+
+        if (isset($_GET["s_id"])) {
+            $s_id = $_GET["s_id"];
+
+            if ($_SERVER['REQUEST_METHOD'] == "POST") {
+                $cargo = new Cargo;
+                $prod = $_POST["prepared_products"];
+                //show($_POST);
+                //die();
+                $date_now = $date . ' 06:00:00';
+                $cargo->deleteByDateId($date_now, $s_id);
+                foreach ($prod as $key => $value) {
+                    $am = $value["amount"];
+                    $toUpdate = ["w_id" => $w_id, "u_id" => 0, "p_id" => $key, "amount" => $am, "date" => $date_now, "u_set_id" => $u_set_id, "c_id" => $s_id];
+                    $cargo->insert($toUpdate);
+                }
+                $data['success'] = "Zapisano pomyślnie";
+                unset($_POST);
+
+                $data['errors'] = $cargo->errors;
+            }
+
+            $cargo = new Cargo;
+            $date_from = $date . ' 00:00:00';
+            $date_to = $date . ' 23:59:59';
+            if (!empty($cargo->getAllFullProductsDateAndShop($s_id, $date_from, $date_to))) {
+                foreach ($cargo->getAllFullProductsDateAndShop($s_id, $date_from, $date_to) as $key => $value) {
+                    $data["cargo"][$value->p_id] = (array) $value;
+                }
+            }
+            if (!empty($cargo->getFullProductsDate($date_from, $date_to))) {
+                foreach ($cargo->getFullProductsDate($date_from, $date_to) as $key => $value) {
+                    $data["cargo_total"][$value->p_id] = (array) $value;
+                }
+            }
+
+            $data["warehouse"] = $w_id;
+
+            $warehouse = new WarehouseModel();
+            $data["warehouse"] = $warehouse->getWarehouse($w_id);
+
+            $planned = new Plannerproduction();// ??
+            if (!empty($planned->getPlanned($date, $w_id))) {
+                foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                    $data["planned"][$value->p_id] = (array) $value;
+                }
+            }
+            
+            if (!empty($planned->getPlanned($date, $w_id))) {
+                foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                    $data["planned_total"][$value->p_id] = (array) $value;
+                }
+            }
+        
+
+            $products_list = new ProductsModel();
+            foreach ($products_list->getAllFullProducts() as $key => $value) {
+                $data["fullproducts"][$value->id] = (array) $value;
+            }
+        }
+
+        $companies = new Companies();
+        $data["shops"] = [];
+        if(!empty($companies->getAllShops())) {
+            foreach ($companies->getAllShops() as $key => $value) {
+                $data["shops"][$value->id] = $value;
+            }
+        }
+
+        $data["date_plan"] = $date;
+
+
+        $this->view('splitpershop', $data);
+    }
 }

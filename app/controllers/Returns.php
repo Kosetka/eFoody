@@ -201,8 +201,11 @@ class Returns
         }
 
         $users = new User();
-        foreach ($users->getTraders() as $key => $value) {
-            $data["traders"][$value->id] = $value;
+        $data["traders"] = [];
+        if(!empty($users->getTraders($date))) {
+            foreach ($users->getTraders($date) as $key => $value) {
+                $data["traders"][$value->id] = $value;
+            }
         }
 
         $planned = new Plannerproduction();

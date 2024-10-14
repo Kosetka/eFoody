@@ -44,6 +44,13 @@ function showPrice($p, $c)
     }
     return round($p / $c, 2);
 }
+function roundPrice($p, $c)
+{
+    if ($c == 0) {
+        return 0;
+    }
+    return round($p * $c, 2);
+}
 function getPercent($p, $c, $cel = 2)
 {
     $ret = 0;

@@ -19,7 +19,8 @@ class Cargo
         'u_id',
         'amount',
         'date_stamp',
-        'u_set_id'
+        'u_set_id',
+        'c_id'
     ];
 
     public function getProducts(): array
@@ -49,6 +50,16 @@ class Cargo
     public function getAllFullProductsDate($id, $date_from, $date_to)
     {
         $query = "select * from $this->table WHERE u_id = $id AND date >= '$date_from' AND date <='$date_to'";
+        return $this->query($query);
+    }
+    public function getAllFullProductsDateAndShop($id, $date_from, $date_to)
+    {
+        $query = "select * from $this->table WHERE c_id = $id AND date >= '$date_from' AND date <='$date_to'";
+        return $this->query($query);
+    }
+    public function getAllFullProductsDateAndShops($date_from, $date_to)
+    {
+        $query = "select * from $this->table WHERE c_id IS NOT NULL AND date >= '$date_from' AND date <='$date_to'";
         return $this->query($query);
     }
     public function getFullProductsDate($date_from, $date_to)
@@ -88,7 +99,7 @@ class Cargo
     public function deleteByDateId($date, $id)
 	{
 
-		$query = "delete from $this->table where date = '$date' AND u_id = $id";
+		$query = "delete from $this->table where date = '$date' AND c_id = $id";
 		$this->query($query);
 
 		return false;

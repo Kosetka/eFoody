@@ -49,6 +49,11 @@ class Prices
             $date_to = NULL;
             $production_cost = $_POST["production_cost"];
             $pr = $_POST["price"];
+            if(isset($_POST["priceshops"])) {
+                $prs = $_POST["priceshops"];
+            } else {
+                $prs = 0;
+            }
             $active = 1;
 
             $price = new PriceModel;
@@ -63,10 +68,10 @@ class Prices
                     }
                 }
             }
-            $toUpdate = ["u_id" => $u_id, "p_id" => $p_id, "date_from" => "$date_from", "date_to" => $date_to, "active" => $active, "production_cost" => $production_cost, "price" => $pr];
+            $toUpdate = ["u_id" => $u_id, "p_id" => $p_id, "date_from" => "$date_from", "date_to" => $date_to, "active" => $active, "production_cost" => $production_cost, "price" => $pr, "priceshops" => $prs];
             if (isset($URL[3])) {
                 $price_id = $URL[3];
-                $toUpdate = ["production_cost" => $production_cost, "price" => $pr];
+                $toUpdate = ["production_cost" => $production_cost, "price" => $pr, "priceshops" => $prs];
                 $price->update($price_id, $toUpdate, "id");
                 $data["success"] = "Aktualizacja danych pomyślna";
             } else {

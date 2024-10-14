@@ -64,6 +64,7 @@
                                             <th>Nazwa produktu</th>
                                             <th>SKU</th>
                                             <th>Planowana ilość</th>
+                                            <th>Sklepy</th>
                                             <th>Pozostało</th>
                                             <?php
                                                 foreach($data["traders"] as $user) {
@@ -81,11 +82,16 @@
                                                 if($data["fullproducts"][$product["p_id"]]["vege"] == 1) {
                                                     $vege = "<span style='color: green; font-weight: bold;'>VEGE </span>";
                                                 }
+                                                $tshops = 0;
+                                                if(isset($data["cargo"][$product["p_id"]])) {
+                                                    $tshops = $data["cargo"][$product["p_id"]];
+                                                }
                                                 echo '
                                                 <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
                                                 <td>'.$vege.' '.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>
                                                 <td style="width: 100px">'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
                                                 <td>'.$product["amount"].'</td>
+                                                <td>'.$tshops.'</td>
                                                 <td></td>';
 
                                                 $pid = $data["fullproducts"][$product["p_id"]]["id"];
@@ -105,6 +111,7 @@
                                             <th></th>
                                             <th></th>
                                             <th>Total</th>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <?php
@@ -184,13 +191,15 @@
 
             function updateCellColor(row) {
                 let plannedAmount = parseInt(row.querySelector('td:nth-child(4)').textContent);
+                let plannedShops = parseInt(row.querySelector('td:nth-child(5)').textContent);
                 let inputs = row.querySelectorAll('input[type="number"]');
                 let sum = 0;
                 inputs.forEach(input => {
                     sum += parseInt(input.value) || 0;
                 });
+                sum = sum + plannedShops;
                 let cell = row.querySelector('td:nth-child(4)');
-                let remainingCell = row.querySelector('td:nth-child(5)');
+                let remainingCell = row.querySelector('td:nth-child(6)');
                 let remaining = plannedAmount - sum;
                 remainingCell.textContent = remaining;
 
