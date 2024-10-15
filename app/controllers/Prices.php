@@ -52,10 +52,8 @@ class Prices
             $prs = 0;
             if(!empty($_POST["priceshops"])) {
                 $prs = $_POST["priceshops"];
-                echo "isset".$_POST["priceshops"];
             } else {
                 $prs = 0;
-                echo "nie jest";
             }
             $active = 1;
 
@@ -72,7 +70,6 @@ class Prices
                 }
             }
             $toUpdate = ["u_id" => $u_id, "p_id" => $p_id, "date_from" => "$date_from", "date_to" => $date_to, "active" => $active, "production_cost" => $production_cost, "price" => $pr, "priceshops" => $prs];
-            show($toUpdate);die;
             if (isset($URL[3])) {
                 $price_id = $URL[3];
                 $toUpdate = ["production_cost" => $production_cost, "price" => $pr, "priceshops" => $prs];
