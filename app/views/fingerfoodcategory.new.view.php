@@ -66,6 +66,34 @@
                             <input type="checkbox" class="form-check-input" id="f_active" name="f_active" value="1" <?php if($edit) {if($data["fingerfoodcategory"]->f_active == 1) {echo " checked"; }}?>>
                             </div>
                         </div>
+                        <div class="form-group row m-3">
+                            <label for="fuel_type" class="col-sm-2 col-form-label">Strona:</label>
+                            <div class="col-sm-10">
+            <?php
+                foreach (PAGETYPE as $f_type_key => $f_type_val) {
+                    $checked = "";
+                    if($edit) {
+                        if ($data["fingerfoodcategory"]->type == $f_type_key) {
+                            $checked = "checked";
+                        }
+                    } else {
+                        if(isset($data["id"])) {
+                            if ($data["id"] == $f_type_key) {
+                                $checked = "checked";
+                            }
+                        }
+                    }
+                    echo "  <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='type' id='type$f_type_key' value='$f_type_key' $checked>
+                                <label class='form-check-label' for='type$f_type_key'>
+                                $f_type_val
+                                </label>
+                            </div>";
+                }
+            ?>
+                        
+                            </div>
+                        </div>
                         </div>
                         
                         <button class="w-100 btn btn-lg btn-primary" type="submit" name="newadd"><?=$button2;?></button>

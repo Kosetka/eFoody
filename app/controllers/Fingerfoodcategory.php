@@ -123,6 +123,7 @@ class Fingerfoodcategory
                     "fc_photo_3" => $_POST["fc_photo_3"],
                     "u_id" => $u_id,
                     "f_order" => NULL,
+                    "type" => $_POST["type"]
                 ]);
             }
 

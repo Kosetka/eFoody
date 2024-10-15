@@ -17,7 +17,7 @@
                 ?>
             <div class="card mb-4">
                 <div class="card-header">
-                    <h2 class="">Kategoria: <?=$fc->fc_name;?></h2>
+                    <h2 class="">Kategoria: <?=$fc->fc_name;?> (<?=PAGETYPE[$fc->type];?>)</h2>
                     <?php
                         echo '<a type="button" class="btn btn-primary" href="'.ROOT.'/fingerfood/new/'.$fc->id.'">Dodaj nowy Fingerfood</a>';
                     ?>

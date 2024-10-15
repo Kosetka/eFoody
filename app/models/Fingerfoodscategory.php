@@ -21,7 +21,8 @@ class Fingerfoodscategory
         'f_active',
         'f_order',
         'u_id',
-        'date'
+        'date',
+        'type'
     ];
 
     public function getAll()

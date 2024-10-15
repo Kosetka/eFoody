@@ -34,6 +34,7 @@
                                 <th>Zdjęcie 2</th>
                                 <th>Zdjęcie 3</th>
                                 <th>Status</th>
+                                <th>Kategoria</th>
                                 <th>Kolejność</th>
                                 <th>Akcje</th>
                             </tr>
@@ -46,6 +47,7 @@
                                 <th>Zdjęcie 2</th>
                                 <th>Zdjęcie 3</th>
                                 <th>Status</th>
+                                <th>Kategoria</th>
                                 <th>Kolejność</th>
                                 <th>Akcje</th>
                             </tr>
@@ -77,8 +79,9 @@
                                     echo "<td>$photo_1</td>";
                                     echo "<td>$photo_2</td>";
                                     echo "<td>$photo_3</td>";
-                                    echo "  <td>$status</td>
-                                            <td>$fc->f_order</td>";
+                                    echo "<td>$status</td>";
+                                    echo "<td>".PAGETYPE[$fc->type]."</td>";
+                                    echo "<td>$fc->f_order</td>";
 
                                     if(in_array($your_id,$access)) {
                                         echo "<td><a href='" . ROOT . "/fingerfoodcategory/edit/" . $fc->id . "'>Edytuj</a></td>";
