@@ -39,6 +39,8 @@ class Fingerfood
             $target_dir = IMG_ROOT_UPLOAD;
             $uploadOk = 1;
             $file_name = "";
+
+            $_POST["u_id"] = $_SESSION["USER"]->id;
             
             $timestamp = date("Ymd_His");
         
