@@ -44,8 +44,8 @@
                     $toBlock = "";
                     $toBlockButton = "";
                     if($date<date("Y-m-d")) {
-                        $toBlock = " disabled";
-                        $toBlockButton = " hidden";
+                        $toBlock = ""; //disabled
+                        $toBlockButton = ""; //hidden
                     }
                 ?>
                     <h2 class="">Przydzielanie produktów do sklepów</h2>
