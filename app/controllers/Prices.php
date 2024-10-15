@@ -50,10 +50,12 @@ class Prices
             $production_cost = $_POST["production_cost"];
             $pr = $_POST["price"];
             $prs = 0;
-            if(isset($_POST["priceshops"])) {
+            if(!empty($_POST["priceshops"])) {
                 $prs = $_POST["priceshops"];
+                echo "isset".$_POST["priceshops"];
             } else {
                 $prs = 0;
+                echo "nie jest";
             }
             $active = 1;
 
@@ -74,7 +76,6 @@ class Prices
             if (isset($URL[3])) {
                 $price_id = $URL[3];
                 $toUpdate = ["production_cost" => $production_cost, "price" => $pr, "priceshops" => $prs];
-                
                 $price->update($price_id, $toUpdate, "id");
                 $data["success"] = "Aktualizacja danych pomyślna";
             } else {
