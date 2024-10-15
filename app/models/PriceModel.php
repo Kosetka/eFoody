@@ -116,7 +116,9 @@ class PriceModel
         GROUP BY
             p_id,
             date_from,
-            date_to
+            date_to,
+            price,
+            priceshops
         ORDER BY
             p_id,
             date_from;";
