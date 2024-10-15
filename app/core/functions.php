@@ -434,3 +434,20 @@ function getPolishMonthName($monthNumber)
     // Zwraca polską nazwę miesiąca na podstawie numeru miesiąca
     return $polishMonths[$monthNumber] ?? "Nieznany miesiąc";
 }
+
+function getPolishDayName($dayNumber)
+{
+    // Tablica z polskimi nazwami miesięcy
+    $polishDays = [
+        1 => "poniedziałek",
+        2 => "wtorek",
+        3 => "środa",
+        4 => "czwartek",
+        5 => "piątek",
+        6 => "sobota",
+        7 => "niedziela"
+    ];
+
+    // Zwraca polską nazwę miesiąca na podstawie numeru miesiąca
+    return $polishDays[$dayNumber] ?? "Nieznany dzień";
+}

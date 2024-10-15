@@ -245,7 +245,7 @@
         var button = $(event.relatedTarget); // Przycisk, który wywołał modal
         var imageSrc = button.data('image'); // Wyciągnięcie ścieżki obrazka z atrybutu data-image
         var modal = $(this);
-        modal.find('#modalImage').attr('src', imageSrc); // Ustawienie źródła obrazka w modalu
+        modal.find('#modalImage').attr('src', imageSrc+"?v="+Math.floor(Date.now() / 1000)); // Ustawienie źródła obrazka w modalu
     });
 </script>
         <?php require_once 'landings/footer.view.php' ?>

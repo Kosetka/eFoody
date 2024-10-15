@@ -783,6 +783,7 @@ class Reports
             foreach ($cargo->getAllFullProductsDateAndShops($date_from, $date_to) as $key => $value) {
                 $day = substr($value->date,0,10);
                 $data["cargo_temp"][$value->c_id][$value->p_id][$day]["amount"] = $value->amount;
+                $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["amount"] = $value->amount;
                 if(isset($data["prices"][$value->p_id])) {
                     $is_price = false;
                     foreach($data["prices"][$value->p_id] as $k => $v) {
@@ -790,9 +791,11 @@ class Reports
                             if(($v->date_to == null) || $v->date_to >= $day) {
                                 if(isset($v->priceshops)) {
                                     $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost"] = $v->priceshops;
+                                    $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = $v->priceshops;
                                     $is_price = true;
                                 } else {
                                     $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost"] = $v->price;
+                                    $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = $v->price;
                                     $is_price = true;
                                 }
                             }
@@ -800,6 +803,7 @@ class Reports
                     } 
                     if($is_price == false) {
                         $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost"] = 0;
+                        $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = 0;
                     }
                 }
             }

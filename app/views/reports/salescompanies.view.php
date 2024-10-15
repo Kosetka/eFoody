@@ -244,9 +244,94 @@ if(isset($data["cargo_temp"])) {
 }
 
 
+$mess2 = "";
+setlocale(LC_TIME, 'pl_PL.UTF-8');
+if(isset($data["cargo_temp2"])) {
+    foreach($data["cargo_temp2"] as $company_id => $compval) {
+        $mess2 .= "<table style='border: 1px solid'>
+            <thead style='border: 1px solid'>
+                <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
+                    <th colspan='12'>Raport szczegółowy sprzedaży - ".$data["shops"][$company_id]->full_name."</th>
+                </tr>
+                <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+                    <th style='border: 1px solid #000; width: 8%'>Produkt</th>
+                    <th style='border: 1px solid #000; width: 8%'>Ilość</th>
+                    <th style='border: 1px solid #000; width: 8%'>Cena za sztukę (brutto)</th>
+                    <th style='border: 1px solid #000; width: 8%'>Cena łączna do zapłaty</th>
+                </tr>
+            </thead>
+            <tbody>";
+        $total_sales = 0;
+        $total_money = 0;
+
+        $start = new DateTime($date_from);
+        $end = new DateTime($date_to);
+
+        $end = $end->modify('+1 day');
+        
+        $week_sales = 0;
+        $week_money = 0;
+        for ($date2 = $start; $date2 < $end; $date2->modify('+1 day')) {
+            $curdate = $date2->format('Y-m-d');
+            $mess2 .= "     <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+                                <th colspan='4'>$curdate (".getPolishDayName($date2->format('N')).")</th>
+                            </tr>";
+
+            if(isset($compval[$curdate])) {
+                $day_sales = 0;
+                $day_money = 0;
+                foreach($compval[$curdate] as $prod_id => $prod_data_detail) {
+                    $day_sales += $prod_data_detail["amount"];
+                    $day_money += $prod_data_detail["amount"] * $prod_data_detail["cost"];
+                    $week_sales += $prod_data_detail["amount"];
+                    $week_money += $prod_data_detail["amount"] * $prod_data_detail["cost"];
+                    $mess2 .= "
+                    <tr style='text-align: center;'>
+                        <td style='border: 1px solid;'>".$data["fullproducts"][$prod_id]["p_name"]."</td>
+                        <td style='border: 1px solid;'>".$prod_data_detail["amount"]."</td>
+                        <td style='border: 1px solid;'>".$prod_data_detail["cost"]." zł</td>
+                        <td style='border: 1px solid;'>".$prod_data_detail["amount"] * $prod_data_detail["cost"]." zł</td>
+                    </tr>";
+                }
+                $mess2 .= " <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
+                                <td style='border: 1px solid;'>TOTAL</td>
+                                <td style='border: 1px solid;'>$day_sales</td>
+                                <td style='border: 1px solid;'>$curdate</td>
+                                <td style='border: 1px solid;'>$day_money zł</td>
+                            </tr>";
+            } else {
+                $mess2 .= " <tr style='text-align: center;'>
+                                <td colspan='4'>Brak sprzedaży w tym dniu.</td>
+                            </tr>";
+            }
+        }
+    
+    
+    
+        $mess2 .= "
+            </tbody>
+            <tfoot>
+                <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
+                    <td style='border: 1px solid;'>TOTAL Z WYBRANEGO ZAKRESU</td>
+                    <td style='border: 1px solid;'>$week_sales</td>
+                    <td style='border: 1px solid;'>$dates</td>
+                    <td style='border: 1px solid;'>$week_money zł</td>
+                </tr>
+            </tfoot>
+        </table>";
+        $mess2 .= "</br>";
+    }
+
+}
+
+
 
 echo $mess;
 
+echo "</br></br>";
+echo "<h2>Szczegółowe dane o sprzedaży</h2>";
+echo "</br></br>";
+echo $mess2;
 
 //tu dodać szczegółowy, czyli po firmie i każdy dzień osobno
 ?>
