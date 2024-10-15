@@ -281,17 +281,19 @@ if(isset($data["cargo_temp2"])) {
                 $day_sales = 0;
                 $day_money = 0;
                 foreach($compval[$curdate] as $prod_id => $prod_data_detail) {
-                    $day_sales += $prod_data_detail["amount"];
-                    $day_money += $prod_data_detail["amount"] * $prod_data_detail["cost"];
-                    $week_sales += $prod_data_detail["amount"];
-                    $week_money += $prod_data_detail["amount"] * $prod_data_detail["cost"];
-                    $mess2 .= "
-                    <tr style='text-align: center;'>
-                        <td style='border: 1px solid;'>".$data["fullproducts"][$prod_id]["p_name"]."</td>
-                        <td style='border: 1px solid;'>".$prod_data_detail["amount"]."</td>
-                        <td style='border: 1px solid;'>".$prod_data_detail["cost"]." zł</td>
-                        <td style='border: 1px solid;'>".$prod_data_detail["amount"] * $prod_data_detail["cost"]." zł</td>
-                    </tr>";
+                    if($prod_data_detail["amount"] > 0) {
+                        $day_sales += $prod_data_detail["amount"];
+                        $day_money += $prod_data_detail["amount"] * $prod_data_detail["cost"];
+                        $week_sales += $prod_data_detail["amount"];
+                        $week_money += $prod_data_detail["amount"] * $prod_data_detail["cost"];
+                        $mess2 .= "
+                        <tr style='text-align: center;'>
+                            <td style='border: 1px solid;'>".$data["fullproducts"][$prod_id]["p_name"]."</td>
+                            <td style='border: 1px solid;'>".$prod_data_detail["amount"]."</td>
+                            <td style='border: 1px solid;'>".$prod_data_detail["cost"]." zł</td>
+                            <td style='border: 1px solid;'>".$prod_data_detail["amount"] * $prod_data_detail["cost"]." zł</td>
+                        </tr>";
+                    }
                 }
                 $mess2 .= " <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
                                 <td style='border: 1px solid;'>TOTAL</td>
