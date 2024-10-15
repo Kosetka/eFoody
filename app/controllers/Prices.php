@@ -49,6 +49,7 @@ class Prices
             $date_to = NULL;
             $production_cost = $_POST["production_cost"];
             $pr = $_POST["price"];
+            $prs = 0;
             if(isset($_POST["priceshops"])) {
                 $prs = $_POST["priceshops"];
             } else {
