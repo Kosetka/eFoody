@@ -218,14 +218,15 @@ if(isset($data["cargo_temp"])) {
             }
     
     
-    
-            $mess .= "
-                <tr style='text-align: center;'>
-                    <td style='border: 1px solid;'>".$data["fullproducts"][$product_id]["p_name"]."</td>
-                    <td style='border: 1px solid;'>$amo</td>
-                    <td style='border: 1px solid;' title='Gwiazda oznacza zmianę ceny w trakcie wybranej daty, kwota liczy się prawidłowo, jednak wyświetla się najnowsza cena za sztukę.'>$cost_last zł$txtadd</td>
-                    <td style='border: 1px solid;'>" . $total_cost . " zł</td>
-                </tr>";
+            if($amo > 0) {
+                $mess .= "
+                    <tr style='text-align: center;'>
+                        <td style='border: 1px solid;'>".$data["fullproducts"][$product_id]["p_name"]."</td>
+                        <td style='border: 1px solid;'>$amo</td>
+                        <td style='border: 1px solid;' title='Gwiazda oznacza zmianę ceny w trakcie wybranej daty, kwota liczy się prawidłowo, jednak wyświetla się najnowsza cena za sztukę.'>$cost_last zł$txtadd</td>
+                        <td style='border: 1px solid;'>" . $total_cost . " zł</td>
+                    </tr>";
+            }
         }
         $mess .= "
             </tbody>
