@@ -6,8 +6,8 @@
     include(ROOT_PLUGINS.'phpqrcode/qrlib.php');//include('phpqrcode/qrlib.php');
 
 
-    if($data["show_prod_date"] == 1) {
-        $date_show_to = 2; // ile dni terminu przydatku
+    if($data["show_prod_date"] > 0) {
+        $date_show_to = $data["show_prod_date"]; // ile dni terminu przydatku
     } else {
         $date_show_to = 0;
     }
@@ -70,7 +70,7 @@
             $prod_name = substr($prod_name, 0, 51) . '...';
         }
         $dateTime = DateTime::createFromFormat('d.m.Y', $date);
-        $dateTime->modify('+2 day');
+        $dateTime->modify('+'.$date_show_to.' day');
         $newDate = $dateTime->format('d.m.Y');
         $pdf->SetXY(15, 10);
         $pdf->Cell(0, 10, $term . $newDate, 0, 1);

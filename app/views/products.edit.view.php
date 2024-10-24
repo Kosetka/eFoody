@@ -64,17 +64,52 @@
                         </div>
                     </div>
                     <div class="form-group row m-3">
-                        <label for="show_prod_date" class="col-sm-2 col-form-label">Pokaż datę ważności:</label>
+                        <legend class="col-sm-2 col-form-label ">Data ważności do:</legend>
                         <div class="col-sm-10">
+                            <div class='form-check'>
                             <?php
-                            if($data['product']->show_prod_date == TRUE) {
-                                $checked = " checked";
-                            } else {
-                                $checked = "";
-                            }
-
+                                if($data['product']->show_prod_date == 0 || $data['product']->show_prod_date == NULL) {
+                                    $checked = " checked";
+                                } else {
+                                    $checked = "";
+                                }
                             ?>
-                            <input type="checkbox" class="form-check-input" id="show_prod_date" name="show_prod_date" value="0" <?=$checked;?>>
+                                <input class='form-check-input' type='radio' name='show_prod_date' id='show_prod_date0' value='0' <?=$checked;?>>
+                                <label class='form-check-label' for='show_prod_date0'>Nie pokazuj</label>
+                            </div>
+                            <div class='form-check'>
+                            <?php
+                                if($data['product']->show_prod_date == 1) {
+                                    $checked = " checked";
+                                } else {
+                                    $checked = "";
+                                }
+                            ?>
+                                <input class='form-check-input' type='radio' name='show_prod_date' id='show_prod_date1' value='1' <?=$checked;?>>
+                                <label class='form-check-label' for='show_prod_date1'>1 dzień</label>
+                            </div>
+                            <div class='form-check'>
+                            <?php
+                                if($data['product']->show_prod_date == 2) {
+                                    $checked = " checked";
+                                } else {
+                                    $checked = "";
+                                }
+                            ?>
+                                <input class='form-check-input' type='radio' name='show_prod_date' id='show_prod_date2' value='2' <?=$checked;?>>
+                                <label class='form-check-label' for='show_prod_date2'>2 dni</label>
+                            </div>
+                            <div class='form-check'>
+                            <?php
+                                if($data['product']->show_prod_date == 3) {
+                                    $checked = " checked";
+                                } else {
+                                    $checked = "";
+                                }
+                            ?>
+                                <input class='form-check-input' type='radio' name='show_prod_date' id='show_prod_date3' value='3' <?=$checked;?>>
+                                <label class='form-check-label' for='show_prod_date3'>3 dni</label>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row m-3" hidden>

@@ -54,12 +54,31 @@
                             <input type="checkbox" class="form-check-input" id="vege" name="vege" value="0">
                         </div>
                     </div>
+
                     <div class="form-group row m-3">
-                        <label for="show_prod_date" class="col-sm-2 col-form-label">Pokaż datę ważności:</label>
+                        <legend class="col-sm-2 col-form-label ">Data ważności do:</legend>
                         <div class="col-sm-10">
-                            <input type="checkbox" class="form-check-input" id="show_prod_date" name="show_prod_date" value="0">
+                            <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='show_prod_date' id='show_prod_date0' value='0' checked>
+                                <label class='form-check-label' for='show_prod_date0'>Nie pokazuj</label>
+                            </div>
+                            <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='show_prod_date' id='show_prod_date1' value='1'>
+                                <label class='form-check-label' for='show_prod_date1'>1 dzień</label>
+                            </div>
+                            <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='show_prod_date' id='show_prod_date2' value='2'>
+                                <label class='form-check-label' for='show_prod_date2'>2 dni</label>
+                            </div>
+                            <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='show_prod_date' id='show_prod_date3' value='3'>
+                                <label class='form-check-label' for='show_prod_date3'>3 dni</label>
+                            </div>
                         </div>
                     </div>
+
+
+
                     <div class="form-group row m-3" hidden>
                         <label for="p_description" class="col-sm-2 col-form-label">Opis:</label>
                         <div class="col-sm-10">

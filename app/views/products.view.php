@@ -61,8 +61,8 @@
                                             $vege = "<span style='color: green; font-weight: bold;'>VEGE</span>";
                                         }
                                         $show_prod_date = "";
-                                            if($product->show_prod_date == 1) {
-                                                $show_prod_date = "TAK";
+                                            if($product->show_prod_date > 0) {
+                                                $show_prod_date = "TAK (+".$product->show_prod_date.")";
                                             }
                                         echo "  <tr>
                                                     <th scope='row'>$product->id</th>

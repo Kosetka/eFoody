@@ -105,8 +105,8 @@
                                                     $color = "red";
                                                 }
                                                 $show_prod_date = "";
-                                                if($data["fullproducts"][$product["p_id"]]["show_prod_date"] == 1) {
-                                                    $show_prod_date = "TAK";
+                                                if($data["fullproducts"][$product["p_id"]]["show_prod_date"] > 0) {
+                                                    $show_prod_date = "TAK (+".$data["fullproducts"][$product["p_id"]]["show_prod_date"].")";
                                                 }
                                                 echo '<td style="background: '.$color.'">'.getPercent($prod_amo, $product["amount"]).'%</td>
                                                 <td>'.substr($ids, 0, -2).'</td>
