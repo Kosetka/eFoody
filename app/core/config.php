@@ -79,6 +79,7 @@ define('POLISHMONTHS',[
 ]);
 define('LABELCOST',["cost" => 16.50, "labels" => 1034]);
 define('FUELTYPE',[0 => "Diesel", 1 => "Benzyna"]);
+define('BONUSTYPE',[0 => "Premia", 1 => "Kara"]);
 define('PAGETYPE',[1 => "Fingerfood", 2 => "Catering"]);
                                         
 

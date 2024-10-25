@@ -3,7 +3,7 @@
 /**
  * GetCargo class
  */
-class Rates
+class Bonussystem
 {
     use Controller;
     public function index()
@@ -13,10 +13,36 @@ class Rates
 
         $data = [];
 
-        $this->view('rates', $data);
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $u_u_id = $_SESSION["USER"]->id;
+            $bonus = new Bonuses;
+            $date = $_POST["date"];
+            $bonus->insert(["u_id" => $_POST["u_id"], "b_description" => $_POST["b_description"], "date" => "$date", "amount" => $_POST["amount"],"type" => $_POST["type"], "u_u_id" => $u_u_id]);
+            $data['success'] = "Pomyślnie dodano premię lub karę.";
+        }
+
+
+        $users = new User;
+        foreach ($users->getAllUsers() as $user) {
+            $data["users"][$user->id] = $user;
+        }
+        $roles = new RolesNameModel();
+        foreach ($roles->getAllRoles() as $role) {
+            $data["roles"][$role->id] = $role;
+        }
+
+        $bonuses = new Bonuses();
+        if(!empty($bonuses->getBonuses())) {
+            foreach ($bonuses->getBonuses() as $bonus) {
+                $data["bonuses"][$bonus->id] = $bonus;
+            }
+        }
+
+
+        $this->view('bonussystem', $data);
     }
 
-    public function generate()
+    public function add()
     {
         if (empty($_SESSION['USER']))
             redirect('login');
@@ -72,25 +98,6 @@ class Rates
             }
         }
 
-        $bonuses = new Bonuses();
-        if(!empty($bonuses->getBonusesByDate($month, $year))) {
-            foreach ($bonuses->getBonusesByDate($month, $year) as $bonus) {
-                $data["bonuses"][$bonus->u_id][] = $bonus;
-                if(!isset($data["bonuses"][$bonus->u_id]["bonus"])) {
-                    $data["bonuses"][$bonus->u_id]["bonus"] = 0;
-                }
-                if(!isset($data["bonuses"][$bonus->u_id]["penalty"])) {
-                    $data["bonuses"][$bonus->u_id]["penalty"] = 0;
-                }
-                if($bonus->type == 0) {
-                    $data["bonuses"][$bonus->u_id]["bonus"] += $bonus->amount;
-                }
-                if($bonus->type == 1) {
-                    $data["bonuses"][$bonus->u_id]["penalty"] += $bonus->amount;
-                }
-            }
-        }
-
 
         $workhour = new Workhours();
         if (!empty($workhour->getMonth($month, $year))) {
@@ -117,12 +124,9 @@ class Rates
                 }
             }
         }
-        //show($data["rates"]);
-        //die;
-        //show($data);
-        //die;
 
-        $this->view('rates.generate', $data);
+
+        $this->view('bonussystem', $data);
     }
 
 }

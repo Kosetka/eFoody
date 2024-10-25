@@ -13,7 +13,7 @@
                     $blocked = " disabled";
                 } else {
                     $head2 = "Dodawanie nowego samochodu";
-                    $button2 = "Dodaj samochdód";
+                    $button2 = "Dodaj samochód";
                     $edit = False;
                     $blocked = "";
                 }
