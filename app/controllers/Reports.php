@@ -790,8 +790,17 @@ class Reports
                         if(substr($v->date_from,0,10) <= $day) {
                             if(($v->date_to == null) || $v->date_to >= $day) {
                                 if(isset($v->priceshops)) {
-                                    $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost"] = $v->priceshops;
-                                    $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = $v->priceshops;
+                                    $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost_zm"] = $v->priceshops;
+                                    $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost_zm"] = $v->priceshops;
+                                    $is_price = true;
+                                } else {
+                                    $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost"] = $v->price;
+                                    $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = $v->price;
+                                    $is_price = true;
+                                }
+                                if(isset($v->pricefixed)) {
+                                    $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost_f"] = $v->pricefixed;
+                                    $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost_f"] = $v->pricefixed;
                                     $is_price = true;
                                 } else {
                                     $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost"] = $v->price;

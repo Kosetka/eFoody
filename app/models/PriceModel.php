@@ -21,7 +21,8 @@ class PriceModel
         'u_id',
         'production_cost',
         'price',
-        'priceshops'
+        'priceshops',
+        'pricefixed'
     ];
 
     public function getPrices(): array
@@ -107,7 +108,8 @@ class PriceModel
             date_from,
             date_to,
             price,
-            priceshops
+            priceshops,
+            pricefixed
         FROM
             $this->table
         WHERE

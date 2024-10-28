@@ -50,10 +50,16 @@ class Prices
             $production_cost = $_POST["production_cost"];
             $pr = $_POST["price"];
             $prs = 0;
+            $prsf = 0;
             if(!empty($_POST["priceshops"])) {
                 $prs = $_POST["priceshops"];
             } else {
                 $prs = 0;
+            }
+            if(!empty($_POST["pricefixed"])) {
+                $prsf = $_POST["pricefixed"];
+            } else {
+                $prsf = 0;
             }
             $active = 1;
 
@@ -69,10 +75,10 @@ class Prices
                     }
                 }
             }
-            $toUpdate = ["u_id" => $u_id, "p_id" => $p_id, "date_from" => "$date_from", "date_to" => $date_to, "active" => $active, "production_cost" => $production_cost, "price" => $pr, "priceshops" => $prs];
+            $toUpdate = ["u_id" => $u_id, "p_id" => $p_id, "date_from" => "$date_from", "date_to" => $date_to, "active" => $active, "production_cost" => $production_cost, "price" => $pr, "priceshops" => $prs, "pricefixed" => $prsf];
             if (isset($URL[3])) {
                 $price_id = $URL[3];
-                $toUpdate = ["production_cost" => $production_cost, "price" => $pr, "priceshops" => $prs];
+                $toUpdate = ["production_cost" => $production_cost, "price" => $pr, "priceshops" => $prs, "pricefixed" => $prsf];
                 $price->update($price_id, $toUpdate, "id");
                 $data["success"] = "Aktualizacja danych pomyślna";
             } else {

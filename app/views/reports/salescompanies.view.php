@@ -196,21 +196,32 @@ if(isset($data["cargo_temp"])) {
     
             foreach($prod_date as $one_date) {
                 $amo += $one_date["amount"];
-                $cost = $one_date["cost"];
+                if($data["shops"][$company_id]->company_type == 2) {
+                    if(isset($one_date["cost_zm"])) {
+                        $cost = $one_date["cost_zm"];
+                    } else {
+                        $cost = $one_date["cost"];
+                    }
+                } else {
+                    if(isset($one_date["cost_f"])) {
+                        $cost = $one_date["cost_f"];
+                    } else {
+                        $cost = $one_date["cost"];
+                    }
+                }
                 if($costb) {
                     if($cost_last == 0) {
-                        $cost_last = $one_date["cost"];
+                        $cost_last = $cost;
                     }
-                    else if ($cost_last != $one_date["cost"]) {
+                    else if ($cost_last != $cost) {
                         $costb = false;
                     }
                 }
-                $cost_last = $one_date["cost"];
     
-                $tot_amo = $one_date["amount"] * $one_date["cost"];
+                $tot_amo = $one_date["amount"] * $cost;
                 $total_sales += $one_date["amount"];
-                $total_money += $one_date["amount"] * $one_date["cost"];
-                $total_cost += $one_date["amount"] * $one_date["cost"];
+                $total_money += $one_date["amount"] * $cost;
+                $total_cost += $one_date["amount"] * $cost;
             }
             $txtadd = "";
             if(!$costb) {

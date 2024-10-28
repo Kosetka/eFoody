@@ -32,6 +32,7 @@
                 $th6 = "";
                 $th7 = "Dodaj cenę";
                 $th8 = "";
+                $th9 = "";
                 //show($data["price"]);
                 if (isset($data["price"])) {
                     $edit_stage = true;
@@ -41,6 +42,7 @@
                     $th4 = $data["price"]->production_cost;
                     $th5 = $data["price"]->price;
                     $th8 = $data["price"]->priceshops;
+                    $th9 = $data["price"]->pricefixed;
                     if ($data["price"]->active == 1) {
                         $th6 = "checked";
                     }
@@ -89,9 +91,15 @@
                         </div>
                     </div>
                     <div class="form-group row m-3">
-                        <label for="priceshops" class="col-sm-2 col-form-label">Cena sprzedaży w sklepach:</label>
+                        <label for="priceshops" class="col-sm-2 col-form-label">Cena sprzedaży w sklepach (zmienna):</label>
                         <div class="col-sm-10">
                             <input type="number" class="form-control" id="priceshops" name="priceshops" value="<?php echo $th8; ?>" min="0.01" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-group row m-3">
+                        <label for="pricefixed" class="col-sm-2 col-form-label">Cena sprzedaży w sklepach (stała):</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="pricefixed" name="pricefixed" value="<?php echo $th9; ?>" min="0.01" step="0.01">
                         </div>
                     </div>
                     <div class="form-group row m-3" hidden>
@@ -113,7 +121,8 @@
                         <th scope="col">Koszt produkcji</th>
                         <th scope="col">Cena sprzedaży</th>
                         <th scope="col">Marża</th>
-                        <th scope="col">Cena w sklepach</th>
+                        <th scope="col">Cena w sklepach (zmienna)</th>
+                        <th scope="col">Cena w sklepach (stała)</th>
                         <th scope="col">Data od</th>
                         <th scope="col">Data do</th>
                         <th scope="col">Akcje</th>
@@ -129,6 +138,11 @@
                             echo "<td>" . $price->price - $price->production_cost . " zł (" . getMargin($price->price, $price->production_cost) . "%)</td>";
                             if(isset($price->priceshops)) {
                                 echo "<td>" . $price->priceshops . " zł</td>";
+                            } else {
+                                echo "<td></td>";
+                            }
+                            if(isset($price->pricefixed)) {
+                                echo "<td>" . $price->pricefixed . " zł</td>";
                             } else {
                                 echo "<td></td>";
                             }

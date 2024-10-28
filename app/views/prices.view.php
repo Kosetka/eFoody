@@ -38,7 +38,8 @@
                                     <th scope="col">Koszt produkcji</th>
                                     <th scope="col">Aktualna cena</th>
                                     <th scope="col">Marża</th>
-                                    <th scope="col">Cena w sklepach</th>
+                                    <th scope="col">Sklepy - zmienna</th>
+                                    <th scope="col">Sklepy - stała</th>
                                     <th scope="col">Data obowiązywania</th>
                                     <th scope="col">Akcje</th>
 
@@ -125,11 +126,18 @@
                                         $vege = "<span style='color: green; font-weight: bold;'>VEGE</span>";
                                     }
                                     $shop_price = "";
+                                    $fixed_price = "";
                                     if(isset($data["prices"][$value->id]->priceshops)) {
                                         $shop_price = $data["prices"][$value->id]->priceshops;
                                         $shop_price_show = roundCost($shop_price) . " zł";
                                     } else {
                                         $shop_price_show = "";
+                                    }
+                                    if(isset($data["prices"][$value->id]->pricefixed)) {
+                                        $fixed_price = $data["prices"][$value->id]->pricefixed;
+                                        $fixed_price_show = roundCost($fixed_price) . " zł";
+                                    } else {
+                                        $fixed_price_show = "";
                                     }
                                     
                                     echo "  <tr><td $no_production_cost>$vege $value->p_name</td>
@@ -140,6 +148,7 @@
                                             <td>".roundCost($price)." zł</td>
                                             <td $low_margin>$margin</td>
                                             <td>".$shop_price_show."</td>
+                                            <td>".$fixed_price_show."</td>
                                             <td>$dates</td>";
                                     echo '<td>
                                     <a href= "' . ROOT . '/prices/edit/' . $value->id . '" class = "btn btn-success">

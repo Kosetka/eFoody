@@ -67,7 +67,7 @@ class Companies
     }
     public function getAllShops()
     {
-        $query = "select * from $this->table WHERE company_type = 2";
+        $query = "select * from $this->table WHERE company_type IN (2, 3)";
         return $this->query($query);
     }
     public function getAllCompaniesBuy()
