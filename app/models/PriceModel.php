@@ -120,7 +120,8 @@ class PriceModel
             date_from,
             date_to,
             price,
-            priceshops
+            priceshops,
+            pricefixed
         ORDER BY
             p_id,
             date_from;";
