@@ -276,8 +276,8 @@ if(isset($data["cargo_temp2"])) {
         $total_sales = 0;
         $total_money = 0;
 
-        $start = new DateTime($date_from);
-        $end = new DateTime($date_to);
+        $start = new DateTime($data["get"]["date_from"]);
+        $end = new DateTime($data["get"]["date_to"]);
 
         $end = $end->modify('+1 day');
         
@@ -294,16 +294,30 @@ if(isset($data["cargo_temp2"])) {
                 $day_money = 0;
                 foreach($compval[$curdate] as $prod_id => $prod_data_detail) {
                     if($prod_data_detail["amount"] > 0) {
+                        if($data["shops"][$company_id]->company_type == 2) {
+                            if(isset($prod_data_detail["cost_zm"])) {
+                                $cost3 = $prod_data_detail["cost_zm"];
+                            } else {
+                                $cost3 = $prod_data_detail["cost"];
+                            }
+                        } else {
+                            if(isset($prod_data_detail["cost_f"])) {
+                                $cost3 = $prod_data_detail["cost_f"];
+                            } else {
+                                $cost3 = $prod_data_detail["cost"];
+                            }
+                        }
+
                         $day_sales += $prod_data_detail["amount"];
-                        $day_money += $prod_data_detail["amount"] * $prod_data_detail["cost"];
+                        $day_money += $prod_data_detail["amount"] * $cost3;
                         $week_sales += $prod_data_detail["amount"];
-                        $week_money += $prod_data_detail["amount"] * $prod_data_detail["cost"];
+                        $week_money += $prod_data_detail["amount"] * $cost3;
                         $mess2 .= "
                         <tr style='text-align: center;'>
                             <td style='border: 1px solid;'>".$data["fullproducts"][$prod_id]["p_name"]."</td>
                             <td style='border: 1px solid;'>".$prod_data_detail["amount"]."</td>
-                            <td style='border: 1px solid;'>".$prod_data_detail["cost"]." zł</td>
-                            <td style='border: 1px solid;'>".$prod_data_detail["amount"] * $prod_data_detail["cost"]." zł</td>
+                            <td style='border: 1px solid;'>".$cost3." zł</td>
+                            <td style='border: 1px solid;'>".$prod_data_detail["amount"] * $cost3." zł</td>
                         </tr>";
                     }
                 }
