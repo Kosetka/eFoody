@@ -177,7 +177,8 @@ if(isset($data["cargo_temp"])) {
                 </tr>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                     <th style='border: 1px solid #000; width: 8%'>Produkt</th>
-                    <th style='border: 1px solid #000; width: 8%'>Ilość</th>
+                    <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
+                    <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena za sztukę (brutto)</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena łączna do zapłaty</th>
                 </tr>
@@ -185,6 +186,7 @@ if(isset($data["cargo_temp"])) {
             <tbody>";
         $total_sales = 0;
         $total_money = 0;
+        $total_return = 0;
         
         foreach ($compval as $product_id => $prod_date) {
             $amo = 0;
@@ -194,7 +196,8 @@ if(isset($data["cargo_temp"])) {
             $costb = true;
             $total_cost = 0;
     
-            foreach($prod_date as $one_date) {
+            foreach($prod_date as $key_date => $one_date) {
+
                 $amo += $one_date["amount"];
                 if($data["shops"][$company_id]->company_type == 2) {
                     if(isset($one_date["cost_zm"])) {
@@ -217,11 +220,15 @@ if(isset($data["cargo_temp"])) {
                         $costb = false;
                     }
                 }
+                $day_ret = 0;
+                if(isset($data["returns"][$company_id][$key_date][$product_id]["amount"])) {
+                    $day_ret = $data["returns"][$company_id][$key_date][$product_id]["amount"];
+                }
     
-                $tot_amo = $one_date["amount"] * $cost;
+                $tot_amo = ($one_date["amount"] - $day_ret) * $cost;
                 $total_sales += $one_date["amount"];
-                $total_money += $one_date["amount"] * $cost;
-                $total_cost += $one_date["amount"] * $cost;
+                $total_money += ($one_date["amount"] - $day_ret) * $cost;
+                $total_cost += ($one_date["amount"] - $day_ret) * $cost;
             }
             $txtadd = "";
             if(!$costb) {
@@ -230,10 +237,16 @@ if(isset($data["cargo_temp"])) {
     
     
             if($amo > 0) {
+                $ret_show = 0;
+                if(isset($data["returns"][$company_id][$product_id]["amount"])) {
+                    $ret_show = $data["returns"][$company_id][$product_id]["amount"];
+                    $total_return += $ret_show;
+                }
                 $mess .= "
                     <tr style='text-align: center;'>
                         <td style='border: 1px solid;'>".$data["fullproducts"][$product_id]["p_name"]."</td>
                         <td style='border: 1px solid;'>$amo</td>
+                        <td style='border: 1px solid;'>$ret_show</td>
                         <td style='border: 1px solid;' title='Gwiazda oznacza zmianę ceny w trakcie wybranej daty, kwota liczy się prawidłowo, jednak wyświetla się najnowsza cena za sztukę.'>$cost_last zł$txtadd</td>
                         <td style='border: 1px solid;'>" . $total_cost . " zł</td>
                     </tr>";
@@ -245,6 +258,7 @@ if(isset($data["cargo_temp"])) {
                 <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
                     <td style='border: 1px solid;'>TOTAL</td>
                     <td style='border: 1px solid;'>$total_sales</td>
+                    <td style='border: 1px solid;'>$total_return</td>
                     <td style='border: 1px solid;'></td>
                     <td style='border: 1px solid;'>$total_money zł</td>
                 </tr>
@@ -267,7 +281,8 @@ if(isset($data["cargo_temp2"])) {
                 </tr>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                     <th style='border: 1px solid #000; width: 8%'>Produkt</th>
-                    <th style='border: 1px solid #000; width: 8%'>Ilość</th>
+                    <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
+                    <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena za sztukę (brutto)</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena łączna do zapłaty</th>
                 </tr>
@@ -283,15 +298,17 @@ if(isset($data["cargo_temp2"])) {
         
         $week_sales = 0;
         $week_money = 0;
+        $week_returns = 0;
         for ($date2 = $start; $date2 < $end; $date2->modify('+1 day')) {
             $curdate = $date2->format('Y-m-d');
             $mess2 .= "     <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
-                                <th colspan='4'>$curdate (".getPolishDayName($date2->format('N')).")</th>
+                                <th colspan='5'>$curdate (".getPolishDayName($date2->format('N')).")</th>
                             </tr>";
 
             if(isset($compval[$curdate])) {
                 $day_sales = 0;
                 $day_money = 0;
+                $day_returns = 0;
                 foreach($compval[$curdate] as $prod_id => $prod_data_detail) {
                     if($prod_data_detail["amount"] > 0) {
                         if($data["shops"][$company_id]->company_type == 2) {
@@ -307,29 +324,37 @@ if(isset($data["cargo_temp2"])) {
                                 $cost3 = $prod_data_detail["cost"];
                             }
                         }
+                        $prod_returns = 0;
+                        if(isset($data["returns"][$company_id][$curdate][$prod_id]["amount"])) {
+                            $prod_returns = $data["returns"][$company_id][$curdate][$prod_id]["amount"];
+                            $day_returns += $prod_returns;
+                        }
 
                         $day_sales += $prod_data_detail["amount"];
-                        $day_money += $prod_data_detail["amount"] * $cost3;
+                        $day_money += ($prod_data_detail["amount"] - $prod_returns) * $cost3;
                         $week_sales += $prod_data_detail["amount"];
-                        $week_money += $prod_data_detail["amount"] * $cost3;
+                        $week_returns += $day_returns;
+                        $week_money += ($prod_data_detail["amount"] - $prod_returns) * $cost3;
                         $mess2 .= "
                         <tr style='text-align: center;'>
                             <td style='border: 1px solid;'>".$data["fullproducts"][$prod_id]["p_name"]."</td>
                             <td style='border: 1px solid;'>".$prod_data_detail["amount"]."</td>
+                            <td style='border: 1px solid;'>".$prod_returns."</td>
                             <td style='border: 1px solid;'>".$cost3." zł</td>
-                            <td style='border: 1px solid;'>".$prod_data_detail["amount"] * $cost3." zł</td>
+                            <td style='border: 1px solid;'>".($prod_data_detail["amount"] - $prod_returns) * $cost3." zł</td>
                         </tr>";
                     }
                 }
                 $mess2 .= " <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
                                 <td style='border: 1px solid;'>TOTAL</td>
                                 <td style='border: 1px solid;'>$day_sales</td>
+                                <td style='border: 1px solid;'>$day_returns</td>
                                 <td style='border: 1px solid;'>$curdate</td>
                                 <td style='border: 1px solid;'>$day_money zł</td>
                             </tr>";
             } else {
                 $mess2 .= " <tr style='text-align: center;'>
-                                <td colspan='4'>Brak sprzedaży w tym dniu.</td>
+                                <td colspan='5'>Brak sprzedaży w tym dniu.</td>
                             </tr>";
             }
         }
@@ -342,6 +367,7 @@ if(isset($data["cargo_temp2"])) {
                 <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
                     <td style='border: 1px solid;'>TOTAL Z WYBRANEGO ZAKRESU</td>
                     <td style='border: 1px solid;'>$week_sales</td>
+                    <td style='border: 1px solid;'></td>
                     <td style='border: 1px solid;'>$dates</td>
                     <td style='border: 1px solid;'>$week_money zł</td>
                 </tr>

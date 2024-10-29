@@ -226,4 +226,103 @@ class Returns
 
         $this->view('returns.split', $data);
     }
+
+    public function splitshops()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+        if(isset($URL[3])) {
+            $c_id = $URL[3];
+        } else {
+            if(isset($_GET["c_idd"])) {
+                $c_id = $_GET["c_idd"];
+            } else {
+                $c_id = 0;
+            }
+        }
+        //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
+        $w_id = 1;
+        $data["show_table"] = false;
+        if($c_id > 0) {
+            $data["show_table"] = true;
+            $data["company"] = $c_id;
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $plan = new ReturnsModel();
+            $plan->deleteByDateAndShop($date, $c_id);
+            if(isset($_POST["ordered_products"])) {
+                $prod = $_POST["ordered_products"];
+                $u_id = $_SESSION["USER"]->id;
+    
+                foreach($prod as $usr => $pid) {
+                    foreach($pid as $p_id => $amount) {
+                        $que = ["date" => "$date 15:00:00", "p_id" => $p_id, "amount" => $amount, "u_id" => 0, "u_set_id" => $u_id, "w_id" => $w_id, "c_id" => $c_id];
+                        $plan->insert($que);
+                    }
+                }
+            }
+
+        }
+
+        $plan = new ReturnsModel();
+        if(!empty($plan->getShopsReturn($date, $date))) {
+            foreach ($plan->getShopsReturn($date, $date) as $key => $value) {
+                $data["returns"][$value->c_id][$value->p_id] = (array) $value;
+            }
+        }
+        //show($data["returns"]);die;
+
+        $companies = new Companies();
+        $data["companies"] = [];
+        if(!empty($companies->getAllShops())) {
+            foreach ($companies->getAllShops() as $key => $value) {
+                $data["companies"][$value->id] = $value;
+            }
+        }
+
+        $planned = new Plannerproduction();
+        if(!empty($planned->getPlanned($date, $w_id))) {
+            foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                $data["planned"][$value->id] = (array) $value;
+            }
+        }
+
+        $cargo = new Cargo;
+        $date_from = $date . ' 00:00:00';
+        $date_to = $date . ' 23:59:59';
+        if (!empty($cargo->getAllFullProductsDateAndShop($c_id, $date_from, $date_to))) {
+            foreach ($cargo->getAllFullProductsDateAndShop($c_id, $date_from, $date_to) as $key => $value) {
+                if($value->amount > 0) {
+                    $data["cargo"][$value->p_id] = (array) $value;
+                }
+            }
+        }
+
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
+
+        $data["date_plan"] = $date;
+
+
+
+
+        $this->view('returns.splitshops', $data);
+    }
 }

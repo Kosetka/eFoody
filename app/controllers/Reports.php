@@ -778,6 +778,19 @@ class Reports
         }
         //show($data["prices"]);
 
+        $plan = new ReturnsModel();
+        if(!empty($plan->getShopsReturn($date_from, $date_to))) {
+            foreach ($plan->getShopsReturn($date_from, $date_to) as $key => $value) {
+                $day = substr($value->date,0,10);
+                $data["returns"][$value->c_id][$day][$value->p_id]["amount"] = $value->amount;
+                if(!isset($data["returns"][$value->c_id][$value->p_id]["amount"])) {
+                    $data["returns"][$value->c_id][$value->p_id]["amount"] = 0;
+                }
+                $data["returns"][$value->c_id][$value->p_id]["amount"] += $value->amount;
+
+            }
+        }
+
         $cargo = new Cargo;
         if (!empty($cargo->getAllFullProductsDateAndShops($date_from, $date_to))) {
             foreach ($cargo->getAllFullProductsDateAndShops($date_from, $date_to) as $key => $value) {
@@ -817,6 +830,7 @@ class Reports
                 }
             }
         }
+
 
         $companies = new Companies();
         $data["shops"] = [];

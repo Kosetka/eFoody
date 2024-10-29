@@ -18,7 +18,8 @@ class ReturnsModel
         'date',
         'u_id',
         'amount',
-        'u_set_id'
+        'u_set_id',
+        'c_id'
     ];
 
     public function getProducts(): array
@@ -55,13 +56,19 @@ class ReturnsModel
         $query = "select * from $this->table WHERE w_id = $w_id AND p_id = $p_id AND date >= '$date'";
         return $this->query($query);
     }
+    public function getShopsReturn($date_from, $date_to)
+    {
+        $query = "select * from $this->table WHERE c_id IS NOT NULL AND date >= '$date_from 00:00:00' AND date <='$date_to 23:59:59'";
+        return $this->query($query);
+    }
     public function getReturnsMonth($month, $year)
     {
         $start_date = "$year-$month-01";
         $end_date = date("Y-m-t", strtotime($start_date));
 
         $query = "select * from $this->table WHERE 
-                date <= '$end_date 00:00:00'
+                c_id is NULL 
+                AND date <= '$end_date 00:00:00'
                 AND date >= '$start_date 23:59:59';";
         return $this->query($query);
     }
@@ -104,6 +111,12 @@ class ReturnsModel
     public function deleteByDate($date)
 	{
 		$query = "delete from $this->table where date >= '$date 00:00:00' AND date <= '$date 23:59:59' ";
+		$this->query($query);
+		return false;
+	}
+    public function deleteByDateAndShop($date, $c_id)
+	{
+		$query = "delete from $this->table where c_id = $c_id AND date >= '$date 00:00:00' AND date <= '$date 23:59:59' ";
 		$this->query($query);
 		return false;
 	}
