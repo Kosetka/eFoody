@@ -157,4 +157,34 @@ class Company
         }
     }
 
+    public function shops()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $companies = new Companies();
+        $data["companies"] = $companies->getAllShops();
+
+        $users_list = new User();
+        $temp["users"] = $users_list->getAll("users");
+        foreach ($temp["users"] as $user) {
+            $data["users"][$user->id] = (array) $user;
+        }
+
+        $apikey = new Apitokens;
+        $data["token"] = $apikey->getToken("google_maps");
+
+        $wh = new WarehouseModel;
+        $data["warehouse"] = $wh->getWarehouses();
+
+        $companies = new Companiesphone;
+        foreach($companies->getAllNumbers() as $company) {
+            $data["phone_numbers"][$company->c_id][$company->c_phone] = $company->c_phone;
+        }
+
+        $this->view('companyshops', $data);
+    }
+
 }
