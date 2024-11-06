@@ -37,7 +37,6 @@
                   <th scope="col">Osoba kontaktowa</th>
                   <th scope="col">Numer telefonu</th>
                   <th scope="col">Adres mailowy</th>
-                  <th scope="col">Status</th>
                   <th scope="col">Notatka</th>
                   <th scope="col">Lokalizacja</th>
                   <th scope="col">Ostatnia dostawa</th>
@@ -51,11 +50,6 @@
                   echo "<tr><th colspan='10'>Brak danych do wyświetlenia</th></tr>";
                 } else {
                   foreach ($data["companies"] as $company) {
-                    if ($company->active) {
-                      $active = "<td><span class='btn btn-success'>Aktywny</span></td>";
-                    } else {
-                      $active = "<td><span class='btn btn-danger'>Nieaktywny</span></td>";
-                    }
                     $gps_link = "#";
                     if (isset($company->latitude) && $company->latitude != "") {
                       if (isset($company->longitude) && $company->longitude != "") {
@@ -74,7 +68,6 @@
                                                 <td>$company->contact_first_name $company->contact_last_name</td>
                                                 <td>$company->phone_number</td>
                                                 <td>$company->email</td>
-                                                $active
                                                 <td>$company->description</td>";
                     if ($gps_link == "#") {
                       echo "<td></td>";
