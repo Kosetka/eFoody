@@ -266,3 +266,8 @@
 .pa0 {
   background-color: #e70909;
 }
+
+
+.card-half {
+  display: flex;
+}
