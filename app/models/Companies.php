@@ -70,6 +70,11 @@ class Companies
         $query = "select * from $this->table WHERE company_type IN (2, 3)";
         return $this->query($query);
     }
+    public function getAllShopsActive()
+    {
+        $query = "select * from $this->table WHERE company_type IN (2, 3) AND active = 1";
+        return $this->query($query);
+    }
     public function getAllCompaniesBuy()
     {
         $query = "select * from $this->table WHERE company_type = 1";
@@ -86,7 +91,8 @@ class Companies
         return $this->query($query)[0]->total;
     }
 
-    function getCompaniesNumber() {
+    function getCompaniesNumber()
+    {
         $query = "SELECT 
         guardian,
         COUNT(*) AS num

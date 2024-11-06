@@ -31,7 +31,7 @@ class Company
         }
 
         $companies = new Companiesphone;
-        foreach($companies->getAllNumbers() as $company) {
+        foreach ($companies->getAllNumbers() as $company) {
             $data["phone_numbers"][$company->c_id][$company->c_phone] = $company->c_phone;
         }
 
@@ -89,7 +89,7 @@ class Company
                 $last_id = $company->getLast();
                 $last_id = $last_id[0]->id;
                 $companies = new Companiesphone;
-                foreach($_POST["phone_numbers"] as $phone) {
+                foreach ($_POST["phone_numbers"] as $phone) {
                     if ($phone != "") {
                         $que_phone = ["c_id" => $last_id, "c_phone" => $phone]; // sprawdzić
                         $companies->insert($que_phone);
@@ -124,8 +124,8 @@ class Company
                 $company->update($company_id, $_POST);
                 $data['success'] = "Edycja firmy pomyślna!";
                 $companies = new Companiesphone;
-                $companies->delete($company_id,"c_id");
-                foreach($_POST["phone_numbers"] as $phone) {
+                $companies->delete($company_id, "c_id");
+                foreach ($_POST["phone_numbers"] as $phone) {
                     if ($phone != "") {
                         $que_phone = ["c_id" => $company_id, "c_phone" => $phone]; // sprawdzić
                         $companies->insert($que_phone);
@@ -165,7 +165,7 @@ class Company
         $data = [];
 
         $companies = new Companies();
-        $data["companies"] = $companies->getAllShops();
+        $data["companies"] = $companies->getAllShopsActive();
 
         $users_list = new User();
         $temp["users"] = $users_list->getAll("users");
@@ -180,7 +180,7 @@ class Company
         $data["warehouse"] = $wh->getWarehouses();
 
         $companies = new Companiesphone;
-        foreach($companies->getAllNumbers() as $company) {
+        foreach ($companies->getAllNumbers() as $company) {
             $data["phone_numbers"][$company->c_id][$company->c_phone] = $company->c_phone;
         }
 
