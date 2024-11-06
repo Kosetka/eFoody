@@ -166,6 +166,12 @@ class Company
 
         $companies = new Companies();
         $data["companies"] = $companies->getAllShopsActive();
+        $cargo = new Cargo();
+        if (!empty($cargo->getLatestCargoDates())) {
+            foreach ($cargo->getLatestCargoDates() as $cg) {
+                $data["cargo"][$cg->c_id] = $cg;
+            }
+        }
 
         $users_list = new User();
         $temp["users"] = $users_list->getAll("users");

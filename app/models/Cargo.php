@@ -74,6 +74,15 @@ class Cargo
         return $this->query($query);
     }
 
+    public function getLatestCargoDates()
+    {
+        $query = "SELECT c_id, MAX(DATE(date)) AS latest_date 
+                FROM $this->table 
+                WHERE amount > 0 
+                GROUP BY c_id";
+        return $this->query($query);
+    }
+
     public function reportData($date_from, $date_to): array
     {
         $query = "SELECT 
@@ -92,23 +101,23 @@ class Cargo
         if (empty($result)) {
             return [];
         }
-    
+
         return $result;
     }
 
     public function deleteByDateId($date, $id)
-	{
+    {
 
-		$query = "delete from $this->table where date = '$date' AND c_id = $id";
-		$this->query($query);
+        $query = "delete from $this->table where date = '$date' AND c_id = $id";
+        $this->query($query);
 
-		return false;
+        return false;
 
-	}
+    }
 
     public function updateChange($date_split, $p_id, $new_p_id, $w_id)
-	{
-		$query = "UPDATE $this->table SET p_id = $new_p_id WHERE date = '$date_split 06:00:00' AND p_id = $p_id AND w_id = $w_id;";
+    {
+        $query = "UPDATE $this->table SET p_id = $new_p_id WHERE date = '$date_split 06:00:00' AND p_id = $p_id AND w_id = $w_id;";
         return $this->query($query);
-	}
+    }
 }

@@ -74,7 +74,11 @@
                     } else {
                       echo "<td><a href='$gps_link' target='_blank'>Pokaż na mapie</a></td>";
                     }
-                    echo "<td></td>";
+                    $last_da = "";
+                    if (isset($data["cargo"][$company->id])) {
+                      $last_da = $data["cargo"][$company->id]->latest_date;
+                    }
+                    echo "<td>$last_da</td>";
                     if ($gps_link == "#") {
                       echo "<td></td>";
                     } else {
