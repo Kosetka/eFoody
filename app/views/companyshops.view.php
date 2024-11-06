@@ -131,20 +131,22 @@
                       <th rowspan="2">Godzina wyjazdu:</th>
                     </tr>
                     <tr>
-                      <td><input type="time" name="departure-time" value="16:00" required></td>
+                      <td><input class="form-control w-50" type="time" name="departure-time" value="16:00" required>
+                      </td>
                     </tr>
                     <tr>
                       <th rowspan="2">Czas na punkt:</th>
                     </tr>
                     <tr>
-                      <td><input type="number" name="point-time" min="1" max="15" step="1" value="5" required></td>
+                      <td><input class="form-control w-50" type="number" name="point-time" min="1" max="15" step="1"
+                          value="5" required></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
               <!-- Przycisk do generowania trasy i link do Google Maps -->
-              <button id="generate-route" onclick="generateRoute()">Generuj trasę</button>
+              <button id="generate-route" class="btn btn-primary" onclick="generateRoute()">Generuj trasę</button>
               <a id="route-link" href="#" target="_blank" style="display:none;">Zobacz trasę na Google Maps</a>
             </div>
             <div style="width: 70%; background-color: grey;">
