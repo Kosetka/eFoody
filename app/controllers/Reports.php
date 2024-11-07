@@ -776,6 +776,14 @@ class Reports
                 $data["prices"][$value->p_id][] = $value; 
             }
         }
+
+        $data["sku"] = [];
+        $skumodel = new Skumodel();
+        if(!empty($skumodel->getSku())) {
+            foreach($skumodel->getSku() as $skum) {
+                $data["sku"][$skum->full_type] = $skum;
+            }
+        }
         //show($data["prices"]);
 
         $plan = new ReturnsModel();
