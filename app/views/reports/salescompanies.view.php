@@ -168,6 +168,8 @@ if ($data["get"]["type"] == "month") {
 //show($data["cargo_temp"]);
 $mess = "";
 
+$prod = [];
+
 if(isset($data["cargo_temp"])) {
     foreach($data["cargo_temp"] as $company_id => $compval) {
         $mess .= "<table style='border: 1px solid'>
@@ -250,6 +252,20 @@ if(isset($data["cargo_temp"])) {
                         <td style='border: 1px solid;' title='Gwiazda oznacza zmianę ceny w trakcie wybranej daty, kwota liczy się prawidłowo, jednak wyświetla się najnowsza cena za sztukę.'>$cost_last zł$txtadd</td>
                         <td style='border: 1px solid;'>" . $total_cost . " zł</td>
                     </tr>";
+                if(!isset($prod[$product_id]["amount"])) {
+                    $prod[$product_id]["amount"] = 0;
+                }
+                $prod[$product_id]["amount"] += $amo;
+
+                if(!isset($prod[$product_id]["return"])) {
+                    $prod[$product_id]["return"] = 0;
+                }
+                $prod[$product_id]["return"] += $ret_show;
+
+                if(!isset($prod[$product_id]["cost"])) {
+                    $prod[$product_id]["cost"] = 0;
+                }
+                $prod[$product_id]["cost"] += $total_cost;
             }
         }
         $mess .= "
@@ -378,6 +394,62 @@ if(isset($data["cargo_temp2"])) {
 
 }
 
+if(!empty($prod)) {
+    $mess3 .= "<table style='border: 1px solid'>
+            <thead style='border: 1px solid'>
+                <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
+                    <th colspan='12'>Raport sprzedaży produktów</th>
+                </tr>
+                <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+                    <th style='border: 1px solid #000; width: 8%'>Produkt</th>
+                    <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
+                    <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
+                    <th style='border: 1px solid #000; width: 8%'>Cena łączna do zapłaty</th>
+                </tr>
+            </thead>
+            <tbody>";
+        $total_sales = 0;
+        $total_money = 0;
+
+        $start = new DateTime($data["get"]["date_from"]);
+        $end = new DateTime($data["get"]["date_to"]);
+
+        $end = $end->modify('+1 day');
+        
+        $week_sales = 0;
+        $week_money = 0;
+        $week_returns = 0;
+
+        foreach($prod as $prod_k => $prod_v) {
+            $mess3 .= "
+            <tr style='text-align: center;'>
+                <td style='border: 1px solid;'>".$data["fullproducts"][$prod_k]["p_name"]."</td>
+                <td style='border: 1px solid;'>".$prod_v["amount"]."</td>
+                <td style='border: 1px solid;'>".$prod_v["return"]."</td>
+                <td style='border: 1px solid;'>".$prod_v["cost"]." zł</td>
+            </tr>";
+            $week_sales += $prod_v["amount"];
+            $week_money += $prod_v["cost"];
+            $week_returns += $prod_v["return"];
+        }
+                    
+    
+        $mess3 .= "
+            </tbody>
+            <tfoot>
+                <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
+                    <td style='border: 1px solid;'>TOTAL Z WYBRANEGO ZAKRESU</td>
+                    <td style='border: 1px solid;'>$week_sales</td>
+                    <td style='border: 1px solid;'>$week_returns</td>
+                    <td style='border: 1px solid;'>$week_money zł</td>
+                </tr>
+            </tfoot>
+        </table>";
+        $mess3 .= "</br>";
+}
+
+
+
 
 
 echo $mess;
@@ -386,6 +458,13 @@ echo "</br></br>";
 echo "<h2>Szczegółowe dane o sprzedaży</h2>";
 echo "</br></br>";
 echo $mess2;
+
+echo "</br></br>";
+echo "<h2>Szczegółowe dane o sprzedaży produktów</h2>";
+echo "</br></br>";
+echo $mess3;
+
+//show($prod);
 
 //tu dodać szczegółowy, czyli po firmie i każdy dzień osobno
 ?>
