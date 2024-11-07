@@ -393,7 +393,7 @@ if(isset($data["cargo_temp2"])) {
     }
 
 }
-
+$mess3 = "";
 if(!empty($prod)) {
     $mess3 .= "<table style='border: 1px solid'>
             <thead style='border: 1px solid'>
