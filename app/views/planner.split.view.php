@@ -1,17 +1,18 @@
 <?php require_once 'landings/header.view.php' ?>
 <?php require_once 'landings/nav.view.php' ?>
 <style>
-    th:nth-child(2n+6), 
+    th:nth-child(2n+6),
     td:nth-child(2n+6),
     tr:nth-child(1) th {
         background-color: #f0f0f0;
     }
+
     tr:hover {
         background-color: #f0f0f0;
     }
 </style>
 <?php
-    //show($data["planned"]);
+//show($data["planned"]);
 ?>
 <div id="layoutSidenav">
     <?php require_once 'landings/sidebar.left.view.php' ?>
@@ -29,20 +30,20 @@
             </div>
             <div class="card mb-4">
                 <div class="card-header">
-                <?php
-                //show($data["split"]);
-                $date = "";
+                    <?php
+                    //show($data["split"]);
+                    $date = "";
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
                     }
                     $toBlock = "";
                     $toBlockButton = "";
-                    if($date<date("Y-m-d")) {
-                        $toBlock = " disabled";
-                        $toBlockButton = " hidden";
+                    if ($date < date("Y-m-d")) {
+                        $toBlock = " "; //disabled
+                        $toBlockButton = " "; //hidden
                     }
-                ?>
-                    <h2 class="">Plan podziału: <?php echo $date;?></h2>
+                    ?>
+                    <h2 class="">Plan podziału: <?php echo $date; ?></h2>
                     <div class="form-group row m-3">
                         <form method='get'>
                             <div class="col-sm-12" style='display: flex'>
@@ -54,88 +55,92 @@
                         </form>
                     </div>
                 </div>
-                    <div class="">
-                        <div class="form-group row m-3">
-                            <div class="col-sm-12">
-                                <table class="table table-bordered" id="orderedProductsTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Zdjęcie</th>
-                                            <th>Nazwa produktu</th>
-                                            <th>SKU</th>
-                                            <th>Planowana ilość</th>
-                                            <th>Sklepy</th>
-                                            <th>Pozostało</th>
-                                            <?php
-                                                foreach($data["traders"] as $user) {
-                                                    echo "<th>".$user->first_name." ".$user->last_name."</th>";
-                                                }
-                                            ?>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                <div class="">
+                    <div class="form-group row m-3">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered" id="orderedProductsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Zdjęcie</th>
+                                        <th>Nazwa produktu</th>
+                                        <th>SKU</th>
+                                        <th>Planowana ilość</th>
+                                        <th>Sklepy</th>
+                                        <th>Pozostało</th>
                                         <?php
-                                        if(isset($data["planned"])) {
-                                            foreach($data["planned"] as $product) {
-                                                echo "<tr>";
-                                                $vege = "";
-                                                if($data["fullproducts"][$product["p_id"]]["vege"] == 1) {
-                                                    $vege = "<span style='color: green; font-weight: bold;'>VEGE </span>";
-                                                }
-                                                $tshops = 0;
-                                                if(isset($data["cargo"][$product["p_id"]])) {
-                                                    $tshops = $data["cargo"][$product["p_id"]];
-                                                }
-                                                echo '
-                                                <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="'.IMG_ROOT.''.$data["fullproducts"][$product["p_id"]]["p_photo"].'"></td>
-                                                <td>'.$vege.' '.$data["fullproducts"][$product["p_id"]]["p_name"].'</td>
-                                                <td style="width: 100px">'.$data["fullproducts"][$product["p_id"]]["sku"].'</td>
-                                                <td>'.$product["amount"].'</td>
-                                                <td>'.$tshops.'</td>
-                                                <td></td>';
-
-                                                $pid = $data["fullproducts"][$product["p_id"]]["id"];
-                                                foreach($data["traders"] as $user) {
-                                                    $us = $user->id;
-                                                    $val = 0;
-                                                    if(isset($data["split"][$us][$pid])) {
-                                                        $val = $data["split"][$us][$pid]["amount"];
-                                                    }
-                                                    echo "<td><input $toBlock type='number' class='form-control' value='$val' min='0' id='in_".$pid."_".$us."' name='in_".$pid."_".$us."'></td>";
-                                                }
-                                                echo "</tr>";
-                                            }
+                                        foreach ($data["traders"] as $user) {
+                                            echo "<th>" . $user->first_name . " " . $user->last_name . "</th>";
                                         }
                                         ?>
-                                        <tr id="totalRow">
-                                            <th></th>
-                                            <th></th>
-                                            <th>Total</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <?php
-                                                foreach($data["traders"] as $user) {
-                                                    echo "<th></th>";
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if (isset($data["planned"])) {
+                                        foreach ($data["planned"] as $product) {
+                                            echo "<tr>";
+                                            $vege = "";
+                                            if ($data["fullproducts"][$product["p_id"]]["vege"] == 1) {
+                                                $vege = "<span style='color: green; font-weight: bold;'>VEGE </span>";
+                                            }
+                                            $tshops = 0;
+                                            if (isset($data["cargo"][$product["p_id"]])) {
+                                                $tshops = $data["cargo"][$product["p_id"]];
+                                            }
+                                            echo '
+                                                <td><img width="40" height="40" class="obrazek" id="imageBox${product.ID}" src="' . IMG_ROOT . '' . $data["fullproducts"][$product["p_id"]]["p_photo"] . '"></td>
+                                                <td>' . $vege . ' ' . $data["fullproducts"][$product["p_id"]]["p_name"] . '</td>
+                                                <td style="width: 100px">' . $data["fullproducts"][$product["p_id"]]["sku"] . '</td>
+                                                <td>' . $product["amount"] . '</td>
+                                                <td>' . $tshops . '</td>
+                                                <td></td>';
+
+                                            $pid = $data["fullproducts"][$product["p_id"]]["id"];
+                                            foreach ($data["traders"] as $user) {
+                                                $us = $user->id;
+                                                $val = 0;
+                                                if (isset($data["split"][$us][$pid])) {
+                                                    $val = $data["split"][$us][$pid]["amount"];
                                                 }
-                                            ?>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="form-group row m-3">
-                            <div class="col-sm-12">
-                                <button id="prepareTableButton" <?=$toBlockButton; ?> class="btn btn-primary">Zapisz podział</button>
-                            </div>
+                                                echo "<td><input $toBlock type='number' class='form-control' value='$val' min='0' id='in_" . $pid . "_" . $us . "' name='in_" . $pid . "_" . $us . "'></td>";
+                                            }
+                                            echo "</tr>";
+                                        }
+                                    }
+                                    ?>
+                                    <tr id="totalRow">
+                                        <th></th>
+                                        <th></th>
+                                        <th>Total</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <?php
+                                        foreach ($data["traders"] as $user) {
+                                            echo "<th></th>";
+                                        }
+                                        ?>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-            
+                    <div class="form-group row m-3">
+                        <div class="col-sm-12">
+                            <button id="prepareTableButton" <?= $toBlockButton; ?> class="btn btn-primary">Zapisz
+                                podział</button>
+                        </div>
+                    </div>
+                </div>
+
         </main>
         <script>
-            document.getElementById('prepareTableButton').addEventListener('click', function() {
+            document.getElementById('prepareTableButton').addEventListener('click', function () {
                 let traders = <?php echo json_encode($data["traders"]); ?>;
-                let planned = <?php if(isset($data["planned"])) echo json_encode($data["planned"]); else echo "[]";?>;
+                let planned = <?php if (isset($data["planned"]))
+                    echo json_encode($data["planned"]);
+                else
+                    echo "[]"; ?>;
                 let fullproducts = <?php echo json_encode($data["fullproducts"]); ?>;
 
                 let result = {};
@@ -235,12 +240,12 @@
                 });
             }
 
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const rows = document.querySelectorAll('#orderedProductsTable tbody tr:not(#totalRow)');
                 rows.forEach(row => {
                     let inputs = row.querySelectorAll('input[type="number"]');
                     inputs.forEach(input => {
-                        input.addEventListener('change', function() {
+                        input.addEventListener('change', function () {
                             updateCellColor(row);
                             updateTotals();
                         });
