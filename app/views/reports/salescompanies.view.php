@@ -261,11 +261,15 @@ if(isset($data["cargo_temp"])) {
                     $prod[$product_id]["return"] = 0;
                 }
                 $prod[$product_id]["return"] += $ret_show;
-
+                
                 if(!isset($prod[$product_id]["cost"])) {
                     $prod[$product_id]["cost"] = 0;
                 }
                 $prod[$product_id]["cost"] += $total_cost;
+                if(!isset($prod[$product_id]["return_val"])) {
+                    $prod[$product_id]["return_val"] = 0;
+                }
+                $prod[$product_id]["return_val"] += $ret_show * $cost_last;
             }
         }
         $mess .= "
@@ -407,6 +411,7 @@ if(!empty($prod)) {
                     <th style='border: 1px solid #000; width: 8%'>Produkt</th>
                     <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
                     <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
+                    <th style='border: 1px solid #000; width: 8%'>Wartość zwrotów</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena łączna do zapłaty</th>
                 </tr>
             </thead>
@@ -422,6 +427,7 @@ if(!empty($prod)) {
         $week_sales = 0;
         $week_money = 0;
         $week_returns = 0;
+        $week_retvar = 0;
 
         foreach($prod as $prod_k => $prod_v) {
             $mess3 .= "
@@ -429,21 +435,25 @@ if(!empty($prod)) {
                 <td style='border: 1px solid;'>".$data["fullproducts"][$prod_k]["p_name"]."</td>
                 <td style='border: 1px solid;'>".$prod_v["amount"]."</td>
                 <td style='border: 1px solid;'>".$prod_v["return"]."</td>
+                <td style='border: 1px solid;'>".$prod_v["return_val"]."</td>
                 <td style='border: 1px solid;'>".$prod_v["cost"]." zł</td>
             </tr>";
             $week_sales += $prod_v["amount"];
             $week_money += $prod_v["cost"];
             $week_returns += $prod_v["return"];
+            $week_retvar += $prod_v["return_val"];
 
             $sku = substr($data["fullproducts"][$prod_k]["sku"],0,4);
             if(!isset($prodsku[$sku])) {
                 $prodsku[$sku]["amount"] = 0;
                 $prodsku[$sku]["cost"] = 0;
                 $prodsku[$sku]["return"] = 0;
+                $prodsku[$sku]["return_val"] = 0;
             }
             $prodsku[$sku]["amount"] += $prod_v["amount"];
             $prodsku[$sku]["cost"] += $prod_v["cost"];
             $prodsku[$sku]["return"] += $prod_v["return"];
+            $prodsku[$sku]["return_val"] += $prod_v["return_val"];
         }
                     
     
@@ -454,6 +464,7 @@ if(!empty($prod)) {
                     <td style='border: 1px solid;'>TOTAL Z WYBRANEGO ZAKRESU</td>
                     <td style='border: 1px solid;'>$week_sales</td>
                     <td style='border: 1px solid;'>$week_returns</td>
+                    <td style='border: 1px solid;'>$week_retvar zł</td>
                     <td style='border: 1px solid;'>$week_money zł</td>
                 </tr>
             </tfoot>
@@ -472,6 +483,7 @@ if(!empty($prodsku)) {
                     <th style='border: 1px solid #000; width: 8%'>Produkt</th>
                     <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
                     <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
+                    <th style='border: 1px solid #000; width: 8%'>Wartość zwrotów</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena łączna do zapłaty</th>
                 </tr>
             </thead>
@@ -487,6 +499,7 @@ if(!empty($prodsku)) {
         $week_sales = 0;
         $week_money = 0;
         $week_returns = 0;
+        $week_retvar = 0;
 
         foreach($prodsku as $prod_k => $prod_v) {
             $here_sku = str_replace("-","_",$prod_k);
@@ -495,11 +508,13 @@ if(!empty($prodsku)) {
                 <td style='border: 1px solid;'>".$data["sku"][$here_sku]->name."</td>
                 <td style='border: 1px solid;'>".$prod_v["amount"]."</td>
                 <td style='border: 1px solid;'>".$prod_v["return"]."</td>
+                <td style='border: 1px solid;'>".$prod_v["return_val"]." zł</td>
                 <td style='border: 1px solid;'>".$prod_v["cost"]." zł</td>
             </tr>";
             $week_sales += $prod_v["amount"];
             $week_money += $prod_v["cost"];
             $week_returns += $prod_v["return"];
+            $week_retvar += $prod_v["return_val"];
         }
                     
     
@@ -510,6 +525,7 @@ if(!empty($prodsku)) {
                     <td style='border: 1px solid;'>TOTAL Z WYBRANEGO ZAKRESU</td>
                     <td style='border: 1px solid;'>$week_sales</td>
                     <td style='border: 1px solid;'>$week_returns</td>
+                    <td style='border: 1px solid;'>$week_retvar zł</td>
                     <td style='border: 1px solid;'>$week_money zł</td>
                 </tr>
             </tfoot>

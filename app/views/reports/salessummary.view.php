@@ -178,7 +178,7 @@ if(isset($data["cargo_temp"])) {
                 <th style='border: 1px solid #000; width: 8%'>Produkt</th>
                 <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
                 <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
-                <th style='border: 1px solid #000; width: 8%'>% zwrotów</th>
+                <th style='border: 1px solid #000; width: 8%'>Wartość zwrotów</th>
                 <th style='border: 1px solid #000; width: 8%'>Łącznie do zapłaty</th>
             </tr>
         </thead>
@@ -186,9 +186,11 @@ if(isset($data["cargo_temp"])) {
     $tt_sales = 0;
     $tt_money = 0;
     $tt_return = 0;
+    $tt_retret = 0;
     foreach($data["cargo_temp"] as $company_id => $compval) {
         $total_sales = 0;
         $total_money = 0;
+        $total_retret = 0;
         $total_return = 0;
         
         foreach ($compval as $product_id => $prod_date) {
@@ -230,6 +232,7 @@ if(isset($data["cargo_temp"])) {
     
                 $tot_amo = ($one_date["amount"] - $day_ret) * $cost;
                 $total_sales += $one_date["amount"];
+                $total_retret += $day_ret * $cost;
                 $total_money += ($one_date["amount"] - $day_ret) * $cost;
                 $total_cost += ($one_date["amount"] - $day_ret) * $cost;
             }
@@ -260,11 +263,12 @@ if(isset($data["cargo_temp"])) {
                     <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name."</td>
                     <td style='border: 1px solid;'>$total_sales</td>
                     <td style='border: 1px solid;'>$total_return</td>
-                    <td style='border: 1px solid;'>".getPercent($total_return,$total_sales)." %</td>
+                    <td style='border: 1px solid;' title='".getPercent($total_return,$total_sales)." %'>".$total_retret." zł</td>
                     <td style='border: 1px solid;'>$total_money zł</td>
                 </tr>";
         $tt_sales += $total_sales;
         $tt_return += $total_return;
+        $tt_retret += $total_retret;
         $tt_money += $total_money;
     }
     $mess .= "
@@ -274,7 +278,7 @@ if(isset($data["cargo_temp"])) {
                     <td style='border: 1px solid;'>TOTAL</td>
                     <td style='border: 1px solid;'>$tt_sales</td>
                     <td style='border: 1px solid;'>$tt_return</td>
-                    <td style='border: 1px solid;'>".getPercent($tt_return,$tt_sales)." %</td>
+                    <td style='border: 1px solid;' title='".getPercent($tt_return,$tt_sales)." %'>".$tt_retret." zł</td>
                     <td style='border: 1px solid;'>$tt_money zł</td>
                 </tr>
             </tfoot>
