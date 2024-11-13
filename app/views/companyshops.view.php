@@ -375,7 +375,10 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
 
                 // Wyświetlamy posortowane punkty
                 const sortedWaypoints = result.routes[0].waypoint_order; // Kolejność punktów pośrednich po optymalizacji
+                full_msg = "";
                 displaySortedPoints(sortedWaypoints, waypoints, result.routes[0].legs);
+                let txt_msg = document.getElementById("txt_msg");
+                txt_msg.innerHTML = full_msg;
                 //console.log(result.routes[0].legs);
                 updateSummary(result.routes[0].legs);
 
@@ -425,7 +428,6 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
         function displaySortedPoints(sortedWaypoints, waypoints, legs) {
           // Usuwamy poprzednią listę punktów
           const pointsList = document.getElementById("table-list");
-          const txt_msg = document.getElementById("txt_msg");
           pointsList.innerHTML = '';
 
           // Ustawiamy czas przyjazdu do pierwszego punktu na wartość startową
@@ -446,7 +448,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
             const shopDescription = shop ? shop_des[shop.id] : 'Brak opisu';
 
             // Wypisujemy `shopDescription` w konsoli
-            console.log(`Shop ID: ${shop ? shop.id : 'N/A'}, Description: ${shopDescription}`);
+            //console.log(`Shop ID: ${shop ? shop.id : 'N/A'}, Description: ${shopDescription}`);
             full_msg += shopDescription + "</br>";
 
             // Parsujemy wartość czasu przejazdu na minuty
@@ -478,7 +480,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
 
             // Ustawiamy nowy czas przyjazdu na czas zakończenia dla kolejnego punktu
             arrivalTime = endTime;
-            txt_msg.innerHTML = full_msg
+
           });
         }
 
