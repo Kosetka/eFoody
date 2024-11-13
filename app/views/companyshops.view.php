@@ -19,6 +19,80 @@
     margin: 5px 0;
   }
 </style>
+<?php
+$msg = "";
+$comp_des = [];
+
+foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
+  $fr_name = "";
+  if (isset($data["companies_sorted"][$comp_id]->full_name)) {
+    $fr_name = $data["companies_sorted"][$comp_id]->full_name;
+    if ($data["companies_sorted"][$comp_id]->friendly_name) {
+      $fr_name .= " (" . $data["companies_sorted"][$comp_id]->friendly_name . ")";
+
+    }
+  }
+  $msg .= $fr_name . ": ";
+  $msg .= "</br>";
+  $p_01 = [];
+  $p_02 = [];
+  $p_03 = [];
+  foreach ($comp_val as $prod_val) {
+    if (substr($prod_val->sku, 0, 4) == "1-01") {
+      $p_01[] = $prod_val;
+    } else if (substr($prod_val->sku, 0, 4) == "1-02") {
+      $p_02[] = $prod_val;
+    } else {
+      $p_03[] = $prod_val;
+    }
+  }
+  $title_set = false;
+  foreach ($p_01 as $prod_val) {
+    $f_name = $prod_val->p_name;
+    if ($prod_val->friendly_name != "") {
+      $f_name = $prod_val->friendly_name;
+    }
+    if (!$title_set) {
+      $msg .= "Sałatki: ";
+      $msg .= "</br>";
+      $title_set = true;
+    }
+    $msg .= "- " . $f_name . " - x" . $prod_val->amount;
+    $msg .= "</br>";
+  }
+  $title_set = false;
+  foreach ($p_02 as $prod_val) {
+    $f_name = $prod_val->p_name;
+    if ($prod_val->friendly_name != "") {
+      $f_name = $prod_val->friendly_name;
+    }
+    if (!$title_set) {
+      $msg .= "Kanapki: ";
+      $msg .= "</br>";
+      $title_set = true;
+    }
+    $msg .= "- " . $f_name . " - x" . $prod_val->amount;
+    $msg .= "</br>";
+  }
+  $title_set = false;
+  foreach ($p_03 as $prod_val) {
+    $f_name = $prod_val->p_name;
+    if ($prod_val->friendly_name != "") {
+      $f_name = $prod_val->friendly_name;
+    }
+    if (!$title_set) {
+      $msg .= "Pozostałe: ";
+      $msg .= "</br>";
+      $title_set = true;
+    }
+    $msg .= "- " . $f_name . " - x" . $prod_val->amount;
+    $msg .= "</br>";
+  }
+  $comp_des[$comp_id] = $msg;
+
+  $msg = "";
+}
+?>
 <div id="layoutSidenav">
   <?php require_once 'landings/sidebar.left.view.php' ?>
   <div id="layoutSidenav_content">
@@ -82,7 +156,7 @@
                     if ($gps_link == "#") {
                       echo "<td></td>";
                     } else {
-                      echo "<td><input type='checkbox' class='location-checkbox form-check-input' data-latitude='{$company->latitude}' data-longitude='{$company->longitude}'></td>";
+                      echo "<td><input type='checkbox' checked class='location-checkbox form-check-input' data-latitude='{$company->latitude}' data-longitude='{$company->longitude}'></td>";
                     }
 
                     echo "</tr>";
@@ -157,26 +231,49 @@
         </div>
       </div>
 
-      <div id="points-list">
-        <h3>Optymalna trasa:</h3>
-        <p id="summary_opti"></p>
-        <ul id="points-ul"></ul>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Nazwa sklepu</th>
-              <th scope="col">Adres</th>
-              <th scope="col">Czas przyjazdu</th>
-              <th scope="col">Czas odjazdu</th>
-              <th scope="col">Odległość</th>
-              <th scope="col">Czas przejazdu</th>
-            </tr>
-          </thead>
-          <tbody id="table-list">
+      <div class="container-fluid px-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3>Optymalna trasa:</h3>
+            <p id="summary_opti"></p>
+            <ul id="points-ul"></ul>
+          </div>
+          <div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Nazwa sklepu</th>
+                  <th scope="col">Adres</th>
+                  <th scope="col">Czas przyjazdu</th>
+                  <th scope="col">Czas odjazdu</th>
+                  <th scope="col">Odległość</th>
+                  <th scope="col">Czas przejazdu</th>
+                </tr>
+              </thead>
+              <tbody id="table-list">
 
-          </tbody>
-        </table>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
+
+      <div class="container-fluid px-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3>Treść wiadomości:</h3>
+          </div>
+          <div>
+            <p id="txt_msg">
+              <?php
+              //show($comp_des);
+              ?>
+
+            </p>
+          </div>
+        </div>
+      </div>
+
 
       <script>
         let map;
@@ -184,6 +281,7 @@
         let directionsRenderer;
         let time_onsite = 300; // 300 sekund = 5 minut
         let time_start = "16:00"; // godzina wyjazdu
+        let full_msg = "";
 
         // Funkcja pomocnicza do dodawania minut do czasu w formacie HH:MM
         function addMinutesToTime(time, minutes) {
@@ -195,6 +293,8 @@
         }
 
         const shops = <?php echo json_encode($data["companies"]); ?>; // Przekazanie danych o sklepach do JavaScript
+        const shop_des = <?php echo json_encode($comp_des); ?>; // Przekazanie danych o sklepach do JavaScript
+        console.log(shop_des);
         //console.log(shops);
 
         function initMap() {
@@ -325,6 +425,7 @@
         function displaySortedPoints(sortedWaypoints, waypoints, legs) {
           // Usuwamy poprzednią listę punktów
           const pointsList = document.getElementById("table-list");
+          const txt_msg = document.getElementById("txt_msg");
           pointsList.innerHTML = '';
 
           // Ustawiamy czas przyjazdu do pierwszego punktu na wartość startową
@@ -340,6 +441,13 @@
 
             // Znajdź sklep na podstawie współrzędnych
             const shop = findShopByLatLng(latLng.lat(), latLng.lng());
+
+            // Jeśli znaleziono sklep, znajdź jego `id` i pobierz odpowiadający tekst z `shop_des`
+            const shopDescription = shop ? shop_des[shop.id] : 'Brak opisu';
+
+            // Wypisujemy `shopDescription` w konsoli
+            console.log(`Shop ID: ${shop ? shop.id : 'N/A'}, Description: ${shopDescription}`);
+            full_msg += shopDescription + "</br>";
 
             // Parsujemy wartość czasu przejazdu na minuty
             const durationMinutes = parseInt(duration.split(" ")[0]);
@@ -365,14 +473,15 @@
       <td>${endTime}</td>
       <td>${distance}</td>
       <td>${duration}</td>
-      `;
-            //<td>${latLng.lat()}, ${latLng.lng()}</td>
+    `;
             pointsList.appendChild(li);
 
             // Ustawiamy nowy czas przyjazdu na czas zakończenia dla kolejnego punktu
             arrivalTime = endTime;
+            txt_msg.innerHTML = full_msg
           });
         }
+
       </script>
       <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=<?= $data["token"]; ?>&callback=initMap"></script>

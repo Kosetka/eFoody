@@ -166,10 +166,18 @@ class Company
 
         $companies = new Companies();
         $data["companies"] = $companies->getAllShopsActive();
+        foreach ($companies->getAllShopsActive() as $co) {
+            $data["companies_sorted"][$co->id] = $co;
+        }
         $cargo = new Cargo();
         if (!empty($cargo->getLatestCargoDates())) {
             foreach ($cargo->getLatestCargoDates() as $cg) {
                 $data["cargo"][$cg->c_id] = $cg;
+            }
+        }
+        if (!empty($cargo->getLastCargo())) {
+            foreach ($cargo->getLastCargo() as $ro) {
+                $data["cargo_comp"][$ro->c_id][] = $ro;
             }
         }
 

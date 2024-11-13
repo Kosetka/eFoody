@@ -83,6 +83,20 @@ class Cargo
         return $this->query($query);
     }
 
+    public function getLastCargo()
+    {
+        $query = "SELECT filtered_records.*, p.*
+FROM (
+    SELECT *, 
+           MAX(DATE(date)) OVER (PARTITION BY c_id) AS max_date_for_cid
+    FROM $this->table
+    WHERE amount > 0 AND c_id IS NOT NULL
+) AS filtered_records
+JOIN products AS p ON p.id = filtered_records.p_id
+WHERE DATE(filtered_records.date) = filtered_records.max_date_for_cid;";
+        return $this->query($query);
+    }
+
     public function reportData($date_from, $date_to): array
     {
         $query = "SELECT 
