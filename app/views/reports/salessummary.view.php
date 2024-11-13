@@ -258,9 +258,13 @@ if(isset($data["cargo_temp"])) {
                     </tr>";*/
             }
         }
+        $friendly = "";
+        if(strlen($data["shops"][$company_id]->friendly_name) > 1 ) {
+            $friendly = "(".$data["shops"][$company_id]->friendly_name.")";
+        }
         $mess .= "
                 <tr style='text-align: center;'>
-                    <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name."</td>
+                    <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly</td>
                     <td style='border: 1px solid;'>$total_sales</td>
                     <td style='border: 1px solid;'>$total_return</td>
                     <td style='border: 1px solid;' title='".getPercent($total_return,$total_sales)." %'>".$total_retret." zł</td>
