@@ -29,7 +29,7 @@
                 <p>Niebieski przycisk <a class="btn btn-primary" href="#" role="button" title="Etykieta"><i class="fa-solid fa-tag"></i></a> pobiera plik LBX, który pozwala na edytowanie etykiety w specjalnym programie Brother na komputerze.</p>
                 <p>Zielony przycisk drukarki <a target="" class="btn btn-success print-pdf" href="#" role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a> otwiera w nowym oknie plik PDF z etykietą produktu. Data produkcji jest tam automatycznie ustawiana na naspeny dzień (w przypadku piątku i soboty - jest ustawiona data najbliższego poniedziałku).</p>
                 <p>Żółty przycisk kalendarza <a target="" class="btn btn-warning print-pdf" href="" role="button" title="Drukuj pdf"><i class="fas fa-calendar-alt"></i></a> podobnie jak przycisk drukarki otwiera plik PDF z etykietą, jednak data jest pobierana z tego pola:</p>
-                <p><b>Data produkcji: </b> <input type='date' style='padding: 5px; margin: 2px;border-radius: 8px;' id='date_prod' name='date_prod' value='<?php echo $date; ?>'></p>
+                <p><b>Data produkcji: </b> <input type='date' style='padding: 5px; margin: 2px;border-radius: 8px;' id='date_prod' name='date_prod' value='<?php //echo $date; ?>'></p>
                 <p>Po kliknięciu przycisku <a target="" class="btn btn-success print-pdf" href="#" role="button" title="Drukuj pdf"><i class="fa-solid fa-print"></i></a> lub <a target="" class="btn btn-warning print-pdf" href="" role="button" title="Drukuj pdf"><i class="fas fa-calendar-alt"></i></a> komórka podświetla się na jasnozielony, co oznacza że dany produkt ma już wydrukowane etykiety. Podświetlenie działa tylko do odświeżenia strony.</p>
                 
             </div>
