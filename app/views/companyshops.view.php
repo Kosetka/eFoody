@@ -53,11 +53,11 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
       $f_name = $prod_val->friendly_name;
     }
     if (!$title_set) {
-      $msg .= "Sałatki: ";
+      $msg .= "S.: ";
       $msg .= "</br>";
       $title_set = true;
     }
-    $msg .= "- " . $f_name . " - x" . $prod_val->amount;
+    $msg .= $f_name . " x" . $prod_val->amount;
     $msg .= "</br>";
   }
   $title_set = false;
@@ -67,11 +67,11 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
       $f_name = $prod_val->friendly_name;
     }
     if (!$title_set) {
-      $msg .= "Kanapki: ";
+      $msg .= "K.: ";
       $msg .= "</br>";
       $title_set = true;
     }
-    $msg .= "- " . $f_name . " - x" . $prod_val->amount;
+    $msg .= $f_name . " x" . $prod_val->amount;
     $msg .= "</br>";
   }
   $title_set = false;
@@ -81,11 +81,11 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
       $f_name = $prod_val->friendly_name;
     }
     if (!$title_set) {
-      $msg .= "Pozostałe: ";
+      $msg .= "Inne: ";
       $msg .= "</br>";
       $title_set = true;
     }
-    $msg .= "- " . $f_name . " - x" . $prod_val->amount;
+    $msg .= $f_name . " x" . $prod_val->amount;
     $msg .= "</br>";
   }
   $comp_des[$comp_id] = $msg;
