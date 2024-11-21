@@ -173,7 +173,7 @@ if(isset($data["cargo_temp"])) {
     $mess .= "<table style='border: 1px solid'>
         <thead style='border: 1px solid'>
             <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
-                <th colspan='12'>Raport sprzedaży po firmach - $dates</th>
+                <th colspan='12'>Raport sprzedaży do punktów sklepowych - $dates</th>
             </tr>
             <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                 <th style='border: 1px solid #000; width: 8%'>Produkt</th>
@@ -303,7 +303,7 @@ if($mess != "") {
 
 <?php
 $to = $data["emails"]; //'mateusz.zybura@radluks.pl, mateusz.zybura@gmail.com'
-$subject = "Raport sprzedaży do firm - $dates";
+$subject = "Raport sprzedaży do punktów sklepowych - $dates";
 
 if ($send == 1) {
     $mailer = new Mailer($to, $subject, $mess);
