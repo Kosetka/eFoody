@@ -162,8 +162,9 @@ if ($data["get"]["type"] == "week") {
     $dates = $new_date_format_from . " - " . $new_date_format_to;
 }
 if ($data["get"]["type"] == "month") {
-    $month = date("F Y", strtotime($data["get"]["date_from"]));
-    $dates = $month;
+    $month = date("F", strtotime($data["get"]["date_from"]));
+    $year = date("Y", strtotime($data["get"]["date_from"]));
+    $dates = POLISHMONTHS[$month]." ".$year;
 }
 //show($data["cargo_temp"]);
 $mess = "";
@@ -292,7 +293,10 @@ if(isset($data["cargo_temp"])) {
 
 
 echo $mess;
-
+$to_send = false;
+if($mess != "") {
+    $to_send = true;
+}
 ?>
 
 
@@ -303,13 +307,16 @@ $subject = "Raport sprzedaży do firm - $dates";
 
 if ($send == 1) {
     $mailer = new Mailer($to, $subject, $mess);
-    if (SEND_ON === TRUE) {
+    if (SEND_ON === TRUE && $to_send) {
         if ($mailer->send()) {
             echo 'Wiadomość została wysłana pomyślnie.';
         } else {
             echo 'Wystąpił problem podczas wysyłania wiadomości. Błąd: ' . print_r($mailer->getLastError(), true);
         }
     } else {
+        if(!$to_send) {
+            echo "Brak treści wiadomości";
+        }
         show($mailer);
     }
 }

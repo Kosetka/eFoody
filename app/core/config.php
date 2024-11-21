@@ -55,6 +55,18 @@ define('COSTCATEGORIES', [1 => "Administracja", 2 => "Flota", 3 => "Kuchnia", 4 
 define('COSTMETHODS', [0 => "-", 1 => "Gotówka", 2 => "Karta *1111", 3 => "Przelew"]);
 define('ATTENDANCEERRORS', ["OK,atcErr01" => "Brak karty w systemie", "OK,atcErr02" => "Karta zablokowana"]);
 define('POLISHMONTHS',[
+	"January" => "Styczeń",
+    "February" => "Luty",
+    "March" => "Marzec",
+    "April" => "Kwiecień",
+    "May" => "Maj",
+    "June" => "Czerwiec",
+    "July" => "Lipiec",
+    "August" => "Sierpień",
+    "September" => "Wrzesień",
+    "October" => "Październik",
+    "November" => "Listopad",
+    "December" => "Grudzień",
     "01" => "Styczeń",
     "1" => "Styczeń",
     "02" => "Luty",
@@ -84,5 +96,5 @@ define('PAGETYPE',[1 => "Fingerfood", 2 => "Catering"]);
                                         
 
 /** true means show errors **/
-define('DEBUG', true);
+define( 'DEBUG', true);
 

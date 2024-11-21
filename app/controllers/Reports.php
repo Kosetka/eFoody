@@ -859,8 +859,8 @@ class Reports
 
     public function salessummary()
     {
-        if (empty($_SESSION['USER']))
-            redirect('login');
+        //if (empty($_SESSION['USER']))
+        //    redirect('login');
 
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
@@ -922,11 +922,11 @@ class Reports
         if ($type == "hour")
             $raport_id = 15; // do zmiany 133
         elseif ($type == "day")
-            $raport_id = 15; // do zmiany
+            $raport_id = 139; // ok
         else if ($type == "week")
-            $raport_id = 15; // do zmiany
+            $raport_id = 136; // ok
         else if ($type == "month")
-            $raport_id = 15; // do zmiany
+            $raport_id = 140; // ok
 
         $l_access = new Linksaccess;
         $ids = [];
