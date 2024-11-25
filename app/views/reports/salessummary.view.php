@@ -227,9 +227,17 @@ if(isset($data["cargo_temp"])) {
                     }
                 }
                 $day_ret = 0;
-                if(isset($data["returns"][$company_id][$key_date][$product_id]["amount"])) {
-                    $day_ret = $data["returns"][$company_id][$key_date][$product_id]["amount"];
+                if($data["get"]["type"] == "day") {
+                    //echo $data["returns_new"][$company_id][$key_date][$product_id]["amount"];
+                    if(isset($data["returns_new"][$company_id][$key_date][$product_id]["amount"])) {
+                        $day_ret = $data["returns_new"][$company_id][$key_date][$product_id]["amount"];
+                    }
+                } else {
+                    if(isset($data["returns"][$company_id][$key_date][$product_id]["amount"])) {
+                        $day_ret = $data["returns"][$company_id][$key_date][$product_id]["amount"];
+                    }
                 }
+                //show($data["returns_new"]["423"]);
     
                 $tot_amo = ($one_date["amount"] - $day_ret) * $cost;
                 $total_sales += $one_date["amount"];
@@ -245,9 +253,16 @@ if(isset($data["cargo_temp"])) {
     
             if($amo > 0) {
                 $ret_show = 0;
-                if(isset($data["returns"][$company_id][$product_id]["amount"])) {
-                    $ret_show = $data["returns"][$company_id][$product_id]["amount"];
-                    $total_return += $ret_show;
+                if($data["get"]["type"] == "day") {
+                    if(isset($data["returns_new"][$company_id][$product_id]["amount"])) {
+                        $ret_show = $data["returns_new"][$company_id][$product_id]["amount"];
+                        $total_return += $ret_show;
+                    }
+                } else {
+                    if(isset($data["returns"][$company_id][$product_id]["amount"])) {
+                        $ret_show = $data["returns"][$company_id][$product_id]["amount"];
+                        $total_return += $ret_show;
+                    }
                 }
                 /*$mess .= "
                     <tr style='text-align: center;'>
@@ -265,7 +280,7 @@ if(isset($data["cargo_temp"])) {
         }
         $mess .= "
                 <tr style='text-align: center;'>
-                    <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly</td>
+                    <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly ($company_id)</td>
                     <td style='border: 1px solid;'>$total_sales</td>
                     <td style='border: 1px solid;'>$total_return</td>
                     <td style='border: 1px solid;' title='".getPercent($total_return,$total_sales)." %'>".$total_retret." zł</td>

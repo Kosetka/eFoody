@@ -1028,8 +1028,22 @@ class Reports
                     $data["returns"][$value->c_id][$value->p_id]["amount"] = 0;
                 }
                 $data["returns"][$value->c_id][$value->p_id]["amount"] += $value->amount;
-
+                
             }
+        }
+
+        if($type == "day") {
+            if(!empty($plan->getShopsReturnNew($date_from, $date_to))) {
+                foreach ($plan->getShopsReturnNew($date_from, $date_to) as $key => $value) {
+                    $day = substr($value->date_now,0,10);
+                    $data["returns_new"][$value->c_id][$day][$value->p_id]["amount"] = $value->amount;
+                    if(!isset($data["returns_new"][$value->c_id][$value->p_id]["amount"])) {
+                        $data["returns_new"][$value->c_id][$value->p_id]["amount"] = 0;
+                    }
+                    $data["returns_new"][$value->c_id][$value->p_id]["amount"] += $value->amount;
+                }
+            }
+            //show($data["returns_new"]);
         }
 
         $cargo = new Cargo;

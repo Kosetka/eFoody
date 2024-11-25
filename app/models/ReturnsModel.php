@@ -19,7 +19,8 @@ class ReturnsModel
         'u_id',
         'amount',
         'u_set_id',
-        'c_id'
+        'c_id',
+        'date_now'
     ];
 
     public function getProducts(): array
@@ -59,6 +60,11 @@ class ReturnsModel
     public function getShopsReturn($date_from, $date_to)
     {
         $query = "select * from $this->table WHERE c_id IS NOT NULL AND date >= '$date_from 00:00:00' AND date <='$date_to 23:59:59'";
+        return $this->query($query);
+    }
+    public function getShopsReturnNew($date_from, $date_to)
+    {
+        $query = "select * from $this->table WHERE c_id IS NOT NULL AND date_now >= '$date_from' AND date_now <='$date_to'";
         return $this->query($query);
     }
     public function getReturnsMonth($month, $year)
