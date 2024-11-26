@@ -100,7 +100,25 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
       <div class="container-fluid px-4">
         <div class="card mb-4">
           <div class="card-header">
-            <h2 class="">Lista miast</h2>
+            <h2 class="">Lista sklepów</h2>
+              <div class="form-group row m-3">
+                  <label for="delivery_hour" class="col-sm-2 col-form-label">Termin dostawy:</label>
+                  <div class="col-sm-2" style="text-align: left;">
+                      <?php
+                      $selected = "checked";
+                      foreach (DELIVERYHOUR as $key => $value) {
+                          echo "<div class='form-check'>
+                              <input class='form-check-input' type='radio' name='delivery_hour' id='delivery_hour$key' value='$key' $selected>
+                              <label class='form-check-label' for='delivery_hour$key'>
+                              $value
+                              </label>
+                              </div>";
+                          $selected = "";
+                      }
+                      ?>
+                      <button id="select-shops" class="btn btn-primary" onclick="selectShops()">Zaznacz wybrane</button>
+                  </div>
+              </div>
           </div>
           <div class="card-body">
             <table class="table">
@@ -280,7 +298,41 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
         </div>
       </div>
 
+      <script>
+function selectShops() {
+    // Pobierz zaznaczoną wartość z radio buttonów
+    const selectedDeliveryHour = document.querySelector('input[name="delivery_hour"]:checked').value;
 
+    // Pobierz wszystkie checkboxy w tabeli
+    const checkboxes = document.querySelectorAll('.location-checkbox');
+
+    // Najpierw odznacz wszystkie checkboxy
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Iteruj przez każdy checkbox i sprawdź, czy jego wiersz odpowiada wybranemu `delivery_hour`
+    checkboxes.forEach(checkbox => {
+        // Pobierz wiersz, w którym znajduje się checkbox
+        const row = checkbox.closest('tr');
+
+        // Znajdź kolumnę z klasą `delivery-typeX` w tym wierszu
+        const deliveryTypeCell = row.querySelector('[class^="delivery-type"]');
+
+        if (deliveryTypeCell) {
+            // Wyciągnij klasę `delivery-typeX` i uzyskaj numer
+            const deliveryClass = [...deliveryTypeCell.classList].find(cls => cls.startsWith('delivery-type'));
+            const deliveryHour = deliveryClass.replace('delivery-type', '');
+
+            // Jeśli numer odpowiada wybranemu radio, zaznacz checkbox
+            if (deliveryHour === selectedDeliveryHour) {
+                checkbox.checked = true;
+            }
+        }
+    });
+}
+
+      </script>
       <script>
         let map;
         let directionsService;
