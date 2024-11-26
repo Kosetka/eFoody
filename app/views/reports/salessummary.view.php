@@ -170,7 +170,8 @@ if ($data["get"]["type"] == "month") {
 $mess = "";
 
 if(isset($data["cargo_temp"])) {
-    $mess .= "<table style='border: 1px solid'>
+    if($data["get"]["type"] == "day") {
+        $mess .= "<table style='border: 1px solid'>
         <thead style='border: 1px solid'>
             <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
                 <th colspan='12'>Raport sprzedaży do punktów sklepowych - $dates</th>
@@ -178,12 +179,29 @@ if(isset($data["cargo_temp"])) {
             <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                 <th style='border: 1px solid #000; width: 8%'>Produkt</th>
                 <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
+                <th style='border: 1px solid #000; width: 8%'>Wartość dostarczonych</th>
                 <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
                 <th style='border: 1px solid #000; width: 8%'>Wartość zwrotów</th>
                 <th style='border: 1px solid #000; width: 8%'>Łącznie do zapłaty</th>
             </tr>
         </thead>
         <tbody>";
+    } else {
+        $mess .= "<table style='border: 1px solid'>
+            <thead style='border: 1px solid'>
+                <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
+                    <th colspan='12'>Raport sprzedaży do punktów sklepowych - $dates</th>
+                </tr>
+                <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+                    <th style='border: 1px solid #000; width: 8%'>Produkt</th>
+                    <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
+                    <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
+                    <th style='border: 1px solid #000; width: 8%'>Wartość zwrotów</th>
+                    <th style='border: 1px solid #000; width: 8%'>Łącznie do zapłaty</th>
+                </tr>
+            </thead>
+            <tbody>";
+    }
     $tt_sales = 0;
     $tt_money = 0;
     $tt_return = 0;
@@ -278,31 +296,61 @@ if(isset($data["cargo_temp"])) {
         if(strlen($data["shops"][$company_id]->friendly_name) > 1 ) {
             $friendly = "(".$data["shops"][$company_id]->friendly_name.")";
         }
-        $mess .= "
-                <tr style='text-align: center;'>
-                    <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly ($company_id)</td>
-                    <td style='border: 1px solid;'>$total_sales</td>
-                    <td style='border: 1px solid;'>$total_return</td>
-                    <td style='border: 1px solid;' title='".getPercent($total_return,$total_sales)." %'>".$total_retret." zł</td>
-                    <td style='border: 1px solid;'>$total_money zł</td>
-                </tr>";
+        if($data["get"]["type"] == "day") {
+            $mess .= "
+                    <tr style='text-align: center;'>
+                        <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly</td>
+                        <td style='border: 1px solid;'>$total_sales</td>
+                        <td style='border: 1px solid;'>".$total_money + $total_retret." zł</td>
+                        <td style='border: 1px solid;'>$total_return</td>
+                        <td style='border: 1px solid;' title='".getPercent($total_return,$total_sales)." %'>".$total_retret." zł</td>
+                        <td style='border: 1px solid;'>$total_money zł</td>
+                    </tr>";
+        } else {
+            $mess .= "
+                    <tr style='text-align: center;'>
+                        <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly ($company_id)</td>
+                        <td style='border: 1px solid;'>$total_sales</td>
+                        <td style='border: 1px solid;'>$total_return</td>
+                        <td style='border: 1px solid;' title='".getPercent($total_return,$total_sales)." %'>".$total_retret." zł</td>
+                        <td style='border: 1px solid;'>$total_money zł</td>
+                    </tr>";
+
+        }
         $tt_sales += $total_sales;
         $tt_return += $total_return;
         $tt_retret += $total_retret;
         $tt_money += $total_money;
     }
-    $mess .= "
-            </tbody>
-            <tfoot>
-                <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
-                    <td style='border: 1px solid;'>TOTAL</td>
-                    <td style='border: 1px solid;'>$tt_sales</td>
-                    <td style='border: 1px solid;'>$tt_return</td>
-                    <td style='border: 1px solid;' title='".getPercent($tt_return,$tt_sales)." %'>".$tt_retret." zł</td>
-                    <td style='border: 1px solid;'>$tt_money zł</td>
-                </tr>
-            </tfoot>
-        </table>";
+    if($data["get"]["type"] == "day") {
+        $mess .= "
+                </tbody>
+                <tfoot>
+                    <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
+                        <td style='border: 1px solid;'>TOTAL</td>
+                        <td style='border: 1px solid;'>$tt_sales</td>
+                        <td style='border: 1px solid;'>".$tt_money + $tt_retret." zł</td>
+                        <td style='border: 1px solid;'>$tt_return</td>
+                        <td style='border: 1px solid;' title='".getPercent($tt_return,$tt_sales)." %'>".$tt_retret." zł</td>
+                        <td style='border: 1px solid;'>$tt_money zł</td>
+                    </tr>
+                </tfoot>
+            </table>";
+    } else {
+        $mess .= "
+                </tbody>
+                <tfoot>
+                    <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
+                        <td style='border: 1px solid;'>TOTAL</td>
+                        <td style='border: 1px solid;'>$tt_sales</td>
+                        <td style='border: 1px solid;'>$tt_return</td>
+                        <td style='border: 1px solid;' title='".getPercent($tt_return,$tt_sales)." %'>".$tt_retret." zł</td>
+                        <td style='border: 1px solid;'>$tt_money zł</td>
+                    </tr>
+                </tfoot>
+            </table>";
+
+    }
 
 }
 
