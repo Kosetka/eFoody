@@ -394,7 +394,7 @@ if($data["get"]["type"] == "day") {
             $total_ret = 0;
             foreach($comp_val[$date_now] as $prod_id => $prod_val) {
                 if($first) {
-                    $mess2 .= "<td style='border: 1px solid;' rowspan='$colspan'>".$data["shops"][$comp_id]->full_name." $friendly</td>";
+                    $mess2 .= "<td style='border: 1px solid;' id='".$data["shops"][$comp_id]->id."' rowspan='$colspan'>".$data["shops"][$comp_id]->full_name." $friendly</td>";
                 }
                 if(!$first) {
                     $mess2 .= " <tr style='text-align: center;'>";
