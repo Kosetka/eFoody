@@ -259,17 +259,18 @@ if(isset($data["cargo_temp"])) {
                         $day_ret = $data["returns"][$company_id][$key_date][$product_id]["amount"];
                     }
                 }
-                if($company_id == "423") {
+                if($company_id == "430") {
                     //show($data["returns_new"]["418"]);
-                    //echo $day_ret." ".$product_id." ".$cost."??</br>";
+                    //echo $one_date["amount"]." ".$product_id." ".$cost."</br>";
                 }
                 
-                if(isset($one_date["amount"])) {
-                    //$tot_amo = ($one_date["amount"] - $day_ret) * $cost;
-                    $total_sales += $one_date["amount"];
-                    $total_money += ($one_date["amount"] - $day_ret) * $cost;
-                    $total_cost += ($one_date["amount"] - $day_ret) * $cost;
+                if(!isset($one_date["amount"])) {
+                    $one_date["amount"] = 0;
                 }
+                //$tot_amo = ($one_date["amount"] - $day_ret) * $cost;
+                $total_sales += $one_date["amount"];
+                $total_money += ($one_date["amount"] - $day_ret) * $cost;
+                $total_cost += ($one_date["amount"] - $day_ret) * $cost;
                 
                 $total_retret += $day_ret * $cost;
 
