@@ -20,7 +20,8 @@ class ReturnsModel
         'amount',
         'u_set_id',
         'c_id',
-        'date_now'
+        'date_now',
+        'date_timestamp'
     ];
 
     public function getProducts(): array
