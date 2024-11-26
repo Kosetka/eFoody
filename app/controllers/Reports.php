@@ -884,6 +884,11 @@ class Reports
             }
             if (isset($URL[4])) {
                 $param1 = $URL[4];
+                if($param1 == "-1") {
+                    $today_p = new DateTime();
+                    $today_p->modify('-1 day');
+                    $param1 = $today_p->format('Y-m-d');
+                }
             }
             if (isset($URL[5])) {
                 $param2 = $URL[5];
