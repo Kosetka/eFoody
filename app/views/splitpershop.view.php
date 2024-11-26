@@ -38,6 +38,7 @@
                 <?php
                 //show($data["recipes"]);
                 $date = "";
+                $date_now = date("Y-m-d");
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
                     }
@@ -52,7 +53,7 @@
                     <div class="form-group row m-3">
                         <form method='get'>
                             <div class="col-sm-12" style='display: flex'>
-                                <label for="c_name" class="col-sm-2 col-form-label">Dzień:</label>
+                                <label for="date" class="col-sm-2 col-form-label">Dzień:</label>
                                 <input type='date' class='form-control col-sm-2' name='date'
                                     value='<?php echo $date; ?>'>
                                 <label for="c_name" class="col-sm-2 col-form-label">Sklep:</label>

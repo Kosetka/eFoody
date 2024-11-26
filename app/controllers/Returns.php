@@ -254,6 +254,16 @@ class Returns
                 $c_id = 0;
             }
         }
+        if(isset($URL[4])) {
+            $date_now = $URL[4];
+        } else {
+            if(isset($_GET["date_now"])) {
+                $date_now = $_GET["date_now"];
+            } else {
+                $date_now = date('Y-m-d');
+            }
+        }
+        $data["date_now"] = $date_now;
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
         $w_id = 1;
         $data["show_table"] = false;
@@ -271,7 +281,7 @@ class Returns
     
                 foreach($prod as $usr => $pid) {
                     foreach($pid as $p_id => $amount) {
-                        $que = ["date" => "$date 15:00:00", "p_id" => $p_id, "amount" => $amount, "u_id" => 0, "u_set_id" => $u_id, "w_id" => $w_id, "c_id" => $c_id];
+                        $que = ["date" => "$date 15:00:00", "p_id" => $p_id, "amount" => $amount, "u_id" => 0, "u_set_id" => $u_id, "w_id" => $w_id, "c_id" => $c_id, "date_now" => $date_now];
                         $plan->insert($que);
                     }
                 }

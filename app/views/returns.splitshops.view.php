@@ -38,6 +38,10 @@
                 <?php
                 //show($data["recipes"]);
                 $date = "";
+                $date_now = date("Y-m-d");
+                if(isset($data["date_now"])) {
+                    $date_now = $data["date_now"];
+                }
                     if (isset($data["date_plan"])) {
                         $date = $data["date_plan"];
                     }
@@ -74,9 +78,12 @@
                                             }
                                         ?>
                                     </select>
+                                <label for="date_now" class="col-sm-2 col-form-label">Data zwrotu:</label>
+                                <input type='date' class='form-control col-sm-2' name='date_now'
+                                    value='<?php echo $date_now; ?>'>
 
-                                <button class='btn btn-primary' style='margin-left: 20px;' type='submit'>Pokaż</button>
-                            </div>
+                                </div>
+                                <button class='btn btn-primary' style='margin-top: 20px;' type='submit'>Pokaż</button>
                         </form>
                     </div>
                 </div>
