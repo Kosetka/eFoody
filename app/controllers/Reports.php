@@ -1056,9 +1056,15 @@ class Reports
                         $data["returns_new"][$value->c_id][$value->p_id]["amount"] = 0;
                     }
                     $data["returns_new"][$value->c_id][$value->p_id]["amount"] += $value->amount;
+
+                    if(isset($data["prices"][$value->p_id])) {
+                        foreach($data["prices"][$value->p_id] as $k => $v) {
+                            $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost_zm"] = $v->priceshops;
+                            $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost_zm"] = $v->priceshops;
+                        }
+                    }
                 }
             }
-            //show($data["returns_new"]);
         }
 
         $cargo = new Cargo;
@@ -1100,6 +1106,8 @@ class Reports
                 }
             }
         }
+
+        //show($data["cargo_temp"]);die;
 
 
         $companies = new Companies();
