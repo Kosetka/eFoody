@@ -211,8 +211,10 @@ if(isset($data["cargo_temp"])) {
         $total_money = 0;
         $total_retret = 0;
         $total_return = 0;
+        //show($compval);die;
         
         foreach ($compval as $product_id => $prod_date) {
+            //echo "product_id = $product_id</br>";
             $amo = 0;
             $cost = 0;
             $cost_last = 0;
@@ -256,6 +258,7 @@ if(isset($data["cargo_temp"])) {
                     }
                 }
                 //show($data["returns_new"]["423"]);
+                
     
                 $tot_amo = ($one_date["amount"] - $day_ret) * $cost;
                 $total_sales += $one_date["amount"];
@@ -309,7 +312,7 @@ if(isset($data["cargo_temp"])) {
         } else {
             $mess .= "
                     <tr style='text-align: center;'>
-                        <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly ($company_id)</td>
+                        <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly</td>
                         <td style='border: 1px solid;'>$total_sales</td>
                         <td style='border: 1px solid;'>$total_return</td>
                         <td style='border: 1px solid;' title='".getPercent($total_return,$total_sales)." %'>".$total_retret." zł</td>

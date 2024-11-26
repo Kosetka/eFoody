@@ -1031,12 +1031,27 @@ class Reports
                 
             }
         }
+        //echo "</br>";
+        //echo "</br>";
+        //echo "</br>";
+
+        /*$dataObj = new DateTime($date_from);
+        $dataObj->modify('-7 days');
+        $new_date_from = $dataObj->format('Y-m-d H:i:s');*/
 
         if($type == "day") {
             if(!empty($plan->getShopsReturnNew($date_from, $date_to))) {
                 foreach ($plan->getShopsReturnNew($date_from, $date_to) as $key => $value) {
+                    /*if($value->c_id == "423") {
+                        echo " t: ";
+                        echo $value->id;
+                        echo " -> ".$value->amount;
+                    }*/
                     $day = substr($value->date_now,0,10);
-                    $data["returns_new"][$value->c_id][$day][$value->p_id]["amount"] = $value->amount;
+                    if(!isset($data["returns_new"][$value->c_id][$day][$value->p_id]["amount"])) {
+                        $data["returns_new"][$value->c_id][$day][$value->p_id]["amount"] = 0;
+                    }
+                    $data["returns_new"][$value->c_id][$day][$value->p_id]["amount"] += $value->amount;
                     if(!isset($data["returns_new"][$value->c_id][$value->p_id]["amount"])) {
                         $data["returns_new"][$value->c_id][$value->p_id]["amount"] = 0;
                     }
@@ -1096,10 +1111,11 @@ class Reports
         }
 
         $products_list = new ProductsModel();
-            foreach ($products_list->getAllFullProducts() as $key => $value) {
-                $data["fullproducts"][$value->id] = (array) $value;
-            }
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
 
+        //show($data["returns_new"]);
         $this->view('salessummary.total', $data);
     }
 
