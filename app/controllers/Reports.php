@@ -913,6 +913,11 @@ class Reports
         } else {
             if (isset($URL[3])) {
                 $param1 = $URL[3];
+                if($param1 == "-1") {
+                    $today_p = new DateTime();
+                    $today_p->modify('-1 day');
+                    $param1 = $today_p->format('Y-m-d');
+                }
             }
             if (isset($URL[4])) {
                 $param2 = $URL[4];

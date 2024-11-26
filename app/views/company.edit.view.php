@@ -171,8 +171,34 @@
                                     $selected = "";
                                 }
                                 echo "<div class='form-check'>
-                                    <input class='form-check-input' type='radio' name='company_type' id='company_type$key' value='$key' $selected>
+                                    <input class='form-check-input company-type-radio' type='radio' name='company_type' id='company_type$key' value='$key' $selected>
                                     <label class='form-check-label' for='company_type$key'>
+                                    $value
+                                    </label>
+                                    </div>";
+                            }
+                            ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group row m-3" id="delivery-hour-group" <?php 
+                        if($data["companies"]->company_type <> 2 && $data["companies"]->company_type <> 3) {
+                            echo "hidden";
+                        }
+                    ?>>
+                        <label for="delivery_hour" class="col-sm-2 col-form-label">Termin dostawy:</label>
+                        <div class="col-sm-10">
+                            <?php
+                            $selected = "";
+                            foreach (DELIVERYHOUR as $key => $value) {
+                                if ($data["companies"]->delivery_hour == $key) {
+                                    $selected = "checked";
+                                } else {
+                                    $selected = "";
+                                }
+                                echo "<div class='form-check'>
+                                    <input class='form-check-input' type='radio' name='delivery_hour' id='delivery_hour$key' value='$key' $selected>
+                                    <label class='form-check-label' for='delivery_hour$key'>
                                     $value
                                     </label>
                                     </div>";
@@ -230,7 +256,7 @@
                     </div>
 
                     <div class="form-group row m-3">
-                        <label for="c_type" class="col-sm-2 col-form-label">Rodzaj firmy:</label>
+                        <label for="c_type" class="col-sm-2 col-form-label">Wielkość firmy:</label>
                         <div class="col-sm-10">
                             <?php
                             
@@ -255,6 +281,24 @@
             </form>
 
         </main>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Pobierz wszystkie radio buttony dla 'Rodzaj firmy'
+                const companyTypeRadios = document.querySelectorAll('.company-type-radio');
+                const deliveryHourGroup = document.getElementById('delivery-hour-group');
+
+                companyTypeRadios.forEach(radio => {
+                    radio.addEventListener('change', function () {
+                        // Jeśli wybrana wartość to 2 lub 3, usuń 'hidden', w przeciwnym wypadku ukryj
+                        if (this.value === '2' || this.value === '3') {
+                            deliveryHourGroup.hidden = false;
+                        } else {
+                            deliveryHourGroup.hidden = true;
+                        }
+                    });
+                });
+            });
+        </script>
         <script>
             function addPhoneNumberField() {
                 // Create a new div element

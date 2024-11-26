@@ -364,63 +364,64 @@ if(isset($data["cargo_temp"])) {
 
 }
 $mess2 = "";
-
-if($data["get"]["type"] == "day") {
-    $mess2 .= "<table style='border: 1px solid'>
-    <thead style='border: 1px solid'>
-        <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
-            <th colspan='3'>Szczegóły zwrotów</th>
-        </tr>
-        <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
-            <th style='border: 1px solid #000; width: 8%'>Firma</th>
-            <th style='border: 1px solid #000; width: 8%'>Produkt</th>
-            <th style='border: 1px solid #000; width: 8%'>Ilość zwrotów</th>
-        </tr>
-    </thead>
-    <tbody>";
-    foreach($data["returns_new"] as $comp_id => $comp_val) {
-        $date_now = substr($data["get"]["date_from"],0,10);
-        $friendly = "";
-        if($data["shops"][$comp_id]->friendly_name != "") {
-            $friendly = " (". $data["shops"][$comp_id]->friendly_name .")";
-        }
-        if(isset($comp_val[$date_now])) {
-            $colspan = 0;
-            foreach($comp_val[$date_now] as $prod_id => $prod_val) {
-                $colspan++;
+if(isset($data["returns_new"])) {
+    if($data["get"]["type"] == "day") {
+        $mess2 .= "<table style='border: 1px solid'>
+        <thead style='border: 1px solid'>
+            <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
+                <th colspan='3'>Szczegóły zwrotów</th>
+            </tr>
+            <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+                <th style='border: 1px solid #000; width: 8%'>Firma</th>
+                <th style='border: 1px solid #000; width: 8%'>Produkt</th>
+                <th style='border: 1px solid #000; width: 8%'>Ilość zwrotów</th>
+            </tr>
+        </thead>
+        <tbody>";
+    
+        foreach($data["returns_new"] as $comp_id => $comp_val) {
+            $date_now = substr($data["get"]["date_from"],0,10);
+            $friendly = "";
+            if($data["shops"][$comp_id]->friendly_name != "") {
+                $friendly = " (". $data["shops"][$comp_id]->friendly_name .")";
             }
-            $mess2 .= " <tr style='text-align: center;'>";
-            $first = true;
-            $total_ret = 0;
-            foreach($comp_val[$date_now] as $prod_id => $prod_val) {
-                if($first) {
-                    $mess2 .= "<td style='border: 1px solid;' id='".$data["shops"][$comp_id]->id."' rowspan='$colspan'>".$data["shops"][$comp_id]->full_name." $friendly</td>";
+            if(isset($comp_val[$date_now])) {
+                $colspan = 0;
+                foreach($comp_val[$date_now] as $prod_id => $prod_val) {
+                    $colspan++;
                 }
-                if(!$first) {
-                    $mess2 .= " <tr style='text-align: center;'>";
+                $mess2 .= " <tr style='text-align: center;'>";
+                $first = true;
+                $total_ret = 0;
+                foreach($comp_val[$date_now] as $prod_id => $prod_val) {
+                    if($first) {
+                        $mess2 .= "<td style='border: 1px solid;' id='".$data["shops"][$comp_id]->id."' rowspan='$colspan'>".$data["shops"][$comp_id]->full_name." $friendly</td>";
+                    }
+                    if(!$first) {
+                        $mess2 .= " <tr style='text-align: center;'>";
+                    }
+                    $mess2 .= "<td style='border: 1px solid;'>".$data["fullproducts"][$prod_id]["p_name"]."</td>";
+                    $mess2 .= "<td style='border: 1px solid;'>".$prod_val["amount"]."</td>";
+                    if(!$first) {
+                        $mess2 .= " </tr>";
+                    }
+                    $first = false;
+                    $total_ret += $prod_val["amount"];
                 }
-                $mess2 .= "<td style='border: 1px solid;'>".$data["fullproducts"][$prod_id]["p_name"]."</td>";
-                $mess2 .= "<td style='border: 1px solid;'>".$prod_val["amount"]."</td>";
-                if(!$first) {
-                    $mess2 .= " </tr>";
-                }
-                $first = false;
-                $total_ret += $prod_val["amount"];
+                $mess2 .= " </tr>";
+                $mess2 .= "<tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
+                                <td style='border: 1px solid;' colspan='2'>TOTAL</td>
+                                <td style='border: 1px solid;'>$total_ret</td>
+                            </tr>";
             }
-            $mess2 .= " </tr>";
-            $mess2 .= "<tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
-                            <td style='border: 1px solid;' colspan='2'>TOTAL</td>
-                            <td style='border: 1px solid;'>$total_ret</td>
-                        </tr>";
+    
         }
 
-
-        
-        
+    
+        $mess2 .= "
+                    </tbody>
+                </table>";
     }
-    $mess2 .= "
-                </tbody>
-            </table>";
 }
 
 echo $mess;

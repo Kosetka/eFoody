@@ -34,7 +34,8 @@ class Companies
         'longitude',
         'c_type',
         'workers',
-        'friendly_name'
+        'friendly_name', 
+        'delivery_hour'
     ];
 
     public function validate($data)

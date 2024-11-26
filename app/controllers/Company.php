@@ -78,6 +78,11 @@ class Company
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             //show($_POST);die;
             $company = new Companies;
+            if($_POST["company_type"] == 2 || $_POST["company_type"] == 3) {
+                //
+            } else {
+                unset($_POST["delivery_hour"]);
+            }
             $_POST["date"] = date("Y-m-d H:i:s");
             $_POST["phone_number"] = $_POST["phone_numbers"][0];
             $_POST["address"] = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
@@ -121,6 +126,11 @@ class Company
             }
             if (isset($_POST["companyEdit"])) {
                 $_POST["address"] = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
+                if($_POST["company_type"] == 2 || $_POST["company_type"] == 3) {
+                    //
+                } else {
+                    unset($_POST["delivery_hour"]);
+                }
                 $company->update($company_id, $_POST);
                 $data['success'] = "Edycja firmy pomyślna!";
                 $companies = new Companiesphone;

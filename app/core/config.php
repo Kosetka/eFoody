@@ -45,7 +45,7 @@ define('PRODUCTTYPENAMES', [0 => "Półprodukt", 1 => "Gotowy produkt", 2 => "So
 define('COMPANIESTYPE', [0 => "Sprzedażowa (Handlowcy)", 1 => "Zakupowa", 2 => "Dostawa (zmienna cena)", 3 => "Dostawa (stała cena)"]);
 define('STATUSNAME', [0 => "Nieaktywne", 1 => "Aktywne"]);
 define('VISITSTATUSES', [0 => "Brak sprzedaży", 1 => "Sprzedaż", 2 => "Gratisy rozdane"]);
-define('COMPANYSIZE', ["building" => "Biurowiec", "house" => "Dom", "shop" => "Sklep", "warehouse" => "Magazyn", "exclamation" => "Duży biurowiec"]);
+define('COMPANYSIZE', ["building" => "Biurowiec", "house" => "Dom", "shop" => "Sklep", "warehouse" => "Magazyn", "exclamation" => "Duży biurowiec", "school" => "Liceum"]);
 define('TRADERS', '3'); //define('TRADERS', '1, 3');
 define('ALLTRADERS', '3, 10'); //define('TRADERS', '1, 3');
 define('EXCHANGESTATUS', [0 => "Oczekuje", 1 => "Zaakceptowany", 2 => "Odrzucony", 3 => "Odrzucony automatycznie", 4 => "Anulowany"]);
@@ -93,6 +93,7 @@ define('LABELCOST',["cost" => 16.50, "labels" => 1034]);
 define('FUELTYPE',[0 => "Diesel", 1 => "Benzyna"]);
 define('BONUSTYPE',[0 => "Premia", 1 => "Kara"]);
 define('PAGETYPE',[1 => "Fingerfood", 2 => "Catering"]);
+define('DELIVERYHOUR',[0 => "Brak", 1 => "Rano", 2 => "Południe", 3 => "Popołudnie", 4 => "Wieczór"]);
                                         
 
 /** true means show errors **/

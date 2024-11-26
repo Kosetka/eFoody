@@ -271,3 +271,20 @@
 .card-half {
   display: flex;
 }
+
+
+.delivery-type {
+  background-color: #ccc !important;
+}
+.delivery-type1 {
+  background-color:#FFFAE5 !important;
+}
+.delivery-type2 {
+  background-color:#FFD580  !important;
+}
+.delivery-type3 {
+  background-color:#87CEEB  !important;
+}
+.delivery-type4 {
+  background-color:#6A5ACD  !important;
+}

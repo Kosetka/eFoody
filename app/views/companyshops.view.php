@@ -112,6 +112,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                   <th scope="col">Numer telefonu</th>
                   <th scope="col">Adres mailowy</th>
                   <th scope="col">Notatka</th>
+                  <th scope="col">Preferowany termin dostawy</th>
                   <th scope="col">Lokalizacja</th>
                   <th scope="col">Ostatnia dostawa</th>
                   <th scope="col">Dodaj do trasy</th>
@@ -136,13 +137,18 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                         $fname = "(" . $company->friendly_name . ")";
                       }
                     }
+                    $delivery = "";
+                    if(isset($company->delivery_hour)) {
+                      $delivery = DELIVERYHOUR[$company->delivery_hour];
+                    }
                     echo "<tr>
                                                 <td>$company->full_name $fname</td>
                                                 <td>$company->address</td>
                                                 <td>$company->contact_first_name $company->contact_last_name</td>
                                                 <td>$company->phone_number</td>
                                                 <td>$company->email</td>
-                                                <td>$company->description</td>";
+                                                <td>$company->description</td>
+                                                <td class='delivery-type".$company->delivery_hour."'>$delivery</td>";
                     if ($gps_link == "#") {
                       echo "<td></td>";
                     } else {
