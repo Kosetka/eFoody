@@ -259,17 +259,18 @@ if(isset($data["cargo_temp"])) {
                         $day_ret = $data["returns"][$company_id][$key_date][$product_id]["amount"];
                     }
                 }
-                //if($company_id == "418") {
+                if($company_id == "423") {
                     //show($data["returns_new"]["418"]);
-                    //echo $day_ret." ".$product_id."</br>";
-                //}
+                    //echo $day_ret." ".$product_id." ".$cost."??</br>";
+                }
                 
                 if(isset($one_date["amount"])) {
-                    $tot_amo = ($one_date["amount"] - $day_ret) * $cost;
+                    //$tot_amo = ($one_date["amount"] - $day_ret) * $cost;
                     $total_sales += $one_date["amount"];
                     $total_money += ($one_date["amount"] - $day_ret) * $cost;
                     $total_cost += ($one_date["amount"] - $day_ret) * $cost;
                 }
+                
                 $total_retret += $day_ret * $cost;
 
                 if($data["get"]["type"] == "day") {
@@ -303,7 +304,7 @@ if(isset($data["cargo_temp"])) {
         $friendly = "";
         if(strlen($data["shops"][$company_id]->friendly_name) > 1 ) {
             $friendly = "(".$data["shops"][$company_id]->friendly_name.")";
-        }
+        } //($company_id)
         if($data["get"]["type"] == "day") {
             $mess .= "
                     <tr style='text-align: center;'>
