@@ -211,4 +211,49 @@ class Company
         $this->view('companyshops', $data);
     }
 
+    public function points()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            //show($_POST);die;
+            $date = date("Y-m-d H:i:s");
+            $u_id = $_SESSION["USER"]->id;
+            $toUpdate = ["description" => $_POST["description"], "status" => $_POST["status"], "visit_date" => $date, "u_id" => $u_id];
+            //show($_POST);
+            $id = $_POST["id"];
+            $card = new Companiestocheck;
+            $card->update($id, $toUpdate);
+            $data['success'] = "Edycja firmy pomyślna";
+        }
+
+        $companies = new Companiestocheck();
+        $data["companies"] = $companies->getCompaniesToVisit();
+        foreach ($companies->getCompaniesToVisit() as $co) {
+            $data["companies_sorted"][$co->id] = $co;
+        }
+        if(!empty($companies->getCompaniesVisited())) {
+            foreach ($companies->getCompaniesVisited() as $co) {
+                $data["companies_visited"][$co->id] = $co;
+            }
+        }
+
+        $users_list = new User();
+        $temp["users"] = $users_list->getAll("users");
+        foreach ($temp["users"] as $user) {
+            $data["users"][$user->id] = (array) $user;
+        }
+
+        $apikey = new Apitokens;
+        $data["token"] = $apikey->getToken("google_maps");
+
+        $wh = new WarehouseModel;
+        $data["warehouse"] = $wh->getWarehouses();
+
+        $this->view('companypoints', $data);
+    }
+
 }
