@@ -15,62 +15,91 @@
         </div>
         <div class="form-group row m-3">
           <div class="col-sm-12">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Odległość</th>
-                  <th scope="col">Nazwa firmy</th>
-                  <th scope="col">Adres</th>
-                  <th scope="col">Telefon</th>
-                  <th scope="col">Typ punktu</th>
-                  <th scope="col">Akcje</th>
-                </tr>
-              </thead>
-              <tbody>
+          <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Odległość</th>
+      <th scope="col">Nazwa firmy</th>
+      <th scope="col">Adres</th>
+      <th scope="col">Telefon</th>
+      <th scope="col">Typ punktu</th>
+      <th scope="col">Akcje</th>
+    </tr>
+  </thead>
+  <tbody>
 
-                <?php
-                $link = "https://www.google.com/maps/dir//";
-                $points = [];
-                foreach ($data["companies_sorted"] as $key => $value) {
-                    echo "<tr>
-                            <td></td>
-                            <td>$value->name</td>
-                            <td>$value->address</td>
-                            <td>$value->phone_number</td>
-                            <td>" . COMPANYTYPE[$value->type] . "</td>";
+    <?php
+        $link = "https://www.google.com/maps/dir//";
+        $points = [];
+        foreach ($data["companies_sorted"] as $key => $value) {
+            echo "<tr>
+                    <td></td>
+                    <td>$value->name</td>
+                    <td>$value->address</td>
+                    <td>$value->phone_number</td>
+                    <td>" . COMPANYTYPE[$value->type] . "</td>";
 
-                    echo "<form method='POST' action=''>"; 
-                    echo "
-                            <td>
-                            <select name='status' class='form-control'>";
-                    foreach(COMPANYVISIT as $kk => $vv) {
-                        echo "<option value='$kk'>$vv</option>";
-                    }
-                echo "        </select>
-                            <input type='text' class='form-control' style='margin: 20px 0 !important;' name='description' placeholder='Dodaj notatkę' />
-                                <input type='hidden' name='id' value='$key' /> <!-- Ukryte pole z ID firmy -->
-                                <button type='submit' class='btn btn-primary'>Zapisz</button>
-                            </td>
-                        </form>";
-                
-                    echo "</tr>";
-                
-                    $points[$key] = [
-                        "name" => $value->name,
-                        "lat" => $value->latitude,
-                        "lng" => $value->longitude,
-                        "type" => "$value->type"
-                    ];
-                }
-                ?>
-              </tbody>
+            echo "<form method='POST' action='' id='form_$key'>"; // Dodanie unikalnego ID do formularza
+            echo "
+                    <td>
+                    <select name='status' class='form-control' id='status_$key'>"; // Dodanie unikalnego ID do selecta
+            foreach(COMPANYVISIT as $kk => $vv) {
+                echo "<option value='$kk'>$vv</option>";
+            }
+            echo "  </select>
+                    <input type='text' class='form-control' style='margin: 20px 0 !important;' name='description' placeholder='Dodaj notatkę' />
+                        <input type='hidden' name='id' value='$key' />
+                        <button type='submit' class='btn btn-primary' id='submit_$key'>Zapisz</button> <!-- Unikalny ID przycisku -->
+                    </td>
+                </form>";
+
+            echo "</tr>";
+
+            $points[$key] = [
+                "name" => $value->name,
+                "lat" => $value->latitude,
+                "lng" => $value->longitude,
+                "type" => "$value->type"
+            ];
+        }
+        ?>
+                </tbody>
             </table>
           </div>
         </div>
       </div>
+      <script>
+  // Funkcja sprawdzająca stan select i blokująca przycisk submit
+  function checkSelectAndDisableSubmit(formId, selectId, submitId) {
+    const selectElement = document.getElementById(selectId);
+    const submitButton = document.getElementById(submitId);
+    
+    // Jeśli wartość wybrana w select to 0 i tekst to "-", zablokuj przycisk submit
+    selectElement.addEventListener('change', function() {
+      if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
+        submitButton.disabled = true; // Blokujemy przycisk
+      } else {
+        submitButton.disabled = false; // Odblokowujemy przycisk
+      }
+    });
+
+    // Inicjalizacja stanu przycisku na podstawie początkowej wartości selecta
+    if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
+      submitButton.disabled = true; // Blokujemy przycisk, jeśli warunki są spełnione
+    }
+  }
+
+  // Inicjalizacja dla wszystkich formularzy
+  window.onload = function() {
+    <?php foreach ($data["companies_sorted"] as $key => $value): ?>
+      checkSelectAndDisableSubmit('form_<?php echo $key; ?>', 'status_<?php echo $key; ?>', 'submit_<?php echo $key; ?>');
+    <?php endforeach; ?>
+  };
+</script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAJHFF9bGryg9sEfdgy5ukLAai8nRMKcU&callback=initMap"
         async defer></script>
       <script>
+
         /*async function initMap() {
           // Request needed libraries.
           const { Map } = await google.maps.importLibrary("maps");
@@ -312,26 +341,49 @@ function sortTableByDistance(userLat, userLng, points) {
 
     // Dodaj posortowane wiersze
     distances.forEach(point => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${point.distance.toFixed(2)} km</td>
-            <td>${point.name}</td>
-            <td>${point.address}</td>
-            <td>${point.phone_number}</td>
-            <td>${point.type}</td>
-            <td>
-                <form method="POST" action="">
-                    <select name="status" class="form-control">
-                        ${selectHtml}
-                    </select>
-                    <input type="text" class="form-control" style="margin: 20px 0 !important;" name="description" placeholder="Dodaj notatkę" />
-                    <input type="hidden" name="id" value="${point.id}" />
-                    <button type="submit" class="btn btn-primary">Zapisz</button>
-                </form>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${point.distance.toFixed(2)} km</td>
+        <td>${point.name}</td>
+        <td>${point.address}</td>
+        <td>${point.phone_number}</td>
+        <td>${point.type}</td>
+        <td>
+            <form method="POST" action="" id="form_${point.type}">
+                <select name="status" class="form-control" id="status_${point.type}">
+                    ${selectHtml}
+                </select>
+                <input type="text" class="form-control" style="margin: 20px 0 !important;" name="description" placeholder="Dodaj notatkę" />
+                <input type="hidden" name="id" value="${point.id}" />
+                <button type="submit" class="btn btn-primary" id="submit_${point.type}">Zapisz</button>
+            </form>
+        </td>
+    `;
+    tbody.appendChild(row);
+
+    // Funkcja do blokowania przycisku submit
+    function checkSelectAndDisableSubmit(selectId, submitId) {
+        const selectElement = document.getElementById(selectId);
+        const submitButton = document.getElementById(submitId);
+
+        // Dodanie nasłuchiwania na zmianę wyboru
+        selectElement.addEventListener('change', function() {
+            if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
+                submitButton.disabled = true; // Blokowanie przycisku
+            } else {
+                submitButton.disabled = false; // Odblokowywanie przycisku
+            }
+        });
+
+        // Inicjalizacja na podstawie początkowej wartości selecta
+        if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
+            submitButton.disabled = true; // Blokowanie przycisku, jeśli warunki są spełnione
+        }
+    }
+
+    // Inicjalizacja dla wygenerowanego formularza
+    checkSelectAndDisableSubmit(`status_${point.type}`, `submit_${point.type}`);
+});
 }
 
 // Funkcja wywoływana po kliknięciu przycisku
