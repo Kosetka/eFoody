@@ -256,4 +256,204 @@ class Company
         $this->view('companypoints', $data);
     }
 
+    public function pointslist()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $companies = new Companiestocheck();
+        $data["companies"] = $companies->getCompanies();
+        foreach ($companies->getCompanies() as $co) {
+            $data["companies_sorted"][$co->id] = $co;
+        }
+
+        $users_list = new User();
+        $temp["users"] = $users_list->getAll("users");
+        foreach ($temp["users"] as $user) {
+            $data["users"][$user->id] = (array) $user;
+        }
+
+        $this->view('companypointslist', $data);
+    }
+
+    public function pointadd()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+            //show($_POST);die;
+            $u_id = $_SESSION["USER"]->id;
+            $date = date("Y-m-d H:i:s");
+            $address = $_POST["street"]." ".$_POST["street_number"].", ".$_POST["city"]." ".$_POST["postal_code"];
+            $toInsert = [
+                "address" => $address, 
+                "street" => $_POST["street"], 
+                "street_number" => $_POST["street_number"], 
+                "postal_code" => $_POST["postal_code"],
+                "city" => $_POST["city"],
+                "phone_number" => $_POST["phone_number"],
+                "latitude" => $_POST["latitude"],
+                "longitude" => $_POST["longitude"],
+                "type" => $_POST["type"],
+                "u_id" => $u_id,
+                "status" => $_POST["status"],
+                "name" => $_POST["name"],
+                "visit_date" => $date,
+                "description" => $_POST["description"]
+            ];
+
+            $comp = new Companiestocheck;
+            $comp->insert($toInsert);
+            $data['success'] = "Punkt został dodany";
+
+            unset($_POST);
+            redirect('company/pointslist');
+        }
+        $data["edit"] = False;
+
+        $companies = new Companiestocheck();
+        $data["companies"] = $companies->getCompanies();
+        foreach ($companies->getCompanies() as $co) {
+            $data["companies_sorted"][$co->id] = $co;
+        }
+
+        $users_list = new User();
+        $temp["users"] = $users_list->getAll("users");
+        foreach ($temp["users"] as $user) {
+            $data["users"][$user->id] = (array) $user;
+        }
+
+        $this->view('companypointadd', $data);
+    }
+
+    public function pointedit()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if (isset($URL[2])) {
+            $id = $URL[2];
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            //show($_POST);die;
+
+            if(isset($_POST["newadd"])) {
+                $u_id = $_SESSION["USER"]->id;
+                $address = $_POST["street"]." ".$_POST["street_number"].", ".$_POST["city"]." ".$_POST["postal_code"];
+                $toInsert = [
+                    "address" => $address, 
+                    "street" => $_POST["street"], 
+                    "street_number" => $_POST["street_number"], 
+                    "postal_code" => $_POST["postal_code"],
+                    "city" => $_POST["city"],
+                    "phone_number" => $_POST["phone_number"],
+                    "latitude" => $_POST["latitude"],
+                    "longitude" => $_POST["longitude"],
+                    "type" => $_POST["type"],
+                    "u_id" => $u_id,
+                    "status" => $_POST["status"],
+                    "name" => $_POST["name"],
+                    "description" => $_POST["description"]
+                ];
+
+                $comp = new Companiestocheck;
+                $comp->update($id,$toInsert);
+                $data['success'] = "Punkt został edytowany";
+                if($_POST["status"] == 2) {
+                    if(isset($_POST["moved"])) {
+                        //tutaj do dodania jako sklep
+                        $comp->update($id,["moved" => 1]);
+                        $date = date("Y-m-d H:i:s");
+
+                        $company = new Companies;
+
+                        $toInsert = [
+                            "phone_number" => $_POST["phone_number"],
+                            "full_name" => $_POST["name"],
+                            "active" => 1,
+                            "address" => $address,
+                            "postal_code" => $_POST["postal_code"],
+                            "city" => $_POST["city"],
+                            "street" => $_POST["street"],
+                            "street_number" => $_POST["street_number"],
+                            "company_type" => 3,
+                            "description" => "",
+                            "latitude" => $_POST["latitude"],
+                            "longitude" => $_POST["longitude"],
+                            "c_type" => "shop",
+                            "delivery_hour" => 0,
+                            "contact_first_name" => "",
+                            "contact_last_name" => "",
+                            "city_id" => 1,
+                            "guardian" => 0,
+                            "nip" => "",
+                            "date" => $date,
+                            "workers" => "",
+                            "friendly_name" => "",
+                        ];
+
+                        $company->insert($toInsert);
+
+                        $data['success'] = "Sklep został dodany pomyślnie";
+        
+
+
+                        if(isset($_POST["phone_number"])) {
+                            if($_POST["phone_number"] != "") {
+                                $last_id = ""; // pobrać ID
+                                $last_id = $company->getLast();
+                                $last_id = $last_id[0]->id;
+                                $companies = new Companiesphone;
+                                $que_phone = ["c_id" => $last_id, "c_phone" => $_POST["phone_number"]]; // sprawdzić
+                                $companies->insert($que_phone);
+                            }
+                        }
+                    }
+                } else {
+                    if($_POST["status"] != 0) {
+                        if(isset($_POST["to_delete"])) {
+                            $comp->update($id,["to_delete" => 1]);
+                        } else {
+                            $comp->update($id,["to_delete" => 0]);
+                        }
+                    }
+                }
+
+                unset($_POST);
+                redirect('company/pointslist');
+            }
+        }
+        $data["edit"] = True;
+
+        $companies = new Companiestocheck;
+        $data["comp"] = $companies->getCompany($id)[0];
+        //show($data);die;
+
+        $companies = new Companiestocheck();
+        $data["companies"] = $companies->getCompanies();
+        foreach ($companies->getCompanies() as $co) {
+            $data["companies_sorted"][$co->id] = $co;
+        }
+
+        $users_list = new User();
+        $temp["users"] = $users_list->getAll("users");
+        foreach ($temp["users"] as $user) {
+            $data["users"][$user->id] = (array) $user;
+        }
+
+        $this->view('companypointadd', $data);
+    }
+
 }

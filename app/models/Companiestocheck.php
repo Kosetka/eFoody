@@ -30,12 +30,18 @@ class Companiestocheck
         'date',
         'name',
         'description',
-        'to_delete'
+        'to_delete',
+        'moved'
     ];
 
     public function getCompanies()
     {
         $query = "select * from $this->table;";
+        return $this->query($query);
+    }
+    public function getCompany($id)
+    {
+        $query = "select * from $this->table WHERE id = $id;";
         return $this->query($query);
     }
     public function getCompaniesVisited()

@@ -12,6 +12,7 @@
         <div class="card-header">
           <h2 class="">Miejsca do odwiedzenia</h2>
           <button class="btn btn-secondary" onclick="sortLocations(points)">Sortuj punkty według odległości</button>
+          <a href="<?php echo ROOT . "/company/pointadd";?>" class="btn btn-primary">Dodaj nowy punkt</a>
         </div>
         <div class="form-group row m-3">
           <div class="col-sm-12">
@@ -343,7 +344,7 @@ function sortTableByDistance(userLat, userLng, points) {
     distances.forEach(point => {
     const row = document.createElement("tr");
     row.innerHTML = `
-        <td>${point.distance.toFixed(2)} km</td>
+        <td>${point.distance.toFixed(3)} km</td>
         <td>${point.name}</td>
         <td>${point.address}</td>
         <td>${point.phone_number}</td>
