@@ -19,6 +19,7 @@
                                 <th>Pełny adres</th>
                                 <th>Rodzaj punktu</th>
                                 <th>Notatki</th>
+                                <th>Data odwiedzin</th>
                                 <th>Status</th>
                                 <th>Współrzędne</th>
                                 <th>Akcje</th>
@@ -33,6 +34,7 @@
                                 <th>Pełny adres</th>
                                 <th>Rodzaj punktu</th>
                                 <th>Notatki</th>
+                                <th>Data odwiedzin</th>
                                 <th>Status</th>
                                 <th>Współrzędne</th>
                                 <th>Akcje</th>
@@ -79,6 +81,11 @@
                                     if ($k == 9)
                                       $type[$k] = "yellow";
                                   }
+                                    if($company->visit_date != "0000-00-00 00:00:00") {
+                                        $visit_date = $company->visit_date;
+                                    } else {
+                                        $visit_date = "";
+                                    }
                                 echo "<tr>
                                     <td>$company->id</td>
                                     <td>$company->name</td>
@@ -86,6 +93,7 @@
                                     <td>$company->address</td>
                                     <td>$company_type</td>
                                     <td>$company->description</td>
+                                    <td>$visit_date</td>
                                     <td data-id='$company->status'><span style='color: ".$type[$company->status]."; font-size: bold;'>".COMPANYVISIT[$company->status]."</span></td>
                                     <td>$latlong</td>
                                     <td>$edit_link</td>
