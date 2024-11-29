@@ -41,7 +41,7 @@ class Companiestocheck
     }
     public function getCompaniesActive()
     {
-        $query = "select * from $this->table WHERE to_delete <> 1;";
+        $query = "select * from $this->table WHERE to_delete <> 1 OR to_delete IS NULL;";
         return $this->query($query);
     }
     public function getCompany($id)
