@@ -264,8 +264,8 @@ class Company
         $data = [];
 
         $companies = new Companiestocheck();
-        $data["companies"] = $companies->getCompanies();
-        foreach ($companies->getCompanies() as $co) {
+        $data["companies"] = $companies->getCompaniesActive();
+        foreach ($companies->getCompaniesActive() as $co) {
             $data["companies_sorted"][$co->id] = $co;
         }
 
