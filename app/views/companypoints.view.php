@@ -345,12 +345,14 @@
         // Dodaj posortowane wiersze
         distances.forEach(point => {
           const row = document.createElement("tr");
+          let linkmap = 'https://www.google.com/maps/dir//' + ${ point.lat }+',' + ${ point.lng };
           row.innerHTML = `
         <td>${point.distance.toFixed(3)} km</td>
         <td>${point.name}</td>
         <td>${point.address}</td>
         <td>${point.phone_number}</td>
         <td>${point.type}</td>
+        <td><a href='`+ linkmap + `' target='_blank'>Nawiguj</a></td>
         <td>
             <form method="POST" action="" id="form_${point.type}">
                 <select name="status" class="form-control" id="status_${point.type}">
