@@ -40,7 +40,7 @@
                     <td>$value->address</td>
                     <td>$value->phone_number</td>
                     <td>" . COMPANYTYPE[$value->type] . "</td>
-                    <td><a href='$link" . $value->latitude . "," . $value->longitude . "'>Nawiguj</a></td>";
+                    <td><a target='blank' href='$link" . $value->latitude . "," . $value->longitude . "'>Nawiguj</a></td>";
 
                   echo "<form method='POST' action='' id='form_$key'>"; // Dodanie unikalnego ID do formularza
                   echo "
