@@ -31,7 +31,8 @@ class Companiestocheck
         'name',
         'description',
         'to_delete',
-        'moved'
+        'moved',
+        'inserted'
     ];
 
     public function getCompanies()
@@ -57,6 +58,15 @@ class Companiestocheck
     public function getCompaniesToVisit()
     {
         $query = "select * from $this->table WHERE status = 0 AND type = 'grocery_or_supermarket';";
+        return $this->query($query);
+    }
+    public function getCompaniesVisitedOrNull($date_from, $date_to)
+    {
+        $query = "SELECT * 
+                FROM $this->table 
+                WHERE type = 'grocery_or_supermarket' 
+                AND ((visit_date >= '$date_from' AND visit_date <= '$date_to') 
+                    OR status IS NULL)";
         return $this->query($query);
     }
 }

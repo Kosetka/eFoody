@@ -771,27 +771,27 @@ class Reports
         $data["get"]["param2"] = $param2;
 
         $prices = new PriceModel();
-        if(!empty($prices->getGroupedPrice($date_from, $date_to))) {
-            foreach($prices->getGroupedPrice($date_from, $date_to) as $key => $value) {
-                $data["prices"][$value->p_id][] = $value; 
+        if (!empty($prices->getGroupedPrice($date_from, $date_to))) {
+            foreach ($prices->getGroupedPrice($date_from, $date_to) as $key => $value) {
+                $data["prices"][$value->p_id][] = $value;
             }
         }
 
         $data["sku"] = [];
         $skumodel = new Skumodel();
-        if(!empty($skumodel->getSku())) {
-            foreach($skumodel->getSku() as $skum) {
+        if (!empty($skumodel->getSku())) {
+            foreach ($skumodel->getSku() as $skum) {
                 $data["sku"][$skum->full_type] = $skum;
             }
         }
         //show($data["prices"]);
 
         $plan = new ReturnsModel();
-        if(!empty($plan->getShopsReturn($date_from, $date_to))) {
+        if (!empty($plan->getShopsReturn($date_from, $date_to))) {
             foreach ($plan->getShopsReturn($date_from, $date_to) as $key => $value) {
-                $day = substr($value->date,0,10);
+                $day = substr($value->date, 0, 10);
                 $data["returns"][$value->c_id][$day][$value->p_id]["amount"] = $value->amount;
-                if(!isset($data["returns"][$value->c_id][$value->p_id]["amount"])) {
+                if (!isset($data["returns"][$value->c_id][$value->p_id]["amount"])) {
                     $data["returns"][$value->c_id][$value->p_id]["amount"] = 0;
                 }
                 $data["returns"][$value->c_id][$value->p_id]["amount"] += $value->amount;
@@ -802,15 +802,15 @@ class Reports
         $cargo = new Cargo;
         if (!empty($cargo->getAllFullProductsDateAndShops($date_from, $date_to))) {
             foreach ($cargo->getAllFullProductsDateAndShops($date_from, $date_to) as $key => $value) {
-                $day = substr($value->date,0,10);
+                $day = substr($value->date, 0, 10);
                 $data["cargo_temp"][$value->c_id][$value->p_id][$day]["amount"] = $value->amount;
                 $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["amount"] = $value->amount;
-                if(isset($data["prices"][$value->p_id])) {
+                if (isset($data["prices"][$value->p_id])) {
                     $is_price = false;
-                    foreach($data["prices"][$value->p_id] as $k => $v) {
-                        if(substr($v->date_from,0,10) <= $day) {
-                            if(($v->date_to == null) || $v->date_to >= $day) {
-                                if(isset($v->priceshops)) {
+                    foreach ($data["prices"][$value->p_id] as $k => $v) {
+                        if (substr($v->date_from, 0, 10) <= $day) {
+                            if (($v->date_to == null) || $v->date_to >= $day) {
+                                if (isset($v->priceshops)) {
                                     $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost_zm"] = $v->priceshops;
                                     $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost_zm"] = $v->priceshops;
                                     $is_price = true;
@@ -819,7 +819,7 @@ class Reports
                                     $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = $v->price;
                                     $is_price = true;
                                 }
-                                if(isset($v->pricefixed)) {
+                                if (isset($v->pricefixed)) {
                                     $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost_f"] = $v->pricefixed;
                                     $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost_f"] = $v->pricefixed;
                                     $is_price = true;
@@ -830,8 +830,8 @@ class Reports
                                 }
                             }
                         }
-                    } 
-                    if($is_price == false) {
+                    }
+                    if ($is_price == false) {
                         $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost"] = 0;
                         $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = 0;
                     }
@@ -842,16 +842,16 @@ class Reports
 
         $companies = new Companies();
         $data["shops"] = [];
-        if(!empty($companies->getAllShops())) {
+        if (!empty($companies->getAllShops())) {
             foreach ($companies->getAllShops() as $key => $value) {
                 $data["shops"][$value->id] = $value;
             }
         }
 
         $products_list = new ProductsModel();
-            foreach ($products_list->getAllFullProducts() as $key => $value) {
-                $data["fullproducts"][$value->id] = (array) $value;
-            }
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = (array) $value;
+        }
 
         $this->view('salescompanies.total', $data);
     }
@@ -884,7 +884,7 @@ class Reports
             }
             if (isset($URL[4])) {
                 $param1 = $URL[4];
-                if($param1 == "-1") {
+                if ($param1 == "-1") {
                     $today_p = new DateTime();
                     $today_p->modify('-1 day');
                     $param1 = $today_p->format('Y-m-d');
@@ -918,7 +918,7 @@ class Reports
         } else {
             if (isset($URL[3])) {
                 $param1 = $URL[3];
-                if($param1 == "-1") {
+                if ($param1 == "-1") {
                     $today_p = new DateTime();
                     $today_p->modify('-1 day');
                     $param1 = $today_p->format('Y-m-d');
@@ -1022,23 +1022,23 @@ class Reports
         $data["get"]["param2"] = $param2;
 
         $prices = new PriceModel();
-        if(!empty($prices->getGroupedPrice($date_from, $date_to))) {
-            foreach($prices->getGroupedPrice($date_from, $date_to) as $key => $value) {
-                $data["prices"][$value->p_id][] = $value; 
+        if (!empty($prices->getGroupedPrice($date_from, $date_to))) {
+            foreach ($prices->getGroupedPrice($date_from, $date_to) as $key => $value) {
+                $data["prices"][$value->p_id][] = $value;
             }
         }
         //show($data["prices"]);
 
         $plan = new ReturnsModel();
-        if(!empty($plan->getShopsReturn($date_from, $date_to))) {
+        if (!empty($plan->getShopsReturn($date_from, $date_to))) {
             foreach ($plan->getShopsReturn($date_from, $date_to) as $key => $value) {
-                $day = substr($value->date,0,10);
+                $day = substr($value->date, 0, 10);
                 $data["returns"][$value->c_id][$day][$value->p_id]["amount"] = $value->amount;
-                if(!isset($data["returns"][$value->c_id][$value->p_id]["amount"])) {
+                if (!isset($data["returns"][$value->c_id][$value->p_id]["amount"])) {
                     $data["returns"][$value->c_id][$value->p_id]["amount"] = 0;
                 }
                 $data["returns"][$value->c_id][$value->p_id]["amount"] += $value->amount;
-                
+
             }
         }
         //echo "</br>";
@@ -1049,29 +1049,29 @@ class Reports
         $dataObj->modify('-7 days');
         $new_date_from = $dataObj->format('Y-m-d H:i:s');*/
 
-        if($type == "day") {
-            if(!empty($plan->getShopsReturnNew($date_from, $date_to))) {
+        if ($type == "day") {
+            if (!empty($plan->getShopsReturnNew($date_from, $date_to))) {
                 foreach ($plan->getShopsReturnNew($date_from, $date_to) as $key => $value) {
                     /*if($value->c_id == "423") {
                         echo " t: ";
                         echo $value->id;
                         echo " -> ".$value->amount;
                     }*/
-                    $day = substr($value->date_now,0,10);
-                    if(!isset($data["returns_new"][$value->c_id][$day][$value->p_id]["amount"])) {
+                    $day = substr($value->date_now, 0, 10);
+                    if (!isset($data["returns_new"][$value->c_id][$day][$value->p_id]["amount"])) {
                         $data["returns_new"][$value->c_id][$day][$value->p_id]["amount"] = 0;
                     }
                     $data["returns_new"][$value->c_id][$day][$value->p_id]["amount"] += $value->amount;
-                    if(!isset($data["returns_new"][$value->c_id][$value->p_id]["amount"])) {
+                    if (!isset($data["returns_new"][$value->c_id][$value->p_id]["amount"])) {
                         $data["returns_new"][$value->c_id][$value->p_id]["amount"] = 0;
                     }
                     $data["returns_new"][$value->c_id][$value->p_id]["amount"] += $value->amount;
 
-                    if(isset($data["prices"][$value->p_id])) {
-                        foreach($data["prices"][$value->p_id] as $k => $v) {
-                            if(substr($v->date_from,0,10) <= $day) {
-                                if(($v->date_to == null) || $v->date_to >= $day) {
-                                    if(isset($v->priceshops)) {
+                    if (isset($data["prices"][$value->p_id])) {
+                        foreach ($data["prices"][$value->p_id] as $k => $v) {
+                            if (substr($v->date_from, 0, 10) <= $day) {
+                                if (($v->date_to == null) || $v->date_to >= $day) {
+                                    if (isset($v->priceshops)) {
                                         $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost_zm"] = $v->priceshops;
                                         $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost_zm"] = $v->priceshops;
                                         $is_price = true;
@@ -1080,7 +1080,7 @@ class Reports
                                         $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = $v->price;
                                         $is_price = true;
                                     }
-                                    if(isset($v->pricefixed)) {
+                                    if (isset($v->pricefixed)) {
                                         $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost_f"] = $v->pricefixed;
                                         $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost_f"] = $v->pricefixed;
                                         $is_price = true;
@@ -1100,15 +1100,15 @@ class Reports
         $cargo = new Cargo;
         if (!empty($cargo->getAllFullProductsDateAndShops($date_from, $date_to))) {
             foreach ($cargo->getAllFullProductsDateAndShops($date_from, $date_to) as $key => $value) {
-                $day = substr($value->date,0,10);
+                $day = substr($value->date, 0, 10);
                 $data["cargo_temp"][$value->c_id][$value->p_id][$day]["amount"] = $value->amount;
                 $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["amount"] = $value->amount;
-                if(isset($data["prices"][$value->p_id])) {
+                if (isset($data["prices"][$value->p_id])) {
                     $is_price = false;
-                    foreach($data["prices"][$value->p_id] as $k => $v) {
-                        if(substr($v->date_from,0,10) <= $day) {
-                            if(($v->date_to == null) || $v->date_to >= $day) {
-                                if(isset($v->priceshops)) {
+                    foreach ($data["prices"][$value->p_id] as $k => $v) {
+                        if (substr($v->date_from, 0, 10) <= $day) {
+                            if (($v->date_to == null) || $v->date_to >= $day) {
+                                if (isset($v->priceshops)) {
                                     $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost_zm"] = $v->priceshops;
                                     $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost_zm"] = $v->priceshops;
                                     $is_price = true;
@@ -1117,7 +1117,7 @@ class Reports
                                     $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = $v->price;
                                     $is_price = true;
                                 }
-                                if(isset($v->pricefixed)) {
+                                if (isset($v->pricefixed)) {
                                     $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost_f"] = $v->pricefixed;
                                     $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost_f"] = $v->pricefixed;
                                     $is_price = true;
@@ -1128,8 +1128,8 @@ class Reports
                                 }
                             }
                         }
-                    } 
-                    if($is_price == false) {
+                    }
+                    if ($is_price == false) {
                         $data["cargo_temp"][$value->c_id][$value->p_id][$day]["cost"] = 0;
                         $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["cost"] = 0;
                     }
@@ -1142,7 +1142,7 @@ class Reports
 
         $companies = new Companies();
         $data["shops"] = [];
-        if(!empty($companies->getAllShops())) {
+        if (!empty($companies->getAllShops())) {
             foreach ($companies->getAllShops() as $key => $value) {
                 $data["shops"][$value->id] = $value;
             }
@@ -1155,6 +1155,186 @@ class Reports
 
         //show($data["returns_new"]);
         $this->view('salessummary.total', $data);
+    }
+
+    public function visitmap()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+
+        $type = 0;
+        $send = 0;
+        $param1 = 0;
+        $param2 = 0;
+
+        $date_from = "2020-01-01 00:00:00";
+        $date_to = "2020-01-01 23:59:59";
+
+        if (isset($URL[2])) {
+            $type = $URL[2];
+        }
+
+        if ($type == "send") {
+            $send = 1;
+            if (isset($URL[3])) {
+                $type = $URL[3];
+            }
+            if (isset($URL[4])) {
+                $param1 = $URL[4];
+                if ($param1 == "-1") {
+                    $today_p = new DateTime();
+                    $today_p->modify('-1 day');
+                    $param1 = $today_p->format('Y-m-d');
+                }
+            }
+            if (isset($URL[5])) {
+                $param2 = $URL[5];
+            }
+        } else if ($type == "show") {
+            $send = 2;
+            if (isset($URL[3])) {
+                $type = $URL[3];
+            }
+            if (isset($_GET["search"])) { // wysłane zapytanie GETem
+                if (isset($_GET["date_from"])) {
+                    $param1 = $_GET["date_from"];
+                    $data["date_from"] = $param1;
+                }
+                if (isset($_GET["date_to"])) {
+                    $param2 = $_GET["date_to"];
+                    $data["date_to"] = $param2;
+                }
+            } else {
+                if (isset($URL[4])) {
+                    $param1 = $URL[4];
+                }
+                if (isset($URL[5])) {
+                    $param2 = $URL[5];
+                }
+            }
+        } else {
+            if (isset($URL[3])) {
+                $param1 = $URL[3];
+                if ($param1 == "-1") {
+                    $today_p = new DateTime();
+                    $today_p->modify('-1 day');
+                    $param1 = $today_p->format('Y-m-d');
+                }
+            }
+            if (isset($URL[4])) {
+                $param2 = $URL[4];
+            }
+        }
+
+        if ($type == "hour")
+            $raport_id = 15; // do zmiany 133
+        elseif ($type == "day")
+            $raport_id = 15; // do zmiany
+        else if ($type == "week")
+            $raport_id = 15; // do zmiany
+        else if ($type == "month")
+            $raport_id = 15; // do zmiany
+
+        $l_access = new Linksaccess;
+        $ids = [];
+        if (!empty($l_access->getEmailsByLinks($raport_id))) {
+            foreach ($l_access->getEmailsByLinks($raport_id) as $l_a) {
+                $ids[] = $l_a->r_id;
+            }
+        }
+        $ids = implode(",", $ids);
+        $get_users = new User;
+        $temp_emails = $get_users->getEmailsByRole($ids);
+
+        $t_em = [];
+        foreach ($temp_emails as $email) {
+            $t_em[] = $email->email;
+        }
+        $data["emails"] = implode(",", $t_em);
+
+        $today = date("Y-m-d");
+
+        if ($type == "hour") {
+            if ($param1 == 0) {
+                $param1 = date("H", strtotime("-1 hour"));
+            }
+            $date_from_hour = $today . " " . $param1 . ":00:00";
+            $date_to_hour = $today . " " . $param1 . ":59:59";
+            $date_from = $today . " 00:00:00";
+            $date_to = $today . " 23:59:59";
+
+        } else if ($type == "day") {
+            if ($param1 <> 0) {
+                $today = $param1;
+            }
+            $date_from = $today . " 00:00:00";
+            $date_to = $today . " 23:59:59";
+        } else if ($type == "week") {
+            if ($param1 <> 0) {
+                $date_from = $param1 . " 00:00:00";
+            }
+            if ($param2 <> 0) {
+                $date_to = $param2 . " 23:59:59";
+            }
+            if ($param1 == 0) {
+                $last_monday = date("Y-m-d", strtotime("-7 days", strtotime("last monday")));
+                $last_sunday = date("Y-m-d", strtotime("+6 days", strtotime($last_monday)));
+                $date_from = $last_monday . " 00:00:00";
+                $date_to = $last_sunday . " 23:59:59";
+                $param1 = $last_monday; // tu sprawdzić
+                $param2 = $last_sunday;
+            }
+        } else if ($type == "month") {
+            if ($param1 <> 0) {
+                if ($param2 <> 0) {
+                    $firstday = date("$param2-$param1-01");
+                    $ld = cal_days_in_month(CAL_GREGORIAN, $param1, $param2);
+                    $lastday = date("$param2-$param1-$ld");
+                    $date_from = $firstday . " 00:00:00";
+                    $date_to = $lastday . " 23:59:59";
+                }
+            }
+            if ($param1 == 0) {
+                $first_day_current_month = date("Y-m-01");
+                $last_day_current_month = date("Y-m-t", strtotime($first_day_current_month));
+                $last_day_previous_month = date("Y-m-t", strtotime("-1 month", strtotime($first_day_current_month)));
+                $first_day_previous_month = date("Y-m-01", strtotime("-1 month", strtotime($first_day_current_month)));
+
+                $date_from = $first_day_previous_month . " 00:00:00";
+                $date_to = $last_day_previous_month . " 23:59:59";
+                $timestamp = strtotime($date_from);
+                $param1 = date('m', $timestamp);
+                $param2 = date('y', $timestamp);
+            }
+        } else {
+            echo "Błędny parametr";
+            die;
+        }
+
+        $data["get"]["send"] = $send;
+        $data["get"]["type"] = $type;
+        $data["get"]["date_from"] = $date_from;
+        $data["get"]["date_to"] = $date_to;
+        $data["get"]["param1"] = $param1;
+        $data["get"]["param2"] = $param2;
+
+        $companies = new Companiestocheck();
+        $data["companies"] = [];
+        if (!empty($companies->getCompaniesVisitedOrNull($date_from, $date_to))) {
+            foreach ($companies->getCompaniesVisitedOrNull($date_from, $date_to) as $key => $value) {
+                $data["companies"][$value->id] = $value;
+            }
+        }
+
+        $products_list = new Companies();
+        foreach ($products_list->getAllShopsActive() as $key => $value) {
+            $data["company_old"][$value->id] = $value;
+        }
+
+        $this->view('visit.total', $data);
     }
 
 

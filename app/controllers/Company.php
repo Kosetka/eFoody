@@ -78,7 +78,7 @@ class Company
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             //show($_POST);die;
             $company = new Companies;
-            if($_POST["company_type"] == 2 || $_POST["company_type"] == 3) {
+            if ($_POST["company_type"] == 2 || $_POST["company_type"] == 3) {
                 //
             } else {
                 unset($_POST["delivery_hour"]);
@@ -126,7 +126,7 @@ class Company
             }
             if (isset($_POST["companyEdit"])) {
                 $_POST["address"] = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
-                if($_POST["company_type"] == 2 || $_POST["company_type"] == 3) {
+                if ($_POST["company_type"] == 2 || $_POST["company_type"] == 3) {
                     //
                 } else {
                     unset($_POST["delivery_hour"]);
@@ -235,7 +235,7 @@ class Company
         foreach ($companies->getCompaniesToVisit() as $co) {
             $data["companies_sorted"][$co->id] = $co;
         }
-        if(!empty($companies->getCompaniesVisited())) {
+        if (!empty($companies->getCompaniesVisited())) {
             foreach ($companies->getCompaniesVisited() as $co) {
                 $data["companies_visited"][$co->id] = $co;
             }
@@ -291,11 +291,11 @@ class Company
             //show($_POST);die;
             $u_id = $_SESSION["USER"]->id;
             $date = date("Y-m-d H:i:s");
-            $address = $_POST["street"]." ".$_POST["street_number"].", ".$_POST["city"]." ".$_POST["postal_code"];
+            $address = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
             $toInsert = [
-                "address" => $address, 
-                "street" => $_POST["street"], 
-                "street_number" => $_POST["street_number"], 
+                "address" => $address,
+                "street" => $_POST["street"],
+                "street_number" => $_POST["street_number"],
                 "postal_code" => $_POST["postal_code"],
                 "city" => $_POST["city"],
                 "phone_number" => $_POST["phone_number"],
@@ -306,7 +306,8 @@ class Company
                 "status" => $_POST["status"],
                 "name" => $_POST["name"],
                 "visit_date" => $date,
-                "description" => $_POST["description"]
+                "description" => $_POST["description"],
+                "inserted" => 1
             ];
 
             $comp = new Companiestocheck;
@@ -349,13 +350,13 @@ class Company
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             //show($_POST);die;
 
-            if(isset($_POST["newadd"])) {
+            if (isset($_POST["newadd"])) {
                 $u_id = $_SESSION["USER"]->id;
-                $address = $_POST["street"]." ".$_POST["street_number"].", ".$_POST["city"]." ".$_POST["postal_code"];
+                $address = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
                 $toInsert = [
-                    "address" => $address, 
-                    "street" => $_POST["street"], 
-                    "street_number" => $_POST["street_number"], 
+                    "address" => $address,
+                    "street" => $_POST["street"],
+                    "street_number" => $_POST["street_number"],
                     "postal_code" => $_POST["postal_code"],
                     "city" => $_POST["city"],
                     "phone_number" => $_POST["phone_number"],
@@ -369,12 +370,12 @@ class Company
                 ];
 
                 $comp = new Companiestocheck;
-                $comp->update($id,$toInsert);
+                $comp->update($id, $toInsert);
                 $data['success'] = "Punkt został edytowany";
-                if($_POST["status"] == 2) {
-                    if(isset($_POST["moved"])) {
+                if ($_POST["status"] == 2) {
+                    if (isset($_POST["moved"])) {
                         //tutaj do dodania jako sklep
-                        $comp->update($id,["moved" => 1]);
+                        $comp->update($id, ["moved" => 1]);
                         $date = date("Y-m-d H:i:s");
 
                         $company = new Companies;
@@ -407,11 +408,11 @@ class Company
                         $company->insert($toInsert);
 
                         $data['success'] = "Sklep został dodany pomyślnie";
-        
 
 
-                        if(isset($_POST["phone_number"])) {
-                            if($_POST["phone_number"] != "") {
+
+                        if (isset($_POST["phone_number"])) {
+                            if ($_POST["phone_number"] != "") {
                                 $last_id = ""; // pobrać ID
                                 $last_id = $company->getLast();
                                 $last_id = $last_id[0]->id;
@@ -422,11 +423,11 @@ class Company
                         }
                     }
                 } else {
-                    if($_POST["status"] != 0) {
-                        if(isset($_POST["to_delete"])) {
-                            $comp->update($id,["to_delete" => 1]);
+                    if ($_POST["status"] != 0) {
+                        if (isset($_POST["to_delete"])) {
+                            $comp->update($id, ["to_delete" => 1]);
                         } else {
-                            $comp->update($id,["to_delete" => 0]);
+                            $comp->update($id, ["to_delete" => 0]);
                         }
                     }
                 }

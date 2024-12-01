@@ -138,11 +138,12 @@ if ($send == 2) {
                 }
             }
             ?>
-                            </script>
-                        </div>
-                        <button class="w-40 btn btn-lg btn-primary" style="margin-bottom: 40px;" type="submit" name="search" value=1>Wyświetl raport</button>
-                    </form>
-        <?php
+        </script>
+    </div>
+    <button class="w-40 btn btn-lg btn-primary" style="margin-bottom: 40px;" type="submit" name="search" value=1>Wyświetl
+        raport</button>
+    </form>
+    <?php
 }
 
 $name = REPORTTYPES[$data["get"]["type"]];
@@ -170,12 +171,12 @@ $mess = "";
 
 $prod = [];
 
-if(isset($data["cargo_temp"])) {
-    foreach($data["cargo_temp"] as $company_id => $compval) {
+if (isset($data["cargo_temp"])) {
+    foreach ($data["cargo_temp"] as $company_id => $compval) {
         $mess .= "<table style='border: 1px solid'>
             <thead style='border: 1px solid'>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
-                    <th colspan='12'>Raport sprzedaży do firmy - ".$data["shops"][$company_id]->full_name." - $dates</th>
+                    <th colspan='12'>Raport sprzedaży do firmy - " . $data["shops"][$company_id]->full_name . " - $dates</th>
                 </tr>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                     <th style='border: 1px solid #000; width: 8%'>Produkt</th>
@@ -189,7 +190,7 @@ if(isset($data["cargo_temp"])) {
         $total_sales = 0;
         $total_money = 0;
         $total_return = 0;
-        
+
         foreach ($compval as $product_id => $prod_date) {
             $amo = 0;
             $cost = 0;
@@ -197,76 +198,75 @@ if(isset($data["cargo_temp"])) {
             $tot_amo = 0;
             $costb = true;
             $total_cost = 0;
-    
-            foreach($prod_date as $key_date => $one_date) {
+
+            foreach ($prod_date as $key_date => $one_date) {
 
                 $amo += $one_date["amount"];
-                if($data["shops"][$company_id]->company_type == 2) {
-                    if(isset($one_date["cost_zm"])) {
+                if ($data["shops"][$company_id]->company_type == 2) {
+                    if (isset($one_date["cost_zm"])) {
                         $cost = $one_date["cost_zm"];
                     } else {
                         $cost = $one_date["cost"];
                     }
                 } else {
-                    if(isset($one_date["cost_f"])) {
+                    if (isset($one_date["cost_f"])) {
                         $cost = $one_date["cost_f"];
                     } else {
                         $cost = $one_date["cost"];
                     }
                 }
-                if($costb) {
-                    if($cost_last == 0) {
+                if ($costb) {
+                    if ($cost_last == 0) {
                         $cost_last = $cost;
-                    }
-                    else if ($cost_last != $cost) {
+                    } else if ($cost_last != $cost) {
                         $costb = false;
                     }
                 }
                 $day_ret = 0;
-                if(isset($data["returns"][$company_id][$key_date][$product_id]["amount"])) {
+                if (isset($data["returns"][$company_id][$key_date][$product_id]["amount"])) {
                     $day_ret = $data["returns"][$company_id][$key_date][$product_id]["amount"];
                 }
-    
+
                 $tot_amo = ($one_date["amount"] - $day_ret) * $cost;
                 $total_sales += $one_date["amount"];
                 $total_money += ($one_date["amount"] - $day_ret) * $cost;
                 $total_cost += ($one_date["amount"] - $day_ret) * $cost;
             }
             $txtadd = "";
-            if(!$costb) {
+            if (!$costb) {
                 $txtadd = "<b>*</b>";
             }
-    
-    
-            if($amo > 0) {
+
+
+            if ($amo > 0) {
                 $ret_show = 0;
-                if(isset($data["returns"][$company_id][$product_id]["amount"])) {
+                if (isset($data["returns"][$company_id][$product_id]["amount"])) {
                     $ret_show = $data["returns"][$company_id][$product_id]["amount"];
                     $total_return += $ret_show;
                 }
                 $mess .= "
                     <tr style='text-align: center;'>
-                        <td style='border: 1px solid;'>".$data["fullproducts"][$product_id]["p_name"]."</td>
+                        <td style='border: 1px solid;'>" . $data["fullproducts"][$product_id]["p_name"] . "</td>
                         <td style='border: 1px solid;'>$amo</td>
                         <td style='border: 1px solid;'>$ret_show</td>
                         <td style='border: 1px solid;' title='Gwiazda oznacza zmianę ceny w trakcie wybranej daty, kwota liczy się prawidłowo, jednak wyświetla się najnowsza cena za sztukę.'>$cost_last zł$txtadd</td>
                         <td style='border: 1px solid;'>" . $total_cost . " zł</td>
                     </tr>";
-                if(!isset($prod[$product_id]["amount"])) {
+                if (!isset($prod[$product_id]["amount"])) {
                     $prod[$product_id]["amount"] = 0;
                 }
                 $prod[$product_id]["amount"] += $amo;
 
-                if(!isset($prod[$product_id]["return"])) {
+                if (!isset($prod[$product_id]["return"])) {
                     $prod[$product_id]["return"] = 0;
                 }
                 $prod[$product_id]["return"] += $ret_show;
-                
-                if(!isset($prod[$product_id]["cost"])) {
+
+                if (!isset($prod[$product_id]["cost"])) {
                     $prod[$product_id]["cost"] = 0;
                 }
                 $prod[$product_id]["cost"] += $total_cost;
-                if(!isset($prod[$product_id]["return_val"])) {
+                if (!isset($prod[$product_id]["return_val"])) {
                     $prod[$product_id]["return_val"] = 0;
                 }
                 $prod[$product_id]["return_val"] += $ret_show * $cost_last;
@@ -292,12 +292,12 @@ if(isset($data["cargo_temp"])) {
 
 $mess2 = "";
 setlocale(LC_TIME, 'pl_PL.UTF-8');
-if(isset($data["cargo_temp2"])) {
-    foreach($data["cargo_temp2"] as $company_id => $compval) {
+if (isset($data["cargo_temp2"])) {
+    foreach ($data["cargo_temp2"] as $company_id => $compval) {
         $mess2 .= "<table style='border: 1px solid'>
             <thead style='border: 1px solid'>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
-                    <th colspan='12'>Raport szczegółowy sprzedaży - ".$data["shops"][$company_id]->full_name."</th>
+                    <th colspan='12'>Raport szczegółowy sprzedaży - " . $data["shops"][$company_id]->full_name . "</th>
                 </tr>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                     <th style='border: 1px solid #000; width: 8%'>Produkt</th>
@@ -315,37 +315,37 @@ if(isset($data["cargo_temp2"])) {
         $end = new DateTime($data["get"]["date_to"]);
 
         $end = $end->modify('+1 day');
-        
+
         $week_sales = 0;
         $week_money = 0;
         $week_returns = 0;
         for ($date2 = $start; $date2 < $end; $date2->modify('+1 day')) {
             $curdate = $date2->format('Y-m-d');
             $mess2 .= "     <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
-                                <th colspan='5'>$curdate (".getPolishDayName($date2->format('N')).")</th>
+                                <th colspan='5'>$curdate (" . getPolishDayName($date2->format('N')) . ")</th>
                             </tr>";
 
-            if(isset($compval[$curdate])) {
+            if (isset($compval[$curdate])) {
                 $day_sales = 0;
                 $day_money = 0;
                 $day_returns = 0;
-                foreach($compval[$curdate] as $prod_id => $prod_data_detail) {
-                    if($prod_data_detail["amount"] > 0) {
-                        if($data["shops"][$company_id]->company_type == 2) {
-                            if(isset($prod_data_detail["cost_zm"])) {
+                foreach ($compval[$curdate] as $prod_id => $prod_data_detail) {
+                    if ($prod_data_detail["amount"] > 0) {
+                        if ($data["shops"][$company_id]->company_type == 2) {
+                            if (isset($prod_data_detail["cost_zm"])) {
                                 $cost3 = $prod_data_detail["cost_zm"];
                             } else {
                                 $cost3 = $prod_data_detail["cost"];
                             }
                         } else {
-                            if(isset($prod_data_detail["cost_f"])) {
+                            if (isset($prod_data_detail["cost_f"])) {
                                 $cost3 = $prod_data_detail["cost_f"];
                             } else {
                                 $cost3 = $prod_data_detail["cost"];
                             }
                         }
                         $prod_returns = 0;
-                        if(isset($data["returns"][$company_id][$curdate][$prod_id]["amount"])) {
+                        if (isset($data["returns"][$company_id][$curdate][$prod_id]["amount"])) {
                             $prod_returns = $data["returns"][$company_id][$curdate][$prod_id]["amount"];
                             $day_returns += $prod_returns;
                         }
@@ -357,11 +357,11 @@ if(isset($data["cargo_temp2"])) {
                         $week_money += ($prod_data_detail["amount"] - $prod_returns) * $cost3;
                         $mess2 .= "
                         <tr style='text-align: center;'>
-                            <td style='border: 1px solid;'>".$data["fullproducts"][$prod_id]["p_name"]."</td>
-                            <td style='border: 1px solid;'>".$prod_data_detail["amount"]."</td>
-                            <td style='border: 1px solid;'>".$prod_returns."</td>
-                            <td style='border: 1px solid;'>".$cost3." zł</td>
-                            <td style='border: 1px solid;'>".($prod_data_detail["amount"] - $prod_returns) * $cost3." zł</td>
+                            <td style='border: 1px solid;'>" . $data["fullproducts"][$prod_id]["p_name"] . "</td>
+                            <td style='border: 1px solid;'>" . $prod_data_detail["amount"] . "</td>
+                            <td style='border: 1px solid;'>" . $prod_returns . "</td>
+                            <td style='border: 1px solid;'>" . $cost3 . " zł</td>
+                            <td style='border: 1px solid;'>" . ($prod_data_detail["amount"] - $prod_returns) * $cost3 . " zł</td>
                         </tr>";
                     }
                 }
@@ -378,9 +378,9 @@ if(isset($data["cargo_temp2"])) {
                             </tr>";
             }
         }
-    
-    
-    
+
+
+
         $mess2 .= "
             </tbody>
             <tfoot>
@@ -401,7 +401,7 @@ if(isset($data["cargo_temp2"])) {
 $prodsku = [];
 
 $mess3 = "";
-if(!empty($prod)) {
+if (!empty($prod)) {
     $mess3 .= "<table style='border: 1px solid'>
             <thead style='border: 1px solid'>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
@@ -416,48 +416,48 @@ if(!empty($prod)) {
                 </tr>
             </thead>
             <tbody>";
-        $total_sales = 0;
-        $total_money = 0;
+    $total_sales = 0;
+    $total_money = 0;
 
-        $start = new DateTime($data["get"]["date_from"]);
-        $end = new DateTime($data["get"]["date_to"]);
+    $start = new DateTime($data["get"]["date_from"]);
+    $end = new DateTime($data["get"]["date_to"]);
 
-        $end = $end->modify('+1 day');
-        
-        $week_sales = 0;
-        $week_money = 0;
-        $week_returns = 0;
-        $week_retvar = 0;
+    $end = $end->modify('+1 day');
 
-        foreach($prod as $prod_k => $prod_v) {
-            $mess3 .= "
-            <tr style='text-align: center;'>
-                <td style='border: 1px solid;'>".$data["fullproducts"][$prod_k]["p_name"]."</td>
-                <td style='border: 1px solid;'>".$prod_v["amount"]."</td>
-                <td style='border: 1px solid;'>".$prod_v["return"]."</td>
-                <td style='border: 1px solid;'>".$prod_v["return_val"]."</td>
-                <td style='border: 1px solid;'>".$prod_v["cost"]." zł</td>
-            </tr>";
-            $week_sales += $prod_v["amount"];
-            $week_money += $prod_v["cost"];
-            $week_returns += $prod_v["return"];
-            $week_retvar += $prod_v["return_val"];
+    $week_sales = 0;
+    $week_money = 0;
+    $week_returns = 0;
+    $week_retvar = 0;
 
-            $sku = substr($data["fullproducts"][$prod_k]["sku"],0,4);
-            if(!isset($prodsku[$sku])) {
-                $prodsku[$sku]["amount"] = 0;
-                $prodsku[$sku]["cost"] = 0;
-                $prodsku[$sku]["return"] = 0;
-                $prodsku[$sku]["return_val"] = 0;
-            }
-            $prodsku[$sku]["amount"] += $prod_v["amount"];
-            $prodsku[$sku]["cost"] += $prod_v["cost"];
-            $prodsku[$sku]["return"] += $prod_v["return"];
-            $prodsku[$sku]["return_val"] += $prod_v["return_val"];
-        }
-                    
-    
+    foreach ($prod as $prod_k => $prod_v) {
         $mess3 .= "
+            <tr style='text-align: center;'>
+                <td style='border: 1px solid;'>" . $data["fullproducts"][$prod_k]["p_name"] . "</td>
+                <td style='border: 1px solid;'>" . $prod_v["amount"] . "</td>
+                <td style='border: 1px solid;'>" . $prod_v["return"] . "</td>
+                <td style='border: 1px solid;'>" . $prod_v["return_val"] . "</td>
+                <td style='border: 1px solid;'>" . $prod_v["cost"] . " zł</td>
+            </tr>";
+        $week_sales += $prod_v["amount"];
+        $week_money += $prod_v["cost"];
+        $week_returns += $prod_v["return"];
+        $week_retvar += $prod_v["return_val"];
+
+        $sku = substr($data["fullproducts"][$prod_k]["sku"], 0, 4);
+        if (!isset($prodsku[$sku])) {
+            $prodsku[$sku]["amount"] = 0;
+            $prodsku[$sku]["cost"] = 0;
+            $prodsku[$sku]["return"] = 0;
+            $prodsku[$sku]["return_val"] = 0;
+        }
+        $prodsku[$sku]["amount"] += $prod_v["amount"];
+        $prodsku[$sku]["cost"] += $prod_v["cost"];
+        $prodsku[$sku]["return"] += $prod_v["return"];
+        $prodsku[$sku]["return_val"] += $prod_v["return_val"];
+    }
+
+
+    $mess3 .= "
             </tbody>
             <tfoot>
                 <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
@@ -469,11 +469,11 @@ if(!empty($prod)) {
                 </tr>
             </tfoot>
         </table>";
-        $mess3 .= "</br>";
+    $mess3 .= "</br>";
 }
 
 $mess4 = "";
-if(!empty($prodsku)) {
+if (!empty($prodsku)) {
     $mess4 .= "<table style='border: 1px solid'>
             <thead style='border: 1px solid'>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
@@ -488,37 +488,37 @@ if(!empty($prodsku)) {
                 </tr>
             </thead>
             <tbody>";
-        $total_sales = 0;
-        $total_money = 0;
+    $total_sales = 0;
+    $total_money = 0;
 
-        $start = new DateTime($data["get"]["date_from"]);
-        $end = new DateTime($data["get"]["date_to"]);
+    $start = new DateTime($data["get"]["date_from"]);
+    $end = new DateTime($data["get"]["date_to"]);
 
-        $end = $end->modify('+1 day');
-        
-        $week_sales = 0;
-        $week_money = 0;
-        $week_returns = 0;
-        $week_retvar = 0;
+    $end = $end->modify('+1 day');
 
-        foreach($prodsku as $prod_k => $prod_v) {
-            $here_sku = str_replace("-","_",$prod_k);
-            $mess4 .= "
-            <tr style='text-align: center;'>
-                <td style='border: 1px solid;'>".$data["sku"][$here_sku]->name."</td>
-                <td style='border: 1px solid;'>".$prod_v["amount"]."</td>
-                <td style='border: 1px solid;'>".$prod_v["return"]."</td>
-                <td style='border: 1px solid;'>".$prod_v["return_val"]." zł</td>
-                <td style='border: 1px solid;'>".$prod_v["cost"]." zł</td>
-            </tr>";
-            $week_sales += $prod_v["amount"];
-            $week_money += $prod_v["cost"];
-            $week_returns += $prod_v["return"];
-            $week_retvar += $prod_v["return_val"];
-        }
-                    
-    
+    $week_sales = 0;
+    $week_money = 0;
+    $week_returns = 0;
+    $week_retvar = 0;
+
+    foreach ($prodsku as $prod_k => $prod_v) {
+        $here_sku = str_replace("-", "_", $prod_k);
         $mess4 .= "
+            <tr style='text-align: center;'>
+                <td style='border: 1px solid;'>" . $data["sku"][$here_sku]->name . "</td>
+                <td style='border: 1px solid;'>" . $prod_v["amount"] . "</td>
+                <td style='border: 1px solid;'>" . $prod_v["return"] . "</td>
+                <td style='border: 1px solid;'>" . $prod_v["return_val"] . " zł</td>
+                <td style='border: 1px solid;'>" . $prod_v["cost"] . " zł</td>
+            </tr>";
+        $week_sales += $prod_v["amount"];
+        $week_money += $prod_v["cost"];
+        $week_returns += $prod_v["return"];
+        $week_retvar += $prod_v["return_val"];
+    }
+
+
+    $mess4 .= "
             </tbody>
             <tfoot>
                 <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
@@ -530,7 +530,7 @@ if(!empty($prodsku)) {
                 </tr>
             </tfoot>
         </table>";
-        $mess4 .= "</br>";
+    $mess4 .= "</br>";
 }
 
 
@@ -577,4 +577,3 @@ if ($send == 1) {
     }
 }
 ?>
-
