@@ -215,8 +215,9 @@ if (isset($data["companies"])) {
     }
 
     foreach ($data["company_old"] as $kkey => $vvalue) {
+        $compaid = $vvalue->id;
         if (isset($vvalue->latitude) && $vvalue->longitude) {
-            $points["x" . $company_id] = ["name" => $vvalue->full_name, "address" => "$vvalue->address", "lat" => $vvalue->latitude, "lng" => $vvalue->longitude, "type" => $vvalue->c_type, "status" => $vvalue->active, "visited" => "old"];
+            $points["x" . $compaid] = ["name" => $vvalue->full_name, "address" => "$vvalue->address", "lat" => $vvalue->latitude, "lng" => $vvalue->longitude, "type" => $vvalue->c_type, "status" => $vvalue->active, "visited" => "old"];
         }
     }
     $mess .= "
