@@ -1323,9 +1323,16 @@ class Reports
 
         $companies = new Companiestocheck();
         $data["companies"] = [];
+        $data["companies_new"] = [];
+        $data["company_old"] = [];
         if (!empty($companies->getCompaniesVisitedOrNull($date_from, $date_to))) {
             foreach ($companies->getCompaniesVisitedOrNull($date_from, $date_to) as $key => $value) {
                 $data["companies"][$value->id] = $value;
+            }
+        }
+        if (!empty($companies->getCompaniesToVisit())) {
+            foreach ($companies->getCompaniesToVisit() as $key => $value) {
+                $data["companies_new"][$value->id] = $value;
             }
         }
 

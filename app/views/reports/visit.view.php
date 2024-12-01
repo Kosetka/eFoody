@@ -214,10 +214,21 @@ if (isset($data["companies"])) {
         }
     }
 
-    foreach ($data["company_old"] as $kkey => $vvalue) {
-        $compaid = $vvalue->id;
-        if (isset($vvalue->latitude) && $vvalue->longitude) {
-            $points["x" . $compaid] = ["name" => $vvalue->full_name, "address" => "$vvalue->address", "lat" => $vvalue->latitude, "lng" => $vvalue->longitude, "type" => $vvalue->c_type, "status" => $vvalue->active, "visited" => "old"];
+    if (isset($data["company_old"])) {
+        foreach ($data["company_old"] as $kkey => $vvalue) {
+            $compaid = $vvalue->id;
+            if (isset($vvalue->latitude) && $vvalue->longitude) {
+                $points["o" . $compaid] = ["name" => $vvalue->full_name, "address" => "$vvalue->address", "lat" => $vvalue->latitude, "lng" => $vvalue->longitude, "type" => $vvalue->c_type, "status" => $vvalue->active, "visited" => "old"];
+            }
+        }
+    }
+    if (isset($data["company_new"])) {
+        foreach ($data["company_new"] as $kkey => $vvalue) {
+            $compaid = $vvalue->id;
+            if (isset($vvalue->latitude) && $vvalue->longitude) {
+                $points["n" . $compaid] = ["name" => $compval->name, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => 0, "visited" => "new"];
+
+            }
         }
     }
     $mess .= "
