@@ -56,7 +56,7 @@ class Companiestocheck
     }
     public function getCompaniesToVisit()
     {
-        $query = "select * from $this->table WHERE status = 0;";
+        $query = "select * from $this->table WHERE status = 0 AND type = 'grocery_or_supermarket';";
         return $this->query($query);
     }
 }

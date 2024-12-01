@@ -12,91 +12,93 @@
         <div class="card-header">
           <h2 class="">Miejsca do odwiedzenia</h2>
           <button class="btn btn-secondary" onclick="sortLocations(points)">Sortuj punkty według odległości</button>
-          <a href="<?php echo ROOT . "/company/pointadd";?>" class="btn btn-primary">Dodaj nowy punkt</a>
+          <a href="<?php echo ROOT . "/company/pointadd"; ?>" class="btn btn-primary">Dodaj nowy punkt</a>
         </div>
         <div class="form-group row m-3">
           <div class="col-sm-12">
-          <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Odległość</th>
-      <th scope="col">Nazwa firmy</th>
-      <th scope="col">Adres</th>
-      <th scope="col">Telefon</th>
-      <th scope="col">Typ punktu</th>
-      <th scope="col">Akcje</th>
-    </tr>
-  </thead>
-  <tbody>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Odległość</th>
+                  <th scope="col">Nazwa firmy</th>
+                  <th scope="col">Adres</th>
+                  <th scope="col">Telefon</th>
+                  <th scope="col">Typ punktu</th>
+                  <th scope="col">Mapa</th>
+                  <th scope="col">Akcje</th>
+                </tr>
+              </thead>
+              <tbody>
 
-    <?php
-        $link = "https://www.google.com/maps/dir//";
-        $points = [];
-        foreach ($data["companies_sorted"] as $key => $value) {
-            echo "<tr>
+                <?php
+                $link = "https://www.google.com/maps/dir//";
+                $points = [];
+                foreach ($data["companies_sorted"] as $key => $value) {
+                  echo "<tr>
                     <td></td>
                     <td>$value->name</td>
                     <td>$value->address</td>
                     <td>$value->phone_number</td>
-                    <td>" . COMPANYTYPE[$value->type] . "</td>";
+                    <td>" . COMPANYTYPE[$value->type] . "</td>
+                    <td><a href='$link" . $value->latitude . "," . $value->longitude . "'>Nawiguj</a></td>";
 
-            echo "<form method='POST' action='' id='form_$key'>"; // Dodanie unikalnego ID do formularza
-            echo "
+                  echo "<form method='POST' action='' id='form_$key'>"; // Dodanie unikalnego ID do formularza
+                  echo "
                     <td>
                     <select name='status' class='form-control' id='status_$key'>"; // Dodanie unikalnego ID do selecta
-            foreach(COMPANYVISIT as $kk => $vv) {
-                echo "<option value='$kk'>$vv</option>";
-            }
-            echo "  </select>
+                  foreach (COMPANYVISIT as $kk => $vv) {
+                    echo "<option value='$kk'>$vv</option>";
+                  }
+                  echo "  </select>
                     <input type='text' class='form-control' style='margin: 20px 0 !important;' name='description' placeholder='Dodaj notatkę' />
                         <input type='hidden' name='id' value='$key' />
                         <button type='submit' class='btn btn-primary' id='submit_$key'>Zapisz</button> <!-- Unikalny ID przycisku -->
                     </td>
                 </form>";
 
-            echo "</tr>";
+                  echo "</tr>";
 
-            $points[$key] = [
-                "name" => $value->name,
-                "lat" => $value->latitude,
-                "lng" => $value->longitude,
-                "type" => "$value->type"
-            ];
-        }
-        ?>
-                </tbody>
+                  $points[$key] = [
+                    "name" => $value->name,
+                    "lat" => $value->latitude,
+                    "lng" => $value->longitude,
+                    "type" => "$value->type"
+                  ];
+                }
+                ?>
+              </tbody>
             </table>
           </div>
         </div>
       </div>
       <script>
-  // Funkcja sprawdzająca stan select i blokująca przycisk submit
-  function checkSelectAndDisableSubmit(formId, selectId, submitId) {
-    const selectElement = document.getElementById(selectId);
-    const submitButton = document.getElementById(submitId);
-    
-    // Jeśli wartość wybrana w select to 0 i tekst to "-", zablokuj przycisk submit
-    selectElement.addEventListener('change', function() {
-      if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
-        submitButton.disabled = true; // Blokujemy przycisk
-      } else {
-        submitButton.disabled = false; // Odblokowujemy przycisk
-      }
-    });
+        // Funkcja sprawdzająca stan select i blokująca przycisk submit
+        function checkSelectAndDisableSubmit(formId, selectId, submitId) {
+          const selectElement = document.getElementById(selectId);
+          const submitButton = document.getElementById(submitId);
 
-    // Inicjalizacja stanu przycisku na podstawie początkowej wartości selecta
-    if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
-      submitButton.disabled = true; // Blokujemy przycisk, jeśli warunki są spełnione
-    }
-  }
+          // Jeśli wartość wybrana w select to 0 i tekst to "-", zablokuj przycisk submit
+          selectElement.addEventListener('change', function () {
+            if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
+              submitButton.disabled = true; // Blokujemy przycisk
+            } else {
+              submitButton.disabled = false; // Odblokowujemy przycisk
+            }
+          });
 
-  // Inicjalizacja dla wszystkich formularzy
-  window.onload = function() {
-    <?php foreach ($data["companies_sorted"] as $key => $value): ?>
-      checkSelectAndDisableSubmit('form_<?php echo $key; ?>', 'status_<?php echo $key; ?>', 'submit_<?php echo $key; ?>');
-    <?php endforeach; ?>
-  };
-</script>
+          // Inicjalizacja stanu przycisku na podstawie początkowej wartości selecta
+          if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
+            submitButton.disabled = true; // Blokujemy przycisk, jeśli warunki są spełnione
+          }
+        }
+
+        // Inicjalizacja dla wszystkich formularzy
+        window.onload = function () {
+          <?php foreach ($data["companies_sorted"] as $key => $value): ?>
+            checkSelectAndDisableSubmit('form_<?php echo $key; ?>', 'status_<?php echo $key; ?>', 'submit_<?php echo $key; ?>');
+          <?php endforeach; ?>
+        };
+      </script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAJHFF9bGryg9sEfdgy5ukLAai8nRMKcU&callback=initMap"
         async defer></script>
       <script>
@@ -234,11 +236,11 @@
         }*/
 
         function generateOptions(companyVisit) {
-            let options = '';
-            for (const [key, value] of Object.entries(companyVisit)) {
-                options += `<option value="${key}">${value}</option>`;
-            }
-            return options;
+          let options = '';
+          for (const [key, value] of Object.entries(companyVisit)) {
+            options += `<option value="${key}">${value}</option>`;
+          }
+          return options;
         }
         const companyVisit = <?php echo json_encode(COMPANYVISIT, JSON_HEX_TAG | JSON_HEX_QUOT); ?>;
 
@@ -290,16 +292,16 @@
                     $type[$k] = "warning";
                 }
 
-                if(isset($data["companies_visited"])) {
-                    foreach ($data["companies_visited"] as $key => $value) {
-                      echo "  <tr><td>$value->name</td>
+                if (isset($data["companies_visited"])) {
+                  foreach ($data["companies_visited"] as $key => $value) {
+                    echo "  <tr><td>$value->name</td>
                                                 <td>$value->address</td>
                                                 <td>$value->description</td>
                                                 <td>$value->visit_date</td>
                                                 <td><span class='btn btn-" . $type[$value->status] . "'>" . COMPANYVISIT[$value->status] . "<span></td>
                                                 <td><a target='blank' href='" . $link . $value->latitude . "," . $value->longitude . "'>Przejdź do mapy</a></td>";
-                      echo "</tr>";
-                    }
+                    echo "</tr>";
+                  }
                 }
 
                 ?>
@@ -311,39 +313,39 @@
 
     </main>
     <script>
-        
 
-// Funkcja do obliczania odległości między dwoma punktami geograficznymi (Haversine formula)
-function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Promień Ziemi w kilometrach
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = 
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Odległość w kilometrach
-}
 
-// Funkcja do sortowania tabeli
-function sortTableByDistance(userLat, userLng, points) {
-    const distances = points.map(point => {
-        const distance = calculateDistance(userLat, userLng, point.lat, point.lng);
-        return { ...point, distance }; 
-    });
+      // Funkcja do obliczania odległości między dwoma punktami geograficznymi (Haversine formula)
+      function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Promień Ziemi w kilometrach
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Odległość w kilometrach
+      }
 
-    // Sortuj punkty według odległości
-    distances.sort((a, b) => a.distance - b.distance);
+      // Funkcja do sortowania tabeli
+      function sortTableByDistance(userLat, userLng, points) {
+        const distances = points.map(point => {
+          const distance = calculateDistance(userLat, userLng, point.lat, point.lng);
+          return { ...point, distance };
+        });
 
-    // Znajdź element tbody i wyczyść jego zawartość
-    const tbody = document.querySelector(".table tbody");
-    tbody.innerHTML = "";
+        // Sortuj punkty według odległości
+        distances.sort((a, b) => a.distance - b.distance);
 
-    // Dodaj posortowane wiersze
-    distances.forEach(point => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
+        // Znajdź element tbody i wyczyść jego zawartość
+        const tbody = document.querySelector(".table tbody");
+        tbody.innerHTML = "";
+
+        // Dodaj posortowane wiersze
+        distances.forEach(point => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
         <td>${point.distance.toFixed(3)} km</td>
         <td>${point.name}</td>
         <td>${point.address}</td>
@@ -360,70 +362,70 @@ function sortTableByDistance(userLat, userLng, points) {
             </form>
         </td>
     `;
-    tbody.appendChild(row);
+          tbody.appendChild(row);
 
-    // Funkcja do blokowania przycisku submit
-    function checkSelectAndDisableSubmit(selectId, submitId) {
-        const selectElement = document.getElementById(selectId);
-        const submitButton = document.getElementById(submitId);
+          // Funkcja do blokowania przycisku submit
+          function checkSelectAndDisableSubmit(selectId, submitId) {
+            const selectElement = document.getElementById(selectId);
+            const submitButton = document.getElementById(submitId);
 
-        // Dodanie nasłuchiwania na zmianę wyboru
-        selectElement.addEventListener('change', function() {
-            if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
+            // Dodanie nasłuchiwania na zmianę wyboru
+            selectElement.addEventListener('change', function () {
+              if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
                 submitButton.disabled = true; // Blokowanie przycisku
-            } else {
+              } else {
                 submitButton.disabled = false; // Odblokowywanie przycisku
+              }
+            });
+
+            // Inicjalizacja na podstawie początkowej wartości selecta
+            if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
+              submitButton.disabled = true; // Blokowanie przycisku, jeśli warunki są spełnione
             }
+          }
+
+          // Inicjalizacja dla wygenerowanego formularza
+          checkSelectAndDisableSubmit(`status_${point.type}`, `submit_${point.type}`);
         });
+      }
 
-        // Inicjalizacja na podstawie początkowej wartości selecta
-        if (selectElement.value === '0' && selectElement.options[selectElement.selectedIndex].text === '-') {
-            submitButton.disabled = true; // Blokowanie przycisku, jeśli warunki są spełnione
-        }
-    }
-
-    // Inicjalizacja dla wygenerowanego formularza
-    checkSelectAndDisableSubmit(`status_${point.type}`, `submit_${point.type}`);
-});
-}
-
-// Funkcja wywoływana po kliknięciu przycisku
-function sortLocations(points) {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
+      // Funkcja wywoływana po kliknięciu przycisku
+      function sortLocations(points) {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
             const userLat = position.coords.latitude;
             const userLng = position.coords.longitude;
 
             // Wywołanie sortowania tabeli
             sortTableByDistance(userLat, userLng, points);
-        }, error => {
+          }, error => {
             console.error("Nie udało się pobrać lokalizacji:", error);
             alert("Nie udało się pobrać lokalizacji. Upewnij się, że udostępniasz swoją lokalizację.");
-        });
-    } else {
-        alert("Twoja przeglądarka nie wspiera geolokalizacji.");
-    }
-}
+          });
+        } else {
+          alert("Twoja przeglądarka nie wspiera geolokalizacji.");
+        }
+      }
 
-// Przykład danych z PHP (wstawiane przez backend)
+      // Przykład danych z PHP (wstawiane przez backend)
 
-<?php
-    echo "const points = [";
-    foreach ($data["companies_sorted"] as $company) {
+      <?php
+      echo "const points = [";
+      foreach ($data["companies_sorted"] as $company) {
         $full_name = $company->name;
         $address = $company->address;
         $phone = $company->phone_number;
         $type = COMPANYTYPE[$company->type];
-        
+
         $id = $company->id;
         echo "{ lat: $company->latitude, lng: $company->longitude, id: $id, name: '$full_name', address: '$address', phone_number: '$phone', type: '$type' },";
-    }
-    echo "];";
-?>
-        //console.log(points);
+      }
+      echo "];";
+      ?>
+      //console.log(points);
 
 
 
     </script>
-    
+
     <?php require_once 'landings/footer.view.php' ?>
