@@ -345,7 +345,7 @@
         // Dodaj posortowane wiersze
         distances.forEach(point => {
           const row = document.createElement("tr");
-          let linkmap = 'https://www.google.com/maps/dir//' + ${ point.lat }+',' + ${ point.lng };
+          let linkmap = `https://www.google.com/maps/dir//${point.lat},${point.lng}`;
           row.innerHTML = `
         <td>${point.distance.toFixed(3)} km</td>
         <td>${point.name}</td>
