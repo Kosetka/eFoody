@@ -278,6 +278,46 @@ class Company
         $this->view('companypointslist', $data);
     }
 
+    public function pointstatus()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+        $data["status"] = "";
+
+        if (!empty($_GET)) {
+            $URL = $_GET['url'] ?? 'home';
+            $URL = explode("/", trim($URL, "/"));
+            if(isset($URL[2])) {
+                $status = $URL[2];
+            }
+            if(isset($_GET["send"])) {
+                if (isset($_GET["status"])) {
+                    $status = $_GET["status"];
+                }
+            }
+
+            $companies = new Companiestocheck();
+            if($status == 99) {
+                if(!empty($companies->getCompaniesActive())) {
+                    foreach($companies->getCompaniesActive() as $com) {
+                        $data["companies"][$com->id] = $com;
+                    }
+                }
+            } else {
+                if(!empty($companies->getCompaniesActiveByStatus($status))) {
+                    foreach($companies->getCompaniesActiveByStatus($status) as $com) {
+                        $data["companies"][$com->id] = $com;
+                    }
+                }
+            }
+            $data["status"] = $status;
+        }
+
+        $this->view('companypointstatus', $data);
+    }
+
     public function pointadd()
     {
         if (empty($_SESSION['USER']))

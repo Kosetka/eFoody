@@ -216,11 +216,19 @@ if (isset($data["companies"])) {
         if ($compval->visit_date == "0000-00-00 00:00:00" || $compval->visit_date == NULL) {
             $points[$company_id] = ["name" => $compval->name, "visit_date" => $compval->visit_date, "status_name" => COMPANYVISIT[$compval->status], "description" => $compval->description, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => $compval->status, "visited" => "false"];
         } else {
+            $color = '';
+            if($compval->status == 2) {
+                $color = "#28a745";
+            } else if($compval->status == 9) {
+                $color = "#ffc107";
+            } else {
+                $color = "#dc3545";
+            }
             $mess .= "<tr style='text-align: center;'>";
             $mess .= "<td style='border: 1px solid;'>$inserted$compval->name</td>";
             $mess .= "<td style='border: 1px solid;'>$compval->address</td>";
             $mess .= "<td style='border: 1px solid;'>$compval->visit_date</td>";
-            $mess .= "<td style='border: 1px solid;'>" . COMPANYVISIT[$compval->status] . "</td>";
+            $mess .= "<td style='border: 1px solid; background-color: $color;'>" . COMPANYVISIT[$compval->status] . "</td>";
             $mess .= "<td style='border: 1px solid;'>$compval->description</td>";
             if ($send == 2) {
                 $link_to_map = "https://www.google.com/maps/dir//" . $compval->latitude . "," . $compval->longitude;
