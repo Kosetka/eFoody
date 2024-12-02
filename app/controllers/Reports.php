@@ -1340,6 +1340,7 @@ class Reports
         foreach ($products_list->getAllShopsActive() as $key => $value) {
             $data["company_old"][$value->id] = $value;
         }
+        //show($data);die;
 
         $this->view('visit.total', $data);
     }

@@ -60,8 +60,12 @@
  :root {
   --building-color: #e78e09;
   --house-color: #43718a;
-  --shop-color: #5bc729;
+  --shop-color: #007BFF;
   --warehouse-color: #eee025;
+  --thumbs-up-color: #28a745;
+  --ban-color: #dc3545;
+  --phone-color: #ffc107;
+  --clipboard-question-color: #6c757d;
   --exclamation-color: #e70909;
 }
 
@@ -147,7 +151,7 @@
   background-color: #FFFFFF;
   border-radius: 8px;
   box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
-  height: 80px;
+  height: 120px;
   padding: 8px 15px;
   width: auto;
 }
@@ -167,6 +171,9 @@
 
 .property .bed {
   color: #FFA000;
+}
+.property .gr {
+  color: #6c757d;
 }
 
 .property .bath {
@@ -220,6 +227,54 @@
 
 .property:not(.highlight):has(.fa-warehouse)::after {
   border-top: 9px solid var(--warehouse-color);
+}
+
+  .property.highlight:has(.fa-thumbs-up) .icon {
+    color: var(--thumbs-up-color);
+  }
+  
+  .property:not(.highlight):has(.fa-thumbs-up) {
+    background-color: var(--thumbs-up-color);
+  }
+  
+  .property:not(.highlight):has(.fa-thumbs-up)::after {
+    border-top: 9px solid var(--thumbs-up-color);
+  }
+
+ .property.highlight:has(.fa-ban) .icon {
+  color: var(--ban-color);
+}
+
+.property:not(.highlight):has(.fa-ban) {
+  background-color: var(--ban-color);
+}
+
+.property:not(.highlight):has(.fa-ban)::after {
+  border-top: 9px solid var(--ban-color);
+}
+
+.property.highlight:has(.fa-phone) .icon {
+  color: var(--phone-color);
+}
+
+.property:not(.highlight):has(.fa-phone) {
+  background-color: var(--phone-color);
+}
+
+.property:not(.highlight):has(.fa-phone)::after {
+  border-top: 9px solid var(--phone-color);
+}
+
+.property.highlight:has(.fa-clipboard-question) .icon {
+  color: var(--clipboard-question-color);
+}
+
+.property:not(.highlight):has(.fa-clipboard-question) {
+  background-color: var(--clipboard-question-color);
+}
+
+.property:not(.highlight):has(.fa-clipboard-question)::after {
+  border-top: 9px solid var(--clipboard-question-color);
 }
 
 /*

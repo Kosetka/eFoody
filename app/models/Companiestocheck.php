@@ -60,6 +60,11 @@ class Companiestocheck
         $query = "select * from $this->table WHERE status = 0 AND type = 'grocery_or_supermarket';";
         return $this->query($query);
     }
+    public function getCompaniesToVisitMap()
+    {
+        $query = "select * from $this->table WHERE status IS NULL AND type = 'grocery_or_supermarket';";
+        return $this->query($query);
+    }
     public function getCompaniesVisitedOrNull($date_from, $date_to)
     {
         $query = "SELECT * 

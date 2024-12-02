@@ -190,13 +190,31 @@ if (isset($data["companies"])) {
     $mess .= " </tr>
         </thead>
         <tbody>";
+
+    if (isset($data["companies_new"])) {
+        foreach ($data["companies_new"] as $kkey => $vvalue) {
+            $compaid = $vvalue->id;
+            if (isset($vvalue->latitude) && $vvalue->longitude) {
+                $points["n" . $compaid] = ["name" => $vvalue->name, "visit_date" => "", "status_name" => "", "description" => $vvalue->description, "address" => $vvalue->address, "lat" => $vvalue->latitude, "lng" => $vvalue->longitude, "type" => $vvalue->type, "status" => 0, "visited" => "new"];
+            }
+        }
+    }
+    if (isset($data["company_old"])) {
+        foreach ($data["company_old"] as $kkey => $vvalue) {
+            $compaid = $vvalue->id;
+            if (isset($vvalue->latitude) && $vvalue->longitude) {
+                $points["o" . $compaid] = ["name" => $vvalue->full_name, "visit_date" => "", "status_name" => "", "description" => $vvalue->description, "address" => "$vvalue->address", "lat" => $vvalue->latitude, "lng" => $vvalue->longitude, "type" => $vvalue->c_type, "status" => $vvalue->active, "visited" => "old"];
+            }
+        }
+    }
+    
     foreach ($data["companies"] as $company_id => $compval) {
         $inserted = "";
         if ($compval->inserted == 1) {
             $inserted = "<b>[NOWA]</b> ";
         }
         if ($compval->visit_date == "0000-00-00 00:00:00" || $compval->visit_date == NULL) {
-            $points[$company_id] = ["name" => $compval->name, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => $compval->status, "visited" => "false"];
+            $points[$company_id] = ["name" => $compval->name, "visit_date" => $compval->visit_date, "status_name" => COMPANYVISIT[$compval->status], "description" => $compval->description, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => $compval->status, "visited" => "false"];
         } else {
             $mess .= "<tr style='text-align: center;'>";
             $mess .= "<td style='border: 1px solid;'>$inserted$compval->name</td>";
@@ -210,27 +228,11 @@ if (isset($data["companies"])) {
             }
             $mess .= "</tr>";
             $total_comp++;
-            $points[$company_id] = ["name" => $compval->name, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => $compval->status, "visited" => "true"];
+            $points[$company_id] = ["name" => $compval->name, "visit_date" => $compval->visit_date, "status_name" => COMPANYVISIT[$compval->status], "description" => $compval->description, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => $compval->status, "visited" => "true"];
         }
     }
-
-    if (isset($data["company_old"])) {
-        foreach ($data["company_old"] as $kkey => $vvalue) {
-            $compaid = $vvalue->id;
-            if (isset($vvalue->latitude) && $vvalue->longitude) {
-                $points["o" . $compaid] = ["name" => $vvalue->full_name, "address" => "$vvalue->address", "lat" => $vvalue->latitude, "lng" => $vvalue->longitude, "type" => $vvalue->c_type, "status" => $vvalue->active, "visited" => "old"];
-            }
-        }
-    }
-    if (isset($data["company_new"])) {
-        foreach ($data["company_new"] as $kkey => $vvalue) {
-            $compaid = $vvalue->id;
-            if (isset($vvalue->latitude) && $vvalue->longitude) {
-                $points["n" . $compaid] = ["name" => $compval->name, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => 0, "visited" => "new"];
-
-            }
-        }
-    }
+    
+    
     $mess .= "
         </tbody>
         <tfoot>
@@ -249,7 +251,7 @@ if (isset($data["companies"])) {
 
 }
 
-
+//show($points);die;
 echo $mess;
 
 $to_send = false;
@@ -345,30 +347,44 @@ if ($mess != "") {
         const content = document.createElement("div");
 
         content.classList.add("property");
+        let type_icon = property.type;
+        if(property.type == "store" || property.type == "shop") {// || property.type == "grocery_or_supermarket"
+            type_icon = "shop";
+        }
+
+        if(property.type == "grocery_or_supermarket") {
+            if(property.visited == "new") {
+                type_icon = "clipboard-question";
+            } else {
+                if(property.status == 2) {
+                    type_icon = "thumbs-up";
+                } else if(property.status == 9) {
+                    type_icon = "phone";
+                } else {
+                    type_icon = "ban";
+                }
+            }
+        }
         content.innerHTML = `
     <div class="icon">
-        <i aria-hidden="true" class="fa fa-icon fa-${property.type}" title="${property.type}"></i>
-        <span class="fa-sr-only">${property.type}</span>
+        <i aria-hidden="true" class="fa fa-icon fa-${type_icon}" title="${type_icon}"></i>
+        <span class="fa-sr-only">${type_icon}</span>
     </div>
     <div class="details">
         <div class="price"><a target='blank' href='${property.url}'>${property.name}</a></div>
         <div class="address">${property.address}</div>
+        <div class="address">Notatka: ${property.description}</div>
         <div class="features">
-        <div>
-            <i aria-hidden="true" class="fa fa-credit-card fa-lg bed" title="Sprzedane"></i>
-            <span class="fa-sr-only">Sprzedane</span>
-            <span>${property.type}</span>
-        </div>
-        <div>
-            <i aria-hidden="true" class="fa fa-gift fa-lg gift" title="Prezenty"></i>
-            <span class="fa-sr-only">Prezenty</span>
-            <span>${property.status}</span>
-        </div>
-        <div>
-            <i aria-hidden="true" class="fa fa-users fa-lg bath" title="Pracownicy"></i>
-            <span class="fa-sr-only">Pracownicy</span>
-            <span>${property.visited}</span>
-        </div>
+            <div>
+                <i aria-hidden="true" class="fa fa-info-circle fa-lg bath" title="Data wizyty"></i>
+                <span class="fa-sr-only">Data wizyty</span>
+                <span>${property.visit_date}</span>
+            </div>
+            <div>
+                <i aria-hidden="true" class="fa fa-calendar-day fa-lg gr" title="Status"></i>
+                <span class="fa-sr-only">Status</span>
+                <span>${property.status_name}</span>
+            </div>
         </div>
     </div>
     `;
@@ -390,6 +406,9 @@ if ($mess != "") {
                 type: "' . $point["type"] . '",
                 status: "' . $point["status"] . '",
                 address: "' . $point["address"] . '",
+                description: "' . $point["description"] . '",
+                visit_date: "' . $point["visit_date"] . '",
+                status_name: "' . $point["status_name"] . '",
                 url: "https://www.google.com/maps/dir//' . $lat . ',' . $lng . '"
             },';
         }
