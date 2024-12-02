@@ -286,7 +286,7 @@ class Company
         $data = [];
         $data["status"] = "";
 
-        if (!empty($_GET)) {
+        if(!empty($_GET["send"])) {
             $URL = $_GET['url'] ?? 'home';
             $URL = explode("/", trim($URL, "/"));
             if(isset($URL[2])) {
