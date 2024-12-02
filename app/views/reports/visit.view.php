@@ -281,7 +281,7 @@ if ($mess != "") {
         </div>
     </div>
 </div>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAJHFF9bGryg9sEfdgy5ukLAai8nRMKcU&callback=initMap" async
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $data["api_key"];?>&callback=initMap" async
     defer></script>
 <script>
     async function initMap() {

@@ -1340,6 +1340,11 @@ class Reports
         foreach ($products_list->getAllShopsActive() as $key => $value) {
             $data["company_old"][$value->id] = $value;
         }
+
+        $api_key = new Apitokens();
+        $data["api_key"] = $api_key->getToken("google_maps");
+        
+
         //show($data);die;
 
         $this->view('visit.total', $data);
