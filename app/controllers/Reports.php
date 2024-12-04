@@ -894,6 +894,8 @@ class Reports
                 $param2 = $URL[5];
             }
         } else if ($type == "show") {
+            if (empty($_SESSION['USER']))
+                redirect('login');
             $send = 2;
             if (isset($URL[3])) {
                 $type = $URL[3];
@@ -916,6 +918,8 @@ class Reports
                 }
             }
         } else {
+            if (empty($_SESSION['USER']))
+                redirect('login');
             if (isset($URL[3])) {
                 $param1 = $URL[3];
                 if ($param1 == "-1") {
@@ -1049,7 +1053,7 @@ class Reports
         $dataObj->modify('-7 days');
         $new_date_from = $dataObj->format('Y-m-d H:i:s');*/
 
-        if ($type == "day") {
+        if ($type == "today") {
             if (!empty($plan->getShopsReturnNew($date_from, $date_to))) {
                 foreach ($plan->getShopsReturnNew($date_from, $date_to) as $key => $value) {
                     /*if($value->c_id == "423") {

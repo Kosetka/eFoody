@@ -148,6 +148,8 @@ if ($send == 2) {
 $name = REPORTTYPES[$data["get"]["type"]];
 $dates = "";
 
+$day_today = date("Y-m-d");
+
 if ($data["get"]["type"] == "hour") {
     $new_date_format = date("d-m-Y", strtotime($data["get"]["date_from"]));
     $dates = $new_date_format . " - " . $data["get"]["param1"] . ":00";
@@ -170,7 +172,7 @@ if ($data["get"]["type"] == "month") {
 $mess = "";
 
 if(isset($data["cargo_temp"])) {
-    if($data["get"]["type"] == "day") {
+    if($data["get"]["type"] == "today") {
         $mess .= "<table style='border: 1px solid'>
         <thead style='border: 1px solid'>
             <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
@@ -194,10 +196,12 @@ if(isset($data["cargo_temp"])) {
                 </tr>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                     <th style='border: 1px solid #000; width: 8%'>Produkt</th>
-                    <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
-                    <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
-                    <th style='border: 1px solid #000; width: 8%'>Wartość zwrotów</th>
-                    <th style='border: 1px solid #000; width: 8%'>Łącznie do zapłaty</th>
+                    <th style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>";
+        if($date_from != $day_today) {
+            $mess .= "  <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
+                        <th style='border: 1px solid #000; width: 8%'>Wartość zwrotów</th>";
+        }
+        $mess .= "  <th style='border: 1px solid #000; width: 8%'>Łącznie do zapłaty</th>
                 </tr>
             </thead>
             <tbody>";
@@ -249,7 +253,7 @@ if(isset($data["cargo_temp"])) {
                     }
                 }
                 $day_ret = 0;
-                if($data["get"]["type"] == "day") {
+                if($data["get"]["type"] == "today") {
                     //echo $data["returns_new"][$company_id][$key_date][$product_id]["amount"];
                     if(isset($data["returns_new"][$company_id][$key_date][$product_id]["amount"])) {
                         $day_ret = $data["returns_new"][$company_id][$key_date][$product_id]["amount"];
@@ -274,7 +278,7 @@ if(isset($data["cargo_temp"])) {
                 
                 $total_retret += $day_ret * $cost;
 
-                if($data["get"]["type"] == "day") {
+                if($data["get"]["type"] == "today") {
                     $total_return += $day_ret;
                 }
             }
@@ -286,7 +290,7 @@ if(isset($data["cargo_temp"])) {
     
             if($amo > 0) {
                 $ret_show = 0;
-                if($data["get"]["type"] != "day") {
+                if($data["get"]["type"] != "today") {
                     if(isset($data["returns"][$company_id][$product_id]["amount"])) {
                         $ret_show = $data["returns"][$company_id][$product_id]["amount"];
                         $total_return += $ret_show;
@@ -306,7 +310,7 @@ if(isset($data["cargo_temp"])) {
         if(strlen($data["shops"][$company_id]->friendly_name) > 1 ) {
             $friendly = "(".$data["shops"][$company_id]->friendly_name.")";
         } //($company_id)
-        if($data["get"]["type"] == "day") {
+        if($data["get"]["type"] == "today") {
             $mess .= "
                     <tr style='text-align: center;'>
                         <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly</td>
@@ -320,10 +324,12 @@ if(isset($data["cargo_temp"])) {
             $mess .= "
                     <tr style='text-align: center;'>
                         <td style='border: 1px solid;'>".$data["shops"][$company_id]->full_name." $friendly</td>
-                        <td style='border: 1px solid;'>$total_sales</td>
-                        <td style='border: 1px solid;'>$total_return</td>
-                        <td style='border: 1px solid;' title='".getPercent($total_return,$total_sales)." %'>".$total_retret." zł</td>
-                        <td style='border: 1px solid;'>$total_money zł</td>
+                        <td style='border: 1px solid;'>$total_sales</td>";
+            if($date_from != $day_today) {
+                $mess .= "  <td style='border: 1px solid;'>$total_return</td>
+                            <td style='border: 1px solid;' title='".getPercent($total_return,$total_sales)." %'>".$total_retret." zł</td>";
+            }
+            $mess .= "  <td style='border: 1px solid;'>$total_money zł</td>
                     </tr>";
 
         }
@@ -332,7 +338,7 @@ if(isset($data["cargo_temp"])) {
         $tt_retret += $total_retret;
         $tt_money += $total_money;
     }
-    if($data["get"]["type"] == "day") {
+    if($data["get"]["type"] == "today") {
         $mess .= "
                 </tbody>
                 <tfoot>
@@ -352,10 +358,12 @@ if(isset($data["cargo_temp"])) {
                 <tfoot>
                     <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
                         <td style='border: 1px solid;'>TOTAL</td>
-                        <td style='border: 1px solid;'>$tt_sales</td>
-                        <td style='border: 1px solid;'>$tt_return</td>
-                        <td style='border: 1px solid;' title='".getPercent($tt_return,$tt_sales)." %'>".$tt_retret." zł</td>
-                        <td style='border: 1px solid;'>$tt_money zł</td>
+                        <td style='border: 1px solid;'>$tt_sales</td>";
+        if($date_from != $day_today) {
+            $mess .= "  <td style='border: 1px solid;'>$tt_return</td>
+                        <td style='border: 1px solid;' title='".getPercent($tt_return,$tt_sales)." %'>".$tt_retret." zł</td>";
+        }
+        $mess .= "      <td style='border: 1px solid;'>$tt_money zł</td>
                     </tr>
                 </tfoot>
             </table>";
@@ -365,7 +373,7 @@ if(isset($data["cargo_temp"])) {
 }
 $mess2 = "";
 if(isset($data["returns_new"])) {
-    if($data["get"]["type"] == "day") {
+    if($data["get"]["type"] == "today") {
         $mess2 .= "<table style='border: 1px solid'>
         <thead style='border: 1px solid'>
             <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
