@@ -143,6 +143,16 @@ if ($send == 2) {
                         <button class="w-40 btn btn-lg btn-primary" style="margin-bottom: 40px;" type="submit" name="search" value=1>Wyświetl raport</button>
                     </form>
         <?php
+} else {
+    if ($data["get"]["type"] == "day") {
+        $date_from = date("Y-m-d");
+    } else if ($data["get"]["type"] == "week") {
+        $date_from = "";
+    } else if ($data["get"]["type"] == "month") {
+        $date_from = "";
+    } else {
+        $date_from = "";
+    }
 }
 
 $name = REPORTTYPES[$data["get"]["type"]];
