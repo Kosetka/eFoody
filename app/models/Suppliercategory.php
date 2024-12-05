@@ -22,4 +22,9 @@ class Suppliercategory
         $query = "select * from $this->table;";
         return $this->query($query);
     }
+    public function getSupplier($id)
+    {
+        $query = "select * from $this->table WHERE supplier_id = $id;";
+        return $this->query($query);
+    }
 }

@@ -91,6 +91,36 @@ define('POLISHMONTHS',[
     "11" => "Listopad",
     "12" => "Grudzień"
 ]);
+define("SUPPLIERCOUNTY",[
+    "KOSTARYKA" => "CR",
+    "BRAZYLIA" => "BR",
+    "PERU" => "PE",
+    "IZRAEL" => "IL",
+    "HISZPANIA" => "ES",
+    "EKWADOR" => "EC",
+    "POLSKA" => "PL",
+    "WŁOCHY" => "IT",
+    "HOLANDIA" => "NL",
+    "AMERYKA" => "SA",
+    "TURCJA" => "TR",
+    "CHINY" => "CN",
+    "MAROKO" => "MA",
+    "KOLUMBIA" => "CO",
+    "WIETNAM" => "WN",
+    "FRANCJA" => "FR",
+    "MACEDONIA" => "MK",
+    "MALEZJA" => "MY",
+    "GRECJA" => "GR",
+    "NOWA ZELANDIA" => "NZ",
+    "FILIPINY" => "PH",
+    "HONDURAS" => "HN",
+    "ROSJA" => "RU",
+    "MOŁDAWIA" => "MD",
+    "EGIPT" => "EG",
+    "USA" => "SA",
+    "IRAN" => "IR",
+    "CHILE" => "CL"
+]);
 define('LABELCOST',["cost" => 16.50, "labels" => 1034]);
 define('FUELTYPE',[0 => "Diesel", 1 => "Benzyna"]);
 define('BONUSTYPE',[0 => "Premia", 1 => "Kara"]);

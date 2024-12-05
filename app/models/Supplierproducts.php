@@ -20,12 +20,18 @@ class Supplierproducts
         'producent_id',
         'name',
         'amount',
-        'unit'
+        'unit',
+        'unit_order'
     ];
 
     public function getSupplierProducts()
     {
         $query = "select * from $this->table;";
+        return $this->query($query);
+    }
+    public function getSupplier($id)
+    {
+        $query = "select * from $this->table WHERE id_company = $id;";
         return $this->query($query);
     }
 }
