@@ -2,7 +2,7 @@
 <?php require_once 'landings/nav.view.php' ?>
 <style>
   #map {
-    height: 500px;
+    height: 600px;
     width: 100%;
   }
 
@@ -200,7 +200,12 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
           <div class="card-body card-half">
             <div style="width: 30%;">
               <!-- Lista wyboru punktu startowego -->
-              <label>Ustawienia</label>
+              
+              <div class="card-body">
+                <div class="alert alert-info alert-dismissible">
+                  <h5>Uwaga!</h5>Przy zaznaczeniu powyżej 25 punktów, trasa nie jest w 100% optymalna.
+                </div>
+              </div><label>Ustawienia</label>
               <div id="start-point-options">
                 <!-- Przykładowe punkty startowe - zastąp je swoimi -->
                 <?php
@@ -333,216 +338,252 @@ function selectShops() {
 }
 
       </script>
-      <script>
-        let map;
-        let directionsService;
-        let directionsRenderer;
-        let time_onsite = 300; // 300 sekund = 5 minut
-        let time_start = "16:00"; // godzina wyjazdu
-        let full_msg = "";
+<script>
+    let map;
+    let directionsService;
+    let directionsRenderer;
+    let time_onsite = 300; // 300 sekund = 5 minut
+    let time_start = "16:00"; // godzina wyjazdu
+    let full_msg = "";
+    let num_pos = 0;
 
-        // Funkcja pomocnicza do dodawania minut do czasu w formacie HH:MM
-        function addMinutesToTime(time, minutes) {
-          const [hours, mins] = time.split(":").map(Number);
-          const date = new Date();
-          date.setHours(hours);
-          date.setMinutes(mins + minutes);
-          return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-        }
+    // Funkcja pomocnicza do dodawania minut do czasu w formacie HH:MM
+    function addMinutesToTime(time, minutes) {
+        const [hours, mins] = time.split(":").map(Number);
+        const date = new Date();
+        date.setHours(hours);
+        date.setMinutes(mins + minutes);
+        return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    }
 
-        const shops = <?php echo json_encode($data["companies"]); ?>; // Przekazanie danych o sklepach do JavaScript
-        const shop_des = <?php echo json_encode($comp_des); ?>; // Przekazanie danych o sklepach do JavaScript
-        console.log(shop_des);
-        //console.log(shops);
+    const shops = <?php echo json_encode($data["companies"]); ?>; // Przekazanie danych o sklepach do JavaScript
+    const shop_des = <?php echo json_encode($comp_des); ?>; // Przekazanie danych o sklepach do JavaScript
+    console.log(shop_des);
 
-        function initMap() {
-          map = new google.maps.Map(document.getElementById("map"), {
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
             zoom: 7,
             center: { lat: 52.229675, lng: 21.012230 } // Domyślny środek (Warszawa)
-          });
+        });
 
-          directionsService = new google.maps.DirectionsService();
-          directionsRenderer = new google.maps.DirectionsRenderer();
-          directionsRenderer.setMap(map);
-        }
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true }); // Ukryj domyślne markery
+        directionsRenderer.setMap(map);
+    }
 
-        function generateRoute() {
-          // Pobieramy wybrany punkt startowy z listy radio buttonów
-          const timeStartInput = document.querySelector('input[name="departure-time"]').value;
-          const timeOnsiteInput = parseInt(document.querySelector('input[name="point-time"]').value);
+    function generateRoute() {
+        const timeStartInput = document.querySelector('input[name="departure-time"]').value;
+        const timeOnsiteInput = parseInt(document.querySelector('input[name="point-time"]').value);
 
-          // Podmiana wartości w zmiennych globalnych
-          time_start = timeStartInput;
-          time_onsite = timeOnsiteInput * 60; // Konwersja minut na sekundy
+        time_start = timeStartInput;
+        time_onsite = timeOnsiteInput * 60;
 
-
-          const startPointRadio = document.querySelector('input[name="start-point"]:checked');
-          if (!startPointRadio) {
+        const startPointRadio = document.querySelector('input[name="start-point"]:checked');
+        if (!startPointRadio) {
             alert("Wybierz punkt startowy.");
             return;
-          }
+        }
 
-          // Wyodrębniamy współrzędne punktu startowego
-          const [startLat, startLng] = startPointRadio.value.split(',');
+        const [startLat, startLng] = startPointRadio.value.split(',');
 
-          // Zbieramy zaznaczone checkboxy jako punkty pośrednie
-          const checkboxes = document.querySelectorAll('.location-checkbox:checked');
-          const waypoints = [];
-
-          checkboxes.forEach(checkbox => {
+        const checkboxes = document.querySelectorAll('.location-checkbox:checked');
+        const waypoints = Array.from(checkboxes).map(checkbox => {
             const latitude = checkbox.getAttribute('data-latitude');
             const longitude = checkbox.getAttribute('data-longitude');
-            if (latitude && longitude) {
-              //console.log("lat: " + latitude + "long: " + longitude);
-              waypoints.push({
+            return {
                 location: new google.maps.LatLng(latitude, longitude),
                 stopover: true
-              });
+            };
+        });
+
+        if (waypoints.length > 0) {
+            const maxWaypoints = 25;
+            const segments = [];
+            let segmentStart = new google.maps.LatLng(startLat, startLng);
+
+            // Podział na segmenty
+            for (let i = 0; i < waypoints.length; i += maxWaypoints) {
+                const segmentWaypoints = waypoints.slice(i, i + maxWaypoints);
+                const segmentEnd =
+                    i + maxWaypoints >= waypoints.length
+                        ? new google.maps.LatLng(startLat, startLng) // Ostatni segment wraca do punktu startowego
+                        : segmentWaypoints[segmentWaypoints.length - 1].location;
+                segments.push({ start: segmentStart, waypoints: segmentWaypoints, end: segmentEnd });
+                segmentStart = segmentEnd; // Ustawienie nowego punktu startowego dla kolejnego segmentu
             }
-          });
+            
 
-          // Jeśli mamy przynajmniej jeden punkt pośredni
-          if (waypoints.length > 0) {
-            // Dodajemy punkt końcowy (to będzie punkt startowy)
-            /*waypoints.push({
-              location: new google.maps.LatLng(startLat, startLng),
-              stopover: true
-            });*/
+            processSegments(segments);
+        } else {
+            alert("Wybierz przynajmniej jeden punkt pośredni.");
+        }
+    }
 
-            // Przed wysłaniem do API, logujemy wszystkie punkty
-            //console.log("Punkty wysyłane do API:");
-            //console.log("Punkt startowy: ", { lat: startLat, lng: startLng });
-            //waypoints.forEach((waypoint, index) => {
-            //  console.log(`Punkt ${index + 1}: `, waypoint.location);
-            //});
+    function processSegments(segments) {
+        const allLegs = [];
+        let currentArrivalTime = time_start;
+        const renderers = []; // Lista rendererów dla każdego segmentu
 
-            // Konstruujemy żądanie do API Directions
+        function processNextSegment(index) {
+            if (index >= segments.length) {
+                // Wszystkie segmenty zostały przetworzone
+                updateSummary(allLegs);
+                return;
+            }
+
+            const segment = segments[index];
             const request = {
-              origin: new google.maps.LatLng(startLat, startLng),
-              destination: new google.maps.LatLng(startLat, startLng), // Punkt końcowy to ten sam co startowy
-              waypoints: waypoints,
-              optimizeWaypoints: true, // Optymalizowanie punktów pośrednich
-              travelMode: google.maps.TravelMode.DRIVING
+                origin: segment.start,
+                destination: segment.end,
+                waypoints: segment.waypoints,
+                optimizeWaypoints: true,
+                travelMode: google.maps.TravelMode.DRIVING
             };
 
-            // Wywołanie Directions API
             directionsService.route(request, function (result, status) {
-              if (status === google.maps.DirectionsStatus.OK) {
-                directionsRenderer.setDirections(result);
-                result.routes[0].legs.pop();
+                if (status === google.maps.DirectionsStatus.OK) {
+                    const legs = result.routes[0].legs;
+                    legs.forEach(leg => {
+                        allLegs.push(leg); // Dodaj nogi trasy do wszystkich nóg
+                    });
+                    const sortedWaypoints = result.routes[0].waypoint_order;
+                    displaySortedPoints(sortedWaypoints, segment.waypoints, legs, currentArrivalTime);
+                    currentArrivalTime = calculateNewArrivalTime(legs, currentArrivalTime);
 
-                // Wyświetlamy posortowane punkty
-                const sortedWaypoints = result.routes[0].waypoint_order; // Kolejność punktów pośrednich po optymalizacji
-                full_msg = "";
-                displaySortedPoints(sortedWaypoints, waypoints, result.routes[0].legs);
-                let txt_msg = document.getElementById("txt_msg");
-                txt_msg.innerHTML = full_msg;
-                //console.log(result.routes[0].legs);
-                updateSummary(result.routes[0].legs);
+                    // Dodanie renderera dla segmentu
+                    const segmentRenderer = new google.maps.DirectionsRenderer({
+                        map: map,
+                        suppressMarkers: true, // Ukryj domyślne markery
+                        polylineOptions: {
+                            strokeColor: getRandomColor(), // Różne kolory dla segmentów
+                            strokeWeight: 5
+                        }
+                    });
+                    segmentRenderer.setDirections(result);
+                    renderers.push(segmentRenderer);
 
-              } else {
-                alert("Nie udało się wygenerować trasy.");
-              }
+                    processNextSegment(index + 1); // Przetwarzaj kolejny segment
+                } else {
+                    alert("Nie udało się wygenerować segmentu trasy.");
+                }
             });
-          } else {
-            alert("Wybierz przynajmniej jeden punkt pośredni.");
-          }
         }
 
-        // Funkcja do wyszukania sklepu po współrzędnych
-        function findShopByLatLng(lat, lng) {
-          //console.log(lat);
-          //console.log(lng);
-          return shops.find(shop => shop.latitude == lat && shop.longitude == lng);
-        }
+        processNextSegment(0); // Rozpocznij przetwarzanie od pierwszego segmentu
+    }
 
-        function updateSummary(legs) {
-          let totalDistance = 0; // Łączna odległość w metrach
-          let totalDuration = 0; // Łączny czas przejazdów w minutach
+    function calculateNewArrivalTime(legs, startTime) {
+        let arrivalTime = startTime;
+        legs.forEach(leg => {
+            const durationMinutes = parseInt(leg.duration.text.split(" ")[0]);
+            arrivalTime = addMinutesToTime(arrivalTime, durationMinutes + time_onsite / 60);
+        });
+        return arrivalTime;
+    }
 
-          // Iterujemy przez wszystkie odcinki trasy
-          legs.forEach(leg => {
-            // Parsujemy odległość na liczbę, zakładając, że wartość jest podana w kilometrach, np. "5.2 km"
-            const distanceText = leg.distance.text;
-            const distanceValue = parseFloat(distanceText.replace(" km", "").replace(",", "."));
-            totalDistance += distanceValue;
-            //console.log(distanceValue);
+    function displaySortedPoints(sortedWaypoints, waypoints, legs, arrivalTime) {
+        const pointsList = document.getElementById("table-list");
+        let currentArrivalTime = arrivalTime;
+        let ppoint = 1;
 
-            // Parsujemy czas na liczbę, zakładając, że wartość jest podana w minutach, np. "8 min"
-            const durationText = leg.duration.text;
-            const durationValue = parseInt(durationText.replace(" min", ""));
-            totalDuration += durationValue;
-          });
-
-          // Zaokrąglamy łączną odległość do dwóch miejsc po przecinku
-          totalDistance = totalDistance.toFixed(2);
-
-          // Aktualizujemy element z id "summary_opti"
-          const summaryElement = document.getElementById("summary_opti");
-          summaryElement.innerHTML = `<b>Trasa:</b> ${totalDistance} km</br><b>Czas jazdy:</b> ${totalDuration} min`;
-        }
-
-
-        function displaySortedPoints(sortedWaypoints, waypoints, legs) {
-          // Usuwamy poprzednią listę punktów
-          const pointsList = document.getElementById("table-list");
-          pointsList.innerHTML = '';
-
-          // Ustawiamy czas przyjazdu do pierwszego punktu na wartość startową
-          let arrivalTime = time_start;
-
-          // Wyświetlamy posortowane punkty z informacjami o odległości i czasie
-          sortedWaypoints.forEach((waypointIndex, index) => {
+        sortedWaypoints.forEach((waypointIndex, index) => {
             const waypoint = waypoints[waypointIndex];
             const leg = legs[index];
             const latLng = waypoint.location;
-            const distance = leg.distance.text; // Odległość
-            const duration = leg.duration.text; // Czas przejazdu jako tekst np. "8 min"
+            const distance = leg.distance.text;
+            const duration = leg.duration.text;
 
-            // Znajdź sklep na podstawie współrzędnych
             const shop = findShopByLatLng(latLng.lat(), latLng.lng());
-
-            // Jeśli znaleziono sklep, znajdź jego `id` i pobierz odpowiadający tekst z `shop_des`
-            const shopDescription = shop ? shop_des[shop.id] : 'Brak opisu';
-
-            // Wypisujemy `shopDescription` w konsoli
-            //console.log(`Shop ID: ${shop ? shop.id : 'N/A'}, Description: ${shopDescription}`);
+            const shopDescription = shop ? shop_des[shop.id] : "Brak opisu";
             full_msg += shopDescription + "</br>";
+            console.log(full_msg);
 
-            // Parsujemy wartość czasu przejazdu na minuty
             const durationMinutes = parseInt(duration.split(" ")[0]);
-
-            // Obliczamy czas przyjazdu jako czas rozpoczęcia plus czas przejazdu
-            arrivalTime = addMinutesToTime(arrivalTime, durationMinutes);
-
-            // Obliczamy czas zakończenia jako czas przyjazdu plus czas na miejscu
-            const endTime = addMinutesToTime(arrivalTime, time_onsite / 60);
-
-            // Tworzymy element tabeli dla obecnego punktu z danymi sklepu
+            currentArrivalTime = addMinutesToTime(currentArrivalTime, durationMinutes);
+            const endTime = addMinutesToTime(currentArrivalTime, time_onsite / 60);
             const li = document.createElement("tr");
             let fname = "";
             if (shop) {
-              if (shop.friendly_name != "") {
-                fname = "(" + shop.friendly_name + ")";
-              }
+                if (shop.friendly_name != "") {
+                    fname = "(" + shop.friendly_name + ")";
+                }
             }
+            num_pos++;
             li.innerHTML = `
-      <td>${shop ? shop.full_name : 'N/A'} ${fname}</td>
-      <td>${shop ? shop.address : 'N/A'}</td>
-      <td>${arrivalTime}</td>
-      <td>${endTime}</td>
-      <td>${distance}</td>
-      <td>${duration}</td>
-    `;
+                <td>${num_pos}</td>
+                <td>${shop ? shop.full_name : "N/A"} ${fname}</td>
+                <td>${shop ? shop.address : "N/A"}</td>
+                <td>${currentArrivalTime}</td>
+                <td>${endTime}</td>
+                <td>${distance}</td>
+                <td>${duration}</td>
+            `;
             pointsList.appendChild(li);
 
-            // Ustawiamy nowy czas przyjazdu na czas zakończenia dla kolejnego punktu
-            arrivalTime = endTime;
+            currentArrivalTime = endTime;
 
-          });
+            let txt_msg = document.getElementById("txt_msg");
+            txt_msg.innerHTML = full_msg;
+
+            
+            addNumberedMarker(latLng, num_pos);
+        });
+    }
+
+    function findShopByLatLng(lat, lng) {
+        return shops.find(shop => shop.latitude == lat && shop.longitude == lng);
+    }
+
+    function updateSummary(legs) {
+        let totalDistance = 0;
+        let totalDuration = 0;
+
+        legs.forEach(leg => {
+            const distanceText = leg.distance.text;
+            const distanceValue = parseFloat(distanceText.replace(" km", "").replace(",", "."));
+            totalDistance += distanceValue;
+            const durationText = leg.duration.text;
+            const durationValue = parseInt(durationText.replace(" min", ""));
+            totalDuration += durationValue;
+        });
+
+        totalDistance = totalDistance.toFixed(2);
+
+        const summaryElement = document.getElementById("summary_opti");
+        summaryElement.innerHTML = `<b>Trasa:</b> ${totalDistance} km</br><b>Czas jazdy:</b> ${totalDuration} min`;
+    }
+
+    // Funkcja generująca losowe kolory dla segmentów
+    function getRandomColor() {
+        const letters = 'E';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
         }
+        return color;
+    }
+    function addNumberedMarker(position, number) {
+        const marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            label: {
+                text: number.toString(),
+                color: "white",
+                fontSize: "14px",
+                fontWeight: "bold"
+            },
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 20,
+                fillColor: "#FF0000", // Ten sam kolor co trasa
+                fillOpacity: 1,
+                strokeColor: "#FFFFFF",
+                strokeWeight: 2
+            }
+        });
+    }
+</script>
 
-      </script>
       <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=<?= $data["token"]; ?>&callback=initMap"></script>
 
