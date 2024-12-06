@@ -23,11 +23,19 @@ class Supplier
         // Otwórz plik CSV w trybie odczytu
 
         $processedValues = [];
+        $data["supplier"] = [];
+        $data["supplier_prod"] = [];
         $comp_id = 447;
         $supp = new Suppliercategory();
         if(!empty($supp->getSupplier($comp_id))) {
             foreach($supp->getSupplier($comp_id) as $s) {
                 $data["supplier"][$s->id] = $s;
+            }
+        }
+        $supppro = new Supplierproducts();
+        if(!empty($supppro->getSupplier($comp_id))) {
+            foreach($supppro->getSupplier($comp_id) as $s) {
+                $data["supplier_prod"][$s->id] = $s;
             }
         }
         //show($data["supplier"]);die;
@@ -173,40 +181,10 @@ class Supplier
                     
                     $fn_temp = trim(preg_replace('/\s*["\'][^"\']*["\']\s*/', ' ', $row[2]));
                     $fn_temp = trim(preg_replace('/\s+/', ' ', $fn_temp));
-                    echo $fullname."</br>";
+                    $fullname = trim(preg_replace('/\s+/', ' ', $fullname));
+                    //echo $fullname."</br>";
                     $id_supplier_category = 0;
-                    $isindb = false;
-                    if(isset($data["supplier"])) {
-                        foreach($data["supplier"] as $s) {
-                            if($s->name == trim($fn_temp)) {
-                                $isindb = true;
-                                $id_supplier_category = $s->id;
-                            }
-                        }
-                    }
-                    if(!$isindb) {
-                        if (!in_array($fullname, $processedValues)) {
-                            // sprawdzam czy tej wartości już nie dodawałem, jeśli tak to pomijam
-                            $supcat = new Suppliercategory();
-                            $supcat->insert(["name" =>$fullname, "supplier_id" => $comp_id]);
-                            $id_supplier_category = $supcat->getLast();
-                            
-                            $data["supplier"][$id_supplier_category]->id = $id_supplier_category;
-                            $data["supplier"][$id_supplier_category]->sub_prod_id = "";
-                            $data["supplier"][$id_supplier_category]->name = $fullname;
-                            $data["supplier"][$id_supplier_category]->supplier_id = $comp_id;
-
-                            $processedValues[] = $fullname;
-
-                        } else {
-                            foreach($data["supplier"] as $s) {
-                                //może być problematyczne
-                                if($s->name == trim($fn_temp)) {
-                                    $id_supplier_category = $s->id;
-                                }
-                            }
-                        }
-                    }
+                    
 
                     $unit = strtolower($unit);
                     if($unit == "sztuki") {
@@ -305,6 +283,65 @@ class Supplier
                     $in++;
                 }
             }
+            
+            foreach($sup as $sk => $s) {
+                $isindb = false;
+                $id_supplier_category = 0;
+                $sname = $s["supplier_products"]["name"];
+                foreach($data["supplier"] as $kssup => $ssup) {
+                    $tsname = $ssup->name;
+                    if($sname == $tsname) {
+                        $isindb = true;
+                        $id_supplier_category = $ssup->id;
+                        break;
+                    }
+                }
+                if(!$isindb) {
+                    $supcat = new Suppliercategory();
+                    $supcat->insert(["name" => $sname, "supplier_id" => $comp_id]);
+                    $id_supplier_category = $supcat->getLast();
+
+                    if (!isset($data["supplier"][$id_supplier_category])) {
+                        $data["supplier"][$id_supplier_category] = new stdClass();
+                    }
+
+                    $data["supplier"][$id_supplier_category]->id = $id_supplier_category;
+                    $data["supplier"][$id_supplier_category]->sub_prod_id = "";
+                    $data["supplier"][$id_supplier_category]->name = $sname;
+                    $data["supplier"][$id_supplier_category]->supplier_id = $comp_id;
+                }
+                $sup[$sk]["supplier_products"]["id_supplier_category"] = $id_supplier_category;
+                //TUTAJ WSTAWIAĆ CENY I PRODUKTY PRZY CZYM SPRAWDZAĆ JESZCZE CZY TAKI PRODUKT JEST
+
+
+                /*$isindb = false;
+                $id_supplier_category = 0;
+                $sname = $s["supplier_products"]["name"];
+                foreach($data["supplier_prod"] as $kssup => $ssup) {
+                    $tsname = $ssup->name;
+                    if($sname == $tsname) {
+                        $isindb = true;
+                        $id_supplier_category = $ssup->id;
+                        break;
+                    }
+                }
+                if(!$isindb) {
+                    $supcat = new Supplierproducts();
+                    //$supcat->insert(["name" => $sname, "supplier_id" => $comp_id]);
+                    //$id_supplier_product = $supcat->getLast();
+
+                    if (!isset($data["supplier_prod"][$id_supplier_category])) {
+                        $data["supplier_prod"][$id_supplier_category] = new stdClass();
+                    }
+                }*/
+
+
+
+            }
+            show($sup);
+
+
+
             fclose($handle); // Zamknij plik
         } else {
             die("Nie udało się otworzyć pliku $plikCSV!");
