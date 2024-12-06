@@ -22,13 +22,15 @@ class Supplier
 //                                                                                              SELIGA
         // Otwórz plik CSV w trybie odczytu
 
+        $processedValues = [];
         $comp_id = 447;
-        $supp = new Supplierproducts();
+        $supp = new Suppliercategory();
         if(!empty($supp->getSupplier($comp_id))) {
             foreach($supp->getSupplier($comp_id) as $s) {
                 $data["supplier"][$s->id] = $s;
             }
         }
+        //show($data["supplier"]);die;
 
         if (($handle = fopen($plikCSV, 'r')) !== FALSE) {
             // Czytaj plik linia po linii
@@ -40,6 +42,7 @@ class Supplier
                     $cleanedString = str_replace("KOSZ NATURY", "", $cleanedString);
                     $cleanedString = str_replace("KLIMEK", "", $cleanedString);
                     $cleanedString = str_replace("GUTIMEX", "", $cleanedString);
+                    $cleanedString = str_replace("EAT ME", "", $cleanedString);
                     $cleanedString = str_replace("do wyczerpania", "", $cleanedString);
                     $cleanedString = trim(preg_replace('/\s+/', ' ', $cleanedString));
                     $cleanedString = str_replace("'", "", $cleanedString);
@@ -83,6 +86,54 @@ class Supplier
                     $cleanedString = implode(' ', $words);
                     
                     $amount = 0;
+                    $amount_temp = "";
+                    $string = trim($cleanedString);
+                    
+                    $words = explode(' ', $string);
+
+                    $last_word = end($words);
+
+                    if (preg_match('/^(\d+)\/(\d+)$/', $last_word, $matches)) {
+                        $amount = $matches[2];
+                        //$amount_temp = $last_word;
+
+                        array_pop($words);
+                    } elseif (is_numeric($last_word)) {
+                        if (substr($last_word, 0, 1) === '0' && strlen($last_word) > 1) {
+                            $amount = '0' . substr($last_word, 1);
+                        } else {
+                            $amount_temp = $last_word;
+                            $amount = 1;//$last_word;
+                        }
+                        array_pop($words);
+                    } else {
+                        
+                        $amount = 1; 
+                    }
+                    $cleanedString = implode(' ', $words);
+
+                    if (substr($cleanedString, -2) === "OP") {
+                        $cleanedString = substr($cleanedString, 0, -2);
+                        if($amount_temp <> "") {
+                            $amount_temp = "";
+                            //$amount = $amount_temp;
+                        }
+                    }
+                    
+
+
+                    $string = trim($cleanedString);
+
+                    $words = explode(' ', $string);
+                    $last_word = end($words);
+
+                    $valid_units = ['G', 'ML', 'L', 'KG', 'SZT', 'ml', 'SZTUKI'];
+
+                    if (in_array($last_word, $valid_units)) {
+                        $unit = $last_word;
+                        array_pop($words);
+                    }
+                    $cleanedString = implode(' ', $words);
                     $string = trim($cleanedString);
                     
                     $words = explode(' ', $string);
@@ -94,38 +145,81 @@ class Supplier
                         array_pop($words);
                     } elseif (is_numeric($last_word)) {
                         if (substr($last_word, 0, 1) === '0' && strlen($last_word) > 1) {
-                            $amount = '0,' . substr($last_word, 1);
+                            $amount = '0' . substr($last_word, 1);
                         } else {
-                            $amount = $last_word;
+                            $amount = 1;//$last_word;
+                            if($unit == "G" || $unit == "ML") {
+                                $amount = $last_word;
+                            }
                         }
                         array_pop($words);
                     } else {
-                        $amount = 1; 
+                        if($amount_temp == "") {
+                            $amount = 1; 
+                        }
                     }
                     $cleanedString = implode(' ', $words);
+                    $cleanedString = str_replace("KARTON", "", $cleanedString);
+                    $cleanedString = str_replace("DONICZKA", "", $cleanedString);
+                    $cleanedString = str_replace("OP PRÓŻNIOWE", "", $cleanedString);
+                    $cleanedString = str_replace("OPPRÓŻNIOWE", "", $cleanedString);
 
-                    if (substr($cleanedString, -2) === "OP") {
-                        // Usuwamy ostatnie słowo "SŁOIK"
-                        $cleanedString = substr($cleanedString, 0, -2);
-                    }
+                    
 
+
+                    
+                    //echo $cleanedString."</br>";
                     $fullname = trim($cleanedString);
+                    
+                    $fn_temp = trim(preg_replace('/\s*["\'][^"\']*["\']\s*/', ' ', $row[2]));
+                    $fn_temp = trim(preg_replace('/\s+/', ' ', $fn_temp));
+                    echo $fullname."</br>";
                     $id_supplier_category = 0;
                     $isindb = false;
                     if(isset($data["supplier"])) {
                         foreach($data["supplier"] as $s) {
-                            if($s->full_name == $row[2]) {
+                            if($s->name == trim($fn_temp)) {
                                 $isindb = true;
                                 $id_supplier_category = $s->id;
                             }
                         }
                     }
                     if(!$isindb) {
-                        //TUTAJ DODAĆ DO BAZY NOWY PRODUKT I USTAWIĆ ZMIENNĄ
-                        
-                        //dodać
+                        if (!in_array($fullname, $processedValues)) {
+                            // sprawdzam czy tej wartości już nie dodawałem, jeśli tak to pomijam
+                            $supcat = new Suppliercategory();
+                            $supcat->insert(["name" =>$fullname, "supplier_id" => $comp_id]);
+                            $id_supplier_category = $supcat->getLast();
+                            
+                            $data["supplier"][$id_supplier_category]->id = $id_supplier_category;
+                            $data["supplier"][$id_supplier_category]->sub_prod_id = "";
+                            $data["supplier"][$id_supplier_category]->name = $fullname;
+                            $data["supplier"][$id_supplier_category]->supplier_id = $comp_id;
+
+                            $processedValues[] = $fullname;
+
+                        } else {
+                            foreach($data["supplier"] as $s) {
+                                //może być problematyczne
+                                if($s->name == trim($fn_temp)) {
+                                    $id_supplier_category = $s->id;
+                                }
+                            }
+                        }
                     }
+
                     $unit = strtolower($unit);
+                    if($unit == "sztuki") {
+                        $unit = "szt";
+                    }
+                    if($unit == "g") {
+                        $unit = "kg";
+                        $amount = $amount / 1000;
+                    }
+                    if($unit == "ml") {
+                        $unit = "l";
+                        $amount = $amount / 1000;
+                    }
 
                     $sup[$in]["supplier_products"]["id_supplier_category"] = $id_supplier_category; 
                     $sup[$in]["supplier_products"]["id_company"] = $comp_id; // 447 - Seliga 
@@ -137,6 +231,15 @@ class Supplier
                     $sup[$in]["supplier_products"]["unit"] = $unit; 
                     $sup[$in]["supplier_products"]["unit_order"] = strtolower(str_replace([' ', '.'], '', $row[4])); 
 
+                    
+
+                    if($sup[$in]["supplier_products"]["unit_order"] == "szt" && $sup[$in]["supplier_products"]["unit"] == "szt") {
+                        if($amount_temp == "") {
+                            $sup[$in]["supplier_products"]["amount"] = 1;
+                        } else {
+                            $sup[$in]["supplier_products"]["amount"] = $amount_temp;
+                        }
+                    }
                     $data[] = $fullname;
 
                     $date = date("Y-m-d");
@@ -154,6 +257,14 @@ class Supplier
                     }
                     $sup[$in]["supplier_cost"]["id_supplier_products"] = $id_supplier_category;
                     $sup[$in]["supplier_cost"]["netto_price"] = $netto_price;
+                    $sup[$in]["supplier_cost"]["netto_per_unit"] = 0;
+                    
+//show($sup[$in]);
+
+                    if($amount_temp <> "") {
+                        $sup[$in]["supplier_cost"]["netto_per_unit"] = number_format($netto_price / $amount_temp, 2);
+                    }
+
                     $sup[$in]["supplier_cost"]["vat"] = $vat;
                     $sup[$in]["supplier_cost"]["brutto_price"] = $brutto_price;
                     
@@ -161,13 +272,24 @@ class Supplier
                         $sup[$in]["supplier_cost"]["netto_price_100g"] = 0;
                         $sup[$in]["supplier_cost"]["netto_price_1kg"] = 0;
                     } else {
+                        
                         if(isset($netto_price) && isset($amount) && $unit <> "brak") {
                             if($amount == 0) {
                                 $price_per_gram = $netto_price / $amount;
                                 $price_for_100g = $price_per_gram * 100;
                                 $price_for_1000g = $price_per_gram * 1000;
+                            } if($amount > 0 && $amount < 1) {
+                                $price_per_gram = ($netto_price / $amount) / 1000;
+                                $price_for_100g = $price_per_gram * 100;
+                                $price_for_1000g = $price_per_gram * 1000;
+                            } else if ($amount >= 1) {
+                                $price_per_gram = $netto_price / $amount / 1000;
+                                $price_for_100g = $price_per_gram * 100;
+                                $price_for_1000g = $price_per_gram * 1000;
                             } else {
-                                show($sup[$in]);
+                                $price_for_100g = 0;
+                                $price_for_1000g = 0;
+                                //show($sup[$in]);
                             }
                         } else {
                             $price_for_100g = 0;
@@ -175,14 +297,9 @@ class Supplier
                         }
                         $sup[$in]["supplier_cost"]["netto_price_100g"] = number_format($price_for_100g, 2);
                         $sup[$in]["supplier_cost"]["netto_price_1kg"] = number_format($price_for_1000g, 2);
-
-
                     }
                     
                     $sup[$in]["supplier_cost"]["date"] = $date;
-
-
-
 
 
                     $in++;
@@ -196,7 +313,7 @@ class Supplier
         // Wyświetl dane w formacie tablicy (przydatne do debugowania)
         echo "<pre>";
         //print_r($data);
-        print_r($sup);
+        //print_r($sup);
         echo "</pre>";
 
         die;

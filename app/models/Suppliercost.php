@@ -19,6 +19,7 @@ class Suppliercost
         'brutto_price',
         'netto_price_100g',
         'netto_price_1kg',
+        'netto_per_unit',
         'date',
         'datenow'
     ];
@@ -28,4 +29,5 @@ class Suppliercost
         $query = "select * from $this->table;";
         return $this->query($query);
     }
+    
 }

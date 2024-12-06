@@ -14,7 +14,8 @@ class Suppliercategory
     protected $allowedColumns = [
         'id',
         'sub_prod_id',
-        'name'
+        'name',
+        'supplier_id'
     ];
 
     public function getSupplierCategory()
@@ -26,5 +27,10 @@ class Suppliercategory
     {
         $query = "select * from $this->table WHERE supplier_id = $id;";
         return $this->query($query);
+    }
+    public function getLast()
+    {
+        $query = "select * from $this->table ORDER BY ID DESC LIMIT 1";
+        return $this->query($query)[0]->id;
     }
 }
