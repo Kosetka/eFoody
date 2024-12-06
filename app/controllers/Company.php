@@ -175,8 +175,8 @@ class Company
         $data = [];
 
         $companies = new Companies();
-        $data["companies"] = $companies->getAllShopsActive();
-        foreach ($companies->getAllShopsActive() as $co) {
+        $data["companies"] = $companies->getAllShopsActiveSorted();
+        foreach ($companies->getAllShopsActiveSorted() as $co) {
             $data["companies_sorted"][$co->id] = $co;
         }
         $cargo = new Cargo();
