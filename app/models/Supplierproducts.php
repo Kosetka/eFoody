@@ -34,4 +34,9 @@ class Supplierproducts
         $query = "select * from $this->table WHERE id_company = $id;";
         return $this->query($query);
     }
+    public function getLast()
+    {
+        $query = "select * from $this->table ORDER BY ID DESC LIMIT 1";
+        return $this->query($query)[0]->id;
+    }
 }

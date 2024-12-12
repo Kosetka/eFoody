@@ -29,5 +29,10 @@ class Suppliercost
         $query = "select * from $this->table;";
         return $this->query($query);
     }
+    public function getCosts($date)
+    {
+        $query = "select * from $this->table WHERE date = '$date';";
+        return $this->query($query);
+    }
     
 }
