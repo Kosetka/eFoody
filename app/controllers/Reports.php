@@ -1173,6 +1173,7 @@ class Reports
         $send = 0;
         $param1 = 0;
         $param2 = 0;
+        $data["only_ours"] = false;
 
         $date_from = "2020-01-01 00:00:00";
         $date_to = "2020-01-01 23:59:59";
@@ -1201,6 +1202,11 @@ class Reports
             $send = 2;
             if (isset($URL[3])) {
                 $type = $URL[3];
+            }
+            if (isset($URL[4])) {
+                if($URL[4]=="ours") {
+                    $data["only_ours"] = true;
+                }
             }
             if (isset($_GET["search"])) { // wysłane zapytanie GETem
                 if (isset($_GET["date_from"])) {
@@ -1329,14 +1335,16 @@ class Reports
         $data["companies"] = [];
         $data["companies_new"] = [];
         $data["company_old"] = [];
-        if (!empty($companies->getCompaniesVisitedOrNull($date_from, $date_to))) {
-            foreach ($companies->getCompaniesVisitedOrNull($date_from, $date_to) as $key => $value) {
-                $data["companies"][$value->id] = $value;
+        if(!$data["only_ours"]) {
+            if (!empty($companies->getCompaniesVisitedOrNull($date_from, $date_to))) {
+                foreach ($companies->getCompaniesVisitedOrNull($date_from, $date_to) as $key => $value) {
+                    $data["companies"][$value->id] = $value;
+                }
             }
-        }
-        if (!empty($companies->getCompaniesToVisit())) {
-            foreach ($companies->getCompaniesToVisit() as $key => $value) {
-                $data["companies_new"][$value->id] = $value;
+            if (!empty($companies->getCompaniesToVisit())) {
+                foreach ($companies->getCompaniesToVisit() as $key => $value) {
+                    $data["companies_new"][$value->id] = $value;
+                }
             }
         }
 
