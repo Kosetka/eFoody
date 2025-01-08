@@ -190,24 +190,69 @@ if (isset($data["companies"])) {
     $mess .= " </tr>
         </thead>
         <tbody>";
-
+    $d_number = 1;
     if (isset($data["companies_new"])) {
         foreach ($data["companies_new"] as $kkey => $vvalue) {
             $compaid = $vvalue->id;
             if (isset($vvalue->latitude) && $vvalue->longitude) {
-                $points["n" . $compaid] = ["name" => $vvalue->name, "visit_date" => "", "status_name" => "", "description" => $vvalue->description, "address" => $vvalue->address, "lat" => $vvalue->latitude, "lng" => $vvalue->longitude, "type" => $vvalue->type, "status" => 0, "visited" => "new"];
+                if(isset($vvalue->delivery_hour) ) {
+                    if($vvalue->delivery_hour == "") {
+                        $vvalue->delivery_hour = 1;
+                    }
+                } else {
+                    $vvalue->delivery_hour = 1;
+                }
+                $points["n" . $compaid] = [
+                    "name" => $vvalue->name, 
+                    "visit_date" => "", 
+                    "status_name" => "", 
+                    "description" => $vvalue->description, 
+                    "address" => $vvalue->address, 
+                    "lat" => $vvalue->latitude, 
+                    "lng" => $vvalue->longitude, 
+                    "type" => $vvalue->type, 
+                    "status" => 0, 
+                    "visited" => "new",
+                    "driver_id" => 0,
+                    "driver_name" => "",
+                    "delivery_time" => $vvalue->delivery_hour
+                ];
             }
         }
     }
+    $d_number = 1;
     if (isset($data["company_old"])) {
         foreach ($data["company_old"] as $kkey => $vvalue) {
             $compaid = $vvalue->id;
             if (isset($vvalue->latitude) && $vvalue->longitude) {
-                $points["o" . $compaid] = ["name" => $vvalue->full_name, "visit_date" => "", "status_name" => "", "description" => $vvalue->description, "address" => "$vvalue->address", "lat" => $vvalue->latitude, "lng" => $vvalue->longitude, "type" => $vvalue->c_type, "status" => $vvalue->active, "visited" => "old"];
+                if($vvalue->delivery_hour == "") {
+                    $vvalue->delivery_hour = 1;
+                }
+                $driver_id = 0;
+                if(isset($vvalue->guardian) && $vvalue->guardian <> "") {
+                    if(isset($data["drivers"][$vvalue->guardian])) {
+                        $driver_id = $data["drivers"][$vvalue->guardian]->int;
+                    }
+                }
+                $points["o" . $compaid] = [
+                    "name" => $vvalue->full_name, 
+                    "visit_date" => "", 
+                    "status_name" => "", 
+                    "description" => $vvalue->description, 
+                    "address" => "$vvalue->address", 
+                    "lat" => $vvalue->latitude, 
+                    "lng" => $vvalue->longitude, 
+                    "type" => $vvalue->c_type, 
+                    "status" => $vvalue->active, 
+                    "visited" => "old",
+                    "driver_id" => $driver_id,
+                    "driver_name" => "",
+                    "delivery_time" => $vvalue->delivery_hour
+                ];
             }
         }
     }
-    
+    $d_number = 1;
     foreach ($data["companies"] as $company_id => $compval) {
         $inserted = "";
         if ($compval->inserted == 1) {
@@ -217,7 +262,24 @@ if (isset($data["companies"])) {
             $inserted = "<span style='color: red;' title='Brak współrzędnych'>".$inserted."</span>";
         }
         if ($compval->visit_date == "0000-00-00 00:00:00" || $compval->visit_date == NULL) {
-            $points[$company_id] = ["name" => $compval->name, "visit_date" => $compval->visit_date, "status_name" => COMPANYVISIT[$compval->status], "description" => $compval->description, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => $compval->status, "visited" => "false"];
+            if($compval->delivery_hour == "") {
+                $compval->delivery_hour = 1;
+            }
+            $points[$company_id] = [
+                "name" => $compval->name, 
+                "visit_date" => $compval->visit_date, 
+                "status_name" => COMPANYVISIT[$compval->status], 
+                "description" => $compval->description, 
+                "address" => $compval->address, 
+                "lat" => $compval->latitude, 
+                "lng" => $compval->longitude, 
+                "type" => $compval->type, 
+                "status" => $compval->status, 
+                "visited" => "false",
+                "driver_id" => 0,
+                "driver_name" => "",
+                "delivery_time" => $compval->delivery_hour
+            ];
         } else {
             $color = '';
             if($compval->status == 2) {
@@ -239,7 +301,31 @@ if (isset($data["companies"])) {
             }
             $mess .= "</tr>";
             $total_comp++;
-            $points[$company_id] = ["name" => $compval->name, "visit_date" => $compval->visit_date, "status_name" => COMPANYVISIT[$compval->status], "description" => $compval->description, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => $compval->status, "visited" => "true"];
+            if(isset($compval->delivery_hour)) {
+                if($compval->delivery_hour == "") {
+                    $compval->delivery_hour = 1;
+                }
+            } else {
+                $compval->delivery_hour = 1;
+            }
+            $points[$company_id] = [
+                "name" => $compval->name, 
+                "visit_date" => $compval->visit_date, 
+                "status_name" => COMPANYVISIT[$compval->status], 
+                "description" => $compval->description, 
+                "address" => $compval->address, 
+                "lat" => $compval->latitude, 
+                "lng" => $compval->longitude, 
+                "type" => $compval->type, 
+                "status" => $compval->status, 
+                "visited" => "true",
+                "driver_id" => 0,
+                "driver_name" => "",
+                "delivery_time" => $compval->delivery_hour
+            ];
+        //driver_id: "' . $point["driver_id"] . '",
+       // driver_name: "' . $point["driver_name"] . '",
+        //delivery_time:
         }
     }
     
@@ -359,6 +445,7 @@ if ($mess != "") {
 
         content.classList.add("property");
         let type_icon = property.type;
+        let styleshop = "";
         if(property.type == "store" || property.type == "shop") {// || property.type == "grocery_or_supermarket"
             type_icon = "shop";
         }
@@ -376,9 +463,15 @@ if ($mess != "") {
                 }
             }
         }
+        if(type_icon == "shop") {
+            styleshop = `shop my-shop-${property.driver_id}-${property.delivery_time}`;
+        } else {
+            styleshop = type_icon;
+        }
+        console.log(styleshop);
         content.innerHTML = `
     <div class="icon">
-        <i aria-hidden="true" class="fa fa-icon fa-${type_icon}" title="${type_icon}"></i>
+        <i aria-hidden="true" class="fa fa-icon fa-${styleshop}" title="${type_icon}"></i>
         <span class="fa-sr-only">${type_icon}</span>
     </div>
     <div class="details">
@@ -426,11 +519,15 @@ if ($mess != "") {
                 description: "' . $point["description"] . '",
                 visit_date: "' . $point["visit_date"] . '",
                 status_name: "' . $point["status_name"] . '",
+                driver_id: "' . $point["driver_id"] . '",
+                driver_name: "' . $point["driver_name"] . '",
+                delivery_time: "' . $point["delivery_time"] . '",
                 url: "https://www.google.com/maps/dir//' . $lat . ',' . $lng . '"
             },';
         }
         ?>
     ];
+    console.log(properties);
 
 
     function handleLocationError(browserHasGeolocation, infoWindow2, pos) {

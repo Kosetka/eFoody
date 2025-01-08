@@ -1348,10 +1348,20 @@ class Reports
             }
         }
 
+        $driverlist = new User();
+        $int = 1;
+        foreach ($driverlist->getAllDriversActive() as $key => $value) {
+            $data["drivers"][$value->id] = $value;
+            $data["drivers"][$value->id]->int = $int;
+            $int++;
+        }
+        //show($data["drivers"]);die;
+
         $products_list = new Companies();
         foreach ($products_list->getAllShopsActive() as $key => $value) {
             $data["company_old"][$value->id] = $value;
         }
+        //show($data["company_old"]);die;
 
         $api_key = new Apitokens();
         $data["api_key"] = $api_key->getToken("google_maps");
