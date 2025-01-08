@@ -389,8 +389,18 @@ class Company
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             //show($_POST);die;
+            if(isset($_POST["is_added"])){
+                $toInsert = [
+                    "latitude" => $_POST["latitude"],
+                    "longitude" => $_POST["longitude"]
+                ];
 
-            if (isset($_POST["newadd"])) {
+                $comp = new Companiestocheck;
+                $comp->update($id, $toInsert);
+                unset($_POST);
+                redirect('company/pointslist');
+
+            } else if (isset($_POST["newadd"])) {
                 $u_id = $_SESSION["USER"]->id;
                 $address = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
                 $toInsert = [

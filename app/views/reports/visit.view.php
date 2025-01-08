@@ -213,6 +213,9 @@ if (isset($data["companies"])) {
         if ($compval->inserted == 1) {
             $inserted = "<b>[NOWA]</b> ";
         }
+        if ($compval->latitude == "" && $compval->longitude == "") {
+            $inserted = "<span style='color: red;' title='Brak współrzędnych'>".$inserted."</span>";
+        }
         if ($compval->visit_date == "0000-00-00 00:00:00" || $compval->visit_date == NULL) {
             $points[$company_id] = ["name" => $compval->name, "visit_date" => $compval->visit_date, "status_name" => COMPANYVISIT[$compval->status], "description" => $compval->description, "address" => $compval->address, "lat" => $compval->latitude, "lng" => $compval->longitude, "type" => $compval->type, "status" => $compval->status, "visited" => "false"];
         } else {
@@ -404,6 +407,12 @@ if ($mess != "") {
         foreach ($points as $k => $point) {
             $lat = $point["lat"];
             $lng = $point["lng"];
+            if($lat == "") {
+                $lat = 0;
+            }
+            if($lng == "") {
+                $lng = 0;
+            }
             $name = "<b>" . $point["name"] . "</b></br></br><a href='https://www.google.com/maps/dir//" . $lat . "," . $lng . "'>Pokaż na mapie</a>";
             echo ' 
             {

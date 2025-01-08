@@ -92,11 +92,11 @@
                         <div class="row m-3 align-items-center">
                             <label for="latitude" class="col-sm-2 col-form-label">Długość geograficzna:</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="latitude" name="latitude" <?=$blocked;?> <?php if($edit) {echo " value='".$data["comp"]->latitude."'"; }?>>
+                                <input type="text" class="form-control" id="latitude" name="latitude" <?php //echo $blocked;?> <?php if($edit) {echo " value='".$data["comp"]->latitude."'"; }?>>
                             </div>
                             <label for="longitude" class="col-sm-2 col-form-label text-end">Szerokość geograficzna:</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" id="longitude" name="longitude" <?=$blocked;?> <?php if($edit) {echo " value='".$data["comp"]->longitude."'"; }?>>
+                                <input type="text" class="form-control" id="longitude" name="longitude" <?php //echo $blocked;?> <?php if($edit) {echo " value='".$data["comp"]->longitude."'"; }?>>
                             </div>
                         </div>
                         <div class="row m-3">
@@ -196,8 +196,13 @@
 
 
                     </div>
+                        <?php 
+                            if($blocked<>"") {
+                                echo '<input hidden type="input" id="is_added" name="is_added" value="1">';                         
+                            }
                         
-                        <button class="w-100 btn btn-lg btn-primary" type="submit" <?=$blocked;?> name="newadd"><?=$button2;?></button>
+                        ?>
+                        <button class="w-100 btn btn-lg btn-primary" type="submit" <?php //echo $blocked;?> name="newadd"><?=$button2;?></button>
                     </form>
                 </div>
             </div>

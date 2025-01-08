@@ -19,16 +19,12 @@
                                 <th>NIP</th>
                                 <th>Osoba kontaktowa</th>
                                 <th>Numer telefonu</th>
-                                <th>Adres e-mail</th>
-                                <th>Miasto</th>
                                 <th>Opiekun</th>
                                 <th>Pełny adres</th>
                                 <th>Rodzaj firmy</th>
                                 <th>Notatki</th>
                                 <th>Status</th>
                                 <th>Współrzędne</th>
-                                <th>Liczba pracowników</th>
-                                <th>Typ budynku</th>
                                 <th>Akcje</th>
                             </tr>
                         </thead>
@@ -40,16 +36,12 @@
                                 <th>NIP</th>
                                 <th>Osoba kontaktowa</th>
                                 <th>Numer telefonu</th>
-                                <th>Adres e-mail</th>
-                                <th>Miasto</th>
                                 <th>Opiekun</th>
                                 <th>Pełny adres</th>
                                 <th>Rodzaj firmy</th>
                                 <th>Notatki</th>
                                 <th>Status</th>
                                 <th>Współrzędne</th>
-                                <th>Liczba pracowników</th>
-                                <th>Typ budynku</th>
                                 <th>Akcje</th>
                             </tr>
                         </tfoot>
@@ -77,10 +69,14 @@
                                 }
                                 $edit_link = '<a href="' . ROOT . '/company/edit/' . $company->id . '">Edytuj</a>';
                                 $numbers = $company->phone_number;
+                                $i = 0;
                                 foreach($data["phone_numbers"] as $number_key => $number_val) {
                                     if($number_key == $company->id) {
                                         foreach($number_val as $numb) {
-                                            $numbers.= ", ".$numb;
+                                            if($i > 0) {
+                                                $numbers.= ", ".$numb;
+                                            }
+                                            $i++;
                                         }
                                     }
                                 }
@@ -92,16 +88,12 @@
                                     <td>$company->nip</td>
                                     <td>$company->contact_first_name $company->contact_last_name</td>
                                     <td>$numbers</td>
-                                    <td>$company->email</td>
-                                    <td>$city_name</td>
                                     <td>$user_name</td>
                                     <td>$company->address</td>
                                     <td>$company_type</td>
                                     <td>$company->description</td>
                                     <td>$active_display</td>
                                     <td>$latlong</td>
-                                    <td>$company->workers</td>
-                                    <td>".COMPANYSIZE[$company->c_type]."</td>
                                     <td>$edit_link</td>
                                 </tr>";
                             }

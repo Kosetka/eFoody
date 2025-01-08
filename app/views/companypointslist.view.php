@@ -57,7 +57,7 @@
                                 }
                                 if($company->moved == 1) {
                                     $active = "<span style='color: green'>Przeniesiony jako sklep</span>";
-                                    $edit_link = "";
+                                    //$edit_link = "";
                                 }
                                 foreach (COMPANYVISIT as $k => $v) {
                                     if ($k == 0)
