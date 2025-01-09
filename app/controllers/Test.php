@@ -110,5 +110,82 @@ class Test
 
         $this->view('test.me', $data);
     }
+    public function summaryreport()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        
+        $data = [];
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if (isset($URL[2]) && isset($URL[3])) {
+            $date_from = $URL[2];
+            $date_to = $URL[3];
+        } else {
+            if (isset($_GET["date_from"])) {
+                $date_from = $_GET["date_from"] . " 00:00:00";
+                $data["date_from"] = $_GET["date_from"];
+            } else {
+                $date_from = date('Y-m-d 00:00:00');
+            }
+            if (isset($_GET["date_to"])) {
+                $date_to = $_GET["date_to"] . " 23:59:59";
+                $data["date_to"] = $_GET["date_to"];
+            } else {
+                $date_to = date('Y-m-d 23:59:59');
+            }
+        }
+
+        if (!isset($_GET["date_from"])) {
+            $date_from = '2024-10-10 00:00:00';
+            $date_to = '2025-01-05 23:59:59';
+            $data["date_from"] = '2024-10-10';
+            $data["date_to"] = '2025-01-05';
+        }
+        $cargo = new Cargo;
+        if (!empty($cargo->getAllFullProductsByDate( $date_from, $date_to))) {
+            foreach ($cargo->getAllFullProductsByDate( $date_from, $date_to) as $key => $value) {
+                if($value->amount > 0 && $value->exclude <> 1) {
+                    $date = substr($value->date,0,10);
+
+                    if(!isset($data["cargo"][$value->c_id][$date]["delivery_early"])) {
+                        $data["cargo"][$value->c_id][$date]["delivery_early"] = 0;
+                    }
+                    if(!isset($data["cargo"][$value->c_id][$date]["delivery_late"])) {
+                        $data["cargo"][$value->c_id][$date]["delivery_late"] = 0;
+                    }
+                    if($value->delivery_hour < 2) {
+                        $data["cargo"][$value->c_id][$date]["delivery_early"] += $value->amount;
+                    } else {
+                        $data["cargo"][$value->c_id][$date]["delivery_late"] += $value->amount;
+                    }
+                    //show($value);
+                }
+            }
+        }
+
+        $return = new ReturnsModel;
+        if (!empty($return->getShopsReturn( $date_from, $date_to))) {
+            foreach ($return->getShopsReturn( $date_from, $date_to) as $key => $value) {
+                    $date = substr($value->date,0,10);
+                    if(!isset($data["cargo"][$value->c_id][$date]["return"])) {
+                        $data["cargo"][$value->c_id][$date]["return"] = 0;
+                    }
+                    $data["cargo"][$value->c_id][$date]["return"] += $value->amount;
+                    
+                    //show($value);
+            }
+        }
+        $companies = new Companies();
+        $data["shops"] = [];
+        if(!empty($companies->getAllShops())) {
+            foreach ($companies->getAllShops() as $key => $value) {
+                $data["shops"][$value->id] = $value;
+            }
+        }
+
+
+        $this->view('returns.summary', $data);
+    }
 
 }

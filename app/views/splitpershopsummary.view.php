@@ -10,7 +10,7 @@
         background-color: #f0f0f0;
     }
 </style>
-<a?php
+<?php
     //show($data["planned"]);
 ?>
 <div id="layoutSidenav">

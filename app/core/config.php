@@ -91,6 +91,16 @@ define('POLISHMONTHS',[
     "11" => "Listopad",
     "12" => "Grudzień"
 ]);
+define('WEEKDAYNAMES',[
+	"0" => "Niedziela",
+    "1" => "Poniedziałek",
+    "2" => "Wtorek",
+    "3" => "Środa",
+    "4" => "Czwartek",
+    "5" => "Piątek",
+    "6" => "Sobota"
+
+]);
 define("SUPPLIERCOUNTY",[
     "KOSTARYKA" => "CR",
     "BRAZYLIA" => "BR",
