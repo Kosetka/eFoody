@@ -1350,7 +1350,7 @@ class Reports
 
         $driverlist = new User();
         $int = 1;
-        foreach ($driverlist->getAllDriversActive() as $key => $value) {
+        foreach ($driverlist->getAllDriverShopsActive() as $key => $value) {
             $data["drivers"][$value->id] = $value;
             $data["drivers"][$value->id]->int = $int;
             $int++;
