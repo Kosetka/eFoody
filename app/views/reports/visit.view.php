@@ -391,6 +391,167 @@ if ($mess != "") {
         </div>
     </div>
 </div>
+
+<?php
+    if($data["only_ours"]) {
+?>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h2 class="">Ilość sklepów</h2>
+    </div>
+    <div class="form-group row m-3">
+        <div class="col-sm-12">
+            <table class="table table-bordered" id="orderedProductsTable">
+                <thead>
+                    <tr>
+                        <th>Kierowca</th>
+                        <th>Ilość sklepów</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    //show($points);die;
+                    if(isset($data["drivers"])) {
+                        $arr = [];
+                        foreach($points as $point) {
+                            if($point["delivery_time"] >= 2) {
+                                if(!isset($arr["evening"])) {
+                                    $arr["evening"] = 0;
+                                }
+                                $arr["evening"]++;
+                            } else {
+                                if(!isset($arr[$point["driver_id"]])) {
+                                    $arr[$point["driver_id"]] = 0;
+                                }
+                                $arr[$point["driver_id"]]++;
+                            }
+                        }
+                        foreach($data["drivers"] as $shop_id => $shop_val) {
+                            echo "<tr>";
+                            echo '<td>'.$shop_val->first_name.' '.$shop_val->last_name.'</td>';
+                            $num_shops = 0;
+                            
+                            echo '<td>'.$arr[$shop_val->int].'</td>';
+                            echo "</tr>";
+                        }
+
+                        echo "<tr>";
+                        echo '<td>Popołudnie</td>';
+                        echo '<td>'.$arr["evening"].'</td>';
+                        echo "</tr>";
+
+                        echo "<tr>";
+                        echo '<td>Brak opiekuna</td>';
+                        echo '<td>'.$arr[0].'</td>';
+                        echo "</tr>";
+                    }
+                
+                    
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h2 class="">Szczegółowa lista</h2>
+    </div>
+    <div class="form-group row m-3">
+        <div class="col-sm-12">
+            <table class="table table-bordered" id="orderedProductsTable">
+                <thead>
+                    <tr>
+                        <th>Nazwa sklepu</th>
+                        <th>Adres</th>
+                        <th>Notatka</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    //show($points);die;
+                    if(isset($data["drivers"])) {
+                        $arr = [];
+                        foreach($points as $point) {
+                            if($point["delivery_time"] >= 2) {
+                                if(!isset($arr["evening"])) {
+                                    $arr["evening"] = 0;
+                                }
+                                $arr["evening"]++;
+                            } else {
+                                if(!isset($arr[$point["driver_id"]])) {
+                                    $arr[$point["driver_id"]] = 0;
+                                }
+                                $arr[$point["driver_id"]]++;
+                            }
+                        }
+                        foreach($data["drivers"] as $shop_id => $shop_val) {
+                            echo "<tr>";
+                            echo '<th colspan="3" style="background-color: lightgray;">'.$shop_val->first_name.' '.$shop_val->last_name.'</th>';
+                            echo "</tr>";
+                            
+                            
+                            foreach($points as $point) {
+                                //show($points);die;
+                                if($point["delivery_time"] < 2 && $point["driver_id"] == $shop_val->int) {
+                                    echo "<tr>";
+                                    echo '<td>'.$point["name"].'</td>';
+                                    echo '<td>'.$point["address"].'</td>';
+                                    echo '<td>'.$point["description"].'</td>';
+                                    echo "</tr>";
+                                } 
+                            }
+                        }
+                        echo "<tr>";
+                        echo '<th colspan="3" style="background-color: lightgray;">Popołudnie</th>';
+                        echo "</tr>";
+                        
+                        
+                        foreach($points as $point) {
+                            //show($points);die;
+                            if($point["delivery_time"] >= 2) {
+                                echo "<tr>";
+                                echo '<td>'.$point["name"].'</td>';
+                                echo '<td>'.$point["address"].'</td>';
+                                echo '<td>'.$point["description"].'</td>';
+                                echo "</tr>";
+                            } 
+                        }
+
+
+                        echo "<tr>";
+                        echo '<th colspan="3" style="background-color: lightgray;">Brak opiekuna</th>';
+                        echo "</tr>";
+                        
+                        
+                        foreach($points as $point) {
+                            //show($points);die;
+                            if($point["driver_id"] == 0) {
+                                echo "<tr>";
+                                echo '<td>'.$point["name"].'</td>';
+                                echo '<td>'.$point["address"].'</td>';
+                                echo '<td>'.$point["description"].'</td>';
+                                echo "</tr>";
+                            } 
+                        }
+                    }
+                
+                    
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<?php
+    }
+?>
+
+
 <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $data["api_key"];?>&callback=initMap" async
     defer></script>
 <script>
