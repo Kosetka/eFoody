@@ -35,7 +35,8 @@ class Companies
         'c_type',
         'workers',
         'friendly_name', 
-        'delivery_hour'
+        'delivery_hour',
+        'exclude'
     ];
 
     public function validate($data)

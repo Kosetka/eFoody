@@ -244,4 +244,161 @@ class GetCargo
 
         $this->view('splitpershop', $data);
     }
+
+    public function shops()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if (isset($URL[2])) {
+            $date = $URL[2];
+        } else {
+            if (isset($_GET["date"])) {
+                $date = $_GET["date"];
+            } else {
+                $date = date('Y-m-d');
+            }
+        }
+
+        $u_set_id = $_SESSION["USER"]->id;
+
+        //w przyszłości zmienić gdyby było więcej magazynów
+        $w_id = 1;
+
+        if (isset($_GET["date"])) {
+            $cargo = new Cargo;
+            $date_from = $date . ' 00:00:00';
+            $date_to = $date . ' 23:59:59';
+            if (!empty($cargo->getAllFullProductsByDate( $date_from, $date_to))) {
+                foreach ($cargo->getAllFullProductsByDate( $date_from, $date_to) as $key => $value) {
+                    if($value->amount > 0 && $value->exclude !=1) {
+                        $data["cargo"][$value->c_id][$value->p_id] = (array) $value;
+                        if($value->delivery_hour <= 2) {
+                            if(!isset($data["cargo_total_morning"][$value->c_id][$value->p_id])) {
+                                $data["cargo_total_morning"][$value->c_id][$value->p_id] = 0;
+                            }
+                            $data["cargo_total_morning"][$value->c_id][$value->p_id] += $value->amount;
+                            if(!isset($data["c_total_morning"][$value->p_id])) {
+                                $data["c_total_morning"][$value->p_id] = 0;
+                            }
+                            $data["c_total_morning"][$value->p_id] += $value->amount;
+                        } else {
+                            if(!isset($data["cargo_total_evening"][$value->c_id][$value->p_id])) {
+                                $data["cargo_total_evening"][$value->c_id][$value->p_id] = 0;
+                            }
+                            $data["cargo_total_evening"][$value->c_id][$value->p_id] += $value->amount;
+                            if(!isset($data["c_total_evening"][$value->p_id])) {
+                                $data["c_total_evening"][$value->p_id] = 0;
+                            }
+                            $data["c_total_evening"][$value->p_id] += $value->amount;
+                        }
+                    }
+                }
+            }
+            //show($data);die;
+
+            $data["warehouse"] = $w_id;
+
+            $warehouse = new WarehouseModel();
+            $data["warehouse"] = $warehouse->getWarehouse($w_id);
+
+            $planned = new Plannerproduction();// ??
+            if (!empty($planned->getPlanned($date, $w_id))) {
+                foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                    $data["planned"][$value->p_id] = (array) $value;
+                }
+            }
+            
+            if (!empty($planned->getPlanned($date, $w_id))) {
+                foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
+                    $data["planned_total"][$value->p_id] = (array) $value;
+                }
+            }
+        
+
+            $products_list = new ProductsModel();
+            foreach ($products_list->getAllFullProducts() as $key => $value) {
+                $data["fullproducts"][$value->id] = (array) $value;
+            }
+        }
+        $driverlist = new User();
+        foreach ($driverlist->getAllDriverShopsActive() as $key => $value) {
+            $data["drivers"][$value->id] = $value;
+        }
+
+        $companies = new Companies();
+        $data["shops"] = [];
+        if(!empty($companies->getAllShops())) {
+            foreach ($companies->getAllShops() as $key => $value) {
+                $data["shops"][$value->id] = $value;
+                if(isset($data["drivers"][$value->guardian])) {
+                    //show($value);
+                    if (!property_exists($data["drivers"][$value->guardian], "shops") || !is_array($data["drivers"][$value->guardian]->shops)) {
+                        $data["drivers"][$value->guardian]->shops = [];
+                    }
+                    $data["drivers"][$value->guardian]->shops[$value->id] = $value->id;
+                }
+            }
+        }
+        $data["cargo_per_driver"] = [];
+        if(isset($data["cargo"])) {
+            foreach($data["cargo"] as $c_key => $c_val) {
+                $c_id = $c_key;
+                foreach($c_val as $c_val1) {
+                    if($c_val1["delivery_hour"] < 2 && $c_val1["exclude"] <> 1) {
+        
+                        foreach($data["drivers"] as $d_val => $d_key) {
+                            $d_id = $d_key->id;
+                            foreach($d_key->shops as $cc_id) {
+                                if($c_id == $cc_id) {
+                                    if(!isset($data["cargo_per_driver"][$d_id][$c_id][$c_val1["p_id"]])) {
+                                        $data["cargo_per_driver"][$d_id][$c_id][$c_val1["p_id"]] = 0;
+                                    }
+                                    $data["cargo_per_driver"][$d_id][$c_id][$c_val1["p_id"]] += $c_val1["amount"];
+                                    if(!isset($data["cargo_per_driver"][$d_id]["total"][$c_val1["p_id"]])) {
+                                        $data["cargo_per_driver"][$d_id]["total"][$c_val1["p_id"]] = 0;
+                                    }
+                                    $data["cargo_per_driver"][$d_id]["total"][$c_val1["p_id"]] += $c_val1["amount"];
+                                    if(!isset($data["cargo_per_driver"][$d_id]["total"]["sum"])) {
+                                        $data["cargo_per_driver"][$d_id]["total"]["sum"] = 0;
+                                    }
+                                    $data["cargo_per_driver"][$d_id]["total"]["sum"] += $c_val1["amount"];
+                                }
+                            }
+                        }
+                    }
+                    if($c_val1["delivery_hour"] >= 2 && $c_val1["exclude"] <> 1) {     
+                        if(!isset($data["cargo_night"][$c_id][$c_val1["p_id"]])) {
+                            $data["cargo_night"][$c_id][$c_val1["p_id"]] = 0;
+                        }
+                        $data["cargo_night"][$c_id][$c_val1["p_id"]] += $c_val1["amount"];
+                        if(!isset($data["cargo_night"]["total"][$c_val1["p_id"]])) {
+                            $data["cargo_night"]["total"][$c_val1["p_id"]] = 0;
+                        }
+                        $data["cargo_night"]["total"][$c_val1["p_id"]] += $c_val1["amount"];
+                        if(!isset($data["cargo_night"]["total"]["sum"])) {
+                            $data["cargo_night"]["total"]["sum"] = 0;
+                        }
+                        $data["cargo_night"]["total"]["sum"] += $c_val1["amount"];
+                                
+                         
+                    }
+                }
+            }
+        }
+
+        
+
+        
+
+        $data["date_plan"] = $date;
+
+        
+
+        $this->view('splitpershopsummary', $data);
+    }
 }
