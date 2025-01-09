@@ -10,16 +10,20 @@
                     $edit = True;
                     $head2 = "Edytowanie punktów";
                     $button2 = "Zapisz zmiany";
+                    $hidden = "";
                     if($data["comp"]->moved == 1) {
                         $blocked = " disabled";
+                        $hidden = " hidden";
                     } else {
                         $blocked = "";
+                        $hidden = "";
                     }
                 } else {
                     $head2 = "Dodawanie nowego punktu";
                     $button2 = "Dodaj punkt";
                     $edit = False;
                     $blocked = "";
+                    $hidden = "";
                 }
             ?>
             <div class="card mb-4">
@@ -138,6 +142,12 @@
                                 <input type="textarea" class="form-control" id="description" name="description" <?=$blocked;?> <?php if($edit) {echo " value='".$data["comp"]->description."'"; }?>>
                             </div>
                         </div>
+                        
+                    
+
+
+
+
                     <?php 
                         if($edit) {
                             ?>
@@ -147,6 +157,47 @@
                                     <input type="checkbox" class="form-check-input" id="moved" name="moved" value="1" <?=$blocked;?> <?php if($edit) {if($data["comp"]->moved == 1) {echo " checked"; }}?>>
                                 </div>
                             </div>
+
+
+                            <div id="div-moved2" class="form-group row m-3" style="display: none;" <?=$hidden;?>>
+                            <label for="driver" class="col-sm-2 col-form-label">Kierowca:</label>
+                            <div class="col-sm-10">
+            <?php
+                $checked = "checked";
+                foreach ($data["drivers"] as $f_type_key => $f_type_val) {
+                    echo "  <div class='form-check'>
+                                <input class='form-check-input' type='radio' name='driver' id='driver$f_type_key' value='$f_type_key' $checked $blocked>
+                                <label class='form-check-label' for='driver$f_type_key'>
+                                $f_type_val->first_name $f_type_val->last_name 
+                                </label>
+                            </div>";
+                            $checked = "";
+                }
+            ?>
+                        
+                            </div>
+                        </div>
+
+                        <div id="div-moved3" class="form-group row m-3" style="display: none;" <?=$hidden;?>>
+                            <label for="hours" class="col-sm-2 col-form-label">Godziny dostawy:</label>
+                            <div class="col-sm-10">
+            <?php
+                $checked = "checked";
+                foreach (DELIVERYHOUR as $f_type_key => $f_type_val) {
+                    if(!$f_type_key == 0) {
+                        echo "  <div class='form-check'>
+                                    <input class='form-check-input' type='radio' name='hours' id='hours$f_type_key' value='$f_type_key' $checked $blocked>
+                                    <label class='form-check-label' for='hours$f_type_key'>
+                                    $f_type_val
+                                    </label>
+                                </div>";
+                        $checked = "";
+                    }
+                }
+            ?>
+                        
+                            </div>
+                        </div>
 
                             <div id="div-to-delete" class="form-group row m-3" style="display: none;">
                                 <label for="to_delete" class="col-sm-2 col-form-label" style ="color: red;">Do usunięcia?:</label>
@@ -158,6 +209,8 @@
                                 document.addEventListener("DOMContentLoaded", function () {
                                 const statusRadios = document.querySelectorAll('input[name="status"]');
                                 const divMoved = document.getElementById("div-moved");
+                                const divMoved2 = document.getElementById("div-moved2");
+                                const divMoved3 = document.getElementById("div-moved3");
                                 const divToDelete = document.getElementById("div-to-delete");
 
                                 function handleStatusChange() {
@@ -166,16 +219,22 @@
                                     // Jeśli status = 3, pokaż "Zamień na sklep", ukryj "do usunięcia"
                                     if (selectedStatus == "2") {
                                         divMoved.style.display = "flex";
+                                        divMoved2.style.display = "flex";
+                                        divMoved3.style.display = "flex";
                                         divToDelete.style.display = "none";
                                     } 
                                     // Jeśli status jest inny niż 0 lub 3, pokaż "do usunięcia", ukryj "Zamień na sklep"
                                     else if (selectedStatus != "0") {
                                         divMoved.style.display = "none";
+                                        divMoved2.style.display = "none";
+                                        divMoved3.style.display = "none";
                                         divToDelete.style.display = "flex";
                                     } 
                                     // W przeciwnym razie ukryj oba
                                     else {
                                         divMoved.style.display = "none";
+                                        divMoved2.style.display = "none";
+                                        divMoved3.style.display = "none";
                                         divToDelete.style.display = "none";
                                     }
                                 }

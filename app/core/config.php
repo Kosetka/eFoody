@@ -125,7 +125,13 @@ define('LABELCOST',["cost" => 16.50, "labels" => 1034]);
 define('FUELTYPE',[0 => "Diesel", 1 => "Benzyna"]);
 define('BONUSTYPE',[0 => "Premia", 1 => "Kara"]);
 define('PAGETYPE',[1 => "Fingerfood", 2 => "Catering"]);
-define('DELIVERYHOUR',[0 => "Brak", 1 => "Rano", 2 => "Południe", 3 => "Popołudnie", 4 => "Wieczór"]);
+define('DELIVERYHOUR',[
+    0 => "Brak", 
+    1 => "Rano", 
+    //2 => "Południe", 
+    3 => "Popołudnie", 
+    //4 => "Wieczór"
+]);
                                         
 
 /** true means show errors **/

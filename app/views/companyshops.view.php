@@ -128,7 +128,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                   <th scope="col">Adres</th>
                   <th scope="col">Osoba kontaktowa</th>
                   <th scope="col">Numer telefonu</th>
-                  <th scope="col">Adres mailowy</th>
+                  <th scope="col">Kierowca</th>
                   <th scope="col">Notatka</th>
                   <th scope="col">Preferowany termin dostawy</th>
                   <th scope="col">Lokalizacja</th>
@@ -159,12 +159,25 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                     if(isset($company->delivery_hour)) {
                       $delivery = DELIVERYHOUR[$company->delivery_hour];
                     }
+                    $guard = "";
+                    if(isset($company->guardian) && $company->guardian <> "") {
+                      if(isset($data["users"][$company->guardian])) {
+                        $guard = $data["users"][$company->guardian]["first_name"]." ".$data["users"][$company->guardian]["last_name"];
+                      } else {
+                        $guard = "Brak";
+                      }
+                    }
+                    if(isset($data["users"][$company->guardian]["int"])) {
+                      $class_color = " class='shop-".$data["users"][$company->guardian]["int"]."' ";
+                    } else {
+                      $class_color = "";
+                    }
                     echo "<tr>
                                                 <td>$company->full_name $fname</td>
                                                 <td>$company->address</td>
                                                 <td>$company->contact_first_name $company->contact_last_name</td>
                                                 <td>$company->phone_number</td>
-                                                <td>$company->email</td>
+                                                <td $class_color>$guard</td>
                                                 <td>$company->description</td>
                                                 <td class='delivery-type".$company->delivery_hour."'>$delivery</td>";
                     if ($gps_link == "#") {

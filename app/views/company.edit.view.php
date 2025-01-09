@@ -114,6 +114,7 @@
                                 foreach ($data["users"] as $user) {
                                     $full_name = $user->first_name . " " . $user->last_name;
                                     $id = $user->id;
+                                
                                     if ($data["companies"]->guardian == $id) {
                                         echo "<option value='$id' selected>$full_name</option>";
                                     } else {
@@ -196,6 +197,7 @@
                                 } else {
                                     $selected = "";
                                 }
+                                if($key)
                                 echo "<div class='form-check'>
                                     <input class='form-check-input' type='radio' name='delivery_hour' id='delivery_hour$key' value='$key' $selected>
                                     <label class='form-check-label' for='delivery_hour$key'>

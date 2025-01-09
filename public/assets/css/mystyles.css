@@ -103,6 +103,18 @@
   --shop-color-4-4: #cc0000;
   --shop-color-4-5: #800000;
 }
+.shop-1 {
+  background-color: var(--shop-color-1-2)!important;
+}
+.shop-2 {
+  background-color: var(--shop-color-2-2)!important;
+}
+.shop-3 {
+  background-color: var(--shop-color-3-2)!important;
+}
+.shop-4 {
+  background-color: var(--shop-color-4-2)!important;
+}
 
 .property {
   align-items: center;

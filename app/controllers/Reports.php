@@ -1366,7 +1366,7 @@ class Reports
         $api_key = new Apitokens();
         $data["api_key"] = $api_key->getToken("google_maps");
         
-
+//show($data["drivers"]);die;
         //show($data);die;
 
         $this->view('visit.total', $data);

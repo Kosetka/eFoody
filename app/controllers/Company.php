@@ -67,7 +67,7 @@ class Company
 
         $data = [];
         $users_list = new User();
-        $data["users"] = $users_list->getAllTraders("users", "3");
+        $data["users"] = $users_list->getAllTraders("users", "3, 5, 11");
 
         $cities = new Shared();
         $query = "SELECT * FROM `cities`";
@@ -161,7 +161,7 @@ class Company
             $data["phone_numbers"] = $companies->getAllById($company_id);
 
             $users_list = new User();
-            $data["users"] = $users_list->getAllTraders("users", "3");
+            $data["users"] = $users_list->getAllTraders("users", "3, 5, 11");
 
             $this->view('company.edit', $data);
         }
@@ -192,9 +192,17 @@ class Company
         }
 
         $users_list = new User();
+        $int = 0;
         $temp["users"] = $users_list->getAll("users");
         foreach ($temp["users"] as $user) {
             $data["users"][$user->id] = (array) $user;
+            if($int>0) {
+                $data["users"][$user->id]["int"] = 0;
+            }
+            if($data["users"][$user->id]["u_role"] == 5 || $data["users"][$user->id]["u_role"] == 11) {
+                $int++;
+                $data["users"][$user->id]["int"] = $int;
+            }
         }
 
         $apikey = new Apitokens;
@@ -371,6 +379,10 @@ class Company
             $data["users"][$user->id] = (array) $user;
         }
 
+        foreach($users_list->getAllDriverShopsActive() as $us) {
+            $data["drivers"][$us->id] = $us;
+        }
+
         $this->view('companypointadd', $data);
     }
 
@@ -444,11 +456,11 @@ class Company
                             "latitude" => $_POST["latitude"],
                             "longitude" => $_POST["longitude"],
                             "c_type" => "shop",
-                            "delivery_hour" => 0,
+                            "delivery_hour" => $_POST["hours"],
                             "contact_first_name" => "",
                             "contact_last_name" => "",
                             "city_id" => 1,
-                            "guardian" => 0,
+                            "guardian" => $_POST["driver"],
                             "nip" => "",
                             "date" => $date,
                             "workers" => "",
@@ -502,6 +514,10 @@ class Company
         $temp["users"] = $users_list->getAll("users");
         foreach ($temp["users"] as $user) {
             $data["users"][$user->id] = (array) $user;
+        }
+
+        foreach($users_list->getAllDriverShopsActive() as $us) {
+            $data["drivers"][$us->id] = $us;
         }
 
         $this->view('companypointadd', $data);

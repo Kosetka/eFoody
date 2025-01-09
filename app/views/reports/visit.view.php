@@ -14,111 +14,132 @@ if ($send == 2) {
     if ($data["get"]["type"] == "month") {
         $f1 = "miesiąc";
     }
-
-
-    echo '<form method="get">';
-
-    echo '<h1 class="h3 mb-3 fw-normal">Wybierz ' . $f1 . ' do wyświetlenia raportu:</h1>';
-    $date_from = "";
-    $date_to = "";
-    if (isset($data["date_from"])) {
-        $date_from = $data["date_from"];
-    }
-    if (isset($data["date_to"])) {
-        $date_to = $data["date_to"];
-    }
+    
+    if($data["only_ours"]) {
+        $date_from = "";
+        $date_to = "";
+        if (isset($data["date_from"])) {
+            $date_from = $data["date_from"];
+        }
+        if (isset($data["date_to"])) {
+            $date_to = $data["date_to"];
+        }
+    } else {
+        echo '<form method="get">';
+    
+        echo '<h1 class="h3 mb-3 fw-normal">Wybierz ' . $f1 . ' do wyświetlenia raportu:</h1>';
+        $date_from = "";
+        $date_to = "";
+        if (isset($data["date_from"])) {
+            $date_from = $data["date_from"];
+        }
+        if (isset($data["date_to"])) {
+            $date_to = $data["date_to"];
+        }
+    
 
     ?>
     <div class="text-start">
         <?php
-        //POPRAWIĆ wyświetlanie godzin po przesłaniu formularza, sprawdzić czy działa dla godzin porannych (6:00, 7:00, 8:00, 9:00)
-        if ($data["get"]["type"] == "hour") {
-            echo '  <div class="form-group row m-3">
-            <label for="date_from" class="col-sm-2 col-form-label">Godzina:</label>
-            <div class="col-sm-4">
-                <select class="form-control" id="date_from" name="date_from" required>';
-            for ($hour = 7; $hour < 17; $hour++) {
-                $selected = "";
-                if ($data["get"]["param1"] == $hour) {
-                    $selected = "selected";
+        
+        
+
+            if ($data["get"]["type"] == "hour") {
+                echo '  <div class="form-group row m-3">
+                <label for="date_from" class="col-sm-2 col-form-label">Godzina:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="date_from" name="date_from" required>';
+                for ($hour = 7; $hour < 17; $hour++) {
+                    $selected = "";
+                    if ($data["get"]["param1"] == $hour) {
+                        $selected = "selected";
+                    }
+                    $hour_padded = sprintf("%02d", $hour);
+                    $hour_padded_to = sprintf("%02d", $hour + 1);
+                    echo '<option value="' . $hour_padded . '" ' . $selected . '>' . $hour_padded . ':00 - ' . $hour_padded_to . ':00</option>';
                 }
-                $hour_padded = sprintf("%02d", $hour);
-                $hour_padded_to = sprintf("%02d", $hour + 1);
-                echo '<option value="' . $hour_padded . '" ' . $selected . '>' . $hour_padded . ':00 - ' . $hour_padded_to . ':00</option>';
-            }
-            echo '</select>
-            </div>
-        </div>';
-        }
-
-        if ($data["get"]["type"] == "day") {
-
-            echo '  <div class="form-group row m-3">
-                        <label for="date_from" class="col-sm-2 col-form-label">Dzień:</label>
-                        <div class="col-sm-4">
-                            <input type="date" class="form-control" id="date_from" name="date_from"
-                                value="' . $date_from . '" required>
-                        </div>
-                    </div>';
-        }
-        if ($data["get"]["type"] == "week") {
-            $datetime = new DateTime($data["get"]["param1"]);
-            $param1 = $datetime->format('Y-m-d');
-            $datetime = new DateTime($data["get"]["param2"]);
-            $param2 = $datetime->format('Y-m-d');
-
-            echo '  <div class="form-group row m-3">
-                        <label for="date_from" class="col-sm-2 col-form-label">Data od:</label>
-                        <div class="col-sm-4">
-                            <input type="date" class="form-control" id="date_from" name="date_from"
-                                value="' . $param1 . '" required>
-                        </div>
-                    </div>
-                    <div class="form-group row m-3">
-                        <label for="date_to" class="col-sm-2 col-form-label">Data do:</label>
-                        <div class="col-sm-4">
-                            <input type="date" class="form-control" id="date_to" name="date_to"
-                                value="' . $param2 . '" required>
-                        </div>
-                    </div>';
-        }
-        if ($data["get"]["type"] == "month") {
-            $param1 = $data["get"]["param1"];
-            $param2 = $data["get"]["param2"];
-
-            echo '  <div class="form-group row m-3">
-            <label for="date_from" class="col-sm-2 col-form-label">Miesiąc:</label>
-            <div class="col-sm-4">
-                <select class="form-control" id="date_from" name="date_from" required>';
-            for ($month = 1; $month <= 12; $month++) {
-                $sel = "";
-                if ($param1 == $month) {
-                    $sel = "selected";
-                }
-                echo '<option value="' . $month . '" ' . $sel . '>' . getPolishMonthName($month) . '</option>';
+                echo '</select>
+                </div>
+            </div>';
             }
 
-            echo '</select>
-            </div>
-        </div>';
+            if ($data["get"]["type"] == "day") {
 
-            echo '<div class="form-group row m-3">
-            <label for="date_to" class="col-sm-2 col-form-label">Rok:</label>
-            <div class="col-sm-4">
-                <select class="form-control" id="date_to" name="date_to" required>';
-            for ($year = 2024; $year <= 2025; $year++) {
-                $sel = "";
-                if ($param1 == $year) {
-                    $sel = "selected";
-                }
-                echo '<option value="' . $year . '" ' . $sel . '>' . $year . '</option>';
+                echo '  <div class="form-group row m-3">
+                            <label for="date_from" class="col-sm-2 col-form-label">Dzień:</label>
+                            <div class="col-sm-4">
+                                <input type="date" class="form-control" id="date_from" name="date_from"
+                                    value="' . $date_from . '" required>
+                            </div>
+                        </div>';
             }
-            echo '</select>
-            </div>
-        </div>';
-        }
+            if ($data["get"]["type"] == "week") {
+                $datetime = new DateTime($data["get"]["param1"]);
+                $param1 = $datetime->format('Y-m-d');
+                $datetime = new DateTime($data["get"]["param2"]);
+                $param2 = $datetime->format('Y-m-d');
+
+                echo '  <div class="form-group row m-3">
+                            <label for="date_from" class="col-sm-2 col-form-label">Data od:</label>
+                            <div class="col-sm-4">
+                                <input type="date" class="form-control" id="date_from" name="date_from"
+                                    value="' . $param1 . '" required>
+                            </div>
+                        </div>
+                        <div class="form-group row m-3">
+                            <label for="date_to" class="col-sm-2 col-form-label">Data do:</label>
+                            <div class="col-sm-4">
+                                <input type="date" class="form-control" id="date_to" name="date_to"
+                                    value="' . $param2 . '" required>
+                            </div>
+                        </div>';
+            }
+            if ($data["get"]["type"] == "month") {
+                $param1 = $data["get"]["param1"];
+                $param2 = $data["get"]["param2"];
+
+                echo '  <div class="form-group row m-3">
+                <label for="date_from" class="col-sm-2 col-form-label">Miesiąc:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="date_from" name="date_from" required>';
+                for ($month = 1; $month <= 12; $month++) {
+                    $sel = "";
+                    if ($param1 == $month) {
+                        $sel = "selected";
+                    }
+                    echo '<option value="' . $month . '" ' . $sel . '>' . getPolishMonthName($month) . '</option>';
+                }
+
+                echo '</select>
+                </div>
+            </div>';
+
+                echo '<div class="form-group row m-3">
+                <label for="date_to" class="col-sm-2 col-form-label">Rok:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="date_to" name="date_to" required>';
+                for ($year = 2024; $year <= 2025; $year++) {
+                    $sel = "";
+                    if ($param1 == $year) {
+                        $sel = "selected";
+                    }
+                    echo '<option value="' . $year . '" ' . $sel . '>' . $year . '</option>';
+                }
+                echo '</select>
+                </div>
+            </div>';
+            }
+        
         ?>
-        <script>
+        
+    </div>
+    <button class="w-40 btn btn-lg btn-primary" style="margin-bottom: 40px;" type="submit" name="search" value=1>Wyświetl
+        raport</button>
+    </form>
+    <?php
+    }
+    ?>
+    <script>
             const date = new Date();
             let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
             let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(date);
@@ -139,10 +160,6 @@ if ($send == 2) {
             }
             ?>
         </script>
-    </div>
-    <button class="w-40 btn btn-lg btn-primary" style="margin-bottom: 40px;" type="submit" name="search" value=1>Wyświetl
-        raport</button>
-    </form>
     <?php
 }
 
@@ -229,9 +246,11 @@ if (isset($data["companies"])) {
                     $vvalue->delivery_hour = 1;
                 }
                 $driver_id = 0;
+                $driver_name = "";
                 if(isset($vvalue->guardian) && $vvalue->guardian <> "") {
                     if(isset($data["drivers"][$vvalue->guardian])) {
                         $driver_id = $data["drivers"][$vvalue->guardian]->int;
+                        $driver_name = $data["drivers"][$vvalue->guardian]->first_name." ".$data["drivers"][$vvalue->guardian]->last_name;
                     }
                 }
                 $points["o" . $compaid] = [
@@ -246,7 +265,7 @@ if (isset($data["companies"])) {
                     "status" => $vvalue->active, 
                     "visited" => "old",
                     "driver_id" => $driver_id,
-                    "driver_name" => "",
+                    "driver_name" => $driver_name,
                     "delivery_time" => $vvalue->delivery_hour
                 ];
             }
@@ -349,7 +368,9 @@ if (isset($data["companies"])) {
 }
 
 //show($points);die;
-echo $mess;
+if(!$data["only_ours"]) {
+    echo $mess;
+}
 
 $to_send = false;
 if ($mess != "") {
@@ -488,6 +509,11 @@ if ($mess != "") {
                 <i aria-hidden="true" class="fa fa-calendar-day fa-lg gr" title="Status"></i>
                 <span class="fa-sr-only">Status</span>
                 <span>${property.status_name}</span>
+            </div>
+            <div>
+                <i aria-hidden="true" class="fa fa-person fa-lg gr" title="Kierowca"></i>
+                <span class="fa-sr-only">Kierowca</span>
+                <span>${property.driver_name}</span>
             </div>
         </div>
     </div>
