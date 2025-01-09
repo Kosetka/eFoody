@@ -256,7 +256,7 @@
 
             <div class="card mb-4" id="pdiv">
                 <div class="card-header">
-                    <h2 class="">Podział na sklepy na <span style="color: red;">PO POŁUDNIU</span></h2>
+                    <h2 class="">Podział na sklepy <span style="color: red;">PO POŁUDNIU</span></h2>
                     <div class="">
                         <div class="form-group row m-3">
                             <div class="col-sm-12">
