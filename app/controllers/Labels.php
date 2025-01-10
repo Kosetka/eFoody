@@ -166,7 +166,10 @@ class Labels
             	"1-10" => "Smoothie",
             	"1-11" => "Grzanki",
             	"1-12" => "Bajgle",
-            	"1-13" => "Wrapy"
+            	"1-13" => "Wrapy",
+            	"1-14" => "Racuchy",
+            	"1-15" => "Owsianki",
+            	"1-16" => "Naleśniki"
         ];
 
         $URL = $_GET['url'] ?? 'home';
