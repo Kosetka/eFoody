@@ -237,17 +237,18 @@ class Labels
         $company = new Companies();
         if(!empty($company->getAllShopsActive())) {
             foreach ($company->getAllShopsActive() as $cg) {
-                if(isset($data["cargo"][$cg->id])) {
-                    $data["cargo"][$cg->id]["full_name"] = $cg->full_name;
-                    $data["cargo"][$cg->id]["street"] = $cg->street;
-                    $data["cargo"][$cg->id]["street_number"] = $cg->street_number;
-                }
-                if(isset($data["cargo_before"][$cg->id])) {
-                    $data["cargo_before"][$cg->id]["full_name"] = $cg->full_name;
-                    $data["cargo_before"][$cg->id]["street"] = $cg->street;
-                    $data["cargo_before"][$cg->id]["street_number"] = $cg->street_number;
-
-                }
+                
+                    if(isset($data["cargo"][$cg->id])) {
+                        $data["cargo"][$cg->id]["full_name"] = $cg->full_name;
+                        $data["cargo"][$cg->id]["street"] = $cg->street;
+                        $data["cargo"][$cg->id]["street_number"] = $cg->street_number;
+                    }
+                    if(isset($data["cargo_before"][$cg->id])) {
+                        $data["cargo_before"][$cg->id]["full_name"] = $cg->full_name;
+                        $data["cargo_before"][$cg->id]["street"] = $cg->street;
+                        $data["cargo_before"][$cg->id]["street_number"] = $cg->street_number;
+                    }
+                
             }
         }
 

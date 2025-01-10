@@ -77,6 +77,11 @@ class Companies
         $query = "select * from $this->table WHERE company_type IN (2, 3) AND active = 1";
         return $this->query($query);
     }
+    public function getAllShopsActiveBy()
+    {
+        $query = "select * from $this->table WHERE company_type IN (2, 3) AND active = 1 AND id NOT IN (407, 409)";
+        return $this->query($query);
+    }
     public function getAllShopsActiveSorted()
     {
         $query = "select * from $this->table WHERE company_type IN (2, 3) AND active = 1 ORDER BY longitude DESC";
