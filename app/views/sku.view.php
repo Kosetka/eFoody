@@ -17,6 +17,7 @@
                                 <tr>
                                     <th scope="col">Nazwa</th>
                                     <th scope="col">Pełne SKU</th>
+                                    <th scope="col">Cena sprzedaży do sklepów</th>
                                     <th scope="col">Akcje</th>
                                 </tr>
                             </thead>
@@ -27,6 +28,11 @@
                                     echo "  <tr>
                                         <td>$value->name</td>
                                         <td>$value->full_type</td>";
+                                        if($value->priceshops <> "") {
+                                            echo "<td>".number_format($value->priceshops,2)." zł</td>";
+                                        } else {
+                                            echo "<td></td>";
+                                        }
                                     if(strlen($value->full_type) > 1) {
                                         echo "<td><a class='btn btn-info' href=' " . ROOT . "/sku/show/$value->id' role='button'>Pokaż listę</a></td>";
                                         //echo "<a class='btn btn-success' href=' " . ROOT . "/products/new/$value->full_type' role='button'>Dodaj</a></td>";
