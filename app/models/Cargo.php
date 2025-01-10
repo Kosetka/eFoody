@@ -62,6 +62,34 @@ class Cargo
     ";
     return $this->query($query);
 }
+public function getAllFullProductsByDateAndAmount($date_from, $date_to)
+{
+    $query = "
+        SELECT p.*, c.exclude, c.delivery_hour, pr.sku
+        FROM $this->table AS p
+        LEFT JOIN companies AS c ON p.c_id = c.id
+        LEFT JOIN products AS pr ON pr.id = p.p_id
+        WHERE p.date >= '$date_from' AND p.date <= '$date_to' AND p.amount > 0
+    ";
+    return $this->query($query);
+}
+public function getLatestTwoRecordsPerPair()
+{
+    $query = "
+        SELECT subquery.*
+        FROM (
+            SELECT p.*, c.exclude, c.delivery_hour, pr.sku,
+                   ROW_NUMBER() OVER (PARTITION BY p.c_id, p.p_id ORDER BY p.date DESC) AS row_num
+            FROM $this->table AS p
+            LEFT JOIN companies AS c ON p.c_id = c.id
+            LEFT JOIN products AS pr ON pr.id = p.p_id
+            WHERE p.amount > 0 AND p.c_id IS NOT NULL 
+            ORDER BY p.date DESC
+        ) AS subquery
+        WHERE subquery.row_num <= 2 
+    ";
+    return $this->query($query);
+}
     public function getAllFullProductsDateAndShop($id, $date_from, $date_to)
     {
         $query = "select * from $this->table WHERE c_id = $id AND date >= '$date_from' AND date <='$date_to'";

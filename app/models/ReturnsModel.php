@@ -68,6 +68,7 @@ class ReturnsModel
         $query = "select * from $this->table WHERE c_id IS NOT NULL AND date_now >= '$date_from' AND date_now <='$date_to'";
         return $this->query($query);
     }
+  
     public function getReturnsMonth($month, $year)
     {
         $start_date = "$year-$month-01";

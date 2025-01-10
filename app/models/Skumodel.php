@@ -16,7 +16,9 @@ class Skumodel
         'type',
         'name',
         'parent',
-        'full_type'
+        'full_type',
+        'priceshops',
+        'pricefixed'
     ];
 
     public function getSku()

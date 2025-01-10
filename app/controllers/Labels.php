@@ -147,4 +147,123 @@ class Labels
         }
         $this->view('labels.generate', $data);
     }
+
+    public function shopswz() 
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $sku_list = [
+            	"1-01" => "Sałatki",
+            	"1-02" => "Kanapki",
+            	"1-03" => "Zupy",
+            	"1-04" => "Dania główne",
+            	"1-05" => "Desery",
+            	"1-06" => "Dodatki",
+            	"1-07" => "Napoje",
+            	"1-08" => "Burgery",
+            	"1-09" => "Granole",
+            	"1-10" => "Smoothie",
+            	"1-11" => "Grzanki",
+            	"1-12" => "Bajgle",
+            	"1-13" => "Wrapy"
+        ];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if(isset($URL[2])) {
+            $date = $URL[2]; 
+            if(isset($_GET["date"])) {
+                $date = $_GET["date"]; 
+            }
+        } else {
+            $date = date("Y-m-d");
+        }
+
+        $date_from = $date." 00:00:00";
+        $date_to = $date." 23:59:59";
+
+        
+
+        $sku = new Skumodel();
+        foreach($sku->getSku() as $sk) {
+            $s = $sk->parent."-".$sk->type;
+            if($sk->priceshops <> "") {
+                $data["sku"][$s] = $sk->priceshops." zł";
+            } else {
+                $data["sku"][$s] = "";
+            }
+        }
+
+        $cargo = new Cargo();
+
+        if(!empty($cargo->getLatestTwoRecordsPerPair())) {
+            foreach ($cargo->getLatestTwoRecordsPerPair() as $cg) {
+                $date_here = substr($cg->date,0,10);
+                //show($cg);
+                if($date == $date_here) {
+                    $data["cargo_before"][$cg->c_id]["date"] = $date;
+                    $data["cargo_before"][$cg->c_id]["set"] = "0";
+                    $data["cargo_before"][$cg->c_id]["get"]["products"][$cg->p_id] = $cg->amount;
+                    $sku = substr($cg->sku,0,4);
+                    $data["cargo_before"][$cg->c_id]["get"]["sku"][$sku]["name"] = $sku_list[$sku];
+                    $data["cargo_before"][$cg->c_id]["get"]["sku"][$sku]["cost"] = $data["sku"][$sku];
+                    $data["cargo_before"][$cg->c_id]["get"]["sku"][$sku]["empty"] = "";
+                } else {
+                    if(isset($data["cargo_before"][$cg->c_id]["set"])) {
+                        if($data["cargo_before"][$cg->c_id]["set"] == 0) {
+                            $data["cargo_before"][$cg->c_id]["set"] = 1;
+                            $data["cargo_before"][$cg->c_id]["return"]["date"] = $date_here;
+                        } 
+                        if($data["cargo_before"][$cg->c_id]["return"]["date"] == $date_here) {
+                            $data["cargo_before"][$cg->c_id]["return"]["products"][$cg->p_id] = $cg->amount;
+                            $sku = substr($cg->sku,0,4);
+                            $data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["name"] = $sku_list[$sku];
+                            $data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["cost"] = $data["sku"][$sku];
+                            $data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["empty"] = "";
+                        }
+                    }
+
+                }
+            }
+        }
+
+        
+
+
+        $company = new Companies();
+        if(!empty($company->getAllShopsActive())) {
+            foreach ($company->getAllShopsActive() as $cg) {
+                if(isset($data["cargo"][$cg->id])) {
+                    $data["cargo"][$cg->id]["full_name"] = $cg->full_name;
+                    $data["cargo"][$cg->id]["street"] = $cg->street;
+                    $data["cargo"][$cg->id]["street_number"] = $cg->street_number;
+                }
+                if(isset($data["cargo_before"][$cg->id])) {
+                    $data["cargo_before"][$cg->id]["full_name"] = $cg->full_name;
+                    $data["cargo_before"][$cg->id]["street"] = $cg->street;
+                    $data["cargo_before"][$cg->id]["street_number"] = $cg->street_number;
+
+                }
+            }
+        }
+
+        if(!isset($data["cargo_before"])) {
+            redirect('labels/shops');
+            //redirect('labels.shops');
+        }
+        $data["date"] = $date;
+
+        $this->view('labels.shopswz', $data);
+    }
+    public function shops() 
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+        $date = date("Y-m-d");
+        $data["date"] = $date;
+
+        $this->view('labels.shops', $data);
+    }
 }
