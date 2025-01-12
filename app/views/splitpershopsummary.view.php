@@ -222,7 +222,9 @@
                                                             $f_name = "";
                                                             if (isset($data["shops"][$shop_key]->friendly_name)) {
                                                                 if (!empty($data["shops"][$shop_key]->friendly_name)) {
-                                                                    $f_name = " (" . $data["shops"][$shop_key]->friendly_name . ")";
+                                                                    $f_name = " (" . $data["shops"][$shop_key]->friendly_name . ")
+                                                                    </br>
+                                                                    test";
                                                                 }
                                                             }
                                                             echo "<td rowspan='$r_span'>" . $data["shops"][$shop_key]->full_name . "$f_name</td>";
