@@ -99,10 +99,10 @@
                                                         echo '<td>' . $to_prod . '</td>';
 
 
-                                                        foreach ($data["cargo_per_driver"] as $driver) {
+                                                        foreach ($data["drivers"] as $driver) {
                                                             $prod_i = 0;
-                                                            if (isset($driver["total"][$pid])) {
-                                                                $prod_i = $driver["total"][$pid];
+                                                            if (isset($data["cargo_per_driver"][$driver->id]["total"][$pid])) {
+                                                                $prod_i = $data["cargo_per_driver"][$driver->id]["total"][$pid];
                                                             }
                                                             echo "<td>$prod_i</td>";
                                                         }
@@ -193,8 +193,8 @@
                     ?>
                     <div class="card mb-4" id="d<?php echo $driver->id; ?>">
                         <div class="card-header">
-                            <h2 class="">Podział na sklepy dla: <?php echo $driver->first_name . " " . $driver->last_name; ?> <span
-                                    style="color: green;">RANO</span></h2>
+                            <h2 class="">Podział na sklepy dla: <?php echo $driver->first_name . " " . $driver->last_name; ?>
+                                <span style="color: green;">RANO</span></h2>
                             <div class="">
                                 <div class="form-group row m-3">
                                     <div class="col-sm-12">
