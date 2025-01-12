@@ -55,7 +55,7 @@
             </div>
             <?php
             if (isset($_GET["date"])) {
-                //show($data["cargo_per_driver"]);
+                show($data["cargo_per_driver"]);
                 ?>
                 <div class="card mb-4">
                     <div class="card-header">
