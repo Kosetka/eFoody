@@ -55,7 +55,7 @@
             </div>
             <?php
             if (isset($_GET["date"])) {
-                show($data["cargo_per_driver"]);
+                //show($data["cargo_per_driver"]);
                 ?>
                 <div class="card mb-4">
                     <div class="card-header">
@@ -120,8 +120,8 @@
                                                 <?php
                                                 foreach ($data["drivers"] as $driver) {
                                                     $prod_i = "";
-                                                    if (isset($data["cargo_per_driver"][$driver->id]["sum"])) {
-                                                        $prod_i = $data["cargo_per_driver"][$driver->id]["sum"];
+                                                    if (isset($data["cargo_per_driver"][$driver->id]["total"]["sum"])) {
+                                                        $prod_i = $data["cargo_per_driver"][$driver->id]["total"]["sum"];
                                                     }
                                                     echo "<th>$prod_i</th>";
                                                 }
