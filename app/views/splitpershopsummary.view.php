@@ -55,7 +55,7 @@
             </div>
             <?php
             if (isset($_GET["date"])) {
-                show($data["cargo_per_driver"]);
+                //show($data["cargo_per_driver"]);
                 ?>
                 <div class="card mb-4">
                     <div class="card-header">
@@ -118,10 +118,10 @@
                                                 <th>Total</th>
                                                 <th><?php echo $total; ?></th>
                                                 <?php
-                                                foreach ($data["cargo_per_driver"] as $driver) {
+                                                foreach ($data["drivers"] as $driver) {
                                                     $prod_i = "";
-                                                    if (isset($driver["total"]["sum"])) {
-                                                        $prod_i = $driver["total"]["sum"];
+                                                    if (isset($data["cargo_per_driver"][$driver->id]["sum"])) {
+                                                        $prod_i = $data["cargo_per_driver"][$driver->id]["sum"];
                                                     }
                                                     echo "<th>$prod_i</th>";
                                                 }
@@ -194,7 +194,8 @@
                     <div class="card mb-4" id="d<?php echo $driver->id; ?>">
                         <div class="card-header">
                             <h2 class="">Podział na sklepy dla: <?php echo $driver->first_name . " " . $driver->last_name; ?>
-                                <span style="color: green;">RANO</span></h2>
+                                <span style="color: green;">RANO</span>
+                            </h2>
                             <div class="">
                                 <div class="form-group row m-3">
                                     <div class="col-sm-12">
