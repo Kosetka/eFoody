@@ -222,12 +222,12 @@
                                                             $f_name = "";
                                                             if (isset($data["shops"][$shop_key]->friendly_name)) {
                                                                 if (!empty($data["shops"][$shop_key]->friendly_name)) {
-                                                                    $f_name = " (" . $data["shops"][$shop_key]->friendly_name . ")
-                                                                    </br>
-                                                                    test";
+                                                                    $f_name = " (" . $data["shops"][$shop_key]->friendly_name . ")";
                                                                 }
                                                             }
-                                                            echo "<td rowspan='$r_span'>" . $data["shops"][$shop_key]->full_name . "$f_name</td>";
+                                                            echo "<td rowspan='$r_span'>" . $data["shops"][$shop_key]->full_name . "$f_name
+                                                                    </br>
+                                                                    Adres: " . $data["shops"][$shop_key]->address . "</td>";
                                                             foreach ($shop_val as $pr_key => $pr_val) {
                                                                 echo "<tr>";
                                                                 echo "<td>" . $data["fullproducts"][$pr_key]["p_name"] . "</td>";
@@ -294,7 +294,9 @@
                                                             }
                                                         }
                                                         echo "<tr>";
-                                                        echo "<td rowspan='$r_span'>" . $data["shops"][$shop_key]->full_name . "$f_name</td>";
+                                                        echo "<td rowspan='$r_span'>" . $data["shops"][$shop_key]->full_name . "$f_name
+                                                                    </br>
+                                                                    Adres: " . $data["shops"][$shop_key]->address . "</td>";
                                                         foreach ($shop_val as $pr_key => $pr_val) {
                                                             echo "<tr>";
                                                             echo "<td>" . $data["fullproducts"][$pr_key]["p_name"] . "</td>";
