@@ -211,6 +211,11 @@ class Company
         $wh = new WarehouseModel;
         $data["warehouse"] = $wh->getWarehouses();
 
+        foreach($users_list->getAllDriverShopsActive() as $us) {
+            $data["drivers"][$us->id] = $us;
+        }
+        //show($data["drivers"]);die;
+
         $companies = new Companiesphone;
         foreach ($companies->getAllNumbers() as $company) {
             $data["phone_numbers"][$company->c_id][$company->c_phone] = $company->c_phone;

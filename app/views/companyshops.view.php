@@ -106,6 +106,14 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                   <div class="col-sm-2" style="text-align: left;">
                       <?php
                       $selected = "checked";
+                      echo "<div class='form-check'>
+                              <input class='form-check-input' type='radio' name='delivery_hour' id='delivery_hour99' value='99' $selected>
+                              <label class='form-check-label' for='delivery_hour99'>
+                              Wszystkie
+                              </label>
+                              </div>";
+                              
+                      $selected = "";
                       foreach (DELIVERYHOUR as $key => $value) {
                           echo "<div class='form-check'>
                               <input class='form-check-input' type='radio' name='delivery_hour' id='delivery_hour$key' value='$key' $selected>
@@ -113,7 +121,31 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                               $value
                               </label>
                               </div>";
-                          $selected = "";
+                      }
+                      ?>
+                  </div>
+              </div>
+              <div class="form-group row m-3">
+                  <label for="drivers" class="col-sm-2 col-form-label">Kierowca:</label>
+                  <div class="col-sm-2" style="text-align: left;">
+                      <?php
+                      $selected = "checked";
+
+                      echo "<div class='form-check'>
+                              <input class='form-check-input' type='radio' name='drivers' id='drivers0' value='0' $selected>
+                              <label class='form-check-label' for='drivers0'>
+                              Wszyscy
+                              </label>
+                              </div>";
+                      $selected = "";
+                      foreach ($data["drivers"] as $key => $value) {
+                          echo "<div class='form-check'>
+                              <input class='form-check-input' type='radio' name='drivers' id='drivers$key' value='$key' $selected>
+                              <label class='form-check-label' for='drivers$key'>
+                              $value->first_name $value->last_name
+                              </label>
+                              </div>";
+                          
                       }
                       ?>
                       <button id="select-shops" class="btn btn-primary" onclick="selectShops()">Zaznacz wybrane</button>
@@ -167,12 +199,15 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                         $guard = "Brak";
                       }
                     }
+                    
                     if(isset($data["users"][$company->guardian]["int"])) {
-                      $class_color = " class='shop-".$data["users"][$company->guardian]["int"]."' ";
+                      $class_color = " class='shop-".$data["users"][$company->guardian]["int"]." drivers".$company->guardian."' ";
+                      $group_class = " class='delivery-type".$company->delivery_hour." drivers".$company->guardian."'";
                     } else {
-                      $class_color = "";
+                      $class_color = " class='drivers0' ";
+                      $group_class = " class='delivery-type".$company->delivery_hour." drivers".$company->guardian."'";
                     }
-                    echo "<tr>
+                    echo "<tr $group_class>
                                                 <td>$company->full_name $fname</td>
                                                 <td>$company->address</td>
                                                 <td>$company->contact_first_name $company->contact_last_name</td>
@@ -318,8 +353,13 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
 
       <script>
 function selectShops() {
-    // Pobierz zaznaczoną wartość z radio buttonów
+    // Pobierz zaznaczoną wartość z radio buttonów `delivery_hour`
     const selectedDeliveryHour = document.querySelector('input[name="delivery_hour"]:checked').value;
+    console.log(selectedDeliveryHour);
+
+    // Pobierz zaznaczoną wartość z radio buttonów `drivers`
+    const selectedDriver = document.querySelector('input[name="drivers"]:checked')?.id?.replace('drivers', '');
+    console.log(selectedDriver);
 
     // Pobierz wszystkie checkboxy w tabeli
     const checkboxes = document.querySelectorAll('.location-checkbox');
@@ -329,12 +369,23 @@ function selectShops() {
         checkbox.checked = false;
     });
 
-    // Iteruj przez każdy checkbox i sprawdź, czy jego wiersz odpowiada wybranemu `delivery_hour`
-    checkboxes.forEach(checkbox => {
-        // Pobierz wiersz, w którym znajduje się checkbox
-        const row = checkbox.closest('tr');
+    // Jeśli wartość `selectedDeliveryHour` wynosi 99, zaznacz wszystkie checkboxy
+    if (selectedDeliveryHour === '99') {
+        checkboxes.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+            // Jeśli kierowca to 0 (zaznacz wszystkich) lub pasuje do wybranego
+            if (!selectedDriver || selectedDriver === '0' || row.classList.contains(`drivers${selectedDriver}`)) {
+                checkbox.checked = true;
+            }
+        });
+        return; // Zakończ działanie funkcji
+    }
 
-        // Znajdź kolumnę z klasą `delivery-typeX` w tym wierszu
+    // Iteruj przez każdy checkbox i sprawdź, czy odpowiada wybranym kryteriom
+    checkboxes.forEach(checkbox => {
+        const row = checkbox.closest('tr'); // Pobierz wiersz tabeli z checkboxem
+
+        // Pobierz kolumnę z klasą `delivery-typeX` w tym wierszu
         const deliveryTypeCell = row.querySelector('[class^="delivery-type"]');
 
         if (deliveryTypeCell) {
@@ -342,8 +393,11 @@ function selectShops() {
             const deliveryClass = [...deliveryTypeCell.classList].find(cls => cls.startsWith('delivery-type'));
             const deliveryHour = deliveryClass.replace('delivery-type', '');
 
-            // Jeśli numer odpowiada wybranemu radio, zaznacz checkbox
-            if (deliveryHour === selectedDeliveryHour) {
+            // Sprawdź, czy checkbox odpowiada wybranemu `delivery_hour` oraz wybranemu kierowcy
+            if (
+                deliveryHour === selectedDeliveryHour &&
+                (!selectedDriver || selectedDriver === '0' || row.classList.contains(`drivers${selectedDriver}`))
+            ) {
                 checkbox.checked = true;
             }
         }
