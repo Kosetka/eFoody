@@ -176,6 +176,17 @@ class Company
 
         $companies = new Companies();
         $data["companies"] = $companies->getAllShopsActiveSorted();
+        foreach($data["companies"] as $ck=>$cv) {
+            if(!empty($data["companies"][$ck]->open_hour)) {
+                $data["companies"][$ck]->open_hour = substr($cv->open_hour,0,5);
+                $data["companies"][$ck]->close_hour = substr($cv->close_hour,0,5);
+                /*if(strlen($data["companies"][$ck]->open_hour) > 4) {
+                    $data["companies"][$ck]->open_hour = substr($data["companies"][$ck]->open_hour,1,4);
+                    //echo $data["companies"][$ck]->open_hour;
+                }*/
+            }
+        }
+        //show($data["companies"]);die;
         foreach ($companies->getAllShopsActiveSorted() as $co) {
             $data["companies_sorted"][$co->id] = $co;
         }

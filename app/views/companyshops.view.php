@@ -209,7 +209,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                       $group_class = " class='delivery-type".$company->delivery_hour." drivers".$company->guardian."'";
                     }
                     if(empty($company->open_hour)) {
-                      $company->open_hour = "7:00";
+                      $company->open_hour = "07:00";
                     } 
                     if(empty($company->close_hour)) {
                       $company->close_hour = "18:00";
@@ -425,6 +425,11 @@ function selectShops() {
     let full_msg = "";
     let num_pos = 0;
 
+
+function timeToMinutes(time) {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+}
     // Funkcja pomocnicza do dodawania minut do czasu w formacie HH:MM
     function addMinutesToTime(time, minutes) {
         const [hours, mins] = time.split(":").map(Number);
@@ -560,54 +565,160 @@ function selectShops() {
     }
 
     function displaySortedPoints(sortedWaypoints, waypoints, legs, arrivalTime) {
-        const pointsList = document.getElementById("table-list");
-        let currentArrivalTime = arrivalTime;
-        let ppoint = 1;
+    const pointsList = document.getElementById("table-list");
+    let currentArrivalTime = arrivalTime;
+    let ppoint = 1;
+    let deferredWaypoints = []; // Punkty do odwiedzenia później
 
-        sortedWaypoints.forEach((waypointIndex, index) => {
-            const waypoint = waypoints[waypointIndex];
-            const leg = legs[index];
-            const latLng = waypoint.location;
-            const distance = leg.distance.text;
-            const duration = leg.duration.text;
+    sortedWaypoints.forEach((waypointIndex, index) => {
+        const waypoint = waypoints[waypointIndex];
+        const leg = legs[index];
+        const latLng = waypoint.location;
+        const distance = leg.distance.text;
+        const duration = leg.duration.text;
 
-            const shop = findShopByLatLng(latLng.lat(), latLng.lng());
-            const shopDescription = shop ? shop_des[shop.id] : "Brak opisu";
-            full_msg += shopDescription + "</br>";
-            console.log(full_msg);
+        const shop = findShopByLatLng(latLng.lat(), latLng.lng());
+        const shopDescription = shop ? shop_des[shop.id] : "Brak opisu";
+        full_msg += shopDescription + "</br>";
+        console.log(full_msg);
 
-            const durationMinutes = parseInt(duration.split(" ")[0]);
-            currentArrivalTime = addMinutesToTime(currentArrivalTime, durationMinutes);
-            const endTime = addMinutesToTime(currentArrivalTime, time_onsite / 60);
-            const li = document.createElement("tr");
-            let fname = "";
-            if (shop) {
-                if (shop.friendly_name != "") {
-                    fname = "(" + shop.friendly_name + ")";
-                }
+        const durationMinutes = parseInt(duration.split(" ")[0]);
+        currentArrivalTime = addMinutesToTime(currentArrivalTime, durationMinutes);
+
+        // Sprawdzanie godzin otwarcia
+        const shopOpen = shop.open_hour;
+        const shopClose = shop.close_hour;
+
+/*console.log(currentArrivalTime < shopOpen);
+console.log(currentArrivalTime == "06:15");
+console.log(currentArrivalTime == "6:15");
+console.log(currentArrivalTime);
+console.log(shopOpen);*/
+
+        if (currentArrivalTime < shopOpen || currentArrivalTime > shopClose) {
+            console.log(`Punkt zamknięty: ${shop.full_name}. Dodano do późniejszego odwiedzenia.`);
+            deferredWaypoints.push(waypoint); // Dodaj do kolejki
+            return; // Pomijamy ten punkt
+        }
+
+        const endTime = addMinutesToTime(currentArrivalTime, time_onsite / 60);
+        const li = document.createElement("tr");
+        let fname = "";
+        if (shop) {
+            if (shop.friendly_name != "") {
+                fname = "(" + shop.friendly_name + ")";
             }
-            num_pos++;
-            li.innerHTML = `
-                <td>${num_pos}</td>
-                <td>${shop ? shop.full_name : "N/A"} ${fname}</td>
-                <td>${shop ? shop.address : "N/A"}</td>
-                <td>${shop.open_hour} - ${shop.close_hour}</td>
-                <td>${currentArrivalTime}</td>
-                <td>${endTime}</td>
-                <td>${distance}</td>
-                <td>${duration}</td>
-            `;
-            pointsList.appendChild(li);
+        }
+        num_pos++;
+        li.innerHTML = `
+            <td>${num_pos}</td>
+            <td>${shop ? shop.full_name : "N/A"} ${fname}</td>
+            <td>${shop ? shop.address : "N/A"}</td>
+            <td>${shop.open_hour} - ${shop.close_hour}</td>
+            <td>${currentArrivalTime}</td>
+            <td>${endTime}</td>
+            <td>${distance}</td>
+            <td>${duration}</td>
+        `;
+        pointsList.appendChild(li);
 
-            currentArrivalTime = endTime;
+        currentArrivalTime = endTime;
 
-            let txt_msg = document.getElementById("txt_msg");
-            txt_msg.innerHTML = full_msg;
+        let txt_msg = document.getElementById("txt_msg");
+        txt_msg.innerHTML = full_msg;
 
-            
-            addNumberedMarker(latLng, num_pos);
-        });
+        addNumberedMarker(latLng, num_pos);
+    });
+
+    // Obsługa pominiętych punktów
+    if (deferredWaypoints.length > 0) {
+        console.log("Ponowne przetwarzanie punktów zamkniętych...");
+        processDeferredWaypoints(deferredWaypoints, currentArrivalTime);
     }
+}
+function processDeferredWaypoints(deferredWaypoints, arrivalTime) {
+    const remainingWaypoints = [];
+
+    deferredWaypoints.forEach((waypoint) => {
+        const shop = findShopByLatLng(waypoint.location.lat(), waypoint.location.lng());
+        const shopOpen = shop.open_hour;
+        const shopClose = shop.close_hour;
+
+        // Jeśli punkt jest już otwarty, odwiedź go
+        if (arrivalTime >= shopOpen && arrivalTime <= shopClose) {
+            console.log(`Odwiedzam punkt ponownie: ${shop.full_name}`);
+            displayFinalPoint(waypoint, arrivalTime);
+        } else {
+            console.log(`Punkt ${shop.full_name} nadal zamknięty. Dodano do trasy końcowej.`);
+            remainingWaypoints.push(waypoint); // Dodaj do ostatecznej trasy
+        }
+    });
+
+    // Jeśli pozostały punkty, wygeneruj dla nich trasę mimo godzin zamknięcia
+    if (remainingWaypoints.length > 0) {
+        console.log("Generowanie ostatecznej trasy dla punktów zamkniętych...");
+        generateFinalRoute(remainingWaypoints, arrivalTime);
+    }
+}
+function generateFinalRoute(waypoints, arrivalTime) {
+    const request = {
+        origin: waypoints[0].location, // Pierwszy punkt jako początek
+        destination: waypoints[waypoints.length - 1].location, // Ostatni punkt jako koniec
+        waypoints: waypoints.slice(1, -1), // Wszystkie pozostałe punkty jako przystanki
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
+
+    directionsService.route(request, function (result, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+            const legs = result.routes[0].legs;
+            legs.forEach((leg, index) => {
+                const waypoint = waypoints[index];
+                const shop = findShopByLatLng(waypoint.location.lat(), waypoint.location.lng());
+                const durationMinutes = parseInt(leg.duration.text.split(" ")[0]);
+
+                arrivalTime = addMinutesToTime(arrivalTime, durationMinutes);
+                displayFinalPoint(waypoint, arrivalTime);
+
+                // Dodaj znacznik na mapie
+                addNumberedMarker(waypoint.location, num_pos);
+            });
+
+            // Renderowanie ostatecznej trasy
+            const finalRenderer = new google.maps.DirectionsRenderer({
+                map: map,
+                suppressMarkers: true,
+                polylineOptions: {
+                    strokeColor: "#0000FF", // Niebieska trasa dla punktów zamkniętych
+                    strokeWeight: 5
+                }
+            });
+            finalRenderer.setDirections(result);
+        } else {
+            console.error("Nie udało się wygenerować ostatecznej trasy.");
+        }
+    });
+}
+
+function displayFinalPoint(waypoint, arrivalTime) {
+    const pointsList = document.getElementById("table-list");
+    const shop = findShopByLatLng(waypoint.location.lat(), waypoint.location.lng());
+    const endTime = addMinutesToTime(arrivalTime, time_onsite / 60);
+
+    const li = document.createElement("tr");
+    num_pos++;
+    li.innerHTML = `
+        <td>${num_pos}</td>
+        <td>${shop ? shop.full_name : "N/A"}</td>
+        <td>${shop ? shop.address : "N/A"}</td>
+        <td>${shop.open_hour} - ${shop.close_hour}</td>
+        <td>${arrivalTime}</td>
+        <td>${endTime}</td>
+        <td>N/A</td>
+        <td>N/A</td>
+    `;
+    pointsList.appendChild(li);
+}
 
     function findShopByLatLng(lat, lng) {
         return shops.find(shop => shop.latitude == lat && shop.longitude == lng);
