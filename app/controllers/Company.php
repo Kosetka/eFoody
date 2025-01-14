@@ -109,6 +109,32 @@ class Company
         }
         $this->view('company.new', $data);
     }
+    public function company_get_matrix()
+    {
+        if (!isset($_GET['origins']) || !isset($_GET['destinations'])) {
+            http_response_code(400);
+            echo json_encode(["error" => "Missing required parameters"]);
+            exit;
+        }
+        
+        $origins = urlencode($_GET['origins']);
+        $destinations = urlencode($_GET['destinations']);
+
+        $apikey = new Apitokens;
+        $data["token"] = $apikey->getToken("google_maps");
+
+        $apiKey = $data["token"]; // Wstaw swój klucz API
+        
+        $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=$origins&destinations=$destinations&key=$apiKey";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        header('Content-Type: application/json');
+        echo $response;
+    }
 
     public function edit()
     {

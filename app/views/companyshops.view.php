@@ -303,7 +303,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
               </div>
 
               <!-- Przycisk do generowania trasy i link do Google Maps -->
-              <button id="generate-route" class="btn btn-primary" onclick="generateRoute()">Generuj trasę</button>
+              <button id="generate-route" class="btn btn-primary" onclick="generateNewRoute()">Generuj trasę</button>
               <a id="route-link" href="#" target="_blank" style="display:none;">Zobacz trasę na Google Maps</a>
             </div>
             <div style="width: 70%; background-color: grey;">
@@ -417,10 +417,10 @@ function selectShops() {
 
       </script>
 <script>
-    let map;
+    /*let map;
     let directionsService;
     let directionsRenderer;
-    let time_onsite = 180; //  sekund = 5 minut
+    let time_onsite = 300; //  sekund = 5 minut
     let time_start = "06:00"; // godzina wyjazdu
     let full_msg = "";
     let num_pos = 0;
@@ -588,12 +588,6 @@ function timeToMinutes(time) {
         // Sprawdzanie godzin otwarcia
         const shopOpen = shop.open_hour;
         const shopClose = shop.close_hour;
-
-/*console.log(currentArrivalTime < shopOpen);
-console.log(currentArrivalTime == "06:15");
-console.log(currentArrivalTime == "6:15");
-console.log(currentArrivalTime);
-console.log(shopOpen);*/
 
         if (currentArrivalTime < shopOpen || currentArrivalTime > shopClose) {
             console.log(`Punkt zamknięty: ${shop.full_name}. Dodano do późniejszego odwiedzenia.`);
@@ -771,7 +765,452 @@ function displayFinalPoint(waypoint, arrivalTime) {
                 strokeWeight: 2
             }
         });
+    }*/
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 7,
+            center: { lat: 52.229675, lng: 21.012230 } // Domyślny środek (Warszawa)
+        });
+
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true }); // Ukryj domyślne markery
+        directionsRenderer.setMap(map);
     }
+
+   let shops = [
+         <?php
+           foreach($data["companies"] as $cp) {
+             $open_hour = "07:00";
+             if(!empty($cp->open_hour)) {
+               $open_hour = $cp->open_hour;
+             }
+             $close_hour = "18:00";
+             if(!empty($cp->close_hour)) {
+               $close_hour = $cp->close_hour;
+             }
+             $full_name = $cp->full_name;
+             if(!empty($cp->friendly_name)) {
+               $full_name .= " (".$cp->friendly_name.")";
+             }
+             $lat = "";
+             if(!empty($cp->latitude)) {
+               $lat = $cp->latitude;
+             }
+             $lng = "";
+             if(!empty($cp->longitude)) {
+               $lng = $cp->longitude;
+             }
+             
+             if($lat <> "" && $lng <> "") {
+               $sms = "";
+               if(isset($comp_des[$cp->id])) {
+                 $sms = $comp_des[$cp->id];
+               }
+               echo '
+                 {
+                     name: "'.$full_name.'",
+                     address: "'.$cp->address.'",
+                     lat: '.$lat.',
+                     lng: '.$lng.',
+                     open_hour: "'.$open_hour.'",
+                     close_hour: "'.$close_hour.'",
+                     arrival_time: "",
+                     departed_time: "",
+                     distance: "",
+                     onsite: "",
+                     sms: "'.$sms.'",
+                     c_id: "'.$cp->id.'"
+                 },
+               ';
+             }
+           }
+         ?>
+   ];
+
+
+let wait_time = 180;
+let shops_sorted = [];
+let sms_text = "";
+let us_totalDistance = 0;
+let us_totalDuration = 0;
+let us_totalDurationBreak = 0;
+let us_checked = 0;
+
+let shop_to_check = shops;
+let shops_copy = shops;
+
+let us_to_check = shop_to_check.length;
+
+let i_max = 288;
+let shops_left = shop_to_check.length;
+
+
+let num_pos = 0;
+
+let globalhour = 6*60*60; // czas wyjazdu
+
+let origin = { lat: 51.41426849316346, lng: 21.153932682504852 };  // Twoje współrzędne początkowe
+let originStr = `${origin.lat},${origin.lng}`; // punkt startowy ZMIENIĆ
+
+let destinationsSubset = shop_to_check.map(shop_to_check => `${shop_to_check.lat},${shop_to_check.lng}`).join('|');
+
+
+
+function generateNewRoute() {
+  shops = shops_copy;
+  const startPointRadio = document.querySelector('input[name="start-point"]:checked');
+  let [startLat, startLng] = startPointRadio.value.split(',');
+  //console.log(startLat+"" +startLng);
+  origin = { lat: startLat, lng: startLng };  // Twoje współrzędne początkowe
+  originStr = `${origin.lat},${origin.lng}`; // punkt startowy ZMIENIĆ
+  shops_sorted.push({
+    name: "Start",
+    address: "adres",
+    lat: origin.lat,
+    lng: origin.lng
+  });
+
+    let timeStartInput = document.querySelector('input[name="departure-time"]').value;
+    let timeOnsiteInput = parseInt(document.querySelector('input[name="point-time"]').value);
+
+    globalhour = timeToSeconds(timeStartInput);
+    wait_time = timeOnsiteInput * 60;
+
+    
+    if (!startPointRadio) {
+        alert("Wybierz punkt startowy.");
+        return;
+    }
+
+    
+
+    let checkboxes = document.querySelectorAll('.location-checkbox:checked');
+    let waypoints = Array.from(checkboxes).map(checkbox => {
+      let latitude = checkbox.getAttribute('data-latitude');
+      let longitude = checkbox.getAttribute('data-longitude');
+        return {
+            location: new google.maps.LatLng(latitude, longitude),
+            stopover: true
+        };
+    });
+
+    // Filtracja tablicy `shops`
+    shops = shops.filter(shop => {
+        return Array.from(checkboxes).some(checkbox => {
+            const latitude = checkbox.getAttribute('data-latitude');
+            const longitude = checkbox.getAttribute('data-longitude');
+            return parseFloat(shop.lat) === parseFloat(latitude) && parseFloat(shop.lng) === parseFloat(longitude);
+        });
+    });
+    console.log(shops);
+
+    if (waypoints.length > 0) {
+      let maxWaypoints = 25;
+      if(waypoints.length > maxWaypoints){
+        alert("Za dużo punktów.");
+        return;
+      } else {
+        shop_to_check = shops;
+        us_to_check = shop_to_check.length;
+        shops_left = shop_to_check.length;
+        destinationsSubset = shop_to_check.map(shop_to_check => `${shop_to_check.lat},${shop_to_check.lng}`).join('|');
+
+        console.log(shop_to_check);
+        console.log(destinationsSubset);
+        executeMultipleRequests();
+      }
+    } else {
+        alert("Wybierz przynajmniej jeden punkt pośredni.");
+    }
+
+}
+
+function drawRoute2(map, start, waypoints, end) {
+    // Tworzenie instancji DirectionsService i DirectionsRenderer
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer({
+        map: map, // Mapa, na której trasa ma być rysowana
+        suppressMarkers: true // Ukrywa automatycznie generowane znaczniki (używamy własnych)
+    });
+
+    // Przygotowanie danych dla trasy
+    const request = {
+        origin: start, // Punkt początkowy
+        destination: end, // Punkt końcowy
+        waypoints: waypoints.map(point => ({ location: point, stopover: true })), // Punkty pośrednie
+        travelMode: google.maps.TravelMode.DRIVING // Tryb podróży (np. DRIVING, WALKING)
+    };
+
+    // Wywołanie DirectionsService
+    directionsService.route(request, (result, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+            // Rysowanie trasy na mapie
+            directionsRenderer.setDirections(result);
+        } else {
+            console.error("Nie udało się obliczyć trasy:", status);
+        }
+    });
+}
+
+
+
+
+function timeToSeconds(time) {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 3600 + minutes * 60;
+}
+
+
+// Funkcja obliczająca czas dotarcia w minutach
+const calculateTravelTime = (durationInSeconds) => {
+    return durationInSeconds / 60; // czas w minutach
+};
+
+// Funkcja sprawdzająca, czy sklep jest otwarty
+const isShopOpen = (openHour, timeOfArrival) => {
+    const [openHourH, openHourM] = openHour.split(':').map(Number);
+    const shopOpenTime = openHourH * 3600 + openHourM * 60;
+//console.log("przybedzie: "+timeOfArrival+" otwarcie o: "+shopOpenTime);
+    return timeOfArrival >= shopOpenTime;
+};
+
+const getDistanceMatrix = async (os, ds) => {
+    try {
+        let response = await fetch(`<?php echo ROOT;?>/company/company_get_matrix?origins=${os}&destinations=${ds}`);
+        let data = await response.json();
+        //console.log(data["rows"]);
+        
+        if (data && data["rows"][0] && data["rows"][0].elements) {
+            const temporaryTable = []; // Tymczasowa tabela do przechowywania danych
+            console.log(data);
+            for (let i = 0; i < shop_to_check.length; i++) {
+              const element = data["rows"][0].elements[i];
+              let travelTimeName = element.duration.text;
+              let travelLength = element.distance.value;
+              let travelTime = convertTime(travelTimeName);
+              let destinationTime = globalhour + travelTime;
+              let lat = shop_to_check[i].lat;
+              let lng = shop_to_check[i].lng;
+              
+                if (element && element.distance && element.duration) {
+                    if (isShopOpen(shop_to_check[i].open_hour, destinationTime)) {
+                        console.log(`${shop_to_check[i].name} is open when you arrive!`);
+                        temporaryTable.push({
+                            shopName: shop_to_check[i].name,
+                            address: shop_to_check[i].address,
+                            travelTime,
+                            lat: shop_to_check[i].lat,
+                            lng: shop_to_check[i].lng,
+                            destinationTime,
+                            open_hour: shop_to_check[i].open_hour,
+                            close_hour: shop_to_check[i].close_hour,
+                            arrival_time: shop_to_check[i].arrival_time,
+                            departed_time: shop_to_check[i].departed_time,
+                            distance: travelLength,
+                            onsite: shop_to_check[i].onsite,
+                            sms: shop_to_check[i].sms,
+                            c_id: shop_to_check[i].c_id
+                        });
+                    } else {
+                        console.log(`${shop_to_check[i].name} will be closed when you arrive.`);
+                    }
+                } else {
+                    console.error(`Brak danych dla sklepu ${shop_to_check[i].name}`);
+                }
+            }
+            if (temporaryTable.length > 0) {
+              const minTravelTimeShop = temporaryTable.reduce((min, shop) => {
+                  return shop.travelTime < min.travelTime ? shop : min;
+              });
+              console.log(minTravelTimeShop.travelTime);
+
+            let shopData = {
+                  shopName: minTravelTimeShop.shopName,
+                  address: minTravelTimeShop.address,
+                  travelTime: minTravelTimeShop.travelTime,
+                  lat: minTravelTimeShop.lat,
+                  lng: minTravelTimeShop.lng,
+                  destinationTime: minTravelTimeShop.destinationTime,
+                  open_hour: minTravelTimeShop.open_hour,
+                  close_hour: minTravelTimeShop.close_hour,
+                  arrival_time: globalhour,
+                  departed_time: minTravelTimeShop.departed_time,
+                  distance: minTravelTimeShop.distance,
+                  onsite: minTravelTimeShop.onsite,
+                  sms: minTravelTimeShop.sms,
+                  c_id: minTravelTimeShop.c_id
+              };
+              shops_sorted.push(shopData);
+
+              shop_to_check = shop_to_check.filter(shop => !(shop.lat === minTravelTimeShop.lat && shop.lng === minTravelTimeShop.lng));
+              console.log(shop_to_check);
+              globalhour += minTravelTimeShop.travelTime + wait_time;
+              console.log(globalhour);
+              originStr = `${minTravelTimeShop.lat},${minTravelTimeShop.lng}`
+              destinationsSubset = shop_to_check.map(shop_to_check => `${shop_to_check.lat},${shop_to_check.lng}`).join('|');
+              shops_left--;
+              sms_text += minTravelTimeShop.sms;
+              sms_text += "</br>";
+              displayFinalPoints(shopData);
+              updateSummary2(minTravelTimeShop.distance, minTravelTimeShop.travelTime);
+              updateSmsText();
+              pos = `${minTravelTimeShop.lat},${minTravelTimeShop.lng}`;
+              let poss = new google.maps.LatLng(
+                  parseFloat(minTravelTimeShop.lat),
+                  parseFloat(minTravelTimeShop.lng)
+              );
+              addNumberedMarker(poss,num_pos);
+                //console.log(`Sklep z najmniejszym czasem dotarcia: ${minTravelTimeShop.shopName}, Czas: ${minTravelTimeShop.travelTime}`);
+            } else {
+                console.log("Brak sklepów, które będą otwarte przy twoim przyjeździe.");
+                globalhour += wait_time;
+            }
+        } else {
+            console.error("Brak danych w odpowiedzi API lub nieprawidłowa struktura odpowiedzi");
+            console.log(shops_left);
+        }
+    } catch (error) {
+        console.error("Error fetching distance matrix:", error);
+    }
+};
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function executeMultipleRequests() {
+    for(i = 0; i <= i_max; i++) {
+      if(shops_left == 0) {
+        break;
+      }
+      getDistanceMatrix(originStr, destinationsSubset);
+      await delay(600);
+    }
+    console.log(shops_sorted);
+    console.log(shops_sorted[0].lat);
+    console.log(shops_sorted[shops_sorted.length - 1].lat);
+    const start = new google.maps.LatLng(shops_sorted[0].lat, shops_sorted[0].lng); // Przykładowe współrzędne startu (Warszawa)
+    const end = new google.maps.LatLng(shops_sorted[shops_sorted.length - 1].lat, shops_sorted[shops_sorted.length - 1].lng);   // Przykładowe współrzędne końca (Poznań)
+
+    const middleWaypoints = [];
+    console.log(shops_sorted);
+    for (let i = 1; i < shops_sorted.length - 1; i++) { // Pomiń pierwszy i ostatni
+        const point = shops_sorted[i];
+        middleWaypoints.push(new google.maps.LatLng(point.lat, point.lng)); // Dodaj do tablicy
+    }
+
+    console.log(middleWaypoints);
+
+    // Rysowanie trasy
+    addNumberedMarker(start,"S");
+    drawRoute2(map, start, middleWaypoints, end);
+
+    //tutaj punkty na mape
+    
+}
+
+function addNumberedMarker(position, number) {
+        const marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            label: {
+                text: number.toString(),
+                color: "white",
+                fontSize: "14px",
+                fontWeight: "bold"
+            },
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 20,
+                fillColor: "#FF0000", // Ten sam kolor co trasa
+                fillOpacity: 1,
+                strokeColor: "#FFFFFF",
+                strokeWeight: 2
+            }
+        });
+    }
+
+function displayFinalPoints(waypoint) {
+  console.log(waypoint);
+    const pointsList = document.getElementById("table-list");
+    //const shop = findShopByLatLng(waypoint.location.lat(), waypoint.location.lng()); //??
+
+    const li = document.createElement("tr");
+    num_pos++;
+    li.innerHTML = `
+        <td>${num_pos}</td>
+        <td>${waypoint.shopName}</td>
+        <td>${waypoint.address}</td>
+        <td>${waypoint.open_hour} - ${waypoint.close_hour}</td>
+        <td>`+formatSecondsToCustomTime(waypoint.destinationTime)+`</td>
+        <td>`+formatSecondsToCustomTime(waypoint.destinationTime + wait_time)+`</td>
+        <td>`+formatMetersToKilometers(waypoint.distance)+`</td>
+        <td>`+formatSecondsToMinutes(waypoint.travelTime)+`</td>
+    `;
+    pointsList.appendChild(li);
+}
+
+
+
+function updateSummary2(totalDistance, totalDuration) {
+
+  us_checked++;
+  us_totalDistance += totalDistance;
+  us_totalDuration += totalDuration;
+  us_totalDurationBreak += totalDuration + wait_time;
+
+  totalDistance = totalDistance.toFixed(2);
+
+  const summaryElement = document.getElementById("summary_opti");
+  summaryElement.innerHTML = `<b>Sprawdzone punkty:</b> ${us_checked} / ${us_to_check}</br><b>Trasa:</b> `+formatMetersToKilometers(us_totalDistance)+`</br><b>Czas jazdy:</b> `+formatSecondsToCustomTime(us_totalDuration)+` min</br><b>Czas całej trasy:</b> `+formatSecondsToCustomTime(us_totalDurationBreak)+` min`;
+}
+function updateSmsText() {
+  let txt_msg = document.getElementById("txt_msg");
+  txt_msg.innerHTML = sms_text;
+}
+
+
+
+function convertTime(timeString) {
+    const timeParts = timeString.split(' ');
+    //console.log(timeParts);
+    if (timeParts.length === 2) {
+        const minutes = parseInt(timeParts[0]);
+        return (minutes * 60);
+    } else if (timeParts.length === 4) {
+        const hours = parseInt(timeParts[0]);
+        const minutes = parseInt(timeParts[2]);
+        return (hours * 3600) + (minutes * 60);
+    } else {
+        return 0;
+    }
+}
+function formatSecondsToMinutes(seconds) {
+    // Obliczanie minut
+    const minutes = Math.floor(seconds / 60);
+    
+    // Zwracanie w formacie "x min"
+    return `${minutes} min`;
+}
+function formatSecondsToCustomTime(seconds) {
+    // Obliczanie godzin i minut
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    
+    // Formatujemy godziny i minuty do 2 cyfr
+    const formattedHours = hours.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    
+    // Zwracamy wynik w formacie "hh-ii"
+    return `${formattedHours}:${formattedMinutes}`;
+}
+function formatMetersToKilometers(meters) {
+    // Przekształcanie metrów na kilometry i zaokrąglanie do dwóch miejsc po przecinku
+    const kilometers = (meters / 1000).toFixed(1);
+    
+    // Zwracamy wynik w formacie "x km"
+    return `${kilometers} km`;
+}
+
+//generateNewRoute();
 </script>
 
       <script async defer
