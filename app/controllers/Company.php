@@ -83,6 +83,12 @@ class Company
             } else {
                 unset($_POST["delivery_hour"]);
             }
+            if (!$_POST["open_hour"] == "00:00") {
+                $_POST["open_hour"] = NULL;
+            }
+            if (!$_POST["close_hour"] == "00:00") {
+                $_POST["close_hour"] = NULL;
+            }
             $_POST["date"] = date("Y-m-d H:i:s");
             $_POST["phone_number"] = $_POST["phone_numbers"][0];
             $_POST["address"] = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
@@ -151,6 +157,14 @@ class Company
                 $_POST["active"] = 0;
             }
             if (isset($_POST["companyEdit"])) {
+                //show($_POST);
+                //die;
+                if (!$_POST["open_hour"] == "00:00") {
+                    $_POST["open_hour"] = NULL;
+                }
+                if (!$_POST["close_hour"] == "00:00") {
+                    $_POST["close_hour"] = NULL;
+                }
                 $_POST["address"] = $_POST["street"] . " " . $_POST["street_number"] . ", " . $_POST["city"] . " " . $_POST["postal_code"];
                 if ($_POST["company_type"] == 2 || $_POST["company_type"] == 3) {
                     //
