@@ -288,7 +288,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                       <th rowspan="2">Godzina wyjazdu:</th>
                     </tr>
                     <tr>
-                      <td><input class="form-control w-50" type="time" name="departure-time" value="06:00" required>
+                      <td><input class="form-control w-50" type="time" name="departure-time" value="05:30" required>
                       </td>
                     </tr>
                     <tr>
@@ -426,7 +426,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
         let directionsService;
         let directionsRenderer;
         let time_onsite = 180; //  sekund = 5 minut
-        let time_start = "06:00"; // godzina wyjazdu
+        let time_start = "05:30"; // godzina wyjazdu
         let full_msg = "";
         let num_pos = 0;
 
