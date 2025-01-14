@@ -116,7 +116,7 @@ class Company
             echo json_encode(["error" => "Missing required parameters"]);
             exit;
         }
-        
+
         $origins = urlencode($_GET['origins']);
         $destinations = urlencode($_GET['destinations']);
 
@@ -124,14 +124,14 @@ class Company
         $data["token"] = $apikey->getToken("google_maps");
 
         $apiKey = $data["token"]; // Wstaw swój klucz API
-        
+
         $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=$origins&destinations=$destinations&key=$apiKey";
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($ch);
         curl_close($ch);
-        
+
         header('Content-Type: application/json');
         echo $response;
     }
@@ -202,10 +202,10 @@ class Company
 
         $companies = new Companies();
         $data["companies"] = $companies->getAllShopsActiveSorted();
-        foreach($data["companies"] as $ck=>$cv) {
-            if(!empty($data["companies"][$ck]->open_hour)) {
-                $data["companies"][$ck]->open_hour = substr($cv->open_hour,0,5);
-                $data["companies"][$ck]->close_hour = substr($cv->close_hour,0,5);
+        foreach ($data["companies"] as $ck => $cv) {
+            if (!empty($data["companies"][$ck]->open_hour)) {
+                $data["companies"][$ck]->open_hour = substr($cv->open_hour, 0, 5);
+                $data["companies"][$ck]->close_hour = substr($cv->close_hour, 0, 5);
                 /*if(strlen($data["companies"][$ck]->open_hour) > 4) {
                     $data["companies"][$ck]->open_hour = substr($data["companies"][$ck]->open_hour,1,4);
                     //echo $data["companies"][$ck]->open_hour;
@@ -233,10 +233,10 @@ class Company
         $temp["users"] = $users_list->getAll("users");
         foreach ($temp["users"] as $user) {
             $data["users"][$user->id] = (array) $user;
-            if($int>0) {
+            if ($int > 0) {
                 $data["users"][$user->id]["int"] = 0;
             }
-            if($data["users"][$user->id]["u_role"] == 5 || $data["users"][$user->id]["u_role"] == 11) {
+            if ($data["users"][$user->id]["u_role"] == 5 || $data["users"][$user->id]["u_role"] == 11) {
                 $int++;
                 $data["users"][$user->id]["int"] = $int;
             }
@@ -248,7 +248,7 @@ class Company
         $wh = new WarehouseModel;
         $data["warehouse"] = $wh->getWarehouses();
 
-        foreach($users_list->getAllDriverShopsActive() as $us) {
+        foreach ($users_list->getAllDriverShopsActive() as $us) {
             $data["drivers"][$us->id] = $us;
         }
         //show($data["drivers"]);die;
@@ -336,28 +336,28 @@ class Company
         $data = [];
         $data["status"] = "";
 
-        if(!empty($_GET["send"])) {
+        if (!empty($_GET["send"])) {
             $URL = $_GET['url'] ?? 'home';
             $URL = explode("/", trim($URL, "/"));
-            if(isset($URL[2])) {
+            if (isset($URL[2])) {
                 $status = $URL[2];
             }
-            if(isset($_GET["send"])) {
+            if (isset($_GET["send"])) {
                 if (isset($_GET["status"])) {
                     $status = $_GET["status"];
                 }
             }
 
             $companies = new Companiestocheck();
-            if($status == 99) {
-                if(!empty($companies->getCompaniesActive())) {
-                    foreach($companies->getCompaniesActive() as $com) {
+            if ($status == 99) {
+                if (!empty($companies->getCompaniesActive())) {
+                    foreach ($companies->getCompaniesActive() as $com) {
                         $data["companies"][$com->id] = $com;
                     }
                 }
             } else {
-                if(!empty($companies->getCompaniesActiveByStatus($status))) {
-                    foreach($companies->getCompaniesActiveByStatus($status) as $com) {
+                if (!empty($companies->getCompaniesActiveByStatus($status))) {
+                    foreach ($companies->getCompaniesActiveByStatus($status) as $com) {
                         $data["companies"][$com->id] = $com;
                     }
                 }
@@ -421,7 +421,7 @@ class Company
             $data["users"][$user->id] = (array) $user;
         }
 
-        foreach($users_list->getAllDriverShopsActive() as $us) {
+        foreach ($users_list->getAllDriverShopsActive() as $us) {
             $data["drivers"][$us->id] = $us;
         }
 
@@ -443,7 +443,7 @@ class Company
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             //show($_POST);die;
-            if(isset($_POST["is_added"])){
+            if (isset($_POST["is_added"])) {
                 $toInsert = [
                     "latitude" => $_POST["latitude"],
                     "longitude" => $_POST["longitude"]
@@ -506,6 +506,8 @@ class Company
                             "nip" => "",
                             "date" => $date,
                             "workers" => "",
+                            "open_hour" => $_POST["open_hour"],
+                            "close_hour" => $_POST["close_hour"],
                             "friendly_name" => "",
                         ];
 
@@ -558,7 +560,7 @@ class Company
             $data["users"][$user->id] = (array) $user;
         }
 
-        foreach($users_list->getAllDriverShopsActive() as $us) {
+        foreach ($users_list->getAllDriverShopsActive() as $us) {
             $data["drivers"][$us->id] = $us;
         }
 

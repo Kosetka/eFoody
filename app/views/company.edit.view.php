@@ -78,32 +78,34 @@
                         <div class="form-group row m-3">
                             <label for="phone_number" class="col-sm-2 col-form-label">Tel. kontaktowy:</label>
                             <div class="col-sm-2">
-                                <input type="text" class="form-control" id="phone_number" name="phone_numbers[]" value="<?= $data["companies"]->phone_number ?>">
+                                <input type="text" class="form-control" id="phone_number" name="phone_numbers[]"
+                                    value="<?= $data["companies"]->phone_number ?>">
                             </div>
                             <div class="col-sm-2">
-                                <button type="button" class="btn btn-secondary" onclick="addPhoneNumberField()">+</button>
+                                <button type="button" class="btn btn-secondary"
+                                    onclick="addPhoneNumberField()">+</button>
                             </div>
                         </div>
                         <?php
                         $first = true;
-                        if(!empty($data["phone_numbers"])) {
-                            foreach($data["phone_numbers"] as $phone) {
-                                if($first == false) {
+                        if (!empty($data["phone_numbers"])) {
+                            foreach ($data["phone_numbers"] as $phone) {
+                                if ($first == false) {
                                     echo '  <div class="form-group row m-3">
                                                 <label for="phone_number" class="col-sm-2 col-form-label">Dodatkowy numer:</label>
                                                 <div class="col-sm-2">
-                                                <input type="text" class="form-control" id="phone_number" name="phone_numbers[]" value="'.$phone->c_phone.'">
+                                                <input type="text" class="form-control" id="phone_number" name="phone_numbers[]" value="' . $phone->c_phone . '">
                                                 </div>
                                             </div>';
-                                    
+
                                 }
-                                if($first == true) {
+                                if ($first == true) {
                                     $first = false;
                                 }
                             }
                         }
 
-?>
+                        ?>
                     </div>
                     <div class="form-group row m-3">
                         <label for="guardian" class="col-sm-2 col-form-label">Opiekun handlowy:</label>
@@ -114,7 +116,7 @@
                                 foreach ($data["users"] as $user) {
                                     $full_name = $user->first_name . " " . $user->last_name;
                                     $id = $user->id;
-                                
+
                                     if ($data["companies"]->guardian == $id) {
                                         echo "<option value='$id' selected>$full_name</option>";
                                     } else {
@@ -128,7 +130,7 @@
                     <div class="form-group row m-3">
                         <label for="nip" class="col-sm-2 col-form-label">NIP:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="nip" name="nip" 
+                            <input type="text" class="form-control" id="nip" name="nip"
                                 value="<?= $data["companies"]->nip ?>">
                         </div>
                     </div>
@@ -182,10 +184,10 @@
                         </div>
                     </div>
 
-                    <div class="form-group row m-3" id="delivery-hour-group" <?php 
-                        if($data["companies"]->company_type <> 2 && $data["companies"]->company_type <> 3) {
-                            echo "hidden";
-                        }
+                    <div class="form-group row m-3" id="delivery-hour-group" <?php
+                    if ($data["companies"]->company_type <> 2 && $data["companies"]->company_type <> 3) {
+                        echo "hidden";
+                    }
                     ?>>
                         <label for="delivery_hour" class="col-sm-2 col-form-label">Termin dostawy:</label>
                         <div class="col-sm-10">
@@ -197,8 +199,8 @@
                                 } else {
                                     $selected = "";
                                 }
-                                if($key)
-                                echo "<div class='form-check'>
+                                if ($key)
+                                    echo "<div class='form-check'>
                                     <input class='form-check-input' type='radio' name='delivery_hour' id='delivery_hour$key' value='$key' $selected>
                                     <label class='form-check-label' for='delivery_hour$key'>
                                     $value
@@ -206,6 +208,29 @@
                                     </div>";
                             }
                             ?>
+                        </div>
+                    </div>
+                    <div class="form-group row m-3" id="open_hour-group" <?php
+                    if ($data["companies"]->company_type <> 2 && $data["companies"]->company_type <> 3) {
+                        echo "hidden";
+                    }
+                    ?>>
+                        <label for="open_hour" class="col-sm-2 col-form-label">Godzina otwarcia:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="open_hour" name="open_hour"
+                                value="<?= $data["companies"]->open_hour ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-group row m-3" id="close_hour-group" <?php
+                    if ($data["companies"]->company_type <> 2 && $data["companies"]->company_type <> 3) {
+                        echo "hidden";
+                    }
+                    ?>>
+                        <label for="close_hour" class="col-sm-2 col-form-label">Godzina zamknięcia:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="close_hour" name="close_hour"
+                                value="<?= $data["companies"]->close_hour ?>">
                         </div>
                     </div>
 
@@ -253,7 +278,8 @@
                     <div class="form-group row m-3">
                         <label for="workers" class="col-sm-2 col-form-label">Ilość pracowników</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="workers" name="workers" value="<?= $data['companies']->workers ?>">
+                            <input type="text" class="form-control" id="workers" name="workers"
+                                value="<?= $data['companies']->workers ?>">
                         </div>
                     </div>
 
@@ -261,7 +287,7 @@
                         <label for="c_type" class="col-sm-2 col-form-label">Wielkość firmy:</label>
                         <div class="col-sm-10">
                             <?php
-                            
+
                             foreach (COMPANYSIZE as $key => $value) {
                                 if ($data["companies"]->c_type == $key) {
                                     $selected = "checked";
@@ -288,14 +314,20 @@
                 // Pobierz wszystkie radio buttony dla 'Rodzaj firmy'
                 const companyTypeRadios = document.querySelectorAll('.company-type-radio');
                 const deliveryHourGroup = document.getElementById('delivery-hour-group');
+                const openHourGroup = document.getElementById('open_hour-group');
+                const closeHourGroup = document.getElementById('close_hour-group');
 
                 companyTypeRadios.forEach(radio => {
                     radio.addEventListener('change', function () {
                         // Jeśli wybrana wartość to 2 lub 3, usuń 'hidden', w przeciwnym wypadku ukryj
                         if (this.value === '2' || this.value === '3') {
                             deliveryHourGroup.hidden = false;
+                            openHourGroup.hidden = false;
+                            closeHourGroup.hidden = false;
                         } else {
                             deliveryHourGroup.hidden = true;
+                            openHourGroup.hidden = true;
+                            closeHourGroup.hidden = true;
                         }
                     });
                 });

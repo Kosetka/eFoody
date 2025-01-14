@@ -23,6 +23,7 @@
                                 <th>Pełny adres</th>
                                 <th>Rodzaj firmy</th>
                                 <th>Notatki</th>
+                                <th>Godziny otwarcia</th>
                                 <th>Status</th>
                                 <th>Współrzędne</th>
                                 <th>Akcje</th>
@@ -40,6 +41,7 @@
                                 <th>Pełny adres</th>
                                 <th>Rodzaj firmy</th>
                                 <th>Notatki</th>
+                                <th>Godziny otwarcia</th>
                                 <th>Status</th>
                                 <th>Współrzędne</th>
                                 <th>Akcje</th>
@@ -47,7 +49,7 @@
                         </tfoot>
                         <tbody>
                             <?php
-                            
+
                             $cities = [0 => "Brak magazynu"];
                             foreach ($data["cities"] as $s) {
                                 $cities[$s["id"]] = $s;
@@ -70,17 +72,20 @@
                                 $edit_link = '<a href="' . ROOT . '/company/edit/' . $company->id . '">Edytuj</a>';
                                 $numbers = $company->phone_number;
                                 $i = 0;
-                                foreach($data["phone_numbers"] as $number_key => $number_val) {
-                                    if($number_key == $company->id) {
-                                        foreach($number_val as $numb) {
-                                            if($i > 0) {
-                                                $numbers.= ", ".$numb;
+                                foreach ($data["phone_numbers"] as $number_key => $number_val) {
+                                    if ($number_key == $company->id) {
+                                        foreach ($number_val as $numb) {
+                                            if ($i > 0) {
+                                                $numbers .= ", " . $numb;
                                             }
                                             $i++;
                                         }
                                     }
                                 }
-
+                                $open_hours = "";
+                                if (isset($company->open_hour)) {
+                                    $open_hours = substr($company->open_hour, 0, 5) . " - " . substr($company->close_hour, 0, 5);
+                                }
                                 echo "<tr>
                                     <td>$company->id</td>
                                     <td>$company->full_name</td>
@@ -92,6 +97,7 @@
                                     <td>$company->address</td>
                                     <td>$company_type</td>
                                     <td>$company->description</td>
+                                    <th>$open_hours</th>
                                     <td>$active_display</td>
                                     <td>$latlong</td>
                                     <td>$edit_link</td>
