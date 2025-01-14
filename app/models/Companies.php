@@ -36,7 +36,9 @@ class Companies
         'workers',
         'friendly_name', 
         'delivery_hour',
-        'exclude'
+        'exclude',
+        'open_hour',
+        'close_hour'
     ];
 
     public function validate($data)

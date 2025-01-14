@@ -163,6 +163,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                   <th scope="col">Kierowca</th>
                   <th scope="col">Notatka</th>
                   <th scope="col">Preferowany termin dostawy</th>
+                  <th scope="col">Godziny otwarcia</th>
                   <th scope="col">Lokalizacja</th>
                   <th scope="col">Ostatnia dostawa</th>
                   <th scope="col">Dodaj do trasy</th>
@@ -207,6 +208,13 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                       $class_color = " class='drivers0' ";
                       $group_class = " class='delivery-type".$company->delivery_hour." drivers".$company->guardian."'";
                     }
+                    if(empty($company->open_hour)) {
+                      $company->open_hour = "7:00";
+                    } 
+                    if(empty($company->close_hour)) {
+                      $company->close_hour = "18:00";
+                    }
+                    $hours = $company->open_hour." - ".$company->close_hour;
                     echo "<tr $group_class>
                                                 <td>$company->full_name $fname</td>
                                                 <td>$company->address</td>
@@ -214,7 +222,8 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                                                 <td>$company->phone_number</td>
                                                 <td $class_color>$guard</td>
                                                 <td>$company->description</td>
-                                                <td class='delivery-type".$company->delivery_hour."'>$delivery</td>";
+                                                <td class='delivery-type".$company->delivery_hour."'>$delivery</td>
+                                                <td>$hours</td>";
                     if ($gps_link == "#") {
                       echo "<td></td>";
                     } else {
@@ -279,7 +288,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                       <th rowspan="2">Godzina wyjazdu:</th>
                     </tr>
                     <tr>
-                      <td><input class="form-control w-50" type="time" name="departure-time" value="16:00" required>
+                      <td><input class="form-control w-50" type="time" name="departure-time" value="06:00" required>
                       </td>
                     </tr>
                     <tr>
@@ -287,7 +296,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                     </tr>
                     <tr>
                       <td><input class="form-control w-50" type="number" name="point-time" min="1" max="15" step="1"
-                          value="5" required></td>
+                          value="3" required></td>
                     </tr>
                   </tbody>
                 </table>
@@ -319,8 +328,10 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
             <table class="table">
               <thead>
                 <tr>
+                  <th scope="col">Lp.</th>
                   <th scope="col">Nazwa sklepu</th>
                   <th scope="col">Adres</th>
+                  <th scope="col">Godziny otwarcia</th>
                   <th scope="col">Czas przyjazdu</th>
                   <th scope="col">Czas odjazdu</th>
                   <th scope="col">Odległość</th>
@@ -409,8 +420,8 @@ function selectShops() {
     let map;
     let directionsService;
     let directionsRenderer;
-    let time_onsite = 300; // 300 sekund = 5 minut
-    let time_start = "16:00"; // godzina wyjazdu
+    let time_onsite = 180; //  sekund = 5 minut
+    let time_start = "06:00"; // godzina wyjazdu
     let full_msg = "";
     let num_pos = 0;
 
@@ -580,6 +591,7 @@ function selectShops() {
                 <td>${num_pos}</td>
                 <td>${shop ? shop.full_name : "N/A"} ${fname}</td>
                 <td>${shop ? shop.address : "N/A"}</td>
+                <td>${shop.open_hour} - ${shop.close_hour}</td>
                 <td>${currentArrivalTime}</td>
                 <td>${endTime}</td>
                 <td>${distance}</td>
