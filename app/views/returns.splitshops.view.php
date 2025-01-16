@@ -59,7 +59,7 @@
                                 <label for="c_name" class="col-sm-2 col-form-label">Dzień:</label>
                                 <input type='date' class='form-control col-sm-2' name='date'
                                     value='<?php echo $date; ?>'>
-                                <label for="c_idd" class="col-sm-2 col-form-label">Handlowiec:</label>
+                                <label for="c_idd" class="col-sm-2 col-form-label">Sklep:</label>
                                     <select class="form-control col-sm-2" id="c_idd" name="c_idd">
                                         <?php
                                         if(isset($_GET["c_idd"])) {
@@ -72,9 +72,13 @@
                                                 if($trader->id == $u_id) {
                                                     $selected = " selected";
                                                 }
+                                                $f_name = "";
+                                                if($trader->friendly_name <> "") {
+                                                    $f_name = " (".$trader->friendly_name.")";
+                                                }
                                                 $full_name = $trader->full_name;
                                                 $id = $trader->id;
-                                                echo "<option value='$id' $selected>$full_name</option>";
+                                                echo "<option value='$id' $selected>$full_name $f_name</option>";
                                             }
                                         ?>
                                     </select>
