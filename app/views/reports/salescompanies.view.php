@@ -1,5 +1,6 @@
 <?php
 $send = $data["get"]["send"];
+$days = 0;
 
 if ($send == 2) {
     if ($data["get"]["type"] == "hour") {
@@ -170,6 +171,11 @@ if ($data["get"]["type"] == "month") {
 $mess = "";
 
 $prod = [];
+if(isset($_GET["date_from"])) {
+    $days = countDaysExcludingSundays($_GET["date_from"], $_GET["date_to"], HOLIDAYS);
+} else {
+    $days = 6;
+}
 
 if (isset($data["cargo_temp"])) {
     foreach ($data["cargo_temp"] as $company_id => $compval) {
@@ -184,6 +190,9 @@ if (isset($data["cargo_temp"])) {
                     <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena za sztukę (brutto)</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena łączna do zapłaty</th>
+                    <th style='border: 1px solid #000; width: 8%'>Dni pracujące</th>
+                    <th style='border: 1px solid #000; width: 8%'>Średnia sprzedaż [na dzień]</th>
+                    <th style='border: 1px solid #000; width: 8%'>Średnia zwrotów [na dzień]</th>
                 </tr>
             </thead>
             <tbody>";
@@ -251,6 +260,9 @@ if (isset($data["cargo_temp"])) {
                         <td style='border: 1px solid;'>$ret_show</td>
                         <td style='border: 1px solid;' title='Gwiazda oznacza zmianę ceny w trakcie wybranej daty, kwota liczy się prawidłowo, jednak wyświetla się najnowsza cena za sztukę.'>$cost_last zł$txtadd</td>
                         <td style='border: 1px solid;'>" . $total_cost . " zł</td>
+                        <td style='border: 1px solid;'>" . $days . "</td>
+                        <td style='border: 1px solid;'>" . number_format(($amo - $ret_show) / $days, 2) . "</td>
+                        <td style='border: 1px solid;'>" . number_format(($ret_show) / $days, 2) . "</td>
                     </tr>";
                 if (!isset($prod[$product_id]["amount"])) {
                     $prod[$product_id]["amount"] = 0;
@@ -281,6 +293,9 @@ if (isset($data["cargo_temp"])) {
                     <td style='border: 1px solid;'>$total_return</td>
                     <td style='border: 1px solid;'></td>
                     <td style='border: 1px solid;'>$total_money zł</td>
+                    <td style='border: 1px solid;'></td>
+                    <td style='border: 1px solid;'>" . number_format(($total_sales - $total_return) / $days, 2) . "</td>
+                    <td style='border: 1px solid;'>" . number_format(($total_return) / $days, 2) . "</td>
                 </tr>
             </tfoot>
         </table>";
@@ -413,6 +428,9 @@ if (!empty($prod)) {
                     <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
                     <th style='border: 1px solid #000; width: 8%'>Wartość zwrotów</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena łączna do zapłaty</th>
+                    <th style='border: 1px solid #000; width: 8%'>Dni pracujące</th>
+                    <th style='border: 1px solid #000; width: 8%'>Średnia sprzedaż [na dzień]</th>
+                    <th style='border: 1px solid #000; width: 8%'>Średnia zwrotów [na dzień]</th>
                 </tr>
             </thead>
             <tbody>";
@@ -437,6 +455,9 @@ if (!empty($prod)) {
                 <td style='border: 1px solid;'>" . $prod_v["return"] . "</td>
                 <td style='border: 1px solid;'>" . $prod_v["return_val"] . "</td>
                 <td style='border: 1px solid;'>" . $prod_v["cost"] . " zł</td>
+                <td style='border: 1px solid;'>" . $days . "</td>
+                <td style='border: 1px solid;'>" . number_format(($prod_v["amount"] - $prod_v["return"]) / $days,2) . "</td>
+                <td style='border: 1px solid;'>" . number_format(($prod_v["return"]) / $days,2) . "</td>
             </tr>";
         $week_sales += $prod_v["amount"];
         $week_money += $prod_v["cost"];
@@ -466,6 +487,9 @@ if (!empty($prod)) {
                     <td style='border: 1px solid;'>$week_returns</td>
                     <td style='border: 1px solid;'>$week_retvar zł</td>
                     <td style='border: 1px solid;'>$week_money zł</td>
+                    <td style='border: 1px solid;'></td>
+                    <td style='border: 1px solid;'>" . number_format(($week_sales - $week_returns) / $days,2) . "</td>
+                    <td style='border: 1px solid;'>" . number_format(($week_returns) / $days,2) . "</td>
                 </tr>
             </tfoot>
         </table>";
@@ -485,6 +509,9 @@ if (!empty($prodsku)) {
                     <th style='border: 1px solid #000; width: 8%'>Zwroty</th>
                     <th style='border: 1px solid #000; width: 8%'>Wartość zwrotów</th>
                     <th style='border: 1px solid #000; width: 8%'>Cena łączna do zapłaty</th>
+                    <th style='border: 1px solid #000; width: 8%'>Dni pracujące</th>
+                    <th style='border: 1px solid #000; width: 8%'>Średnia sprzedaż [na dzień]</th>
+                    <th style='border: 1px solid #000; width: 8%'>Średnia zwrotów [na dzień]</th>
                 </tr>
             </thead>
             <tbody>";
@@ -510,9 +537,12 @@ if (!empty($prodsku)) {
                 <td style='border: 1px solid;'>" . $prod_v["return"] . "</td>
                 <td style='border: 1px solid;'>" . $prod_v["return_val"] . " zł</td>
                 <td style='border: 1px solid;'>" . $prod_v["cost"] . " zł</td>
-            </tr>";
-        $week_sales += $prod_v["amount"];
-        $week_money += $prod_v["cost"];
+                <td style='border: 1px solid;'>" . $days . "</td>
+                <td style='border: 1px solid;'>" . number_format(($prod_v["amount"] - $prod_v["return"]) / $days,2) . "</td>
+                <td style='border: 1px solid;'>" . number_format(($prod_v["return"]) / $days,2) . "</td>
+                </tr>";
+                $week_sales += $prod_v["amount"];
+                $week_money += $prod_v["cost"];
         $week_returns += $prod_v["return"];
         $week_retvar += $prod_v["return_val"];
     }
@@ -527,6 +557,9 @@ if (!empty($prodsku)) {
                     <td style='border: 1px solid;'>$week_returns</td>
                     <td style='border: 1px solid;'>$week_retvar zł</td>
                     <td style='border: 1px solid;'>$week_money zł</td>
+                    <td style='border: 1px solid;'></td>
+                    <td style='border: 1px solid;'>" . number_format(($week_sales - $week_returns) / $days,2) . "</td>
+                    <td style='border: 1px solid;'>" . number_format(($week_returns) / $days,2) . "</td>
                 </tr>
             </tfoot>
         </table>";

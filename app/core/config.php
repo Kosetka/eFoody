@@ -142,6 +142,23 @@ define('DELIVERYHOUR',[
     3 => "Popołudnie", 
     //4 => "Wieczór"
 ]);
+
+define('HOLIDAYS',
+[
+    '2024-11-01', // Wszystkich Świętych
+    '2024-11-11', // Narodowe Święto Niepodległości
+    '2024-12-25', // Boże Narodzenie (pierwszy dzień)
+    '2024-12-26', // Boże Narodzenie (drugi dzień)
+    '2025-01-01', // Nowy Rok
+    '2025-01-06', // Trzech Króli
+    '2025-04-20', // Wielkanoc (pierwszy dzień)
+    '2025-04-21', // Wielkanoc (drugi dzień)
+    '2025-05-01', // Święto Pracy
+    '2025-05-03', // Święto Konstytucji 3 Maja
+    '2025-06-08', // Zielone Świątki
+    '2025-06-19', // Boże Ciało
+    '2025-08-15', // Wniebowzięcie NMP
+]);
                                         
 
 /** true means show errors **/

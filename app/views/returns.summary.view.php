@@ -48,6 +48,8 @@
             </div>
             <?php
                     if(isset($_GET["date_from"])) {
+                        $days = 0;
+                        $days = countDaysExcludingSundays($_GET["date_from"], $_GET["date_to"], HOLIDAYS);
                 ?>
             <div class="card mb-4">
                 <div class="card-header">
@@ -64,6 +66,10 @@
                                             <th>Produkty wieczorem</th>
                                             <th>Zwroty</th>
                                             <th>% zwrotów</th>
+                                            <th>Dni pracujące</th>
+                                            <th>Dostarczone produkty</th>
+                                            <th>Średnia sprzedaż [na dzień]</th>
+                                            <th>Średnia zwrotów [na dzień]</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -77,6 +83,9 @@
                                                 $late = 0;
                                                 $return = 0;
                                                 $ret = 0;
+                                                $sumdays = 0;
+                                                $avg_sell = 0;
+                                                $avg_ret = 0;
                                                 foreach($shop_val as $date => $prod_val) {
                                                     $early += $prod_val["delivery_early"];
                                                     $late += $prod_val["delivery_late"];
@@ -87,12 +96,23 @@
                                                 echo '<td>'.$early.'</td>';
                                                 echo '<td>'.$late.'</td>';
                                                 echo '<td>'.$return.'</td>';
+                                                $sumdays = $early + $late;
                                                 if($early <> 0) {
                                                     $ret = $return / $early * 100;
                                                 } else {
                                                     $ret = $return / $late * 100;
                                                 }
                                                 echo '<td>'.number_format($ret, 2).'%</td>';
+                                                echo '<td>'.$days.'</td>';
+                                                echo '<td>'.$sumdays.'</td>';
+                                                if($days > 0) {
+                                                    $avg_sell = number_format(($sumdays - $return) / $days,2);
+                                                }
+                                                if($days > 0) {
+                                                    $avg_ret = number_format(($return) / $days,2);
+                                                }
+                                                echo '<td>'.$avg_sell.'</td>';
+                                                echo '<td>'.$avg_ret.'</td>';
                                                 echo "</tr>";
                                                 
                                             }

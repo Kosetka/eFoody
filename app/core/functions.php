@@ -451,3 +451,25 @@ function getPolishDayName($dayNumber)
     // Zwraca polską nazwę miesiąca na podstawie numeru miesiąca
     return $polishDays[$dayNumber] ?? "Nieznany dzień";
 }
+
+function countDaysExcludingSundays($dateFrom, $dateTo, $holidays = []) {
+    $start = new DateTime($dateFrom);
+    $end = new DateTime($dateTo);
+    $end->modify('+1 day'); // Uwzględnij dzień końcowy w iteracji
+
+    $interval = new DateInterval('P1D'); // 1-dniowy krok
+    $dateRange = new DatePeriod($start, $interval, $end);
+
+    $nonSundayAndHolidayCount = 0;
+
+    foreach ($dateRange as $date) {
+        $formattedDate = $date->format('Y-m-d');
+
+        // Sprawdź, czy dzień nie jest niedzielą i nie jest w tablicy świąt
+        if ($date->format('w') != 0 && !in_array($formattedDate, $holidays)) {
+            $nonSundayAndHolidayCount++;
+        }
+    }
+
+    return $nonSundayAndHolidayCount;
+}
