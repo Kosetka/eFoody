@@ -164,14 +164,14 @@
                     <div class="form-group row m-3" id="open_hour-group" hidden>
                         <label for="open_hour" class="col-sm-2 col-form-label">Godzina otwarcia:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" id="open_hour" name="open_hour" value="07:00">
+                            <input type="time" class="form-control" id="open_hour" name="open_hour" value="06:00">
                         </div>
                     </div>
 
                     <div class="form-group row m-3" id="close_hour-group" hidden>
                         <label for="close_hour" class="col-sm-2 col-form-label">Godzina zamknięcia:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" id="close_hour" name="close_hour" value="18:00">
+                            <input type="time" class="form-control" id="close_hour" name="close_hour" value="20:00">
                         </div>
                     </div>
 
