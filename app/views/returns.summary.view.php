@@ -54,22 +54,24 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h2 class="">Wszystkie sklepy</h2>
-                    <button class="btn btn-primary" onclick="sortTable()">Sortuj po % zwrotów</button>
+                    <button class="btn btn-primary" onclick="sortTable(4)">Sortuj po % zwrotów</button>
+                    <button class="btn btn-primary" onclick="sortTable(7)">Sortuj po średnia sprzedaż</button>
+                    <button class="btn btn-primary" onclick="sortTable(8)">Sortuj po średnia zwrotów</button>
                     <div class="">
                         <div class="form-group row m-3">
                             <div class="col-sm-12">
                                 <table class="table table-bordered" id="orderedProductsTable">
                                     <thead>
                                         <tr>
-                                            <th>Sklep</th>
-                                            <th>Produkty rano</th>
-                                            <th>Produkty wieczorem</th>
-                                            <th>Zwroty</th>
-                                            <th>% zwrotów</th>
-                                            <th>Dni pracujące</th>
-                                            <th>Dostarczone produkty</th>
-                                            <th>Średnia sprzedaż [na dzień]</th>
-                                            <th>Średnia zwrotów [na dzień]</th>
+                                            <th onclick="sortTable(0)">Sklep</th>
+                                            <th onclick="sortTable(1)">Produkty rano</th>
+                                            <th onclick="sortTable(2)">Produkty wieczorem</th>
+                                            <th onclick="sortTable(3)">Zwroty</th>
+                                            <th onclick="sortTable(4)">% zwrotów</th>
+                                            <th onclick="sortTable(5)">Dni pracujące</th>
+                                            <th onclick="sortTable(6)">Dostarczone produkty</th>
+                                            <th onclick="sortTable(7)">Średnia sprzedaż [na dzień]</th>
+                                            <th onclick="sortTable(8)">Średnia zwrotów [na dzień]</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -316,20 +318,20 @@
             
         </main>
         <script>
-    function sortTable() {
+    function sortTable(id) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("orderedProductsTable");
         switching = true;
         // Początkowo ustawiamy sortowanie rosnące
-        dir = "asc"; 
+        dir = "desc"; 
         while (switching) {
             switching = false;
             rows = table.rows;
             // Przechodzimy przez wszystkie wiersze (pomijając pierwszy wiersz z nagłówkami)
             for (i = 1; i < (rows.length - 1); i++) {
                 shouldSwitch = false;
-                x = rows[i].getElementsByTagName("TD")[4]; // Wybieramy piątą kolumnę (indeks 4)
-                y = rows[i + 1].getElementsByTagName("TD")[4];
+                x = rows[i].getElementsByTagName("TD")[id]; // Wybieramy piątą kolumnę (indeks 4)
+                y = rows[i + 1].getElementsByTagName("TD")[id];
                 // Sprawdzamy, czy wartości muszą zostać zamienione
                 if (dir == "asc") {
                     if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
@@ -350,8 +352,8 @@
                 switchcount++;
             } else {
                 // Jeśli nie było zamiany i sortowanie jest rosnące, zmieniamy kierunek na malejące
-                if (switchcount == 0 && dir == "asc") {
-                    dir = "desc";
+                if (switchcount == 0 && dir == "desc") {
+                    dir = "asc";
                     switching = true;
                 }
             }
