@@ -147,10 +147,6 @@ define('HOLIDAYS',
 [
     '2024-11-01', // Wszystkich Świętych
     '2024-11-11', // Narodowe Święto Niepodległości
-    '2024-12-16', // wolne
-    '2024-12-17', // wolne
-    '2024-12-18', // wolne
-    '2024-12-19', // wolne
     '2024-12-20', // wolne
     '2024-12-21', // wolne
     '2024-12-22', // wolne
