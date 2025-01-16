@@ -466,7 +466,7 @@ function countDaysExcludingSundays($dateFrom, $dateTo, $holidays = []) {
         $formattedDate = $date->format('Y-m-d');
 
         // Sprawdź, czy dzień nie jest niedzielą i nie jest w tablicy świąt
-        if ($date->format('w') != 0 && !in_array($formattedDate, $holidays)) {
+        if ($date->format('w') != 0 && $date->format('w') != 6 && !in_array($formattedDate, $holidays)) {
             $nonSundayAndHolidayCount++;
         }
     }

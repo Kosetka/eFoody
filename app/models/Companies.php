@@ -38,7 +38,8 @@ class Companies
         'delivery_hour',
         'exclude',
         'open_hour',
-        'close_hour'
+        'close_hour',
+        'strong_weekend'
     ];
 
     public function validate($data)
