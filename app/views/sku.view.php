@@ -17,7 +17,8 @@
                                 <tr>
                                     <th scope="col">Nazwa</th>
                                     <th scope="col">Pełne SKU</th>
-                                    <th scope="col">Cena sprzedaży do sklepów</th>
+                                    <th scope="col">Cena sprzedaży do sklepów (zmienna)</th>
+                                    <th scope="col">Cena sprzedaży do sklepów (stała)</th>
                                     <th scope="col">Akcje</th>
                                 </tr>
                             </thead>
@@ -33,8 +34,14 @@
                                         } else {
                                             echo "<td></td>";
                                         }
+                                        if($value->pricefixed <> "") {
+                                            echo "<td>".number_format($value->pricefixed,2)." zł</td>";
+                                        } else {
+                                            echo "<td></td>";
+                                        }
                                     if(strlen($value->full_type) > 1) {
-                                        echo "<td><a class='btn btn-info' href=' " . ROOT . "/sku/show/$value->id' role='button'>Pokaż listę</a></td>";
+                                        echo "<td><a class='btn btn-info' href=' " . ROOT . "/sku/show/$value->id' role='button'>Pokaż listę</a> ";
+                                        echo "<a class='btn btn-info' href=' " . ROOT . "/sku/edit/$value->id' role='button'>Edytuj</a></td>";
                                         //echo "<a class='btn btn-success' href=' " . ROOT . "/products/new/$value->full_type' role='button'>Dodaj</a></td>";
                                     } else {
                                         echo "<td></td>";

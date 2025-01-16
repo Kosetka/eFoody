@@ -42,4 +42,49 @@ class Sku
         }
         $this->view('sku.show', $data);
     }
+
+    public function edit() {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        $id = $URL[2];
+
+        $sku = new Skumodel;
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST" && !empty($_GET)) {
+
+            $s_type = $_POST["type"];
+            $s_name = $_POST["name"];
+            $s_parent = $_POST["parent"];
+            $s_full_type = $_POST["parent"] . "_" . $_POST["type"];
+            $s_priceshops = $_POST["priceshops"];
+            $s_pricefixed = $_POST["pricefixed"];
+            $toUpdate = [
+                "type" => $s_type, 
+                "name" => $s_name, 
+                "parent" => $s_parent, 
+                "full_type" => $s_full_type,
+                "priceshops" => $s_priceshops,
+                "pricefixed" => $s_pricefixed
+            ];
+            $sku->update($id, $toUpdate, "id");
+            $data["success"] = "Aktualizacja danych pomyślna";
+            redirect(path: 'sku');
+        }
+
+        if (!empty($_GET)) {
+            $data["sku"] = $sku->getFullType($id)[0];
+        }
+
+        
+        $data["sku_full"] = $sku->getSku();
+        
+
+
+
+        $this->view('sku.edit', $data);
+    }
 }
