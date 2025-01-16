@@ -209,7 +209,7 @@ foreach ($data["cargo_comp"] as $comp_id => $comp_val) {
                       $group_class = " class='delivery-type" . $company->delivery_hour . " drivers" . $company->guardian . "'";
                     }
                     if (empty($company->open_hour)) {
-                      $company->open_hour = "07:00";
+                      $company->open_hour = "06:00";
                     }
                     if (empty($company->close_hour)) {
                       $company->close_hour = "18:00";
