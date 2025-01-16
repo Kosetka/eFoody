@@ -78,7 +78,7 @@ public function getLatestTwoRecordsPerPair()
     $query = "
         SELECT subquery.*
         FROM (
-            SELECT p.*, c.exclude, c.delivery_hour, pr.sku,
+            SELECT p.*, pr.p_name, pr.first_letter, c.exclude, c.delivery_hour, pr.sku,
                    ROW_NUMBER() OVER (PARTITION BY p.c_id, p.p_id ORDER BY p.date DESC) AS row_num
             FROM $this->table AS p
             LEFT JOIN companies AS c ON p.c_id = c.id

@@ -53,8 +53,11 @@ function generatePage($prod, $prod2, $date, $pdf, $address)
     $text[3] = "Cena za jedn.";
     $text[4] = "Wartość";
     $text_topay = "DO ZAPŁATY";
+    $text_fl = "";
     $offsetX = 6;
     $total_sum = 0;
+
+    
 
     $p_1 = count($prod);
     if ($p_1 <= 5) {
@@ -375,12 +378,25 @@ function generatePage($prod, $prod2, $date, $pdf, $address)
     $height_offset_new = 0;
     $i = 1;
     foreach ($prod2 as $pr2) {
+        $text_fl = "";
+        if(isset($pr2["names"]["name"])) {
+            if($pr2["names"]["name"] <> "") {
+                if (substr($pr2["names"]["name"], -3) === " | ") {
+                    $pr2["names"]["name"] = substr($pr2["names"]["name"], 0, -3);
+                }
+                $text_fl = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $pr2["names"]["name"]);
+            }
+        }
+        //show($pr2);die;
         $name = "";
         $cost = "";
         $amount = "";
         $value = "";
         if (isset($pr2["name"])) {
             $name = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $pr2["name"]);
+            if($text_fl <> "") {
+                $name = $name . ": ". $text_fl;
+            }
         }
         if (isset($pr2["cost"])) {
             $cost = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $pr2["cost"]);

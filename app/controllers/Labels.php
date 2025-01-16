@@ -232,13 +232,23 @@ class Labels
                             $data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["name"] = $sku_list[$sku];
                             $data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["cost"] = $data["sku"][$sku];
                             $data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["empty"] = "";
+
+                            if(!isset($data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["names"]["name"])) {
+                                $data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["names"]["name"] = "";
+                            }
+                            $data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["names"][$cg->p_id] = $cg->first_letter;
+                            if($cg->first_letter <> "") {
+                                $data["cargo_before"][$cg->c_id]["return"]["sku"][$sku]["names"]["name"] .= $cg->first_letter." | ";
+                            }
                         }
                     }
 
                 }
             }
         }
-
+        //show($sku_list);
+        //show($data["cargo_before"][$cg->c_id]["return"]);
+        //show($data["sku"]);die;
 
 
 

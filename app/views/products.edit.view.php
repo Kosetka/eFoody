@@ -50,6 +50,12 @@
                         </div>
                     </div>
                     <div class="form-group row m-3">
+                        <label for="first_letter" class="col-sm-2 col-form-label">Skrót jednoznakowy:</label>
+                        <div class="col-sm-10">
+                            <input type="text" maxlength="2" style="text-transform: uppercase;" class="form-control" id="first_letter" name="first_letter" <?php echo "value = '" . $data['product']->first_letter . "'"; ?>>
+                        </div>
+                    </div>
+                    <div class="form-group row m-3">
                         <label for="vege" class="col-sm-2 col-form-label">VEGE:</label>
                         <div class="col-sm-10">
                             <?php
