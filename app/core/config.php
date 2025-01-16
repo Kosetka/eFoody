@@ -147,10 +147,27 @@ define('HOLIDAYS',
 [
     '2024-11-01', // Wszystkich Świętych
     '2024-11-11', // Narodowe Święto Niepodległości
+    '2024-12-16', // wolne
+    '2024-12-17', // wolne
+    '2024-12-18', // wolne
+    '2024-12-19', // wolne
+    '2024-12-20', // wolne
+    '2024-12-21', // wolne
+    '2024-12-22', // wolne
+    '2024-12-23', // wolne
+    '2024-12-24', // wolne
     '2024-12-25', // Boże Narodzenie (pierwszy dzień)
     '2024-12-26', // Boże Narodzenie (drugi dzień)
+    '2024-12-27', // wolne
+    '2024-12-28', // wolne
+    '2024-12-30', // wolne
+    '2024-12-31', // wolne
     '2025-01-01', // Nowy Rok
+    '2025-01-02', // wolne
+    '2025-01-03', // wolne
+    '2025-01-04', // wolne
     '2025-01-06', // Trzech Króli
+    '2025-01-07', // wolne
     '2025-04-20', // Wielkanoc (pierwszy dzień)
     '2025-04-21', // Wielkanoc (drugi dzień)
     '2025-05-01', // Święto Pracy
