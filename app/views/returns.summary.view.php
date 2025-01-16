@@ -77,8 +77,12 @@
                                         if(isset($data["cargo"])) {
                                             $total = 0;
                                             foreach($data["cargo"] as $shop_id => $shop_val) {
+                                                $f_name = "";
+                                                if($data["shops"][$shop_id]->friendly_name <> "") {
+                                                    $f_name = " (".$data["shops"][$shop_id]->friendly_name.")";
+                                                }
                                                 echo "<tr>";
-                                                echo '<td>'.$data["shops"][$shop_id]->full_name.'</td>';
+                                                echo '<td>'.$data["shops"][$shop_id]->full_name.' '.$f_name.'</td>';
                                                 $early = 0;
                                                 $late = 0;
                                                 $return = 0;
