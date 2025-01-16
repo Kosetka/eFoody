@@ -81,7 +81,16 @@ if ($send == 2) {
                             <input type="date" class="form-control" id="date_to" name="date_to"
                                 value="' . $param2 . '" required>
                         </div>
-                    </div>';
+                    </div>
+                    <div class="form-group row m-3">
+                        <label for="prop" class="col-sm-2 col-form-label">Pokaż propozycje:</label>
+                        <div class="col-sm-4">
+                            <input type="checkbox" class="form-check-input" id="prop" name="prop"
+                                value="1">
+                        </div>
+                    </div>
+                    ';
+
         }
         if ($data["get"]["type"] == "month") {
             $param1 = $data["get"]["param1"];
@@ -141,6 +150,7 @@ if ($send == 2) {
             ?>
         </script>
     </div>
+
     <button class="w-40 btn btn-lg btn-primary" style="margin-bottom: 40px;" type="submit" name="search" value=1>Wyświetl
         raport</button>
     </form>
@@ -171,18 +181,24 @@ if ($data["get"]["type"] == "month") {
 $mess = "";
 
 $prod = [];
-if(isset($_GET["date_from"])) {
+if (isset($_GET["date_from"])) {
     $days = countDaysExcludingSundays($_GET["date_from"], $_GET["date_to"], HOLIDAYS);
 } else {
     $days = 6;
 }
 
+$prop = [];
+
 if (isset($data["cargo_temp"])) {
     foreach ($data["cargo_temp"] as $company_id => $compval) {
+        $f_name = "";
+        if ($data["shops"][$company_id]->friendly_name <> "") {
+            $f_name = " (" . $data["shops"][$company_id]->friendly_name . ")";
+        }
         $mess .= "<table style='border: 1px solid'>
             <thead style='border: 1px solid'>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
-                    <th colspan='12'>Raport sprzedaży do firmy - " . $data["shops"][$company_id]->full_name . " - $dates</th>
+                    <th colspan='12'>Raport sprzedaży do firmy - " . $data["shops"][$company_id]->full_name . " $f_name - $dates</th>
                 </tr>
                 <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
                     <th style='border: 1px solid #000; width: 8%'>Produkt</th>
@@ -201,87 +217,104 @@ if (isset($data["cargo_temp"])) {
         $total_return = 0;
 
         foreach ($compval as $product_id => $prod_date) {
-            $amo = 0;
-            $cost = 0;
-            $cost_last = 0;
-            $tot_amo = 0;
-            $costb = true;
-            $total_cost = 0;
+            //show($product_id);
+            if ($product_id <> "dates") {
+                $amo = 0;
+                $cost = 0;
+                $cost_last = 0;
+                $tot_amo = 0;
+                $costb = true;
+                $total_cost = 0;
 
-            foreach ($prod_date as $key_date => $one_date) {
+                foreach ($prod_date as $key_date => $one_date) {
 
-                $amo += $one_date["amount"];
-                if ($data["shops"][$company_id]->company_type == 2) {
-                    if (isset($one_date["cost_zm"])) {
-                        $cost = $one_date["cost_zm"];
+                    $amo += $one_date["amount"];
+                    if ($data["shops"][$company_id]->company_type == 2) {
+                        if (isset($one_date["cost_zm"])) {
+                            $cost = $one_date["cost_zm"];
+                        } else {
+                            $cost = $one_date["cost"];
+                        }
                     } else {
-                        $cost = $one_date["cost"];
+                        if (isset($one_date["cost_f"])) {
+                            $cost = $one_date["cost_f"];
+                        } else {
+                            $cost = $one_date["cost"];
+                        }
                     }
-                } else {
-                    if (isset($one_date["cost_f"])) {
-                        $cost = $one_date["cost_f"];
-                    } else {
-                        $cost = $one_date["cost"];
+                    if ($costb) {
+                        if ($cost_last == 0) {
+                            $cost_last = $cost;
+                        } else if ($cost_last != $cost) {
+                            $costb = false;
+                        }
                     }
-                }
-                if ($costb) {
-                    if ($cost_last == 0) {
-                        $cost_last = $cost;
-                    } else if ($cost_last != $cost) {
-                        $costb = false;
+                    $day_ret = 0;
+                    if (isset($data["returns"][$company_id][$key_date][$product_id]["amount"])) {
+                        $day_ret = $data["returns"][$company_id][$key_date][$product_id]["amount"];
                     }
+
+                    $tot_amo = ($one_date["amount"] - $day_ret) * $cost;
+                    $total_sales += $one_date["amount"];
+                    $total_money += ($one_date["amount"] - $day_ret) * $cost;
+                    $total_cost += ($one_date["amount"] - $day_ret) * $cost;
                 }
-                $day_ret = 0;
-                if (isset($data["returns"][$company_id][$key_date][$product_id]["amount"])) {
-                    $day_ret = $data["returns"][$company_id][$key_date][$product_id]["amount"];
+                $txtadd = "";
+                if (!$costb) {
+                    $txtadd = "<b>*</b>";
                 }
 
-                $tot_amo = ($one_date["amount"] - $day_ret) * $cost;
-                $total_sales += $one_date["amount"];
-                $total_money += ($one_date["amount"] - $day_ret) * $cost;
-                $total_cost += ($one_date["amount"] - $day_ret) * $cost;
-            }
-            $txtadd = "";
-            if (!$costb) {
-                $txtadd = "<b>*</b>";
-            }
 
+                if ($amo > 0) {
+                    $ret_show = 0;
+                    if (isset($data["returns"][$company_id][$product_id]["amount"])) {
+                        $ret_show = $data["returns"][$company_id][$product_id]["amount"];
+                        $total_return += $ret_show;
+                    }
+                    $days = countDaysExcludingSundays($compval["dates"]["start_date"], $compval["dates"]["stop_date"], HOLIDAYS) + 2;
+                    $mess .= "
+                        <tr style='text-align: center;'>
+                            <td style='border: 1px solid;'>" . $data["fullproducts"][$product_id]["p_name"] . "</td>
+                            <td style='border: 1px solid;'>$amo</td>
+                            <td style='border: 1px solid;'>$ret_show</td>
+                            <td style='border: 1px solid;' title='Gwiazda oznacza zmianę ceny w trakcie wybranej daty, kwota liczy się prawidłowo, jednak wyświetla się najnowsza cena za sztukę.'>$cost_last zł$txtadd</td>
+                            <td style='border: 1px solid;'>" . $total_cost . " zł</td>
+                            <td style='border: 1px solid;'>" . $days . "</td>
+                            <td style='border: 1px solid;'>" . number_format(($amo - $ret_show) / $days, 2) . "</td>
+                            <td style='border: 1px solid;'>" . number_format(($ret_show) / $days, 2) . "</td>
+                        </tr>";
+                    if (!isset($prod[$product_id]["amount"])) {
+                        $prod[$product_id]["amount"] = 0;
+                    }
+                    $prod[$product_id]["amount"] += $amo;
 
-            if ($amo > 0) {
-                $ret_show = 0;
-                if (isset($data["returns"][$company_id][$product_id]["amount"])) {
-                    $ret_show = $data["returns"][$company_id][$product_id]["amount"];
-                    $total_return += $ret_show;
-                }
-                $mess .= "
-                    <tr style='text-align: center;'>
-                        <td style='border: 1px solid;'>" . $data["fullproducts"][$product_id]["p_name"] . "</td>
-                        <td style='border: 1px solid;'>$amo</td>
-                        <td style='border: 1px solid;'>$ret_show</td>
-                        <td style='border: 1px solid;' title='Gwiazda oznacza zmianę ceny w trakcie wybranej daty, kwota liczy się prawidłowo, jednak wyświetla się najnowsza cena za sztukę.'>$cost_last zł$txtadd</td>
-                        <td style='border: 1px solid;'>" . $total_cost . " zł</td>
-                        <td style='border: 1px solid;'>" . $days . "</td>
-                        <td style='border: 1px solid;'>" . number_format(($amo - $ret_show) / $days, 2) . "</td>
-                        <td style='border: 1px solid;'>" . number_format(($ret_show) / $days, 2) . "</td>
-                    </tr>";
-                if (!isset($prod[$product_id]["amount"])) {
-                    $prod[$product_id]["amount"] = 0;
-                }
-                $prod[$product_id]["amount"] += $amo;
+                    if (!isset($prod[$product_id]["return"])) {
+                        $prod[$product_id]["return"] = 0;
+                    }
+                    $prod[$product_id]["return"] += $ret_show;
 
-                if (!isset($prod[$product_id]["return"])) {
-                    $prod[$product_id]["return"] = 0;
+                    if (!isset($prod[$product_id]["cost"])) {
+                        $prod[$product_id]["cost"] = 0;
+                    }
+                    $prod[$product_id]["cost"] += $total_cost;
+                    if (!isset($prod[$product_id]["return_val"])) {
+                        $prod[$product_id]["return_val"] = 0;
+                    }
+                    $prod[$product_id]["return_val"] += $ret_show * $cost_last;
+                    $prop[$company_id]["id"] = $company_id;
+                    $prop[$company_id]["name"] = $data["shops"][$company_id]->full_name . " " . $f_name;
+                    $prop[$company_id]["delivery"] = $compval["dates"]["unique"];
+                    $prop[$company_id]["products"][$product_id]["id"] = $product_id;
+                    $prop[$company_id]["products"][$product_id]["name"] = $data["fullproducts"][$product_id]["p_name"];
+                    $prop[$company_id]["products"][$product_id]["amount"] = $amo;
+                    $prop[$company_id]["products"][$product_id]["returns"] = $ret_show;
+                    $prop[$company_id]["products"][$product_id]["cost"] = $cost_last;
+                    $prop[$company_id]["products"][$product_id]["total_cost"] = $total_cost;
+                    $prop[$company_id]["products"][$product_id]["daysopen"] = $days;
+                    $prop[$company_id]["products"][$product_id]["avgsell"] = number_format(($amo - $ret_show) / $days, 2);
+                    $prop[$company_id]["products"][$product_id]["avgret"] = number_format(($ret_show) / $days, 2);
                 }
-                $prod[$product_id]["return"] += $ret_show;
 
-                if (!isset($prod[$product_id]["cost"])) {
-                    $prod[$product_id]["cost"] = 0;
-                }
-                $prod[$product_id]["cost"] += $total_cost;
-                if (!isset($prod[$product_id]["return_val"])) {
-                    $prod[$product_id]["return_val"] = 0;
-                }
-                $prod[$product_id]["return_val"] += $ret_show * $cost_last;
             }
         }
         $mess .= "
@@ -304,9 +337,13 @@ if (isset($data["cargo_temp"])) {
 
 }
 
-
 $mess2 = "";
 setlocale(LC_TIME, 'pl_PL.UTF-8');
+if (isset($_GET["date_from"])) {
+    $days = countDaysExcludingSundays($_GET["date_from"], $_GET["date_to"], HOLIDAYS);
+} else {
+    $days = 6;
+}
 if (isset($data["cargo_temp2"])) {
     foreach ($data["cargo_temp2"] as $company_id => $compval) {
         $mess2 .= "<table style='border: 1px solid'>
@@ -415,7 +452,14 @@ if (isset($data["cargo_temp2"])) {
 
 $prodsku = [];
 
+
+
 $mess3 = "";
+if (isset($_GET["date_from"])) {
+    $days = countDaysExcludingSundays($_GET["date_from"], $_GET["date_to"], HOLIDAYS);
+} else {
+    $days = 6;
+}
 if (!empty($prod)) {
     $mess3 .= "<table style='border: 1px solid'>
             <thead style='border: 1px solid'>
@@ -456,8 +500,8 @@ if (!empty($prod)) {
                 <td style='border: 1px solid;'>" . $prod_v["return_val"] . "</td>
                 <td style='border: 1px solid;'>" . $prod_v["cost"] . " zł</td>
                 <td style='border: 1px solid;'>" . $days . "</td>
-                <td style='border: 1px solid;'>" . number_format(($prod_v["amount"] - $prod_v["return"]) / $days,2) . "</td>
-                <td style='border: 1px solid;'>" . number_format(($prod_v["return"]) / $days,2) . "</td>
+                <td style='border: 1px solid;'>" . number_format(($prod_v["amount"] - $prod_v["return"]) / $days, 2) . "</td>
+                <td style='border: 1px solid;'>" . number_format(($prod_v["return"]) / $days, 2) . "</td>
             </tr>";
         $week_sales += $prod_v["amount"];
         $week_money += $prod_v["cost"];
@@ -475,6 +519,8 @@ if (!empty($prod)) {
         $prodsku[$sku]["cost"] += $prod_v["cost"];
         $prodsku[$sku]["return"] += $prod_v["return"];
         $prodsku[$sku]["return_val"] += $prod_v["return_val"];
+
+
     }
 
 
@@ -488,8 +534,8 @@ if (!empty($prod)) {
                     <td style='border: 1px solid;'>$week_retvar zł</td>
                     <td style='border: 1px solid;'>$week_money zł</td>
                     <td style='border: 1px solid;'></td>
-                    <td style='border: 1px solid;'>" . number_format(($week_sales - $week_returns) / $days,2) . "</td>
-                    <td style='border: 1px solid;'>" . number_format(($week_returns) / $days,2) . "</td>
+                    <td style='border: 1px solid;'>" . number_format(($week_sales - $week_returns) / $days, 2) . "</td>
+                    <td style='border: 1px solid;'>" . number_format(($week_returns) / $days, 2) . "</td>
                 </tr>
             </tfoot>
         </table>";
@@ -538,11 +584,11 @@ if (!empty($prodsku)) {
                 <td style='border: 1px solid;'>" . $prod_v["return_val"] . " zł</td>
                 <td style='border: 1px solid;'>" . $prod_v["cost"] . " zł</td>
                 <td style='border: 1px solid;'>" . $days . "</td>
-                <td style='border: 1px solid;'>" . number_format(($prod_v["amount"] - $prod_v["return"]) / $days,2) . "</td>
-                <td style='border: 1px solid;'>" . number_format(($prod_v["return"]) / $days,2) . "</td>
+                <td style='border: 1px solid;'>" . number_format(($prod_v["amount"] - $prod_v["return"]) / $days, 2) . "</td>
+                <td style='border: 1px solid;'>" . number_format(($prod_v["return"]) / $days, 2) . "</td>
                 </tr>";
-                $week_sales += $prod_v["amount"];
-                $week_money += $prod_v["cost"];
+        $week_sales += $prod_v["amount"];
+        $week_money += $prod_v["cost"];
         $week_returns += $prod_v["return"];
         $week_retvar += $prod_v["return_val"];
     }
@@ -558,37 +604,143 @@ if (!empty($prodsku)) {
                     <td style='border: 1px solid;'>$week_retvar zł</td>
                     <td style='border: 1px solid;'>$week_money zł</td>
                     <td style='border: 1px solid;'></td>
-                    <td style='border: 1px solid;'>" . number_format(($week_sales - $week_returns) / $days,2) . "</td>
-                    <td style='border: 1px solid;'>" . number_format(($week_returns) / $days,2) . "</td>
+                    <td style='border: 1px solid;'>" . number_format(($week_sales - $week_returns) / $days, 2) . "</td>
+                    <td style='border: 1px solid;'>" . number_format(($week_returns) / $days, 2) . "</td>
                 </tr>
             </tfoot>
         </table>";
     $mess4 .= "</br>";
 }
+$mess5 = "";
+if (!empty($prop)) {
+    foreach ($prop as $company_id => $c_data) {
+        $mess5 .= "<table style='border: 1px solid'>
+                <thead style='border: 1px solid'>
+                    <tr style='background-color: #4a4a4a; color: #e6e6e6; font-size: 26px'>
+                        <th colspan='14'>Propozycja sprzedaży do sklepu: " . $c_data["name"] . "</th>
+                    </tr>
+                    <tr rowspan='2' style='background-color: #4a4a4a; color: #e6e6e6;'>
+                        <th rowspan='2' style='border: 1px solid #000; width: 8%'>Produkt</th>
+                        <th rowspan='2' style='border: 1px solid #000; width: 8%'>Ilość dostarczona</th>
+                        <th rowspan='2' style='border: 1px solid #000; width: 8%'>Zwroty</th>
+                        <th rowspan='2' style='border: 1px solid #000; width: 8%'>Dni pracujące (dni dostaw)</th>
+                        <th rowspan='2' style='border: 1px solid #000; width: 8%'>Średnia sprzedaż [na dzień]</th>
+                        <th rowspan='2' style='border: 1px solid #000; width: 8%'>Średnia zwrotów [na dzień]</th>
+                        <th colspan='2' style='border: 1px solid #000; width: 8%'>Propozycja na 2 dni</th>
+                        <th colspan='2' style='border: 1px solid #000; width: 8%'>Propozycja na 3 dni</th>
+                    </tr>
+                    <tr style='background-color: #4a4a4a; color: #e6e6e6;'>
+                        <th style='border: 1px solid #000; width: 8%'>Ilość</th>
+                        <th style='border: 1px solid #000; width: 8%'>Wartość</th>
+                        <th style='border: 1px solid #000; width: 8%'>Ilość</th>
+                        <th style='border: 1px solid #000; width: 8%'>Wartość</th>
+                    </tr>
+                </thead>
+                <tbody>";
+        $total_sales = 0;
+        $total_money = 0;
+
+        $week_sales = 0;
+        $week_money = 0;
+        $week_returns = 0;
+        $week_retvar = 0;
+        $week_prop2 = 0;
+        $week_prop2_avg = 0;
+        $week_prop3 = 0;
+        $week_prop3_avg = 0;
+        $delivery_num = 0;
+
+        foreach ($c_data["products"] as $prod_k => $prod_v) {
+            $delivery_num = $prop[$company_id]["delivery"];
+            $prop2 = $prod_v["avgsell"] * 2;
+            $prop2_avg = round($prop2);
+            $prop3 = $prod_v["avgsell"] * 3;
+            $prop3_avg = round($prop3);
+            $val2 = number_format($prod_v["cost"] * $prop2_avg, 2);
+            $val3 = number_format($prod_v["cost"] * $prop3_avg, 2);
+
+
+            $mess5 .= "
+                <tr style='text-align: center;'>
+                    <td style='border: 1px solid;'>" . $prod_v["name"] . "</td>
+                    <td style='border: 1px solid;'>" . $prod_v["amount"] . "</td>
+                    <td style='border: 1px solid;'>" . $prod_v["returns"] . "</td>
+                    <td style='border: 1px solid;'>" . $prod_v["daysopen"] . " ($delivery_num)</td>
+                    <td style='border: 1px solid;'>" . $prod_v["avgsell"] . "</td>
+                    <td style='border: 1px solid;'>" . $prod_v["avgret"] . "</td>
+                    <td style='border: 1px solid;'><b>" . $prop2_avg . "</b> ($prop2)</td>
+                    <td style='border: 1px solid;'>" . $val2 . " zł</td>
+                    <td style='border: 1px solid;'><b>" . $prop3_avg . "</b> ($prop3)</td>
+                    <td style='border: 1px solid;'>" . $val3 . " zł</td>
+                    </tr>";
+            $week_sales += $prod_v["amount"];
+            $week_returns += $prod_v["returns"];
+            $week_prop2 += $val2;
+            $week_prop2_avg += $prop2_avg;
+            $week_prop3 += $val3;
+            $week_prop3_avg += $prop3_avg;
+        }
+
+
+        $mess5 .= "
+                </tbody>
+                <tfoot>
+                    <tr style='background-color: #e6e6e6; font-weight: bold; text-align: center;'>
+                        <td style='border: 1px solid;'>TOTAL</td>
+                        <td style='border: 1px solid;'>$week_sales</td>
+                        <td style='border: 1px solid;'>$week_returns</td>
+                        <td style='border: 1px solid;'></td>
+                        <td style='border: 1px solid;'></td>
+                        <td style='border: 1px solid;'></td>
+                        <td style='border: 1px solid;'>$week_prop2_avg</td>
+                        <td style='border: 1px solid;'>$week_prop2 zł</td>
+                        <td style='border: 1px solid;'>$week_prop3_avg</td>
+                        <td style='border: 1px solid;'>$week_prop3 zł</td>
+                    </tr>
+                </tfoot>
+            </table>";
+        $mess5 .= "</br>";
+    }
+}
 
 
 
 
-echo $mess;
 
-echo "</br></br>";
-echo "<h2>Szczegółowe dane o sprzedaży</h2>";
-echo "</br></br>";
-echo $mess2;
+if (isset($_GET["prop"])) {
+    echo "</br></br>";
+    echo "<h2>Propozycja ilości dla sklepów</h2>";
+    echo "</br></br>";
+    echo $mess5;
 
-echo "</br></br>";
-echo "<h2>Szczegółowe dane o sprzedaży produktów</h2>";
-echo "</br></br>";
-echo $mess3;
+    //show($prop);
+    die;
 
-echo "</br></br>";
-echo "<h2>Szczegółowe dane o sprzedaży produktów - pogrupowane</h2>";
-echo "</br></br>";
-echo $mess4;
+} else {
+    echo $mess;
 
-//show($prod);
+    /*echo "</br></br>";
+    echo "<h2>Szczegółowe dane o sprzedaży</h2>";
+    echo "</br></br>";
+    echo $mess2;*/
 
-//tu dodać szczegółowy, czyli po firmie i każdy dzień osobno
+    echo "</br></br>";
+    echo "<h2>Szczegółowe dane o sprzedaży produktów</h2>";
+    echo "</br></br>";
+    echo $mess3;
+
+    echo "</br></br>";
+    echo "<h2>Szczegółowe dane o sprzedaży produktów - pogrupowane</h2>";
+    echo "</br></br>";
+    echo $mess4;
+
+    //show($prod);
+
+    //tu dodać szczegółowy, czyli po firmie i każdy dzień osobno
+}
+
+
+
 ?>
 
 

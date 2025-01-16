@@ -804,7 +804,34 @@ class Reports
             foreach ($cargo->getAllFullProductsDateAndShops($date_from, $date_to) as $key => $value) {
                 $day = substr($value->date, 0, 10);
                 $data["cargo_temp"][$value->c_id][$value->p_id][$day]["amount"] = $value->amount;
+
                 $data["cargo_temp2"][$value->c_id][$day][$value->p_id]["amount"] = $value->amount;
+
+                if (!isset($data["cargo_temp"][$value->c_id]["dates"]["start_date"])) {
+                    $data["cargo_temp"][$value->c_id]["dates"]["start_date"] = $day;
+                }
+                if (!isset($data["cargo_temp"][$value->c_id]["dates"]["stop_date"])) {
+                    $data["cargo_temp"][$value->c_id]["dates"]["stop_date"] = $day;
+                }
+                if ($day < $data["cargo_temp"][$value->c_id]["dates"]["start_date"]) {
+                    $data["cargo_temp"][$value->c_id]["dates"]["start_date"] = $day;
+                }
+                if ($day > $data["cargo_temp"][$value->c_id]["dates"]["stop_date"]) {
+                    $data["cargo_temp"][$value->c_id]["dates"]["stop_date"] = $day;
+                }
+                if (!isset($data["cargo_temp"][$value->c_id]["dates"]["unique"])) {
+                    $data["cargo_temp"][$value->c_id]["dates"]["unique"] = 0;
+                }
+
+                if (!isset($data["cargo_temp"][$value->c_id]["dates"]["dates"][$day])) {
+                    $data["cargo_temp"][$value->c_id]["dates"]["dates"][$day] = 0;
+                    $data["cargo_temp"][$value->c_id]["dates"]["unique"]++;
+                }
+                $data["cargo_temp"][$value->c_id]["dates"]["dates"][$day] = $day;
+
+
+
+
                 if (isset($data["prices"][$value->p_id])) {
                     $is_price = false;
                     foreach ($data["prices"][$value->p_id] as $k => $v) {
@@ -852,6 +879,9 @@ class Reports
         foreach ($products_list->getAllFullProducts() as $key => $value) {
             $data["fullproducts"][$value->id] = (array) $value;
         }
+
+        //show($data["cargo_temp"]);
+        //die;
 
         $this->view('salescompanies.total', $data);
     }
@@ -1204,7 +1234,7 @@ class Reports
                 $type = $URL[3];
             }
             if (isset($URL[4])) {
-                if($URL[4]=="ours") {
+                if ($URL[4] == "ours") {
                     $data["only_ours"] = true;
                 }
             }
@@ -1335,7 +1365,7 @@ class Reports
         $data["companies"] = [];
         $data["companies_new"] = [];
         $data["company_old"] = [];
-        if(!$data["only_ours"]) {
+        if (!$data["only_ours"]) {
             if (!empty($companies->getCompaniesVisitedOrNull($date_from, $date_to))) {
                 foreach ($companies->getCompaniesVisitedOrNull($date_from, $date_to) as $key => $value) {
                     $data["companies"][$value->id] = $value;
@@ -1365,8 +1395,8 @@ class Reports
 
         $api_key = new Apitokens();
         $data["api_key"] = $api_key->getToken("google_maps");
-        
-//show($data["drivers"]);die;
+
+        //show($data["drivers"]);die;
         //show($data);die;
 
         $this->view('visit.total', $data);
@@ -1673,27 +1703,27 @@ class Reports
         }
         $data["cargo_temp4"] = [];
         $data["cargo_temp5"] = [];
-        foreach($data["cargo_temp3"] as $day => $company) {
-            foreach($company as $c_id => $prod) {
+        foreach ($data["cargo_temp3"] as $day => $company) {
+            foreach ($company as $c_id => $prod) {
                 //show($prod);
-                foreach($prod as $d) {
-                    if(!isset($data["cargo_temp4"][$day]["amount"])) {
+                foreach ($prod as $d) {
+                    if (!isset($data["cargo_temp4"][$day]["amount"])) {
                         $data["cargo_temp4"][$day]["amount"] = 0;
                     }
-                    if(!isset($data["cargo_temp4"][$day]["cost"])) {
+                    if (!isset($data["cargo_temp4"][$day]["cost"])) {
                         $data["cargo_temp4"][$day]["cost"] = 0;
                     }
-                    if(!isset($data["cargo_temp5"][$c_id][$day]["amount"])) {
+                    if (!isset($data["cargo_temp5"][$c_id][$day]["amount"])) {
                         $data["cargo_temp5"][$c_id][$day]["amount"] = 0;
                     }
-                    if(!isset($data["cargo_temp5"][$c_id][$day]["cost"])) {
+                    if (!isset($data["cargo_temp5"][$c_id][$day]["cost"])) {
                         $data["cargo_temp5"][$c_id][$day]["cost"] = 0;
                     }
                     $data["cargo_temp4"][$day]["amount"] += $d["amount"];
                     $data["cargo_temp5"][$c_id][$day]["amount"] += $d["amount"];
-                    if($d["amount"] > 0) {
-                        if($data["shops"][$c_id]->company_type == 2) {
-                            if(!isset($d["cost_zm"])) {
+                    if ($d["amount"] > 0) {
+                        if ($data["shops"][$c_id]->company_type == 2) {
+                            if (!isset($d["cost_zm"])) {
                                 $d["cost_zm"] = $d["cost"];//TU MOŻE COŚ ŹLE LICZYĆ
                             }
                             $data["cargo_temp4"][$day]["cost"] += $d["amount"] * $d["cost_zm"];
@@ -1704,26 +1734,26 @@ class Reports
                         }
                     }
                 }
-                if(isset($data["returns_day"][$day][$c_id])) {
-                    foreach($data["returns_day"][$day][$c_id] as $pret_k => $pret_v) {
-                        if(!isset($data["cargo_temp4"][$day]["return"])) {
+                if (isset($data["returns_day"][$day][$c_id])) {
+                    foreach ($data["returns_day"][$day][$c_id] as $pret_k => $pret_v) {
+                        if (!isset($data["cargo_temp4"][$day]["return"])) {
                             $data["cargo_temp4"][$day]["return"] = 0;
                         }
-                        if(!isset($data["cargo_temp4"][$day]["return_cost"])) {
+                        if (!isset($data["cargo_temp4"][$day]["return_cost"])) {
                             $data["cargo_temp4"][$day]["return_cost"] = 0;
                         }
-                        if(!isset($data["cargo_temp5"][$c_id][$day]["return"])) {
+                        if (!isset($data["cargo_temp5"][$c_id][$day]["return"])) {
                             $data["cargo_temp5"][$c_id][$day]["return"] = 0;
                         }
-                        if(!isset($data["cargo_temp5"][$c_id][$day]["return_cost"])) {
+                        if (!isset($data["cargo_temp5"][$c_id][$day]["return_cost"])) {
                             $data["cargo_temp5"][$c_id][$day]["return_cost"] = 0;
                         }
 
                         $data["cargo_temp4"][$day]["return"] += $pret_v["amount"];
                         $data["cargo_temp5"][$c_id][$day]["return"] += $pret_v["amount"];
 
-                        if($data["shops"][$c_id]->company_type == 2) {
-                            if(!isset($prod[$pret_k]["cost_zm"])) {
+                        if ($data["shops"][$c_id]->company_type == 2) {
+                            if (!isset($prod[$pret_k]["cost_zm"])) {
                                 $prod[$pret_k]["cost_zm"] = $prod[$pret_k]["cost"];//TU MOŻE COŚ ŹLE LICZYĆ
                             }
                             $data["cargo_temp4"][$day]["return_cost"] += $pret_v["amount"] * $prod[$pret_k]["cost_zm"];
@@ -1736,11 +1766,11 @@ class Reports
                 }
             }
         }
-//die;
+
         //show($data["cargo_temp4"]);die;
 
 
-        
+
 
         $products_list = new ProductsModel();
         foreach ($products_list->getAllFullProducts() as $key => $value) {
