@@ -157,6 +157,19 @@
                                     <input type="checkbox" class="form-check-input" id="moved" name="moved" value="1" <?=$blocked;?> <?php if($edit) {if($data["comp"]->moved == 1) {echo " checked"; }}?>>
                                 </div>
                             </div>
+                            <div id="div-moved5" class="form-group row m-3" id="open_hour-group" style="display: none;">
+                                <label for="open_hour" class="col-sm-2 col-form-label">Godzina otwarcia:</label>
+                                <div class="col-sm-10">
+                                    <input required type="time" class="form-control" id="open_hour" name="open_hour" value="07:00">
+                                </div>
+                            </div>
+
+                    <div id="div-moved4" class="form-group row m-3" id="close_hour-group" style="display: none;">
+                        <label for="close_hour" class="col-sm-2 col-form-label">Godzina zamknięcia:</label>
+                        <div class="col-sm-10">
+                            <input required type="time" class="form-control" id="close_hour" name="close_hour" value="18:00">
+                        </div>
+                    </div>
 
 
                             <div id="div-moved2" class="form-group row m-3" style="display: none;" <?=$hidden;?>>
@@ -211,6 +224,8 @@
                                 const divMoved = document.getElementById("div-moved");
                                 const divMoved2 = document.getElementById("div-moved2");
                                 const divMoved3 = document.getElementById("div-moved3");
+                                const divMoved4 = document.getElementById("div-moved4");
+                                const divMoved5 = document.getElementById("div-moved5");
                                 const divToDelete = document.getElementById("div-to-delete");
 
                                 function handleStatusChange() {
@@ -221,6 +236,8 @@
                                         divMoved.style.display = "flex";
                                         divMoved2.style.display = "flex";
                                         divMoved3.style.display = "flex";
+                                        divMoved4.style.display = "flex";
+                                        divMoved5.style.display = "flex";
                                         divToDelete.style.display = "none";
                                     } 
                                     // Jeśli status jest inny niż 0 lub 3, pokaż "do usunięcia", ukryj "Zamień na sklep"
@@ -228,6 +245,8 @@
                                         divMoved.style.display = "none";
                                         divMoved2.style.display = "none";
                                         divMoved3.style.display = "none";
+                                        divMoved4.style.display = "none";
+                                        divMoved5.style.display = "none";
                                         divToDelete.style.display = "flex";
                                     } 
                                     // W przeciwnym razie ukryj oba
@@ -235,6 +254,8 @@
                                         divMoved.style.display = "none";
                                         divMoved2.style.display = "none";
                                         divMoved3.style.display = "none";
+                                        divMoved4.style.display = "none";
+                                        divMoved5.style.display = "none";
                                         divToDelete.style.display = "none";
                                     }
                                 }

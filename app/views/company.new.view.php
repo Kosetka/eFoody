@@ -73,7 +73,8 @@
                                 <input type="text" class="form-control" id="phone_number" name="phone_numbers[]">
                             </div>
                             <div class="col-sm-2">
-                                <button type="button" class="btn btn-secondary" onclick="addPhoneNumberField()">+</button>
+                                <button type="button" class="btn btn-secondary"
+                                    onclick="addPhoneNumberField()">+</button>
                             </div>
                         </div>
                     </div>
@@ -160,6 +161,20 @@
                         </div>
                     </div>
 
+                    <div class="form-group row m-3" id="open_hour-group" hidden>
+                        <label for="open_hour" class="col-sm-2 col-form-label">Godzina otwarcia:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="open_hour" name="open_hour" value="07:00">
+                        </div>
+                    </div>
+
+                    <div class="form-group row m-3" id="close_hour-group" hidden>
+                        <label for="close_hour" class="col-sm-2 col-form-label">Godzina zamknięcia:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="close_hour" name="close_hour" value="18:00">
+                        </div>
+                    </div>
+
                     <div class="form-group row m-3">
                         <label for="description" class="col-sm-2 col-form-label">Notatki:</label>
                         <div class="col-sm-10">
@@ -221,14 +236,20 @@
                 // Pobierz wszystkie radio buttony dla 'Rodzaj firmy'
                 const companyTypeRadios = document.querySelectorAll('.company-type-radio');
                 const deliveryHourGroup = document.getElementById('delivery-hour-group');
+                const openHourGroup = document.getElementById('open_hour-group');
+                const closeHourGroup = document.getElementById('close_hour-group');
 
                 companyTypeRadios.forEach(radio => {
                     radio.addEventListener('change', function () {
                         // Jeśli wybrana wartość to 2 lub 3, usuń 'hidden', w przeciwnym wypadku ukryj
                         if (this.value === '2' || this.value === '3') {
                             deliveryHourGroup.hidden = false;
+                            openHourGroup.hidden = false;
+                            closeHourGroup.hidden = false;
                         } else {
                             deliveryHourGroup.hidden = true;
+                            openHourGroup.hidden = true;
+                            closeHourGroup.hidden = true;
                         }
                     });
                 });
