@@ -24,7 +24,8 @@ class ProductsModel
         'friendly_name',
         'vege',
         'show_prod_date',
-        'first_letter'
+        'first_letter',
+        'ratio'
     ];
 
     public function validate($data)

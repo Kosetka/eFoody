@@ -26,6 +26,23 @@ class Productalergens
         $query = "select * from $this->table WHERE a_id = $id;";
         return $this->query($query);
     }
+    public function getByAlergenAndNames($id)
+    {
+        $query = "
+            SELECT 
+                product_alergens.*, 
+                alergens.*
+            FROM 
+                $this->table AS product_alergens
+            INNER JOIN 
+                alergens 
+            ON 
+                product_alergens.a_id = alergens.id
+            WHERE 
+                product_alergens.a_id = $id;
+        ";
+        return $this->query($query);
+    }
     public function getByProduct($id)
     {
         $query = "select * from $this->table WHERE p_id = $id;";
