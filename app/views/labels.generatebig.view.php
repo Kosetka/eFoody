@@ -2,19 +2,23 @@
     require(ROOT_PLUGINS.'fpdf/fpdf.php');//require('fpdf/fpdf.php');
     include(ROOT_PLUGINS.'phpqrcode/qrlib.php');//include('phpqrcode/qrlib.php');
 
+
+
+
+
     $prod_name = $data["prod"]["name"];
     $full_products = strtolower($data["prod"]["full_products"]);
 
     $ingr = "Składniki: ";
-    $txt = "Lista alergenów: ";
+    $txt = "*Lista alergenów: ";
     $txt_ale = strtolower($data["prod"]["alergen"]);
     
-    if (strlen($prod_name) > 101) {
-        $prod_name = substr($prod_name, 0, 101) . '...';
+    if (strlen($prod_name) > 60) {
+        $prod_name = substr($prod_name, 0, 60) . '...';
     }
     $prod = "Data produkcji: ";
     $prod_d = $data["prod"]["date_prod"];
-    $term = "Należy spożyć do: ";
+    $term = "Spożyć do: ";
     $term_d = $data["prod"]["date_term"];
     $netto = "Zawartość netto: ";
     $netto_g = $data["prod"]["netto"];
@@ -66,7 +70,12 @@
     $pdf->AddPage(); 
 
     $pdf->AddFont('Arialpl', '', 'Arialpl.php','font');
-    $pdf->SetFont('Arialpl', '', 12);
+    $pdf->AddFont('Roboto', '', 'Roboto-Regular.php');
+    $pdf->AddFont('Roboto', 'B', 'Roboto-Bold.php');
+
+
+
+    $pdf->SetFont('Roboto', '', 12);
 
     $imageWidth = 24;
     $imageHeight = 24;
@@ -78,16 +87,16 @@
     }
 
     //nazwa
-    $pdf->SetFont('Arialpl', '', 16);
-    $pdf->SetXY(3, 5); 
-    $pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
-    $pdf->SetXY(3, 5); 
-    $pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
-    $pdf->SetXY(3, 5); 
-    $pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
+    $pdf->SetFont('Roboto', '', 16);
+    $pdf->SetXY(3, 3); 
+    $pdf->MultiCell(96, 6, $prod_name, 0, 1);
+    $pdf->SetXY(3, 3); 
+    $pdf->MultiCell(96, 6, $prod_name, 0, 1);
+    $pdf->SetXY(3, 3); 
+    $pdf->MultiCell(96, 6, $prod_name, 0, 1);
 
-    //składniki
-    $pdf->SetFont('Arialpl', '', 9);
+    //składniki   
+    $pdf->SetFont('Roboto', '', 9);
     $pdf->SetXY(3, 18); 
     $pdf->MultiCell(96, 4, $ingr.$full_products, 0, 1);
     $pdf->SetXY(3, 18); 
@@ -96,7 +105,7 @@
     $pdf->MultiCell(96, 4, $ingr, 0, 1);
 
     //alergeny
-    $pdf->SetFont('Arialpl', '', 9);
+    $pdf->SetFont('Roboto', '', 9);
     $pdf->SetXY(3, 40); 
     $pdf->MultiCell(96, 4, $txt.$txt_ale, 0, 1);
     $pdf->SetXY(3, 40); 
@@ -105,7 +114,7 @@
     $pdf->MultiCell(96, 4, $txt, 0, 1);
 
     //netto i daty
-    $pdf->SetFont('Arialpl', '', 9);
+    $pdf->SetFont('Roboto', '', 9);
     $pdf->SetXY(3, 55); 
     $pdf->MultiCell(96, 4, $netto.$netto_g."g", 0, 1);
     $pdf->SetXY(3, 55); 
@@ -113,18 +122,18 @@
     $pdf->SetXY(3, 55); 
     $pdf->MultiCell(96, 4, $netto, 0, 1);
 
-    $pdf->SetXY(52, 52); 
+    $pdf->SetXY(47, 52); 
     $pdf->MultiCell(96, 4, $prod.$prod_d, 0, 1);
-    $pdf->SetXY(52, 52); 
+    $pdf->SetXY(47, 52); 
     $pdf->MultiCell(96, 4, $prod, 0, 1);
-    $pdf->SetXY(52, 52); 
+    $pdf->SetXY(47, 52); 
     $pdf->MultiCell(96, 4, $prod, 0, 1);
 
-    $pdf->SetXY(52, 57); 
+    $pdf->SetXY(47, 57); 
     $pdf->MultiCell(96, 4, $term.$term_d, 0, 1);
-    $pdf->SetXY(52, 57); 
+    $pdf->SetXY( 5472, 57); 
     $pdf->MultiCell(96, 4, $term, 0, 1);
-    $pdf->SetXY(52, 57); 
+    $pdf->SetXY(47, 57); 
     $pdf->MultiCell(96, 4, $term, 0, 1);
 
     //warunki przechowywania
@@ -136,23 +145,27 @@
     $pdf->MultiCell(96, 4, $war_p, 0, 1);
 
     //producent
-    $pdf->SetXY(20, 76); 
+    $pdf->SetXY(20, 75); 
     $pdf->MultiCell(96, 4, $producent, 0, 1);
-    $pdf->SetXY(20, 76); 
+    $pdf->SetXY(20, 75); 
     $pdf->MultiCell(96, 4, $producent, 0, 1);
-    $pdf->SetXY(20, 76); 
+    $pdf->SetXY(20, 75); 
     $pdf->MultiCell(96, 4, $producent, 0, 1);
 
-    $pdf->SetXY(15, 80); 
+    $pdf->SetXY(16, 79); 
     $pdf->MultiCell(96, 4, $producent_adr1, 0, 1);
-    $pdf->SetXY(15, 84); 
+    $pdf->SetXY(15, 83); 
     $pdf->MultiCell(96, 4, $producent_adr2, 0, 1);
-    $pdf->SetXY(15, 88); 
+    $pdf->SetXY(18, 87); 
     $pdf->MultiCell(96, 4, $producent_adr3, 0, 1);
+    $pdf->SetXY(14, 91); 
+    $pdf->MultiCell(96, 4, "www.pan-obiadek.pl", 0, 1);
 
     //QR
     $pdf->SetXY(50, 76); 
     $pdf->Image($qrFileName, 70, 72, $imageWidth, $imageHeight); 
+
+
 
     $pdf->Output(); 
     unlink($qrFileName);

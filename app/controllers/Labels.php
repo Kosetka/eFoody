@@ -252,32 +252,39 @@ class Labels
         $ids = [];
         $recipes = new RecipesModel();
 
-        $rec = $recipes->getFullRecipe($pid);
-        foreach($rec as $key => $value) {
-            if(!isset($ids[$value->sub_prod])) {
-                $ids[$value->sub_prod] = 0;
-            }
-            $ids[$value->sub_prod] += $value->amount;
-        }
-
-        $sauce = new Sauce();
-        if(!empty($sauce->getSauce($pid))) {
-            $rec = $recipes->getFullRecipe($sauce->getSauce($pid)[0]->r_id);
+        if(!empty($recipes->getFullRecipe($pid))) {
+            $rec = $recipes->getFullRecipe($pid);
             foreach($rec as $key => $value) {
                 if(!isset($ids[$value->sub_prod])) {
                     $ids[$value->sub_prod] = 0;
                 }
                 $ids[$value->sub_prod] += $value->amount;
             }
+            $sauce = new Sauce();
+            if(!empty($sauce->getSauce($pid))) {
+                $rec = $recipes->getFullRecipe($sauce->getSauce($pid)[0]->r_id);
+                foreach($rec as $key => $value) {
+                    if(!isset($ids[$value->sub_prod])) {
+                        $ids[$value->sub_prod] = 0;
+                    }
+                    $ids[$value->sub_prod] += $value->amount;
+                }
+            }
         }
+
         $data["prod"]["netto"] = 0;
         $data["prod"]["full_products"] = "";
+        $data["prod"]["full_products_big"] = "";
         arsort($ids);
         foreach($ids as $idd => $idv) {
             $data["prod"]["ing"][$idd]["name"] = $temp["subprod"][$idd]->p_name;
             $data["prod"]["ing"][$idd]["ratio"] = $temp["subprod"][$idd]->ratio;
             $data["prod"]["ing"][$idd]["wage"] = $idv;
             $data["prod"]["ing"][$idd]["unit"] = $temp["subprod"][$idd]->p_unit;
+            $data["prod"]["ing"][$idd]["alergen"] = "false";
+            if (!empty($alergens->getByProduct($temp["subprod"][$idd]->id))) {
+                $data["prod"]["ing"][$idd]["alergen"] = "true";
+            }
 
             if($temp["subprod"][$idd]->p_unit == "kg" || $temp["subprod"][$idd]->p_unit == "l") {
                 $pu = "";
@@ -303,13 +310,20 @@ class Labels
             }
             $data["prod"]["netto"] += $num;
         }
-        usort($data["prod"]["ing"], function ($a, $b) {
-            return $b['show_only'] <=> $a['show_only'];
-        });
-        foreach($data["prod"]["ing"] as $prod) {
-            $data["prod"]["full_products"] .= $prod["name"].", ";
+        if(isset($data["prod"]["ing"])) {
+            usort($data["prod"]["ing"], function ($a, $b) {
+                return $b['show_only'] <=> $a['show_only'];
+            });
+            foreach($data["prod"]["ing"] as $prod) {
+                if($prod["alergen"] == "true") {
+                    $data["prod"]["full_products"] .= $prod["name"]."*, ";
+                } else {
+                    $data["prod"]["full_products"] .= $prod["name"].", ";
+                }
+            }
         }
         $data["prod"]["full_products"] = substr($data["prod"]["full_products"],0,-2);
+        $data["prod"]["full_products_big"] = substr($data["prod"]["full_products_big"],0,-2);
         //show($ids);
         //die;
 
@@ -323,6 +337,7 @@ class Labels
 
         //show($data);
         //die;
+        
         $this->view('labels.generatebig', $data);
     }
 
