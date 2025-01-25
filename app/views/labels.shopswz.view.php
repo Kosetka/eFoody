@@ -23,6 +23,7 @@ foreach ($data["cargo_before"] as $company) {
         $to_send = [];
     }
     //show($company);die;
+    //how($to_send);
     generatePage($company["get"]["sku"], $to_send, $date, $pdf, $address);
 }
 //show($data["cargo_before"]);
@@ -35,6 +36,7 @@ $pdf->Output();
 function generatePage($prod, $prod2, $date, $pdf, $address)
 {
 
+    
     $pdf->AddPage();
 
     $pdf->AddFont('Arialpl', '', 'Arialpl.php', 'font');

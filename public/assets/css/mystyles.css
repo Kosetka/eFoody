@@ -68,12 +68,12 @@
   --clipboard-question-color: #6c757d;
   --exclamation-color: #e70909;
 
-  --shop-color-0-0: #007BFF;
-  --shop-color-0-1: #007BFF;
-  --shop-color-0-2: #007BFF;
-  --shop-color-0-3: #007BFF;
-  --shop-color-0-4: #007BFF;
-  --shop-color-0-5: #007BFF;
+  --shop-color-0-0: #6c757d;
+  --shop-color-0-1: #6c757d;
+  --shop-color-0-2: #6c757d;
+  --shop-color-0-3: #6c757d;
+  --shop-color-0-4: #6c757d;
+  --shop-color-0-5: #6c757d;
 
   --shop-color-1-0: #e6f9e6;
   --shop-color-1-1: #b3e6b3;
@@ -102,6 +102,13 @@
   --shop-color-4-3: #ff4d4d;
   --shop-color-4-4: #cc0000;
   --shop-color-4-5: #800000;
+
+  --shop-color-5-0: #e6f0ff;
+  --shop-color-5-1: #b3d1ff;
+  --shop-color-5-2: #80b3ff;
+  --shop-color-5-3: #4d94ff;
+  --shop-color-5-4: #0066cc;
+  --shop-color-5-5: #003366;
 }
 .shop-1 {
   background-color: var(--shop-color-1-2)!important;
@@ -114,6 +121,9 @@
 }
 .shop-4 {
   background-color: var(--shop-color-4-2)!important;
+}
+.shop-5 {
+  background-color: var(--shop-color-5-2)!important;
 }
 
 .property {
@@ -592,7 +602,7 @@
 .property.highlight:has(.my-shop-4-1) .icon {
   color: var(--shop-color-4-1);
 }
-.property:not(.highlight):has(.my-shop-34-1) {
+.property:not(.highlight):has(.my-shop-4-1) {
   background-color: var(--shop-color-4-1);
 }
 .property:not(.highlight):has(.my-shop-4-1)::after {
@@ -647,6 +657,73 @@
 
 
 
+
+
+
+.property.highlight:has(.my-shop-5-0) .icon {
+  color: var(--shop-color-5-0);
+}
+.property:not(.highlight):has(.my-shop-5-0) {
+  background-color: var(--shop-color-5-0);
+}
+.property:not(.highlight):has(.my-shop-5-0)::after {
+  border-top: 9px solid var(--shop-color-5-0);
+}
+
+
+.property.highlight:has(.my-shop-5-1) .icon {
+  color: var(--shop-color-5-1);
+}
+.property:not(.highlight):has(.my-shop-5-1) {
+  background-color: var(--shop-color-5-1);
+}
+.property:not(.highlight):has(.my-shop-5-1)::after {
+  border-top: 9px solid var(--shop-color-5-1);
+}
+
+
+.property.highlight:has(.my-shop-5-2) .icon {
+  color: var(--shop-color-5-2);
+}
+.property:not(.highlight):has(.my-shop-5-2) {
+  background-color: var(--shop-color-5-2);
+}
+.property:not(.highlight):has(.my-shop-5-2)::after {
+  border-top: 9px solid var(--shop-color-5-2);
+}
+
+
+.property.highlight:has(.my-shop-5-3) .icon {
+  color: var(--shop-color-5-3);
+}
+.property:not(.highlight):has(.my-shop-5-3) {
+  background-color: var(--shop-color-5-3);
+}
+.property:not(.highlight):has(.my-shop-5-3)::after {
+  border-top: 9px solid var(--shop-color-5-3);
+}
+
+
+.property.highlight:has(.my-shop-5-4) .icon {
+  color: var(--shop-color-5-4);
+}
+.property:not(.highlight):has(.my-shop-5-4) {
+  background-color: var(--shop-color-5-4);
+}
+.property:not(.highlight):has(.my-shop-5-4)::after {
+  border-top: 9px solid var(--shop-color-5-4);
+}
+
+
+.property.highlight:has(.my-shop-5-5) .icon {
+  color: var(--shop-color-5-5);
+}
+.property:not(.highlight):has(.my-shop-5-5) {
+  background-color: var(--shop-color-5-5);
+}
+.property:not(.highlight):has(.my-shop-5-5)::after {
+  border-top: 9px solid var(--shop-color-5-5);
+}
 
 
 
