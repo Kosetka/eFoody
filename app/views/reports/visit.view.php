@@ -431,8 +431,11 @@ if ($mess != "") {
                             echo "<tr>";
                             echo '<td>'.$shop_val->first_name.' '.$shop_val->last_name.'</td>';
                             $num_shops = 0;
-                            
-                            echo '<td>'.$arr[$shop_val->int].'</td>';
+                            $ttemp = "";
+                            if(isset($arr[$shop_val->int])) {
+                                $ttemp = $arr[$shop_val->int];
+                            }
+                            echo '<td>'.$ttemp.'</td>';
                             echo "</tr>";
                         }
 
