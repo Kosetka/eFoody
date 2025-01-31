@@ -1,0 +1,1127 @@
+{
+    "Strefa 1": [
+        {
+            "position": {
+                "lat": 51.44778888287454,
+                "lng": 21.146001107744436
+            },
+            "title": "<b>Sklep Barlickiego<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.44778888287454,21.146001107744436'>Poka\u017c na mapie<\/a>",
+            "id": "407",
+            "name": "Sklep Barlickiego",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": " ,  ",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "0",
+            "driver_name": "",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.44778888287454,21.146001107744436"
+        },
+        {
+            "position": {
+                "lat": 51.38182369479839,
+                "lng": 21.16196646353389
+            },
+            "title": "<b>Sklep Osiedlowa 7<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.38182369479839,21.16196646353389'>Poka\u017c na mapie<\/a>",
+            "id": "416",
+            "name": "Sklep Osiedlowa 7",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Osiedlowa 7, Radom 26-600",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 19:30",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.38182369479839,21.16196646353389"
+        },
+        {
+            "position": {
+                "lat": 51.37873509071285,
+                "lng": 21.171719782977608
+            },
+            "title": "<b>Sklep Je\u017cyk<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.37873509071285,21.171719782977608'>Poka\u017c na mapie<\/a>",
+            "id": "421",
+            "name": "Sklep Je\u017cyk",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Radomskiego 4A, Radom 26-604",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 20:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.37873509071285,21.171719782977608"
+        },
+        {
+            "position": {
+                "lat": 51.37648124942731,
+                "lng": 21.162246923579936
+            },
+            "title": "<b>Sklep Wy\u015bcigowa 20B<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.37648124942731,21.162246923579936'>Poka\u017c na mapie<\/a>",
+            "id": "422",
+            "name": "Sklep Wy\u015bcigowa 20B",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Wy\u015bcigowa 20B, Radom 26-600",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 20:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.37648124942731,21.162246923579936"
+        },
+        {
+            "position": {
+                "lat": 51.37903544311303,
+                "lng": 21.16461239662871
+            },
+            "title": "<b>Sklep Osiedlowa 20A<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.37903544311303,21.16461239662871'>Poka\u017c na mapie<\/a>",
+            "id": "425",
+            "name": "Sklep Osiedlowa 20A",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Osiedlowa 20A, Radom 26-600",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 20:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.37903544311303,21.16461239662871"
+        },
+        {
+            "position": {
+                "lat": 51.40101824102242,
+                "lng": 21.141514756835733
+            },
+            "title": "<b>Sklep Kana\u0142owa 10\/12<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.40101824102242,21.141514756835733'>Poka\u017c na mapie<\/a>",
+            "id": "431",
+            "name": "Sklep Kana\u0142owa 10\/12",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Kana\u0142owa 10\/12\/107, Radom 26-600",
+            "description": "06:00-19:00, rano kanapki i sa\u0142atki",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.40101824102242,21.141514756835733"
+        },
+        {
+            "position": {
+                "lat": 51.431391429194996,
+                "lng": 21.16464788289386
+            },
+            "title": "<b>Sklep Piastowska 1A<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.431391429194996,21.16464788289386'>Poka\u017c na mapie<\/a>",
+            "id": "432",
+            "name": "Sklep Piastowska 1A",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Piastowska 1A, 26-600 Radom",
+            "description": "06:00- 20:00, rano sa\u0142atki i kanapki",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.431391429194996,21.16464788289386"
+        },
+        {
+            "position": {
+                "lat": 51.39066411035681,
+                "lng": 21.1810046292638
+            },
+            "title": "<b>Sklep Odrodzenia 65<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.39066411035681,21.1810046292638'>Poka\u017c na mapie<\/a>",
+            "id": "434",
+            "name": "Sklep Odrodzenia 65",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Odrodzenia 65, Radom 26-604",
+            "description": "06:00- 23:00 Popo\u0142udnie sa\u0142atki i kanapki",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "3",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.39066411035681,21.1810046292638"
+        },
+        {
+            "position": {
+                "lat": 51.3941407024419,
+                "lng": 21.145255969579576
+            },
+            "title": "<b>Sklep Cha\u0142ubi\u0144skiego 14\/9<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.3941407024419,21.145255969579576'>Poka\u017c na mapie<\/a>",
+            "id": "435",
+            "name": "Sklep Cha\u0142ubi\u0144skiego 14\/9",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Cha\u0142ubi\u0144skiego 14\/9, Radom 26-610",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.3941407024419,21.145255969579576"
+        },
+        {
+            "position": {
+                "lat": 51.411274941505845,
+                "lng": 21.178315469651693
+            },
+            "title": "<b>Sklep u Rafa\u0142a <\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.411274941505845,21.178315469651693'>Poka\u017c na mapie<\/a>",
+            "id": "436",
+            "name": "Sklep u Rafa\u0142a ",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "11 listopada 95F, Radom 26-615",
+            "description": "USTAWI\u0106 GODZINY ",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.411274941505845,21.178315469651693"
+        },
+        {
+            "position": {
+                "lat": 51.409935800754184,
+                "lng": 21.163812473172634
+            },
+            "title": "<b>Sklep Kusoci\u0144skiego 21 lok.4<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.409935800754184,21.163812473172634'>Poka\u017c na mapie<\/a>",
+            "id": "437",
+            "name": "Sklep Kusoci\u0144skiego 21 lok.4",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Kusoci\u0144skiego 21 lok.4, Radom 26-609",
+            "description": "06:00-17:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.409935800754184,21.163812473172634"
+        },
+        {
+            "position": {
+                "lat": 51.4213134247024,
+                "lng": 21.17289640473778
+            },
+            "title": "<b>Sklep Rapackiego 17<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.4213134247024,21.17289640473778'>Poka\u017c na mapie<\/a>",
+            "id": "438",
+            "name": "Sklep Rapackiego 17",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Rapackiego 17, Radom 26-600",
+            "description": "05:00-20:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.4213134247024,21.17289640473778"
+        },
+        {
+            "position": {
+                "lat": 51.4170488626725,
+                "lng": 21.138265048683174
+            },
+            "title": "<b>Sklep Folwarczna 85 <\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.4170488626725,21.138265048683174'>Poka\u017c na mapie<\/a>",
+            "id": "439",
+            "name": "Sklep Folwarczna 85 ",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Folwarczna 85, Radom 26-610",
+            "description": "05:30-21:30 Pon rano, sroda popo\u0142udnie ",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.4170488626725,21.138265048683174"
+        },
+        {
+            "position": {
+                "lat": 51.366118358347734,
+                "lng": 21.132102889855158
+            },
+            "title": "<b>Sklep Policka 2\/5U<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.366118358347734,21.132102889855158'>Poka\u017c na mapie<\/a>",
+            "id": "440",
+            "name": "Sklep Policka 2\/5U",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Policka 2\/5U, Radom 26-600",
+            "description": "06:00- 22:00, Pon rano \u015br popo\u0142udnie",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.366118358347734,21.132102889855158"
+        },
+        {
+            "position": {
+                "lat": 51.37243778032864,
+                "lng": 21.13450217609958
+            },
+            "title": "<b>Sklep G\u0119barzewska 35<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.37243778032864,21.13450217609958'>Poka\u017c na mapie<\/a>",
+            "id": "444",
+            "name": "Sklep G\u0119barzewska 35",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "G\u0119barzewska 35, Radom 26-616",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.37243778032864,21.13450217609958"
+        },
+        {
+            "position": {
+                "lat": 51.397406737806634,
+                "lng": 21.164609961878703
+            },
+            "title": "<b>Sklep Nowogrodzka 12 <\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.397406737806634,21.164609961878703'>Poka\u017c na mapie<\/a>",
+            "id": "445",
+            "name": "Sklep Nowogrodzka 12 ",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Nowogrodzka 12, Radom 26-610",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.397406737806634,21.164609961878703"
+        },
+        {
+            "position": {
+                "lat": 51.37427353189669,
+                "lng": 21.18299409455266
+            },
+            "title": "<b>Sklep Pi\u0119kna 5<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.37427353189669,21.18299409455266'>Poka\u017c na mapie<\/a>",
+            "id": "446",
+            "name": "Sklep Pi\u0119kna 5",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Pi\u0119kna 5, Radom 26-600",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.37427353189669,21.18299409455266"
+        },
+        {
+            "position": {
+                "lat": 51.4157,
+                "lng": 21.1777
+            },
+            "title": "<b>Sklep Zbrowskiego 112<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.4157,21.1777'>Poka\u017c na mapie<\/a>",
+            "id": "447",
+            "name": "Sklep Zbrowskiego 112",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Stanis\u0142awa Zbrowskiego 112, Radom 26-600",
+            "description": "tygodniowe faktury",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.4157,21.1777"
+        },
+        {
+            "position": {
+                "lat": 51.411664,
+                "lng": 21.1693054
+            },
+            "title": "<b>Warzywniaczek u Ani<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.411664,21.1693054'>Poka\u017c na mapie<\/a>",
+            "id": "448",
+            "name": "Warzywniaczek u Ani",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Sportowa 33, Radom 26-610",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.411664,21.1693054"
+        },
+        {
+            "position": {
+                "lat": 51.36931869661461,
+                "lng": 21.19267857033938
+            },
+            "title": "<b>Sklep S\u0142owackiego 288<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.36931869661461,21.19267857033938'>Poka\u017c na mapie<\/a>",
+            "id": "450",
+            "name": "Sklep S\u0142owackiego 288",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "S\u0142owackiego 288, Radom 26-604",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.36931869661461,21.19267857033938"
+        },
+        {
+            "position": {
+                "lat": 51.39978899755116,
+                "lng": 21.167942897765528
+            },
+            "title": "<b>Sklep \u017beromskiego 99<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.39978899755116,21.167942897765528'>Poka\u017c na mapie<\/a>",
+            "id": "451",
+            "name": "Sklep \u017beromskiego 99",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "\u017beromskiego  99, Radom 26-600",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.39978899755116,21.167942897765528"
+        },
+        {
+            "position": {
+                "lat": 51.39543276584374,
+                "lng": 21.201232040093963
+            },
+            "title": "<b>Sklep Sadk\u00f3w 9<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.39543276584374,21.201232040093963'>Poka\u017c na mapie<\/a>",
+            "id": "452",
+            "name": "Sklep Sadk\u00f3w 9",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Sadk\u00f3w  9, Radom 26-603",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.39543276584374,21.201232040093963"
+        },
+        {
+            "position": {
+                "lat": 51.3982,
+                "lng": 21.1805
+            },
+            "title": "<b>Sklep Lubelska 48<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.3982,21.1805'>Poka\u017c na mapie<\/a>",
+            "id": "453",
+            "name": "Sklep Lubelska 48",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Lubelska 48, Radom 26-603",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.3982,21.1805"
+        },
+        {
+            "position": {
+                "lat": 51.40204577167468,
+                "lng": 21.161589926601287
+            },
+            "title": "<b>Sklep Kelles-Krauza <\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.40204577167468,21.161589926601287'>Poka\u017c na mapie<\/a>",
+            "id": "454",
+            "name": "Sklep Kelles-Krauza ",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Kelles-Krauza  34c, Radom 26-600",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.40204577167468,21.161589926601287"
+        },
+        {
+            "position": {
+                "lat": 51.41447988029533,
+                "lng": 21.165485768930484
+            },
+            "title": "<b>Sklep \u017bwirki i Wigury<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.41447988029533,21.165485768930484'>Poka\u017c na mapie<\/a>",
+            "id": "455",
+            "name": "Sklep \u017bwirki i Wigury",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "\u017bwirki i Wigury 31, Radom 26-615",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.41447988029533,21.165485768930484"
+        },
+        {
+            "position": {
+                "lat": 51.379106063638176,
+                "lng": 21.182921280438645
+            },
+            "title": "<b>Sklep spo\u017cywczy<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.379106063638176,21.182921280438645'>Poka\u017c na mapie<\/a>",
+            "id": "456",
+            "name": "Sklep spo\u017cywczy",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Juliusza S\u0142owackiego 190A, Radom 26-604",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.379106063638176,21.182921280438645"
+        },
+        {
+            "position": {
+                "lat": 51.33885,
+                "lng": 21.1278182
+            },
+            "title": "<b>Delikatesy premium<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.33885,21.1278182'>Poka\u017c na mapie<\/a>",
+            "id": "458",
+            "name": "Delikatesy premium",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Mazowszany 44E, Mazowszany 26-624",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.33885,21.1278182"
+        },
+        {
+            "position": {
+                "lat": 51.403503399501446,
+                "lng": 21.141191461282737
+            },
+            "title": "<b>Delikatesy Jankowski<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.403503399501446,21.141191461282737'>Poka\u017c na mapie<\/a>",
+            "id": "461",
+            "name": "Delikatesy Jankowski",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Szpitalna 3A,  ",
+            "description": "P\u0142atno\u015b\u0107 z faktur\u0105",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.403503399501446,21.141191461282737"
+        },
+        {
+            "position": {
+                "lat": 51.40161052929701,
+                "lng": 21.162106643147084
+            },
+            "title": "<b>u Madzi<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.40161052929701,21.162106643147084'>Poka\u017c na mapie<\/a>",
+            "id": "462",
+            "name": "u Madzi",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Curie-Sk\u0142odowskiej  15 lok.1,  26-600",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.40161052929701,21.162106643147084"
+        },
+        {
+            "position": {
+                "lat": 51.41734088094574,
+                "lng": 21.17294057960211
+            },
+            "title": "<b>Chorten<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.41734088094574,21.17294057960211'>Poka\u017c na mapie<\/a>",
+            "id": "463",
+            "name": "Chorten",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Paderewskiego 14 lok.3,  ",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.41734088094574,21.17294057960211"
+        },
+        {
+            "position": {
+                "lat": 51.409087152547585,
+                "lng": 21.14656665113917
+            },
+            "title": "<b>Ma\u0142a hala KOREJ box 26<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.409087152547585,21.14656665113917'>Poka\u017c na mapie<\/a>",
+            "id": "465",
+            "name": "Ma\u0142a hala KOREJ box 26",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Wernera 10, Radom 26-600",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.409087152547585,21.14656665113917"
+        },
+        {
+            "position": {
+                "lat": 51.40982510659734,
+                "lng": 21.158186686721358
+            },
+            "title": "<b>Livio<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.40982510659734,21.158186686721358'>Poka\u017c na mapie<\/a>",
+            "id": "466",
+            "name": "Livio",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Chrobrego 7\/9, Radom 26-610",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.40982510659734,21.158186686721358"
+        },
+        {
+            "position": {
+                "lat": 51.40289529256399,
+                "lng": 21.151661067838575
+            },
+            "title": "<b>Galeria rosa ASIK<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.40289529256399,21.151661067838575'>Poka\u017c na mapie<\/a>",
+            "id": "468",
+            "name": "Galeria rosa ASIK",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Witolda 7,  ",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "1",
+            "driver_name": "Pawe\u0142 Zieli\u0144ski",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.40289529256399,21.151661067838575"
+        }
+    ],
+    "Strefa 2": [
+        {
+            "position": {
+                "lat": 51.35872166847533,
+                "lng": 21.083522783829622
+            },
+            "title": "<b>Cukiernia Mak<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.35872166847533,21.083522783829622'>Poka\u017c na mapie<\/a>",
+            "id": "412",
+            "name": "Cukiernia Mak",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Krychnowicka 1, Radom 26-600",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.35872166847533,21.083522783829622"
+        },
+        {
+            "position": {
+                "lat": 51.323792226830236,
+                "lng": 21.074893264418087
+            },
+            "title": "<b>Sklep Mak market Kowala<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.323792226830236,21.074893264418087'>Poka\u017c na mapie<\/a>",
+            "id": "413",
+            "name": "Sklep Mak market Kowala",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Jana Paw\u0142a II 12, Kowala-St\u0119pocina 26-624",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 21:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "3",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.323792226830236,21.074893264418087"
+        },
+        {
+            "position": {
+                "lat": 51.384552303992905,
+                "lng": 21.106906068488446
+            },
+            "title": "<b>Sklep Gama<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.384552303992905,21.106906068488446'>Poka\u017c na mapie<\/a>",
+            "id": "414",
+            "name": "Sklep Gama",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Po\u015brednia 29, Radom 26-612",
+            "description": "USTAWI\u0106 GODZINY ",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "3",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.384552303992905,21.106906068488446"
+        },
+        {
+            "position": {
+                "lat": 51.381935140624435,
+                "lng": 21.10534542148248
+            },
+            "title": "<b>Sklep Delikatesy Wo\u015bnicka<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.381935140624435,21.10534542148248'>Poka\u017c na mapie<\/a>",
+            "id": "417",
+            "name": "Sklep Delikatesy Wo\u015bnicka",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Wo\u015bnicka 34B, Radom 26-600",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 20:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.381935140624435,21.10534542148248"
+        },
+        {
+            "position": {
+                "lat": 51.43004577959955,
+                "lng": 21.11709522737251
+            },
+            "title": "<b>Sklep Lokalny w Janiszewie<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.43004577959955,21.11709522737251'>Poka\u017c na mapie<\/a>",
+            "id": "418",
+            "name": "Sklep Lokalny w Janiszewie",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Zielona 121, Janiszew 26-652",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 20:30",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "3",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.43004577959955,21.11709522737251"
+        },
+        {
+            "position": {
+                "lat": 51.39981762751832,
+                "lng": 21.119064963135568
+            },
+            "title": "<b>Sklep Garbarska 82\/86<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.39981762751832,21.119064963135568'>Poka\u017c na mapie<\/a>",
+            "id": "420",
+            "name": "Sklep Garbarska 82\/86",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Garbarska 82\/86, Radom 26-601",
+            "description": "USTAWI\u0106 GODZINY Sklep do 21:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "3",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.39981762751832,21.119064963135568"
+        },
+        {
+            "position": {
+                "lat": 51.413620966302254,
+                "lng": 21.122242838007626
+            },
+            "title": "<b>Sklep Langiewicza 41B<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.413620966302254,21.122242838007626'>Poka\u017c na mapie<\/a>",
+            "id": "423",
+            "name": "Sklep Langiewicza 41B",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Langiewicza 41B, Radom 26-600",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 19:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.413620966302254,21.122242838007626"
+        },
+        {
+            "position": {
+                "lat": 51.391098567062315,
+                "lng": 21.100713642641395
+            },
+            "title": "<b>Sklep Wst\u0119pna 2<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.391098567062315,21.100713642641395'>Poka\u017c na mapie<\/a>",
+            "id": "426",
+            "name": "Sklep Wst\u0119pna 2",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Wst\u0119pna 2, Radom 26-612",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 20:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.391098567062315,21.100713642641395"
+        },
+        {
+            "position": {
+                "lat": 51.348488425252185,
+                "lng": 21.06397147245729
+            },
+            "title": "<b>Sklep Kos\u00f3w 30<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.348488425252185,21.06397147245729'>Poka\u017c na mapie<\/a>",
+            "id": "427",
+            "name": "Sklep Kos\u00f3w 30",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Kos\u00f3w 30, Kos\u00f3w 26-624",
+            "description": "Sklep czynny 06:00- 20:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.348488425252185,21.06397147245729"
+        },
+        {
+            "position": {
+                "lat": 51.35504619202216,
+                "lng": 21.0940109595164
+            },
+            "title": "<b>Sklep Odlewnicza 1<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.35504619202216,21.0940109595164'>Poka\u017c na mapie<\/a>",
+            "id": "429",
+            "name": "Sklep Odlewnicza 1",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Odlewnicza 1, Radom 26-624",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 19:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.35504619202216,21.0940109595164"
+        },
+        {
+            "position": {
+                "lat": 51.40537622518111,
+                "lng": 21.12505617563844
+            },
+            "title": "<b>Sklep Przeskok<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.40537622518111,21.12505617563844'>Poka\u017c na mapie<\/a>",
+            "id": "430",
+            "name": "Sklep Przeskok",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Przeskok 8\/4A, Radom 26-600",
+            "description": "USTAWI\u0106 GODZINY Sklep czynny do 18:00",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "3",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.40537622518111,21.12505617563844"
+        },
+        {
+            "position": {
+                "lat": 51.40966615653518,
+                "lng": 21.129694355752328
+            },
+            "title": "<b>Sklep Wrzosowa 9<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.40966615653518,21.129694355752328'>Poka\u017c na mapie<\/a>",
+            "id": "433",
+            "name": "Sklep Wrzosowa 9",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Wrzosowa 9\/l.1, Radom 26-600",
+            "description": "06:00-21:00 + niedziela 09:00-19:00, rano sa\u0142atki",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.40966615653518,21.129694355752328"
+        },
+        {
+            "position": {
+                "lat": 51.40949757269434,
+                "lng": 21.105437130036595
+            },
+            "title": "<b>Sklep Przytycka 82<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.40949757269434,21.105437130036595'>Poka\u017c na mapie<\/a>",
+            "id": "441",
+            "name": "Sklep Przytycka 82",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Przytycka 82, 26-601 Wacyn",
+            "description": "same sa\u0142atki",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.40949757269434,21.105437130036595"
+        },
+        {
+            "position": {
+                "lat": 51.41585682843298,
+                "lng": 21.08689003883231
+            },
+            "title": "<b>Sklep Przytycka 214<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.41585682843298,21.08689003883231'>Poka\u017c na mapie<\/a>",
+            "id": "443",
+            "name": "Sklep Przytycka 214",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Przytycka 214, Bielicha 26-601",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.41585682843298,21.08689003883231"
+        },
+        {
+            "position": {
+                "lat": 51.40625882258026,
+                "lng": 21.12886428218048
+            },
+            "title": "<b>Sklep spo\u017cywczy Okulickiego 58\/70<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.40625882258026,21.12886428218048'>Poka\u017c na mapie<\/a>",
+            "id": "449",
+            "name": "Sklep spo\u017cywczy Okulickiego 58\/70",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Okulickiego 58\/70, Radom 26-610",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.40625882258026,21.12886428218048"
+        },
+        {
+            "position": {
+                "lat": 51.41922313961926,
+                "lng": 21.078327752798554
+            },
+            "title": "<b>Falko<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.41922313961926,21.078327752798554'>Poka\u017c na mapie<\/a>",
+            "id": "457",
+            "name": "Falko",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Radomska 26, Milejowice 26-652",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.41922313961926,21.078327752798554"
+        },
+        {
+            "position": {
+                "lat": 51.346807722884954,
+                "lng": 21.084225762230574
+            },
+            "title": "<b>Delikatesy Lilu<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.346807722884954,21.084225762230574'>Poka\u017c na mapie<\/a>",
+            "id": "459",
+            "name": "Delikatesy Lilu",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Ludwin\u00f3w 64A, Ludwin\u00f3w 26-624",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.346807722884954,21.084225762230574"
+        },
+        {
+            "position": {
+                "lat": 51.36721222202758,
+                "lng": 21.051316147523032
+            },
+            "title": "<b>Delikatesy <\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.36721222202758,21.051316147523032'>Poka\u017c na mapie<\/a>",
+            "id": "460",
+            "name": "Delikatesy ",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Ko\u0144czyce-Kolonia 17C, Ko\u0144czyce-Kolonia 26-601",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "2",
+            "driver_name": "Krzysztof Kaim",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.36721222202758,21.051316147523032"
+        },
+        {
+            "position": {
+                "lat": 51.406606455519935,
+                "lng": 21.053636364898058
+            },
+            "title": "<b>Sklep spo\u017cywczy Cerekiew<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.406606455519935,21.053636364898058'>Poka\u017c na mapie<\/a>",
+            "id": "464",
+            "name": "Sklep spo\u017cywczy Cerekiew",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "Radomska 93, Cerekiew 26-652",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.406606455519935,21.053636364898058"
+        },
+        {
+            "position": {
+                "lat": 51.39017347866509,
+                "lng": 21.13269448622219
+            },
+            "title": "<b>Delikatesy<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.39017347866509,21.13269448622219'>Poka\u017c na mapie<\/a>",
+            "id": "467",
+            "name": "Delikatesy",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": "1905r. 60,  ",
+            "description": "Ten w\u0142a\u015bciciel co szpitalna",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.39017347866509,21.13269448622219"
+        },
+        {
+            "position": {
+                "lat": 51.439702496424026,
+                "lng": 21.003545281333988
+            },
+            "title": "<b>Sklep Zakrzew 15A<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.439702496424026,21.003545281333988'>Poka\u017c na mapie<\/a>",
+            "id": "469",
+            "name": "Sklep Zakrzew 15A",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": " ,  ",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.439702496424026,21.003545281333988"
+        },
+        {
+            "position": {
+                "lat": 51.4675198388288,
+                "lng": 21.008962977636788
+            },
+            "title": "<b>Gulin 12<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.4675198388288,21.008962977636788'>Poka\u017c na mapie<\/a>",
+            "id": "470",
+            "name": "Gulin 12",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": " ,  ",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.4675198388288,21.008962977636788"
+        },
+        {
+            "position": {
+                "lat": 51.476716825008175,
+                "lng": 21.048025096678824
+            },
+            "title": "<b>D\u0105br\u00f3wka Pod\u0142\u0119\u017cna 36<\/b><\/br><\/br><a href='https:\/\/www.google.com\/maps\/dir\/\/51.476716825008175,21.048025096678824'>Poka\u017c na mapie<\/a>",
+            "id": "471",
+            "name": "D\u0105br\u00f3wka Pod\u0142\u0119\u017cna 36",
+            "visited": "old",
+            "type": "shop",
+            "status": "1",
+            "address": " ,  ",
+            "description": "",
+            "visit_date": "",
+            "status_name": "",
+            "driver_id": "3",
+            "driver_name": "Micha\u0142 Nogaj",
+            "delivery_time": "1",
+            "url": "https:\/\/www.google.com\/maps\/dir\/\/51.476716825008175,21.048025096678824"
+        }
+    ],
+    "Poza strefami": []
+}

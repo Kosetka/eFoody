@@ -1236,6 +1236,11 @@ class Reports
             if (isset($URL[4])) {
                 if ($URL[4] == "ours") {
                     $data["only_ours"] = true;
+
+                    $data["zones"] = 4;
+                    if(isset($URL[5])) {
+                        $data["zones"] = $URL[5];
+                    }
                 }
             }
             if (isset($_GET["search"])) { // wysłane zapytanie GETem
@@ -1782,5 +1787,55 @@ class Reports
     }
 
 
+    public function saveroute() {
+        $da = file_get_contents("php://input");
 
+        // Sprawdź, czy dane zostały przesłane
+        if (!empty($da)) {
+            $driverlist = new User();
+            $int = 1;
+            $company = new Companies();
+            foreach ($driverlist->getAllDriverShopsActive() as $key => $value) {
+                $data["drivers"][$int] = $value->id;
+                $int++;
+            }
+            // Konwertuj JSON na tablicę PHP
+            $zones = json_decode($da, true);
+        
+            // Tworzymy tablicę do zapisu
+            $result = [];
+        
+            $int = 1;
+            foreach ($zones as $zoneName => $stores) {
+                $result[$zoneName] = [];
+                if(!isset($data["drivers"][$int])) {
+                    $data["drivers"][$int] = 0;
+                }
+                $driver = $data["drivers"][$int];
+
+                foreach ($stores as $store) {
+                    if($zoneName == "Poza strefami") {
+                        if (isset($store['id'])) {
+                            $store = $store['id'];
+                            $company->update($store, ["guardian" => 0]);
+                        }
+                    } else {
+                        if (isset($store['id'])) {
+                            $store = $store['id'];
+                            //$result[$zoneName][] = $store['id'];
+                            $company->update($store, ["guardian" => $driver]);
+                        }
+                    }
+                }
+                $int++;
+            }
+        
+            // Zapisujemy dane do pliku JSON
+            //file_put_contents("zones_with_stores.json", json_encode($result, JSON_PRETTY_PRINT));
+        
+            echo "Dane zapisane pomyślnie!";
+        } else {
+            echo "Brak danych do zapisania!";
+        }
+    }
 }

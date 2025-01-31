@@ -388,6 +388,16 @@ if ($mess != "") {
 <div class="card mb-4">
     <div class="card-header">
         <h2 class="">Mapa</h2>
+        <?php
+            if($data["only_ours"]) {
+                ?>
+            <a href="<?=ROOT;?>/reports/visitmap/show/day/ours/2" class="btn btn-primary">2 Strefy</a>
+            <a href="<?=ROOT;?>/reports/visitmap/show/day/ours/3" class="btn btn-primary">3 Strefy</a>
+            <a href="<?=ROOT;?>/reports/visitmap/show/day/ours/4" class="btn btn-primary">4 Strefy</a>
+            <button id="saveroute" class="btn btn-danger">Zapisz wybrany podział</button>
+                <?php
+            }
+        ?>
     </div>
     <div class="form-group row m-3">
         <div class="col-sm-12">
@@ -447,7 +457,9 @@ if ($mess != "") {
                         echo '<td>Popołudnie</td>';
                         echo '<td>'.$arr["evening"].'</td>';
                         echo "</tr>";
-
+                        if(!isset($arr[0])) {
+                            $arr[0] = 0;
+                        }
                         echo "<tr>";
                         echo '<td>Brak opiekuna</td>';
                         echo '<td>'.$arr[0].'</td>';
@@ -562,62 +574,365 @@ if ($mess != "") {
 <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $data["api_key"];?>&callback=initMap" async
     defer></script>
 <script>
-    async function initMap() {
-        // Request needed libraries.
-        const { Map } = await google.maps.importLibrary("maps");
-        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-        const center = { lat: 51.40328, lng: 21.1486 };
-        const map = new Map(document.getElementById("map"), {
-            zoom: 15,
-            center,
-            mapId: "e6dc69ca24aac8ed",
+let pointsInZones = {};
+const num_zones = <?php if(isset($data["zones"])) echo $data["zones"]; else echo 4;?>;
+ /*    //mapa z zaznaczaniem punktów
+async function initMap() {
+    const { Map } = await google.maps.importLibrary("maps");
+
+    const center = { lat: 51.40328, lng: 21.1486 };
+    const map = new Map(document.getElementById("map"), {
+        zoom: 15,
+        center,
+        mapId: "e6dc69ca24aac8ed",
+    });
+
+    let tempCoords = [];
+    let tempMarkers = [];
+    let tempPolygon = null;
+
+    // Obsługa kliknięć - dodawanie punktów do nowej strefy
+    map.addListener("click", (event) => {
+        const latLng = event.latLng;
+        console.log(`Kliknięto: { lat: ${latLng.lat()}, lng: ${latLng.lng()} },`);
+
+        // Dodanie punktu do tablicy
+        tempCoords.push({ lat: latLng.lat(), lng: latLng.lng() });
+
+        // Stworzenie markera
+        const marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            label: `${tempCoords.length}`, // Numer punktu
         });
 
-        for (const property of properties) {
-            const AdvancedMarkerElement = new google.maps.marker.AdvancedMarkerElement({
-                map,
-                content: buildContent(property),
-                position: property.position,
-                title: property.description,
-            });
+        tempMarkers.push(marker);
 
-            AdvancedMarkerElement.addListener("click", () => {
-                toggleHighlight(AdvancedMarkerElement, property);
+        // Jeśli jest co najmniej 3 punkty, rysujemy tymczasowy polygon
+        if (tempCoords.length >= 3) {
+            if (tempPolygon) tempPolygon.setMap(null); // Usunięcie poprzedniego
+            tempPolygon = new google.maps.Polygon({
+                paths: tempCoords,
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.35,
+                map: map
             });
         }
+    });
 
-        infoWindow2 = new google.maps.InfoWindow();
+    // Przycisk do pobrania współrzędnych
+    const getCoordsButton = document.createElement("button");
+    getCoordsButton.textContent = "Pobierz współrzędne";
+    getCoordsButton.classList.add("custom-map-control-button");
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(getCoordsButton);
 
-        const locationButton = document.createElement("button");
+    getCoordsButton.addEventListener("click", () => {
+        console.log("Współrzędne strefy:", JSON.stringify(tempCoords, null, 2));
+        alert("Współrzędne zapisane w konsoli!");
+    });
 
-        locationButton.textContent = "Pokaż moją lokalizację";
-        locationButton.classList.add("custom-map-control-button");
-        map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-        locationButton.addEventListener("click", () => {
-            // Try HTML5 geolocation.
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const pos = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                        };
+    // Przycisk do resetowania rysowania
+    const resetButton = document.createElement("button");
+    resetButton.textContent = "Resetuj";
+    resetButton.classList.add("custom-map-control-button");
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(resetButton);
 
-                        infoWindow2.setPosition(pos);
-                        infoWindow2.setContent("Lokacja znaleziona");
-                        infoWindow2.open(map);
-                        map.setCenter(pos);
-                    },
-                    () => {
-                        handleLocationError(true, infoWindow2, map.getCenter());
-                    },
-                );
-            } else {
-                // Browser doesn't support Geolocation
-                handleLocationError(false, infoWindow2, map.getCenter());
-            }
+    resetButton.addEventListener("click", () => {
+        tempCoords = [];
+        tempMarkers.forEach(marker => marker.setMap(null));
+        tempMarkers = [];
+        if (tempPolygon) tempPolygon.setMap(null);
+        tempPolygon = null;
+    });
+    addZonesToMap(map);
+}*/
+async function initMap() {
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    await google.maps.importLibrary("geometry");
+
+    const center = { lat: 51.40328, lng: 21.1486 };
+    const map = new Map(document.getElementById("map"), {
+        zoom: 15,
+        center,
+        mapId: "e6dc69ca24aac8ed",
+    });
+
+    for (const property of properties) {
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+            map,
+            content: buildContent(property),
+            position: property.position,
+            title: property.description,
+        });
+
+        marker.addListener("click", () => {
+            toggleHighlight(marker, property);
         });
     }
+
+    infoWindow2 = new google.maps.InfoWindow();
+
+    const locationButton = document.createElement("button");
+    locationButton.textContent = "Pokaż moją lokalizację";
+    locationButton.classList.add("custom-map-control-button");
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
+    locationButton.addEventListener("click", () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+
+                    infoWindow2.setPosition(pos);
+                    infoWindow2.setContent("Lokacja znaleziona");
+                    infoWindow2.open(map);
+                    map.setCenter(pos);
+                },
+                () => {
+                    handleLocationError(true, infoWindow2, map.getCenter());
+                }
+            );
+        } else {
+            handleLocationError(false, infoWindow2, map.getCenter());
+        }
+    });
+
+    // Wywołanie funkcji do dodania polygonów
+    addZonesToMap(map, num_zones);
+}
+
+
+function addZonesToMap(map, izo) {
+        const zones4 = [
+            {
+                name: "Strefa 1",
+                coords: [
+                    { lat: 51.40453706709643, lng: 21.140323746223952 }, //wspólny 1 = 2 = 3 = 4
+                    { lat: 51.40194942645369, lng: 21.36829188054551 }, //wspólny 1 = 2
+                    { lat: 51.52258912025264, lng: 21.375844981131447 }, 
+                    { lat: 51.50806081394803, lng: 21.089513804373635 },//wspólny 1 = 4
+                ],
+                color: "#00FF00", //
+            },
+            {
+                name: "Strefa 2",
+                coords: [
+                    { lat: 51.40453706709643, lng: 21.140323746223952 }, //wspólny 1 = 2 = 3 = 4
+                    { lat: 51.40194942645369, lng: 21.36829188054551 }, //wspólny 1 = 2
+                    { lat: 51.29983637563959, lng: 21.359921497058618 },
+                    { lat: 51.31185580622801, lng: 21.109295886707056 }, //wspólny 2 = 3
+                ],
+                color: "#ffff00", //
+            },
+            {
+                name: "Strefa 3",
+                coords: [
+                    { lat: 51.40453706709643, lng: 21.140323746223952 }, //wspólny 1 = 2 = 3 = 4
+                    { lat: 51.31185580622801, lng: 21.109295886707056 }, //wspólny 2 = 3
+                    { lat: 51.32575156242881, lng: 20.903150226102966 },
+                    { lat: 51.40763247153663, lng: 20.93130269192328 }, //wspólny 3 = 4
+    
+                ],
+                color: "#0000FF", // 
+            },
+            {
+                name: "Strefa 4",
+                coords: [
+                    { lat: 51.40453706709643, lng: 21.140323746223952 }, //wspólny 1 = 2 = 3 = 4
+                    { lat: 51.40763247153663, lng: 20.93130269192328 }, //wspólny 3 = 4
+                    { lat: 51.50219216524154, lng: 20.91698723283829 },
+                    { lat: 51.50806081394803, lng: 21.089513804373635 }, // wspólny 1 = 4
+                ],
+                color: "#ff0000", // 
+            }
+        ];
+        const zones3 = [
+            {
+                name: "Strefa 1",
+                coords: [
+                    { lat: 51.39531539646887, lng: 21.14124579393425 }, //wspólny 1 = 2 = 3
+                    { lat: 51.40194942645369, lng: 21.36829188054551 }, //wspólny 1 = 2
+                    { lat: 51.52258912025264, lng: 21.375844981131447 },
+                    { lat: 51.50806081394803, lng: 21.089513804373635 },//wspólny 1 = 4
+                ],
+                color: "#00FF00", // Czerwony
+            },
+            {
+                name: "Strefa 2",
+                coords: [
+                    { lat: 51.39531539646887, lng: 21.14124579393425 }, //wspólny 1 = 2 = 3
+                    { lat: 51.40194942645369, lng: 21.36829188054551 }, //wspólny 1 = 2
+                    
+                    { lat: 51.29983637563959, lng: 21.359921497058618 },
+                    { lat: 51.32575156242881, lng: 20.903150226102966 },
+                    { lat: 51.40763247153663, lng: 20.93130269192328 }, //wspólny 2 = 3
+
+
+                ],
+                color: "#ffff00", // Niebieski
+            },
+            {
+                name: "Strefa 3",
+                coords: [
+                    { lat: 51.39531539646887, lng: 21.14124579393425 }, //wspólny 1 = 2 = 3
+                    { lat: 51.40763247153663, lng: 20.93130269192328 }, //wspólny 2 = 3
+                    { lat: 51.50219216524154, lng: 20.91698723283829 },
+                    { lat: 51.50806081394803, lng: 21.089513804373635 }, // wspólny 1 = 3
+    
+                ],
+                color: "#0000FF", // 
+            }
+        ];
+        const zones2 = [
+            {
+                name: "Strefa 1",
+                coords: [
+                    { lat: 51.40453706709643, lng: 21.140323746223952 }, //wspólny 1 = 2
+                    { lat: 51.50806081394803, lng: 21.089513804373635 },//wspólny 1 = 2
+                    { lat: 51.52258912025264, lng: 21.375844981131447 }, 
+                    { lat: 51.29983637563959, lng: 21.359921497058618 },
+                    { lat: 51.31185580622801, lng: 21.109295886707056 }, //wspólny 1 = 2
+                ],
+                color: "#00ff00", // Czerwony
+            },
+            {
+                name: "Strefa 2",
+                coords: [
+                    { lat: 51.40453706709643, lng: 21.140323746223952 }, //wspólny 1 = 2
+                    { lat: 51.50806081394803, lng: 21.089513804373635 },//wspólny 1 = 2
+                    { lat: 51.50219216524154, lng: 20.91698723283829 },
+                    { lat: 51.32575156242881, lng: 20.903150226102966 },
+                    { lat: 51.31185580622801, lng: 21.109295886707056 }, //wspólny 1 = 2
+
+
+                ],
+                color: "#ffff00", // Niebieski
+            }
+        ];
+
+        if(izo == 2) {
+            const polygons = zones2.map(zone => {
+                return {
+                    name: zone.name,
+                    polygon: new google.maps.Polygon({
+                        paths: zone.coords,
+                        strokeColor: zone.color,
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: zone.color,
+                        fillOpacity: 0.35,
+                        map: map
+                    })
+                };
+            });
+            pointsInZones = {};  
+            polygons.forEach(zone => pointsInZones[zone.name] = []);
+            pointsInZones["Poza strefami"] = [];
+            properties.forEach(point => {
+                const latLng = new google.maps.LatLng(point.position.lat, point.position.lng);
+                let insideAnyZone = false;
+        
+                polygons.forEach(zone => {
+                    if (google.maps.geometry.poly.containsLocation(latLng, zone.polygon)) {
+                        pointsInZones[zone.name].push(point);
+                        insideAnyZone = true;
+                    }
+                });
+        
+                if (!insideAnyZone) {
+                    pointsInZones["Poza strefami"].push(point);
+                }
+            });
+            console.log("Punkty w strefach:", pointsInZones);
+        }
+        if(izo == 3) {
+            const polygons = zones3.map(zone => {
+                return {
+                    name: zone.name,
+                    polygon: new google.maps.Polygon({
+                        paths: zone.coords,
+                        strokeColor: zone.color,
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: zone.color,
+                        fillOpacity: 0.35,
+                        map: map
+                    })
+                };
+            });
+            pointsInZones = {};  
+            polygons.forEach(zone => pointsInZones[zone.name] = []);
+            pointsInZones["Poza strefami"] = [];
+            properties.forEach(point => {
+                const latLng = new google.maps.LatLng(point.position.lat, point.position.lng);
+                let insideAnyZone = false;
+        
+                polygons.forEach(zone => {
+                    if (google.maps.geometry.poly.containsLocation(latLng, zone.polygon)) {
+                        pointsInZones[zone.name].push(point);
+                        insideAnyZone = true;
+                    }
+                });
+        
+                if (!insideAnyZone) {
+                    pointsInZones["Poza strefami"].push(point);
+                }
+            });
+            console.log("Punkty w strefach:", pointsInZones);
+        }
+        if(izo == 4) {
+            const polygons = zones4.map(zone => {
+                return {
+                    name: zone.name,
+                    polygon: new google.maps.Polygon({
+                        paths: zone.coords,
+                        strokeColor: zone.color,
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: zone.color,
+                        fillOpacity: 0.35,
+                        map: map
+                    })
+                };
+            });
+            pointsInZones = {};  
+            polygons.forEach(zone => pointsInZones[zone.name] = []);
+            pointsInZones["Poza strefami"] = [];
+            properties.forEach(point => {
+                const latLng = new google.maps.LatLng(point.position.lat, point.position.lng);
+                let insideAnyZone = false;
+        
+                polygons.forEach(zone => {
+                    if (google.maps.geometry.poly.containsLocation(latLng, zone.polygon)) {
+                        pointsInZones[zone.name].push(point);
+                        insideAnyZone = true;
+                    }
+                });
+        
+                if (!insideAnyZone) {
+                    pointsInZones["Poza strefami"].push(point);
+                }
+            });
+            console.log("Punkty w strefach:", pointsInZones);
+        }
+        
+            
+        
+            
+            
+
+        
+
+}
+
+
 
     function toggleHighlight(markerView, property) {
         if (markerView.content.classList.contains("highlight")) {
@@ -739,6 +1054,32 @@ if ($mess != "") {
         );
         infoWindow2.open(map);
     }
+
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("saveroute").addEventListener("click", async () => {
+            try {
+                const data = JSON.stringify(pointsInZones);
+
+                const response = await fetch("<?php echo ROOT."/reports/saveroute";?>", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: data
+                });
+
+                const result = await response.text();
+                alert("Odpowiedź z serwera: " + result);
+                location.reload();
+                console.log("Odpowiedź z serwera:", result);
+            } catch (error) {
+                console.error("Błąd podczas wysyłania danych:", error);
+                alert("Wystąpił błąd podczas zapisu.");
+            }
+        });
+    });
 </script>
 
 
