@@ -221,6 +221,7 @@ if (isset($data["companies"])) {
                 }
                 $points["n" . $compaid] = [
                     "name" => $vvalue->name, 
+                    "id" => $compaid, 
                     "visit_date" => "", 
                     "status_name" => "", 
                     "description" => $vvalue->description, 
@@ -255,6 +256,7 @@ if (isset($data["companies"])) {
                 }
                 $points["o" . $compaid] = [
                     "name" => $vvalue->full_name, 
+                    "id" => $compaid, 
                     "visit_date" => "", 
                     "status_name" => "", 
                     "description" => $vvalue->description, 
@@ -287,6 +289,7 @@ if (isset($data["companies"])) {
             $points[$company_id] = [
                 "name" => $compval->name, 
                 "visit_date" => $compval->visit_date, 
+                "id" => $company_id, 
                 "status_name" => COMPANYVISIT[$compval->status], 
                 "description" => $compval->description, 
                 "address" => $compval->address, 
@@ -330,6 +333,7 @@ if (isset($data["companies"])) {
             $points[$company_id] = [
                 "name" => $compval->name, 
                 "visit_date" => $compval->visit_date, 
+                "id" => $company_id, 
                 "status_name" => COMPANYVISIT[$compval->status], 
                 "description" => $compval->description, 
                 "address" => $compval->address, 
@@ -665,6 +669,11 @@ if ($mess != "") {
         <div class="address">Notatka: ${property.description}</div>
         <div class="features">
             <div>
+                <i aria-hidden="true" class="fa fa-info-circle fa-lg bath" title="Edycja"></i>
+                <span class="fa-sr-only">Edytuj</span>
+                <span><a target="_blank" href="<?php echo ROOT;?>/company/edit/${property.id}">Edytuj</a></span>
+            </div>
+            <div>
                 <i aria-hidden="true" class="fa fa-info-circle fa-lg bath" title="Data wizyty"></i>
                 <span class="fa-sr-only">Data wizyty</span>
                 <span>${property.visit_date}</span>
@@ -701,6 +710,7 @@ if ($mess != "") {
             {
                 position: {lat: ' . $lat . ', lng: ' . $lng . '},
                 title: "' . $name . '",
+                id: "' . $point["id"] . '",
                 name: "' . $point["name"] . '",
                 visited: "' . $point["visited"] . '",
                 type: "' . $point["type"] . '",
