@@ -723,7 +723,7 @@ function addZonesToMap(map, izo) {
                     { lat: 51.52258912025264, lng: 21.375844981131447 }, 
                     { lat: 51.510901738823165, lng: 21.145960601255744 },//wspólny 1 = 4
                 ],
-                color: "#00FF00", //
+                color: "#f00", //
             },
             {
                 name: "Strefa 2",
@@ -737,7 +737,7 @@ function addZonesToMap(map, izo) {
                     { lat: 51.29983637563959, lng: 21.359921497058618 },
                     { lat: 51.30836818386306, lng: 21.152942410158456 }, //wspólny 2 = 3
                 ],
-                color: "#ffff00", //
+                color: "#0f0", //
             },
             {
                 name: "Strefa 3",
@@ -749,7 +749,7 @@ function addZonesToMap(map, izo) {
                     { lat: 51.40763247153663, lng: 20.93130269192328 }, //wspólny 3 = 4
     
                 ],
-                color: "#0000FF", // 
+                color: "#00f", // 
             },
             {
                 name: "Strefa 4",
@@ -759,7 +759,7 @@ function addZonesToMap(map, izo) {
                     { lat: 51.50219216524154, lng: 20.91698723283829 },
                     { lat: 51.510901738823165, lng: 21.145960601255744 }, // wspólny 1 = 4
                 ],
-                color: "#ff0000", // 
+                color: "#ff0", // 
             }
         ];
 
