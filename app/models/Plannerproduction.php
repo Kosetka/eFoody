@@ -54,19 +54,28 @@ class Plannerproduction
     }
 
     public function deleteByDate($date, $w_id)
-	{
+    {
 
-		$query = "delete from $this->table where w_id = $w_id AND date_plan = '$date' ";
-		$this->query($query);
+        $query = "delete from $this->table where w_id = $w_id AND date_plan = '$date' ";
+        $this->query($query);
 
-		return false;
+        return false;
 
-	}
+    }
+    public function getByDate($date, $w_id)
+    {
+
+        $query = "SELECT *  from $this->table where w_id = $w_id AND date_plan = '$date' ";
+        $this->query($query);
+
+        return $this->query($query);
+
+    }
 
     public function updateChange($date_split, $p_id, $new_p_id, $w_id)
-	{
-		$query = "UPDATE $this->table SET p_id = $new_p_id WHERE date_plan = '$date_split' AND p_id = $p_id AND w_id = $w_id;";
+    {
+        $query = "UPDATE $this->table SET p_id = $new_p_id WHERE date_plan = '$date_split' AND p_id = $p_id AND w_id = $w_id;";
         return $this->query($query);
-	}
+    }
 
 }
