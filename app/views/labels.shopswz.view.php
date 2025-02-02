@@ -36,7 +36,7 @@ $pdf->Output();
 function generatePage($prod, $prod2, $date, $pdf, $address)
 {
 
-    
+
     $pdf->AddPage();
 
     $pdf->AddFont('Arialpl', '', 'Arialpl.php', 'font');
@@ -59,7 +59,7 @@ function generatePage($prod, $prod2, $date, $pdf, $address)
     $offsetX = 6;
     $total_sum = 0;
 
-    
+
 
     $p_1 = count($prod);
     if ($p_1 <= 5) {
@@ -381,8 +381,8 @@ function generatePage($prod, $prod2, $date, $pdf, $address)
     $i = 1;
     foreach ($prod2 as $pr2) {
         $text_fl = "";
-        if(isset($pr2["names"]["name"])) {
-            if($pr2["names"]["name"] <> "") {
+        if (isset($pr2["names"]["name"])) {
+            if ($pr2["names"]["name"] <> "") {
                 if (substr($pr2["names"]["name"], -3) === " | ") {
                     $pr2["names"]["name"] = substr($pr2["names"]["name"], 0, -3);
                 }
@@ -396,8 +396,8 @@ function generatePage($prod, $prod2, $date, $pdf, $address)
         $value = "";
         if (isset($pr2["name"])) {
             $name = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $pr2["name"]);
-            if($text_fl <> "") {
-                $name = $name . ": ". $text_fl;
+            if ($text_fl <> "") {
+                $name = $name . ": " . $text_fl;
             }
         }
         if (isset($pr2["cost"])) {
