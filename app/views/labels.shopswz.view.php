@@ -6,12 +6,12 @@ $pdf = new FPDF('L', 'mm', 'A4');
 $date = $data["date"];
 
 //show($data["cargo_before"]);
-
 //die;
 
 
 foreach ($data["cargo_before"] as $company) {
     if (empty($company["street"]) || empty($company["street_number"])) {
+        //show($company);die;
         $address = $company["full_name"];
     } else {
         $address = $company["street"] . " " . $company["street_number"];
