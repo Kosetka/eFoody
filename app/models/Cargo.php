@@ -53,29 +53,29 @@ class Cargo
         return $this->query($query);
     }
     public function getAllFullProductsByDate($date_from, $date_to)
-{
-    $query = "
+    {
+        $query = "
         SELECT p.*, c.exclude, c.delivery_hour 
         FROM $this->table AS p
         LEFT JOIN companies AS c ON p.c_id = c.id
         WHERE p.date >= '$date_from' AND p.date <= '$date_to'
     ";
-    return $this->query($query);
-}
-public function getAllFullProductsByDateAndAmount($date_from, $date_to)
-{
-    $query = "
+        return $this->query($query);
+    }
+    public function getAllFullProductsByDateAndAmount($date_from, $date_to)
+    {
+        $query = "
         SELECT p.*, c.exclude, c.delivery_hour, pr.sku
         FROM $this->table AS p
         LEFT JOIN companies AS c ON p.c_id = c.id
         LEFT JOIN products AS pr ON pr.id = p.p_id
         WHERE p.date >= '$date_from' AND p.date <= '$date_to' AND p.amount > 0
     ";
-    return $this->query($query);
-}
-public function getLatestTwoRecordsPerPair()
-{
-    $query = "
+        return $this->query($query);
+    }
+    public function getLatestTwoRecordsPerPair()
+    {
+        $query = "
         SELECT subquery.*
         FROM (
             SELECT p.*, pr.p_name, pr.first_letter, c.exclude, c.delivery_hour, pr.sku,
@@ -88,14 +88,14 @@ public function getLatestTwoRecordsPerPair()
         ) AS subquery
         WHERE subquery.row_num <= 2 
     ";
-    return $this->query($query);
-}
+        return $this->query($query);
+    }
     public function getAllFullProductsDateAndShop($id, $date_from, $date_to)
     {
         $query = "select * from $this->table WHERE c_id = $id AND date >= '$date_from' AND date <='$date_to'";
         return $this->query($query);
     }
-    
+
     public function getAllFullProductsDateAndShops($date_from, $date_to)
     {
         $query = "select * from $this->table WHERE c_id IS NOT NULL AND date >= '$date_from' AND date <='$date_to'";
@@ -162,6 +162,16 @@ WHERE DATE(filtered_records.date) = filtered_records.max_date_for_cid;";
     {
 
         $query = "delete from $this->table where date = '$date' AND c_id = $id";
+        $this->query($query);
+
+        return false;
+
+    }
+
+    public function deleteByPidAndDate($date, $id)
+    {
+
+        $query = "delete from $this->table where date = '$date 06:00:00' AND p_id = $id";
         $this->query($query);
 
         return false;

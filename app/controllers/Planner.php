@@ -60,7 +60,7 @@ class Planner
         }
         foreach ($data["p"] as $k => $v) {
             foreach ($data["subproducts"] as $k1 => $v1) {
-                $data["sets"][$k][$k1] = (object)[];
+                $data["sets"][$k][$k1] = (object) [];
             }
         }
         $products_list = new ProductsModel();
@@ -201,16 +201,17 @@ class Planner
         $this->view('planner.plan', $data);
     }
 
-    public function new() {
+    public function new()
+    {
         if (empty($_SESSION['USER']))
             redirect('login');
         $data = [];
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
-        if(isset($URL[2])) {
+        if (isset($URL[2])) {
             $date = $URL[2];
         } else {
-            if(isset($_GET["date"])) {
+            if (isset($_GET["date"])) {
                 $date = $_GET["date"];
             } else {
                 $date = date('Y-m-d');
@@ -219,29 +220,48 @@ class Planner
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
         $w_id = 1;
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            
-            $plan = new Plannerproduction();
-            $plan->deleteByDate($date,$w_id);
 
-            if(isset($_POST["ordered_products"])) {
+            $plan = new Plannerproduction();
+
+            $ids = [];
+            if (!empty($plan->getByDate($date, $w_id))) {
+                foreach ($plan->getByDate($date, $w_id) as $planprod) {
+                    $ids[$planprod->p_id] = $planprod;
+                }
+            }
+
+
+            $plan->deleteByDate($date, $w_id);
+
+            if (isset($_POST["ordered_products"])) {
                 $prod = $_POST["ordered_products"];
                 $u_id = $_SESSION["USER"]->id;
                 //echo $u_id;
                 //show($prod);
                 //echo $date;
-    
-    
+
+
                 //tu usunąć cały plan z tego dnia przed wstawieniem aktualizacji/nowego
-                foreach($prod as $pid => $amount) {
+                foreach ($prod as $pid => $amount) {
                     $que = ["date_plan" => "$date", "w_id" => $w_id, "p_id" => $pid, "amount" => $amount, "u_id" => $u_id];
                     $plan->insert($que);
+                    if (isset($ids[$pid])) {
+                        unset($ids[$pid]);
+                    }
+                }
+                // usuwamy z cargo usunięte z planu
+                if (!empty($ids)) {
+                    $cargo = new Cargo();
+                    foreach ($ids as $k_id => $k_val) {
+                        $cargo->deleteByPidAndDate($date, $k_id);
+                    }
                 }
             }
         }
 
 
         $planned = new Plannerproduction();
-        if(!empty($planned->getPlanned($date, $w_id))) {
+        if (!empty($planned->getPlanned($date, $w_id))) {
             foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->id] = (array) $value;
             }
@@ -259,16 +279,17 @@ class Planner
         $this->view('planner.new', $data);
     }
 
-    public function planned() {
+    public function planned()
+    {
         if (empty($_SESSION['USER']))
             redirect('login');
         $data = [];
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
-        if(isset($URL[2])) {
+        if (isset($URL[2])) {
             $date = $URL[2];
         } else {
-            if(isset($_GET["date"])) {
+            if (isset($_GET["date"])) {
                 $date = $_GET["date"];
             } else {
                 $date = date('Y-m-d');
@@ -279,7 +300,7 @@ class Planner
         $w_id = 1;
 
         $producted = new Plannerproducted();
-        if(!empty($producted->getProducted($date, $w_id))) {
+        if (!empty($producted->getProducted($date, $w_id))) {
             foreach ($producted->getProducted($date, $w_id) as $key => $value) {
                 $data["producted"][$value->p_id] = (array) $value;
             }
@@ -291,16 +312,16 @@ class Planner
         $data["warehouse"] = $warehouse->getWarehouse($w_id);
 
         $alergen = new Alergen();
-        foreach($alergen->getAlergens() as $ale) {
+        foreach ($alergen->getAlergens() as $ale) {
             $data["alergens"][$ale->id] = $ale;
         }
         $alergens = new Productalergens();
-        foreach($alergens->getGrouped() as $ale) {
+        foreach ($alergens->getGrouped() as $ale) {
             $data["prod_alergens"][$ale->p_id] = $ale;
         }
 
         $planned = new Plannerproduction();
-        if(!empty($planned->getPlanned($date, $w_id))) {
+        if (!empty($planned->getPlanned($date, $w_id))) {
             foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->p_id] = (array) $value;
             }
@@ -316,16 +337,17 @@ class Planner
         $this->view('planner.planned', $data);
     }
 
-    public function split() {
+    public function split()
+    {
         if (empty($_SESSION['USER']))
             redirect('login');
         $data = [];
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
-        if(isset($URL[2])) {
+        if (isset($URL[2])) {
             $date = $URL[2];
         } else {
-            if(isset($_GET["date"])) {
+            if (isset($_GET["date"])) {
                 $date = $_GET["date"];
             } else {
                 $date = date('Y-m-d');
@@ -333,19 +355,19 @@ class Planner
         }
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
         $w_id = 1;
-        
+
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $plan = new Plannersplit();
             $plan->deleteByDate($date);
-            if(isset($_POST["ordered_products"])) {
+            if (isset($_POST["ordered_products"])) {
                 $prod = $_POST["ordered_products"];
                 $u_id = $_SESSION["USER"]->id;
                 //echo $u_id;
                 //show($prod);
                 //echo $date;
-    
-                foreach($prod as $usr => $pid) {
-                    foreach($pid as $p_id => $amount) {
+
+                foreach ($prod as $usr => $pid) {
+                    foreach ($pid as $p_id => $amount) {
                         $que = ["date_split" => "$date", "p_id" => $p_id, "amount" => $amount, "u_id" => $usr, "u_set_id" => $u_id];
                         $plan->insert($que);
                     }
@@ -355,7 +377,7 @@ class Planner
         }
 
         $plan = new Plannersplit();
-        if(!empty($plan->getAll($date))) {
+        if (!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {
                 $data["split"][$value->u_id][$value->p_id] = (array) $value;
             }
@@ -370,10 +392,10 @@ class Planner
             }
         }
         //show($data["cargo_temp"]);
-        if(isset($data["cargo_temp"])) {
-            foreach($data["cargo_temp"] as $product) {
-                foreach($product as $entry) {
-                    if(!isset($data["cargo"][$entry["p_id"]])) {
+        if (isset($data["cargo_temp"])) {
+            foreach ($data["cargo_temp"] as $product) {
+                foreach ($product as $entry) {
+                    if (!isset($data["cargo"][$entry["p_id"]])) {
                         $data["cargo"][$entry["p_id"]] = 0;
                     }
                     $data["cargo"][$entry["p_id"]] += $entry["amount"];
@@ -383,14 +405,14 @@ class Planner
 
         $users = new User();
         $data["traders"] = [];
-        if(!empty($users->getTraders($date))) {
+        if (!empty($users->getTraders($date))) {
             foreach ($users->getTraders($date) as $key => $value) {
                 $data["traders"][$value->id] = $value;
             }
         }
 
         $planned = new Plannerproduction();
-        if(!empty($planned->getPlanned($date, $w_id))) {
+        if (!empty($planned->getPlanned($date, $w_id))) {
             foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->id] = (array) $value;
             }
@@ -405,16 +427,17 @@ class Planner
         $this->view('planner.split', $data);
     }
 
-    public function splitted() {
+    public function splitted()
+    {
         if (empty($_SESSION['USER']))
             redirect('login');
         $data = [];
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
-        if(isset($URL[2])) {
+        if (isset($URL[2])) {
             $date = $URL[2];
         } else {
-            if(isset($_GET["date"])) {
+            if (isset($_GET["date"])) {
                 $date = $_GET["date"];
             } else {
                 $date = date('Y-m-d');
@@ -422,10 +445,10 @@ class Planner
         }
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
         $w_id = 1;
-        
+
 
         $plan = new Plannersplit();
-        if(!empty($plan->getAll($date))) {
+        if (!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {
                 $data["split"][$value->u_id][$value->p_id] = (array) $value;
             }
@@ -433,7 +456,7 @@ class Planner
 
         $users = new User();
         $data["traders"] = [];
-        if(!empty($users->getTraders($date))) {
+        if (!empty($users->getTraders($date))) {
             foreach ($users->getTraders($date) as $key => $value) {
                 $data["traders"][$value->id] = $value;
             }
@@ -447,15 +470,15 @@ class Planner
             }
         }
         //show($data["cargo_temp"]);
-        if(isset($data["cargo_temp"])) {
-            foreach($data["cargo_temp"] as $product) {
-                foreach($product as $entry) {
-                    if(!isset($data["cargo"][$entry["p_id"]])) {
+        if (isset($data["cargo_temp"])) {
+            foreach ($data["cargo_temp"] as $product) {
+                foreach ($product as $entry) {
+                    if (!isset($data["cargo"][$entry["p_id"]])) {
                         $data["cargo"][$entry["p_id"]] = 0;
                     }
                     $data["cargo"][$entry["p_id"]] += $entry["amount"];
 
-                    if(!isset($data["cargo_comp"][$entry["c_id"]][$entry["p_id"]])) {
+                    if (!isset($data["cargo_comp"][$entry["c_id"]][$entry["p_id"]])) {
                         $data["cargo_comp"][$entry["c_id"]][$entry["p_id"]] = 0;
                     }
                     $data["cargo_comp"][$entry["c_id"]][$entry["p_id"]] += $entry["amount"];
@@ -464,7 +487,7 @@ class Planner
         }
 
         $planned = new Plannerproduction();
-        if(!empty($planned->getPlanned($date, $w_id))) {
+        if (!empty($planned->getPlanned($date, $w_id))) {
             foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->id] = (array) $value;
             }
@@ -476,7 +499,7 @@ class Planner
 
         $companies = new Companies();
         $data["shops"] = [];
-        if(!empty($companies->getAllShops())) {
+        if (!empty($companies->getAllShops())) {
             foreach ($companies->getAllShops() as $key => $value) {
                 $data["shops"][$value->id] = $value;
             }
@@ -489,16 +512,17 @@ class Planner
         $this->view('planner.splitted', $data);
     }
 
-    public function myplan() {
+    public function myplan()
+    {
         if (empty($_SESSION['USER']))
             redirect('login');
         $data = [];
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
-        if(isset($URL[2])) {
+        if (isset($URL[2])) {
             $date = $URL[2];
         } else {
-            if(isset($_GET["date"])) {
+            if (isset($_GET["date"])) {
                 $date = $_GET["date"];
             } else {
                 $date = date('Y-m-d');
@@ -507,25 +531,25 @@ class Planner
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
         $w_id = 1;
         $u_id = $_SESSION["USER"]->id;
-        
+
         // ODWRÓCONIE ID PRZY POMOCNIKU
         $h_id = 0;
-        if(isset($_SESSION["USER"]->helper_for)) {
+        if (isset($_SESSION["USER"]->helper_for)) {
             $u_id = $_SESSION["USER"]->helper_for;
             $h_id = $_SESSION["USER"]->id;
         }
 
         $cargo = new Cargo;
-        $date_from = $date.' 00:00:00';
-        $date_to = $date.' 23:59:59';
-        if(!empty($cargo->getAllFullProductsDate($u_id, $date_from, $date_to))) {
+        $date_from = $date . ' 00:00:00';
+        $date_to = $date . ' 23:59:59';
+        if (!empty($cargo->getAllFullProductsDate($u_id, $date_from, $date_to))) {
             foreach ($cargo->getAllFullProductsDate($u_id, $date_from, $date_to) as $key => $value) {
                 $data["cargo"][$value->p_id] = (array) $value;
             }
         }
 
         $plan = new Plannersplit();
-        if(!empty($plan->getAll($date))) {
+        if (!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {
                 $data["split"][$value->u_id][$value->p_id] = (array) $value;
             }
@@ -533,14 +557,14 @@ class Planner
 
         $users = new User();
         $data["traders"] = [];
-        if(!empty($users->getTraders($date))) {
+        if (!empty($users->getTraders($date))) {
             foreach ($users->getTraders($date) as $key => $value) {
                 $data["traders"][$value->id] = $value;
             }
         }
 
         $planned = new Plannerproduction();
-        if(!empty($planned->getPlanned($date, $w_id))) {
+        if (!empty($planned->getPlanned($date, $w_id))) {
             foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->id] = (array) $value;
             }
@@ -555,16 +579,17 @@ class Planner
         $this->view('planner.myplan', $data);
     }
 
-    public function kitchen() {
+    public function kitchen()
+    {
         if (empty($_SESSION['USER']))
             redirect('login');
         $data = [];
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
-        if(isset($URL[2])) {
+        if (isset($URL[2])) {
             $date = $URL[2];
         } else {
-            if(isset($_GET["date"])) {
+            if (isset($_GET["date"])) {
                 $date = $_GET["date"];
             } else {
                 $date = date('Y-m-d');
@@ -572,10 +597,10 @@ class Planner
         }
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
         $w_id = 1;
-        
+
 
         $plan = new Plannersplit();
-        if(!empty($plan->getAll($date))) {
+        if (!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {
                 $data["split"][$value->u_id][$value->p_id] = (array) $value;
             }
@@ -583,14 +608,14 @@ class Planner
 
         $users = new User();
         $data["traders"] = [];
-        if(!empty($users->getTraders($date))) {
+        if (!empty($users->getTraders($date))) {
             foreach ($users->getTraders($date) as $key => $value) {
                 $data["traders"][$value->id] = $value;
             }
         }
 
         $planned = new Plannerproduction();
-        if(!empty($planned->getPlanned($date, $w_id))) {
+        if (!empty($planned->getPlanned($date, $w_id))) {
             foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->id] = (array) $value;
             }
@@ -606,15 +631,15 @@ class Planner
         }
 
         $recipes = new RecipesModel();
-        if(!empty($recipes->getFullRecipes() )) {
+        if (!empty($recipes->getFullRecipes())) {
             foreach ($recipes->getFullRecipes() as $key => $value) {
                 $data["recipes"][$value->p_id][$value->sub_prod] = $value;
             }
         }
 
         $sauce = new Sauce();
-        if(!empty($sauce->getSauces())) {
-            foreach($sauce->getSauces() as $sauce) {
+        if (!empty($sauce->getSauces())) {
+            foreach ($sauce->getSauces() as $sauce) {
                 $data["sauces"][$sauce->p_id] = $sauce->r_id;
             }
         }
@@ -624,16 +649,17 @@ class Planner
         $this->view('planner.kitchen', $data);
     }
 
-    public function producted() {
+    public function producted()
+    {
         if (empty($_SESSION['USER']))
             redirect('login');
         $data = [];
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
-        if(isset($URL[2])) {
+        if (isset($URL[2])) {
             $date = $URL[2];
         } else {
-            if(isset($_GET["date"])) {
+            if (isset($_GET["date"])) {
                 $date = $_GET["date"];
             } else {
                 $date = date('Y-m-d');
@@ -651,7 +677,7 @@ class Planner
             $plan = new Plannerproducted();
             $plan->deleteByDate($date);
 
-            foreach($prod as $pid => $val) {
+            foreach ($prod as $pid => $val) {
                 $am = $val["amount"];
                 $que = ["date_producted" => "$date", "w_id" => $w_id, "p_id" => $pid, "amount" => $am, "u_id" => $u_id];
                 $plan->insert($que);
@@ -659,14 +685,14 @@ class Planner
         }
 
         $plan = new Plannerproducted();
-        if(!empty($plan->getAll($date))) {
+        if (!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {
                 $data["producted"][$value->p_id] = (array) $value;
             }
         }
 
         $plan = new Plannersplit();
-        if(!empty($plan->getAll($date))) {
+        if (!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {
                 $data["split"][$value->u_id][$value->p_id] = (array) $value;
             }
@@ -674,14 +700,14 @@ class Planner
 
         $users = new User();
         $data["traders"] = [];
-        if(!empty($users->getTraders($date))) {
+        if (!empty($users->getTraders($date))) {
             foreach ($users->getTraders($date) as $key => $value) {
                 $data["traders"][$value->id] = $value;
             }
         }
 
         $planned = new Plannerproduction();
-        if(!empty($planned->getPlanned($date, $w_id))) {
+        if (!empty($planned->getPlanned($date, $w_id))) {
             foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->id] = (array) $value;
             }
@@ -702,33 +728,34 @@ class Planner
         $this->view('planner.producted', $data);
     }
 
-    public function change() {
+    public function change()
+    {
         if (empty($_SESSION['USER']))
             redirect('login');
         $data = [];
         $data["show_list"] = 0;
         $URL = $_GET['url'] ?? 'home';
         $URL = explode("/", trim($URL, "/"));
-        if(isset($URL[2])) {
+        if (isset($URL[2])) {
             $date = $URL[2];
             $data["show_list"] = 3;
         } else {
-            if(isset($_GET["date"])) {
+            if (isset($_GET["date"])) {
                 $data["show_list"] = 1;
                 $date = $_GET["date"];
             } else {
                 $date = date('Y-m-d');
             }
         }
-        if(isset($URL[3])) {
+        if (isset($URL[3])) {
             $product_id = $URL[3];
             $data["show_list"] = 2;
             $data["product_id"] = $product_id;
         }
         //przy zapisywaniu ustawić na sztywno magazyn na którym to robimy, później ewentualnie będzie wybór
         $w_id = 1;
-        
-        if(isset($_POST["wyborOpcji"])) {
+
+        if (isset($_POST["wyborOpcji"])) {
             $new_p_id = $_POST["wyborOpcji"];
 
             $split = new Plannersplit();
@@ -740,11 +767,11 @@ class Planner
             $cargo = new Cargo();
             $cargo->updateChange($date, $product_id, $new_p_id, $w_id);
 
-            redirect('planner/change/'.$date);
+            redirect('planner/change/' . $date);
         }
 
         $plan = new Plannersplit();
-        if(!empty($plan->getAll($date))) {
+        if (!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {
                 $data["split"][$value->u_id][$value->p_id] = (array) $value;
             }
@@ -752,20 +779,20 @@ class Planner
 
         $users = new User();
         $data["traders"] = [];
-        if(!empty($users->getTraders($date))) {
+        if (!empty($users->getTraders($date))) {
             foreach ($users->getTraders($date) as $key => $value) {
                 $data["traders"][$value->id] = $value;
             }
         }
 
         $planned = new Plannerproduction();
-        if(!empty($planned->getPlanned($date, $w_id))) {
+        if (!empty($planned->getPlanned($date, $w_id))) {
             foreach ($planned->getPlanned($date, $w_id) as $key => $value) {
                 $data["planned"][$value->id] = (array) $value;
             }
         }
         $plan = new Plannerproducted();
-        if(!empty($plan->getAll($date))) {
+        if (!empty($plan->getAll($date))) {
             foreach ($plan->getAll($date) as $key => $value) {
                 $data["producted"][$value->p_id] = (array) $value;
             }
