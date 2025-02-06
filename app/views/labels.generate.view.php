@@ -33,6 +33,7 @@ $txt = "Lista alergenów: " . $link;
 $txt = $data["alergen"]; // TU USUNĄĆ JAKBY CO
 $ntxt = "Może zawierać: ";
 $prod = "Data produkcji: ";
+$producent = "Prod.: Radluks Sp. z o.o. NIP: 7963011952";
 if ($data["kcal"] > 0) {
     $kcal = "Kalorie: " . $data["kcal"] . "kcal";
 } else {
@@ -44,6 +45,7 @@ $prod_name = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $prod_name);
 $txt = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $txt);
 $ntxt = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $ntxt);
 $term = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $term);
+$producent = iconv('UTF-8', 'iso-8859-2//TRANSLIT//IGNORE', $producent);
 
 $pdfWidth = 29;
 $pdfHeight = 62;
@@ -90,10 +92,18 @@ $pdf->SetXY(16, 3);
 $pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
 $new = true; //bez linka do strony
 if ($new) {
-    $pdf->SetXY(1, 14);
-    $pdf->MultiCell(62, 6, $kcal, 0, 'L');
-    $pdf->SetXY(1, 19);
-    $pdf->MultiCell(60, 3, $ntxt . $txt, 0, 'L');
+    $new2 = true; //bez kcal z nazwa firmy
+    if ($new2) {
+        $pdf->SetXY(1, 16);
+        $pdf->MultiCell(60, 3, $ntxt . $txt, 0, 'L');
+        $pdf->SetXY(1, 23);
+        $pdf->MultiCell(60, 3, $producent, 0, 'L');
+    } else {
+        $pdf->SetXY(1, 14);
+        $pdf->MultiCell(62, 6, $kcal, 0, 'L');
+        $pdf->SetXY(1, 19);
+        $pdf->MultiCell(60, 3, $ntxt . $txt, 0, 'L');
+    }
 } else {
     $pdf->SetXY(1, 15);
     $pdf->MultiCell(62, 6, $al . $alergens, 0, 'L');
