@@ -107,7 +107,7 @@
                                     }
 
                                     if (!$is_msg) {
-                                        echo "<tr><td colspan='8'>Brak wiadomości</td></tr>";
+                                        echo "<tr><td colspan='10'>Brak zamówień</td></tr>";
                                     }
                                     ?>
                                 </tbody>
