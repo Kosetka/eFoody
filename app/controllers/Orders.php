@@ -86,7 +86,7 @@ class Orders
                 }
                 $data["ordered"][$o->order_id]["data"]["address"] = $address;
                 $data["ordered"][$o->order_id]["data"]["u_id"] = $o->u_id;
-                $data["ordered"][$o->order_id]["data"]["full_name"] = $fname;
+                $data["ordered"][$o->order_id]["data"]["full_name"] = $fname. "<br>(tel. ".$o->o_phone.")";
                 $data["ordered"][$o->order_id]["data"]["order_status"] = CART_STATUS[$o->status];
                 $data["ordered"][$o->order_id]["data"]["o_phone"] = $o->o_phone;
                 $data["ordered"][$o->order_id]["data"]["o_email"] = $o->o_email;
@@ -237,7 +237,7 @@ class Orders
                 }
                 $data["ordered"][$o->order_id]["data"]["address"] = $address;
                 $data["ordered"][$o->order_id]["data"]["u_id"] = $o->u_id;
-                $data["ordered"][$o->order_id]["data"]["full_name"] = $fname;
+                $data["ordered"][$o->order_id]["data"]["full_name"] = $fname . "</br>(tel. ".$o->o_phone.")";
                 $data["ordered"][$o->order_id]["data"]["order_status"] = CART_STATUS[$o->status];
                 $data["ordered"][$o->order_id]["data"]["o_phone"] = $o->o_phone;
                 $data["ordered"][$o->order_id]["data"]["o_email"] = $o->o_email;
