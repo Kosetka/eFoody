@@ -54,9 +54,18 @@ class Order
     }
     public function getFullOrdersbyDate($date_from, $date_to)
     {
+        $t_p = ORDER_PAYED;
         $query = "SELECT *, oc.id as oc_id
               FROM order_content oc
-              JOIN $this->table o ON o.id = oc.order_id WHERE o.date >= '$date_from 00:00:00' AND o.date <= '$date_to 23:59:59' AND status <> 0 ORDER BY order_id DESC;";
+              JOIN $this->table o ON o.id = oc.order_id WHERE o.date >= '$date_from 00:00:00' AND o.date <= '$date_to 23:59:59' AND status IN ($t_p) ORDER BY order_id DESC;";
+        return $this->query($query);
+    }
+    public function getFullOrdersSingleDay($date)
+    {
+        $t_p = ORDER_PAYED;
+        $query = "SELECT *, oc.id as oc_id
+              FROM order_content oc
+              JOIN $this->table o ON o.id = oc.order_id WHERE oc.o_date = '$date' AND status IN ($t_p) ORDER BY order_id DESC;";
         return $this->query($query);
     }
 

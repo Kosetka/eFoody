@@ -51,11 +51,20 @@ class Orders
         $data["date_from"] = $date_from;
         $data["date_to"] = $date_to;
         $data["ordered"] = [];
+        $clients = new Client();
+        if(!empty($clients->getAllUsers())) {
+            foreach($clients->getAllUsers() as $cl) {
+                $data["clients"][$cl->id] = $cl;
+            }
+        }
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = $value;
+        }
         $ord = new Order;
-
         if (!empty($ord->getFullOrdersbyDate($date_from, $date_to))) {
             foreach ($ord->getFullOrdersbyDate($date_from, $date_to) as $o) {
-                $data["ordered"][$o->order_id][$o->o_date][$o->p_id]["p_id"] = $o->p_id;
+                $data["ordered"][$o->order_id][$o->o_date][$o->p_id]["p_id"] = $data["fullproducts"][$o->p_id]->p_name;
                 $data["ordered"][$o->order_id][$o->o_date][$o->p_id]["amount"] = $o->amount;
                 $data["ordered"][$o->order_id][$o->o_date][$o->p_id]["cost"] = $o->cost;
                 $data["ordered"][$o->order_id]["data"]["description"] = $o->o_description;
@@ -63,8 +72,22 @@ class Orders
                 $data["ordered"][$o->order_id]["data"]["fv_id"] = $o->fv_id;
                 $data["ordered"][$o->order_id]["data"]["not_return_status"] = $o->o_status;
                 $data["ordered"][$o->order_id]["data"]["order_date"] = $o->date;
+                $fname = "";
+                if(isset($data["clients"][$o->u_id])) {
+                    $fname = $data["clients"][$o->u_id]->full_name;
+                }
+                $address = "";
+                if(isset($data["clients"][$o->u_id])) {
+                    $address = $data["clients"][$o->u_id]->street." ".$data["clients"][$o->u_id]->street_number;
+                    if($data["clients"][$o->u_id]->house_number <> "") {
+                        $address .= "/".$data["clients"][$o->u_id]->house_number;
+                    }
+                    $address .= ", ".$data["clients"][$o->u_id]->city." ".$data["clients"][$o->u_id]->postal_code;
+                }
+                $data["ordered"][$o->order_id]["data"]["address"] = $address;
                 $data["ordered"][$o->order_id]["data"]["u_id"] = $o->u_id;
-                $data["ordered"][$o->order_id]["data"]["order_status"] = $o->status;
+                $data["ordered"][$o->order_id]["data"]["full_name"] = $fname;
+                $data["ordered"][$o->order_id]["data"]["order_status"] = CART_STATUS[$o->status];
                 $data["ordered"][$o->order_id]["data"]["o_phone"] = $o->o_phone;
                 $data["ordered"][$o->order_id]["data"]["o_email"] = $o->o_email;
                 $data["ordered"][$o->order_id]["data"]["discount"] = $o->discount;
@@ -72,11 +95,172 @@ class Orders
                 $data["ordered"][$o->order_id]["data"]["discount_amount"] = $o->discount_amount;
             }
         }
-        //show($data["ordered"]);
-        //die;
-
-
-        //show($data["sms"]);
+        
+        
         $this->view('orders.show', $data);
+    }
+
+    public function kitchenplan() 
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if (isset($URL[2])) {
+            $date_from = $URL[2];
+        } else {
+            if (isset($_GET["date_from"])) {
+                $date_from = $_GET["date_from"];
+            } else {
+                $date_from = date('Y-m-d');
+            }
+        }
+
+        $data["date_from"] = $date_from;
+        $data["ordered"] = [];
+        $clients = new Client();
+        if(!empty($clients->getAllUsers())) {
+            foreach($clients->getAllUsers() as $cl) {
+                $data["clients"][$cl->id] = $cl;
+            }
+        }
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = $value;
+        }
+        $data["total"] = [];
+        $ord = new Order;
+        if (!empty($ord->getFullOrdersSingleDay($date_from, ))) {
+            foreach ($ord->getFullOrdersSingleDay($date_from, ) as $o) {
+                $data["ordered"][$o->order_id][$o->p_id]["p_id"] = $data["fullproducts"][$o->p_id]->p_name;
+                $data["ordered"][$o->order_id][$o->p_id]["amount"] = $o->amount;
+                $data["ordered"][$o->order_id][$o->p_id]["cost"] = $o->cost;
+                $data["ordered"][$o->order_id]["data"]["description"] = $o->o_description;
+                $data["ordered"][$o->order_id]["data"]["fv"] = $o->fv;
+                $data["ordered"][$o->order_id]["data"]["fv_id"] = $o->fv_id;
+                $data["ordered"][$o->order_id]["data"]["not_return_status"] = $o->o_status;
+                $data["ordered"][$o->order_id]["data"]["order_date"] = $o->date;
+                $fname = "";
+                if(isset($data["clients"][$o->u_id])) {
+                    $fname = $data["clients"][$o->u_id]->full_name;
+                }
+                $address = "";
+                if(isset($data["clients"][$o->u_id])) {
+                    $address = $data["clients"][$o->u_id]->street." ".$data["clients"][$o->u_id]->street_number;
+                    if($data["clients"][$o->u_id]->house_number <> "") {
+                        $address .= "/".$data["clients"][$o->u_id]->house_number;
+                    }
+                    $address .= ", ".$data["clients"][$o->u_id]->city." ".$data["clients"][$o->u_id]->postal_code;
+                }
+                $data["ordered"][$o->order_id]["data"]["address"] = $address;
+                $data["ordered"][$o->order_id]["data"]["u_id"] = $o->u_id;
+                $data["ordered"][$o->order_id]["data"]["full_name"] = $fname;
+                $data["ordered"][$o->order_id]["data"]["order_status"] = CART_STATUS[$o->status];
+                $data["ordered"][$o->order_id]["data"]["o_phone"] = $o->o_phone;
+                $data["ordered"][$o->order_id]["data"]["o_email"] = $o->o_email;
+                $data["ordered"][$o->order_id]["data"]["discount"] = $o->discount;
+                $data["ordered"][$o->order_id]["data"]["id_discount_code"] = $o->id_discount_code;
+                $data["ordered"][$o->order_id]["data"]["discount_amount"] = $o->discount_amount;
+                $data["ordered"][$o->order_id]["data"]["order_id"] = $o->order_id;
+
+                if(!isset($data["total"][$o->p_id])) {
+                    $data["total"][$o->p_id] = 0;
+                }
+                $data["total"][$o->p_id] += $o->amount;
+            }
+        }
+        usort($data["ordered"], function ($a, $b) {
+            return strcmp($a['data']['address'], $b['data']['address']);
+        });
+        //show($data["total"]);
+        //die;
+        
+        $this->view('orders.kitchenplan', $data);
+    }
+    public function driverplan() 
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        $URL = $_GET['url'] ?? 'home';
+        $URL = explode("/", trim($URL, "/"));
+        if (isset($URL[2])) {
+            $date_from = $URL[2];
+        } else {
+            if (isset($_GET["date_from"])) {
+                $date_from = $_GET["date_from"];
+            } else {
+                $date_from = date('Y-m-d');
+            }
+        }
+
+        $data["date_from"] = $date_from;
+        $data["ordered"] = [];
+        $clients = new Client();
+        if(!empty($clients->getAllUsers())) {
+            foreach($clients->getAllUsers() as $cl) {
+                $data["clients"][$cl->id] = $cl;
+            }
+        }
+        $products_list = new ProductsModel();
+        foreach ($products_list->getAllFullProducts() as $key => $value) {
+            $data["fullproducts"][$value->id] = $value;
+        }
+        $data["total"] = [];
+        $ord = new Order;
+        if (!empty($ord->getFullOrdersSingleDay($date_from, ))) {
+            foreach ($ord->getFullOrdersSingleDay($date_from, ) as $o) {
+                $data["ordered"][$o->order_id][$o->p_id]["p_id"] = $data["fullproducts"][$o->p_id]->p_name;
+                $data["ordered"][$o->order_id][$o->p_id]["amount"] = $o->amount;
+                $data["ordered"][$o->order_id][$o->p_id]["cost"] = $o->cost;
+                $data["ordered"][$o->order_id]["data"]["description"] = $o->o_description;
+                $data["ordered"][$o->order_id]["data"]["fv"] = $o->fv;
+                $data["ordered"][$o->order_id]["data"]["fv_id"] = $o->fv_id;
+                $data["ordered"][$o->order_id]["data"]["not_return_status"] = $o->o_status;
+                $data["ordered"][$o->order_id]["data"]["order_date"] = $o->date;
+                $fname = "";
+                if(isset($data["clients"][$o->u_id])) {
+                    $fname = $data["clients"][$o->u_id]->full_name;
+                }
+                $address = "";
+                if(isset($data["clients"][$o->u_id])) {
+                    $address = $data["clients"][$o->u_id]->street." ".$data["clients"][$o->u_id]->street_number;
+                    if($data["clients"][$o->u_id]->house_number <> "") {
+                        $address .= "/".$data["clients"][$o->u_id]->house_number;
+                    }
+                    $address .= ", ".$data["clients"][$o->u_id]->city." ".$data["clients"][$o->u_id]->postal_code;
+                }
+                $data["ordered"][$o->order_id]["data"]["address"] = $address;
+                $data["ordered"][$o->order_id]["data"]["u_id"] = $o->u_id;
+                $data["ordered"][$o->order_id]["data"]["full_name"] = $fname;
+                $data["ordered"][$o->order_id]["data"]["order_status"] = CART_STATUS[$o->status];
+                $data["ordered"][$o->order_id]["data"]["o_phone"] = $o->o_phone;
+                $data["ordered"][$o->order_id]["data"]["o_email"] = $o->o_email;
+                $data["ordered"][$o->order_id]["data"]["discount"] = $o->discount;
+                $data["ordered"][$o->order_id]["data"]["id_discount_code"] = $o->id_discount_code;
+                $data["ordered"][$o->order_id]["data"]["discount_amount"] = $o->discount_amount;
+                $data["ordered"][$o->order_id]["data"]["order_id"] = $o->order_id;
+
+                if(!isset($data["total"][$o->p_id])) {
+                    $data["total"][$o->p_id] = 0;
+                }
+                $data["total"][$o->p_id] += $o->amount;
+            }
+        }
+        //show($data["ordered"]);
+        usort($data["ordered"], function ($a, $b) {
+            return strcmp($a['data']['address'], $b['data']['address']);
+        });
+        
+        //show($data["ordered"]);die;
+        //show($data["total"]);
+        //die;
+        
+        $this->view('orders.driverplan', $data);
     }
 }

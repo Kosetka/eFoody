@@ -172,6 +172,19 @@ define('HOLIDAYS',
     '2025-06-19', // Boże Ciało
     '2025-08-15', // Wniebowzięcie NMP
 ]);
+
+define("CART_STATUS", [
+    0 => "Koszyk",
+    1 => "Płatność na miejscu",
+    2 => "Oczekuje na płatność",
+    3 => "Opłacone online",
+    4 => "Dostarczone (na miejscu)",
+    5 => "Dostarczone (online)",
+    6 => "Zamówienie anulowane",
+    7 => "Zamówienie anulowane (na miejscu)",
+]);
+
+define("ORDER_PAYED", "1, 3, 4, 5");
                                         
 
 /** true means show errors **/
