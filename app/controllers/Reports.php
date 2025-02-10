@@ -1819,6 +1819,11 @@ class Reports
                             $store = $store['id'];
                             $company->update($store, ["guardian" => 0]);
                         }
+                    } else if($zoneName == "Strefa Lublin") {
+                        if (isset($store['id'])) {
+                            $store = $store['id'];
+                            $company->update($store, ["guardian" => 53]);
+                        }
                     } else {
                         if (isset($store['id'])) {
                             $store = $store['id'];
