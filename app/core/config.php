@@ -174,14 +174,16 @@ define('HOLIDAYS',
 ]);
 
 define("CART_STATUS", [
-    0 => "Koszyk",
-    1 => "Płatność na miejscu",
-    2 => "Oczekuje na płatność",
-    3 => "Opłacone online",
-    4 => "Dostarczone (na miejscu)",
-    5 => "Dostarczone (online)",
-    6 => "Zamówienie anulowane",
-    7 => "Zamówienie anulowane (na miejscu)",
+	0 => "Koszyk",
+	1 => "Płatność na miejscu",
+	2 => "Oczekuje na płatność",
+	3 => "Opłacone online",
+	4 => "Dostarczone (na miejscu)",
+	5 => "Dostarczone (online)",
+	6 => "Zamówienie anulowane",
+	7 => "Zamówienie anulowane (na miejscu)",
+	8 => "Płatność anulowana",
+	9 => "Zwrot online"
 ]);
 
 define("ORDER_PAYED", "1, 3, 4, 5");
