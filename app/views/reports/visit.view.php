@@ -760,6 +760,16 @@ function addZonesToMap(map, izo) {
                     { lat: 51.510901738823165, lng: 21.145960601255744 }, // wspólny 1 = 4
                 ],
                 color: "#ff0", // 
+            },
+            {
+                name: "Strefa Lublin",
+                coords: [
+                    { lat: 51.41738447185943, lng: 22.195690122424196 }, //wspólny 1 = 2 = 3 = 4
+                    { lat: 51.058625770703216, lng: 22.220812146428173 }, //wspólny 3 = 4
+                    { lat: 51.05336219906269, lng: 22.863218188815704 },
+                    { lat: 51.43976065097275, lng: 22.83689987795439 }, // wspólny 1 = 4
+                ],
+                color: "#f0f", // 
             }
         ];
 
@@ -801,6 +811,16 @@ function addZonesToMap(map, izo) {
     
                 ],
                 color: "#0000FF", // 
+            },
+            {
+                name: "Strefa Lublin",
+                coords: [
+                    { lat: 51.41738447185943, lng: 22.195690122424196 }, //wspólny 1 = 2 = 3 = 4
+                    { lat: 51.058625770703216, lng: 22.220812146428173 }, //wspólny 3 = 4
+                    { lat: 51.05336219906269, lng: 22.863218188815704 },
+                    { lat: 51.43976065097275, lng: 22.83689987795439 }, // wspólny 1 = 4
+                ],
+                color: "#f0f", // 
             }
         ];
         const zones2 = [
@@ -827,6 +847,16 @@ function addZonesToMap(map, izo) {
 
                 ],
                 color: "#ffff00", // Niebieski
+            },
+            {
+                name: "Strefa Lublin",
+                coords: [
+                    { lat: 51.41738447185943, lng: 22.195690122424196 }, //wspólny 1 = 2 = 3 = 4
+                    { lat: 51.058625770703216, lng: 22.220812146428173 }, //wspólny 3 = 4
+                    { lat: 51.05336219906269, lng: 22.863218188815704 },
+                    { lat: 51.43976065097275, lng: 22.83689987795439 }, // wspólny 1 = 4
+                ],
+                color: "#f0f", // 
             }
         ];
 
