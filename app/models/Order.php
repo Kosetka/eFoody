@@ -72,5 +72,12 @@ class Order
               JOIN $this->table o ON o.id = oc.order_id WHERE oc.o_date = '$date' AND status IN ($t_p) ORDER BY order_id DESC;";
         return $this->query($query);
     }
+    public function getFullOrderById($id)
+    {
+        $query = "SELECT *
+              FROM order_content oc
+              JOIN $this->table o ON o.id = oc.order_id WHERE o.id = '$id';";
+        return $this->query($query);
+    }
 
 }
