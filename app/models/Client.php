@@ -35,7 +35,10 @@ class Client
         'c_house_number',
         'want_register',
         'verified',
-        'return_points'
+        'return_points',
+        'session_id',
+        'reset_time',
+        'new_password'
     ];
 
 
