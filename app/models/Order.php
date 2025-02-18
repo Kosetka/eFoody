@@ -26,7 +26,11 @@ class Order
         'discount_amount',
         'fv_id',
         'expired',
-        'o_description'
+        'o_description',
+        'send_sms',
+        'send_sms_date',
+        'send_email',
+        'send_email_date'
     ];
 
     public function getOrders()
