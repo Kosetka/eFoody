@@ -187,7 +187,12 @@ define("CART_STATUS", [
 ]);
 
 define("ORDER_PAYED", "1, 3, 4, 5");
-                                        
+            
+define("TEMPLATE", [
+	"lost_password" => "../app/views/template/lostpassword.view.php",
+	"order_confirm" => "../app/views/template/orderconfirm.view.php",
+	"register_confirm" => "../app/views/template/registerconfirm.view.php",
+]);
 
 /** true means show errors **/
 define( 'DEBUG', true);

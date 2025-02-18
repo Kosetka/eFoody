@@ -38,6 +38,11 @@ class Order
         $query = "select * from $this->table;";
         return $this->query($query);
     }
+    public function getOrdersAwaiting($date)
+    {
+        $query = "select * from $this->table WHERE date >= '$date 00:00:00' AND date <= '$date 23:59:59' AND status = 2;";
+        return $this->query($query);
+    }
     public function getOrderByCookie($id)
     {
         $query = "select * from $this->table WHERE cookie_id = '$id';";

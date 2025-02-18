@@ -263,4 +263,30 @@ class Orders
         
         $this->view('orders.driverplan', $data);
     }
+
+    public function checker()
+    {
+
+        //CRON - sprawdza czy zamówienie zostało opłacone kartą i wysyła powiadomienia
+
+        $data = [];
+        $data["errors"] = [];
+        $data["page"]["title"] = "Sprawdzanie statusów zamówień - Pan Obiadek | Pyszne Obiady i Catering w Radomiu";
+        $data["page"]["link"] = "https://www.pan-obiadek.pl/zamowienie/checker";
+        $data["page"]["sublink"] = "checker";
+
+        $date = date("Y-m-d");
+        $orders = new Order();
+        if(!empty($orders->getOrdersAwaiting($date))) {
+            foreach($orders->getOrdersAwaiting($date) as $order) {
+                show($order);
+                //biore info z payu_statuses czy jest wpis z moim order_id, jak nie ma to pomijam, jak jest to sprawdzam który i aktualizuje status w zamówieniu + ewentualnie wyysłam info
+                //COMPLETED
+                //CANCELED
+            }
+        }
+        
+
+        //$this->view('status', $data);
+    }
 }
