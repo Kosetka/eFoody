@@ -23,4 +23,9 @@ class Payu
         $query = "select * from $this->table;";
         return $this->query($query);
     }
+    public function getPayuStatus($id)
+    {
+        $query = "select * from $this->table WHERE order_id = $id ORDER BY date DESC LIMIT 1;";
+        return $this->query($query);
+    }
 }

@@ -33,6 +33,12 @@ class Sendsms
         );
         sms_send($params, $token);
 
+        $date_now = date("Y-m-d H:i:s");
+        $order = new Order();
+        $order->update($coo_id,[
+            "send_sms" => 1,
+            "send_sms_date" => $date_now,
+        ]);
         //tu dodać zapis o wysyłce sms do bazy
         $query = "INSERT INTO $this->table (`phone`, `sms_txt`) VALUES (:phone, :sms_txt)";
         $this->query($query, ['phone' => $phone, 'sms_txt' => $sms_txt]);

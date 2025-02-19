@@ -47,7 +47,11 @@ class Client
         $query = "select * from $this->table;";
         return $this->query($query);
     }
-
+    public function getUserBySession($id)
+	{
+		$query = "select * from $this->table WHERE `session_id` = '$id'";
+		return $this->query($query)[0];
+	}
     public function getUser($id)
     {
         $query = "select * from $this->table WHERE id = $id";

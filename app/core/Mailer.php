@@ -33,4 +33,15 @@ class Mailer {
     public function getLastError() {
         return $this->lastError;
     }
+    public static function loadTemplate($templatePath, $variables = [])
+    {
+        if (!file_exists($templatePath)) {
+            return "Błąd: Szablon nie istnieje!";
+        }
+
+        ob_start();
+        extract($variables);
+        include $templatePath;
+        return ob_get_clean();
+    }
 }

@@ -9,6 +9,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == '192.16
 	define('DBDRIVER', '');
 
 	define('ROOT', 'http://localhost/efoody/public'); //http://localhost/efoody/public
+	define('CLIENT_PANEL', 'http://' . $_SERVER['SERVER_NAME'] . '/klient.pan-obiadek.pl/public');
 	define('ROOT_DIR', '/efoody/public/');
 	define('ROOT_PLUGINS', '../public/plugins/');
 	define('IMG_ROOT', '/efoody/public/assets/img/');
@@ -28,6 +29,7 @@ if ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == '192.16
 	define('DBDRIVER', '');
 
 	define('ROOT', ''); //https://51.254.47.60
+	define('CLIENT_PANEL', 'https://klient.pan-obiadek.pl');
 	define('ROOT_DIR', '/');
 	define('ROOT_PLUGINS', '../public/plugins/');
 	define('IMG_ROOT', '/assets/img/'); ///efoody/public/assets/img/
@@ -191,6 +193,7 @@ define("ORDER_PAYED", "1, 3, 4, 5");
 define("TEMPLATE", [
 	"lost_password" => "../app/views/template/lostpassword.view.php",
 	"order_confirm" => "../app/views/template/orderconfirm.view.php",
+	"order_failed" => "../app/views/template/orderfailed.view.php",
 	"register_confirm" => "../app/views/template/registerconfirm.view.php",
 ]);
 

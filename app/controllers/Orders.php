@@ -277,9 +277,34 @@ class Orders
 
         $date = date("Y-m-d");
         $orders = new Order();
+        $payu_status = new Payu();
         if(!empty($orders->getOrdersAwaiting($date))) {
             foreach($orders->getOrdersAwaiting($date) as $order) {
-                show($order);
+                $order_id = $order->id;
+                if(!empty($payu_status->getPayuStatus($order_id))) {
+                    $status = $payu_status->getPayuStatus($order_id)[0]->status;
+                    $email = $order->o_email;
+                    $phone = $order->o_phone;
+                    if($status == "COMPLETED") {
+                        $orders->update($order_id,[
+                            "status" => 3
+                        ]);
+                        $send_sms = new Sendsms();
+                        $send_sms->sendSMSconfirm($phone, $order_id);
+
+                        $send_email = new Sendemail();
+                        $send_email->sendEMAILconfirmation($email,$order_id);
+                    }
+                    if($status == "CANCELED") {
+                        $orders->update($order_id,[
+                            "status" => 8
+                        ]);
+
+                        $send_email = new Sendemail();
+                        $send_email->sendEMAILconfirmationfailed($email,$order_id);
+                    }
+                }
+                //show($order);
                 //biore info z payu_statuses czy jest wpis z moim order_id, jak nie ma to pomijam, jak jest to sprawdzam który i aktualizuje status w zamówieniu + ewentualnie wyysłam info
                 //COMPLETED
                 //CANCELED
