@@ -11256,3 +11256,10 @@ body {
 .hnone:hover {
   background-color: none;
 }
+
+.upsel-active {
+  background-color: #00ee00;
+}
+.upsel-inactive {
+  background-color: #ccc;
+}

@@ -147,6 +147,11 @@ class Products
                 } else {
                     $_POST["vege"] = 0;
                 }
+                if(isset($_POST["upsel"])) {
+                    $_POST["upsel"] = 1;
+                } else {
+                    $_POST["upsel"] = 0;
+                }
                 if(!isset($_POST["show_prod_date"])) {
                     $_POST["show_prod_date"] = 0;
                 }
@@ -253,6 +258,11 @@ class Products
                 } else {
                     $_POST["vege"] = 0;
                 }
+                if(isset($_POST["upsel"])) {
+                    $_POST["upsel"] = 1;
+                } else {
+                    $_POST["upsel"] = 0;
+                }
                 if(!isset($_POST["show_prod_date"])) {
                     $_POST["show_prod_date"] = 0;
                 }
@@ -283,5 +293,65 @@ class Products
         }
 
         $this->view('products.edit', $data);
+    }
+
+    public function upsel()
+    {
+        if (empty($_SESSION['USER']))
+            redirect('login');
+
+        $data = [];
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $upsel = new Upsels;
+            if($_POST["date_to"] <>"") {
+                $_POST["date_to"] = NULL;
+            }
+            if($_POST["status"] == 0) {
+                if(empty($upsel->getUpselbyId($_POST["id"]))) {
+                    $upsel->insert([
+                        "p_id" => $_POST["id"],
+                        "date_from" => $_POST["date_from"],
+                        "date_to" => $_POST["date_to"]
+                    ]);
+                }
+            } 
+            if($_POST["status"] == 1) {
+                $upsel->update($_POST["id"],[
+                    "date_from" => $_POST["date_from"],
+                    "date_to" => $_POST["date_to"]
+                ],"p_id");
+            } 
+        }
+
+        $products = new ProductsModel;
+        $temp = $products->getAll("products");
+        foreach ($temp as $key => $value) {
+            $data["products"][$value->id] = $value;
+        }
+        
+        
+        if(!empty($products->getAllUpsels())) {
+            foreach($products->getAllUpsels() as $up) {
+                $data["upsels_available"][$up->id] = $up;
+            }
+        }
+        $upsels = new Upsels;
+        if(!empty($upsels->getUpsels())) {
+            foreach($upsels->getUpsels() as $up) {
+                $data["upsels"][$up->p_id] = $up;
+            }
+        }
+        $products = new PriceModel();
+        if(!empty($products->getCurrentPrice())) {
+            foreach ($products->getCurrentPrice() as $product) {
+                $data["prices"][$product->p_id] = (object) $product;
+            }
+        }
+        
+        //show($data["prices"]);die;
+
+
+        $this->view('products.upsel', $data);
     }
 }

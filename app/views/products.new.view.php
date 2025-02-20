@@ -60,6 +60,12 @@
                             <input type="checkbox" class="form-check-input" id="vege" name="vege" value="0">
                         </div>
                     </div>
+                    <div class="form-group row m-3">
+                        <label for="upsel" class="col-sm-2 col-form-label">Możliwy upsel:</label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" class="form-check-input" id="upsel" name="upsel" value="0">
+                        </div>
+                    </div>
 
                     <div class="form-group row m-3">
                         <legend class="col-sm-2 col-form-label ">Data ważności do:</legend>

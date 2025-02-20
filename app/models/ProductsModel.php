@@ -25,7 +25,8 @@ class ProductsModel
         'vege',
         'show_prod_date',
         'first_letter',
-        'ratio'
+        'ratio',
+        'upsel'
     ];
 
     public function validate($data)
@@ -91,6 +92,11 @@ class ProductsModel
     public function getAllFullProducts()
     {
         $query = "select * from $this->table WHERE prod_type = 1";
+        return $this->query($query);
+    }
+    public function getAllUpsels()
+    {
+        $query = "select * from $this->table WHERE prod_type = 1 AND upsel = 1";
         return $this->query($query);
     }
     public function getAllSauces()
