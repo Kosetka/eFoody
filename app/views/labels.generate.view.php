@@ -70,29 +70,55 @@ $pdf->SetFont('Arialpl', '', 8);
 $imageWidth = 16;
 $imageHeight = 16;
 
+$new = true; //bez linka do strony
+$new2 = true; //bez kcal z nazwa firmy
+
 $prod_type = substr($sku, 0, 4);
-if ($date_show_to > 0) {
-    if (strlen($prod_name) > 51) {
-        $prod_name = substr($prod_name, 0, 51) . '...';
+
+
+if($new2) {
+    if ($date_show_to > 0) {
+        if (strlen($prod_name) > 51) {
+            $prod_name = substr($prod_name, 0, 51) . '...';
+        }
+        $dateTime = DateTime::createFromFormat('d.m.Y', $date);
+        $dateTime->modify('+' . $date_show_to . ' day');
+        $newDate = $dateTime->format('d.m.Y');
+        $pdf->SetXY(1, 9);
+        $pdf->Cell(0, 10, $term . $newDate, 0, 1);
+        $pdf->SetXY(1, 6);
+        $pdf->Cell(0, 10, $prod . $date, 0, 1);
+        $pdf->SetXY(46, 10);
+        $pdf->MultiCell(15, 2.5, $kcal, 0, 'L');
+    } else {
+        $pdf->SetXY(1, 10);
+        $pdf->Cell(0, 10, $prod . $date, 0, 1);
     }
-    $dateTime = DateTime::createFromFormat('d.m.Y', $date);
-    $dateTime->modify('+' . $date_show_to . ' day');
-    $newDate = $dateTime->format('d.m.Y');
-    $pdf->SetXY(15, 9);
-    $pdf->Cell(0, 10, $term . $newDate, 0, 1);
-    $pdf->SetXY(15, 6);
-    $pdf->Cell(0, 10, $prod . $date, 0, 1);
+    $pdf->SetXY(1, 3);
+    $pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
 } else {
-    $pdf->SetXY(15, 10);
-    $pdf->Cell(0, 10, $prod . $date, 0, 1);
+    if ($date_show_to > 0) {
+        if (strlen($prod_name) > 51) {
+            $prod_name = substr($prod_name, 0, 51) . '...';
+        }
+        $dateTime = DateTime::createFromFormat('d.m.Y', $date);
+        $dateTime->modify('+' . $date_show_to . ' day');
+        $newDate = $dateTime->format('d.m.Y');
+        $pdf->SetXY(15, 9);
+        $pdf->Cell(0, 10, $term . $newDate, 0, 1);
+        $pdf->SetXY(15, 6);
+        $pdf->Cell(0, 10, $prod . $date, 0, 1);
+    } else {
+        $pdf->SetXY(15, 10);
+        $pdf->Cell(0, 10, $prod . $date, 0, 1);
+    }
+    $pdf->Image($qrFileName, 0, 1, $imageWidth, $imageHeight);
+    $pdf->SetXY(16, 3);
+    $pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
 }
 
-$pdf->Image($qrFileName, 0, 1, $imageWidth, $imageHeight);
-$pdf->SetXY(16, 3);
-$pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
-$new = true; //bez linka do strony
 if ($new) {
-    $new2 = true; //bez kcal z nazwa firmy
+    
     if ($new2) {
         $pdf->SetXY(1, 16);
         $pdf->MultiCell(60, 3, $ntxt . $txt, 0, 'L');
