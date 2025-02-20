@@ -78,8 +78,8 @@ $prod_type = substr($sku, 0, 4);
 
 if($new2) {
     if ($date_show_to > 0) {
-        if (strlen($prod_name) > 51) {
-            $prod_name = substr($prod_name, 0, 51) . '...';
+        if (strlen($prod_name) > 81) {
+            $prod_name = substr($prod_name, 0, 81) . '...';
         }
         $dateTime = DateTime::createFromFormat('d.m.Y', $date);
         $dateTime->modify('+' . $date_show_to . ' day');
@@ -95,7 +95,7 @@ if($new2) {
         $pdf->Cell(0, 10, $prod . $date, 0, 1);
     }
     $pdf->SetXY(1, 3);
-    $pdf->MultiCell(46, 2.5, $prod_name, 0, 1);
+    $pdf->MultiCell(56, 2.5, $prod_name, 0, 1);
 } else {
     if ($date_show_to > 0) {
         if (strlen($prod_name) > 51) {
