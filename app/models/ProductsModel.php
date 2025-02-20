@@ -94,6 +94,11 @@ class ProductsModel
         $query = "select * from $this->table WHERE prod_type = 1";
         return $this->query($query);
     }
+    public function getAllFullProductsUpsel()
+    {
+        $query = "select * from $this->table WHERE prod_type = 1 AND upsel = 1";
+        return $this->query($query);
+    }
     public function getAllUpsels()
     {
         $query = "select * from $this->table WHERE prod_type = 1 AND upsel = 1";
