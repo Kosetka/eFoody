@@ -39,6 +39,7 @@
                 <?php
 
                 if(!empty($data["upsels_available"])) {
+                    $date_now = date("Y-m-d H:i:s");
                     foreach ($data["upsels_available"] as $pid) {
                         $date_from = "";
                         $date_to = "";
@@ -53,7 +54,9 @@
                         if(isset($data["upsels"][$pid->id])) {
                             $date_from = $data["upsels"][$pid->id]->date_from;
                             $date_to = $data["upsels"][$pid->id]->date_to;
-                            $active = "upsel-active";
+                            if($date_to >= $date_now || $date_to == NULL) {
+                                $active = "upsel-active";
+                            } 
                             $btn_txt = "Zapisz zmiany";
                             $status = 1;
                         }
