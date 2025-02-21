@@ -304,7 +304,7 @@ class Products
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $upsel = new Upsels;
-            if($_POST["date_to"] <>"") {
+            if($_POST["date_to"] == "") {
                 $_POST["date_to"] = NULL;
             }
             if($_POST["status"] == 0) {
